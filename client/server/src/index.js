@@ -25,10 +25,23 @@ app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 app.use(authenticateUser);
 
 // Serve static uploads
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+const uploadDir = process.env.VERCEL === '1'
+  ? path.join('/tmp', 'uploads')
+  : path.join(__dirname, '../../uploads');
+
+if (!fs.existsSync(uploadDir)) {
+  try {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  } catch (e) {
+    console.warn('Could not create upload directory:', e.message);
+  }
+}
+
+app.use('/uploads', express.static(uploadDir));
+app.use('/api/uploads', express.static(uploadDir));
 
 // Health check
-app.get('/api/health', (req, res) => {
+app.get(['/api/health', '/health'], (req, res) => {
   res.json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
@@ -36,13 +49,13 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/employees', employeeRoutes);
-app.use('/api/expenses', expenseRoutes);
-app.use('/api/zoho', zohoRoutes);
-app.use('/api/reports', reportRoutes);
-app.use('/api/webhooks', webhookRoutes);
+// API Routes (support both /api/* and /* if prefix is stripped)
+app.use(['/api/auth', '/auth'], authRoutes);
+app.use(['/api/employees', '/employees'], employeeRoutes);
+app.use(['/api/expenses', '/expenses'], expenseRoutes);
+app.use(['/api/zoho', '/zoho'], zohoRoutes);
+app.use(['/api/reports', '/reports'], reportRoutes);
+app.use(['/api/webhooks', '/webhooks'], webhookRoutes);
 
 // Serve client build if available
 const clientDist = path.join(__dirname, '../../client/dist');

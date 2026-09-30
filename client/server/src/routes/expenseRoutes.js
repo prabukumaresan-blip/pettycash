@@ -8,9 +8,16 @@ const { db, supabase, isLiveSupabase } = require('../config/supabase');
 const zohoBooksService = require('../services/zohoBooksService');
 
 // Setup local uploads storage directory as reliable fallback
-const UPLOAD_DIR = path.join(__dirname, '../../uploads');
+const UPLOAD_DIR = process.env.VERCEL === '1'
+  ? path.join('/tmp', 'uploads')
+  : path.join(__dirname, '../../uploads');
+
 if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+  try {
+    fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+  } catch (e) {
+    console.warn('Could not create upload directory:', e.message);
+  }
 }
 
 const storage = multer.memoryStorage();

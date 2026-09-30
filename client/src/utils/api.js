@@ -33,6 +33,21 @@ async function fetchWithAuth(url, options = {}) {
   });
 }
 
+async function safeJson(res) {
+  try {
+    const text = await res.text();
+    return JSON.parse(text);
+  } catch {
+    if (res.status === 401) {
+      return { success: false, error: 'Authentication required. Please log in.' };
+    }
+    if (res.status === 404) {
+      return { success: false, error: 'Resource or API route not found (404).' };
+    }
+    return { success: false, error: `Server response not valid JSON (HTTP ${res.status})` };
+  }
+}
+
 export const api = {
   // Authentication
   getStoredUser() {
@@ -45,7 +60,7 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ identifier, password })
     });
-    const data = await res.json();
+    const data = await safeJson(res);
     if (data.success && data.employee) {
       const userSession = {
         ...data.employee,
@@ -60,7 +75,7 @@ export const api = {
   async getMe() {
     try {
       const res = await fetchWithAuth(`${BASE_URL}/auth/me`);
-      const data = await res.json();
+      const data = await safeJson(res);
       if (data.success && data.employee) {
         const current = getStoredUser() || {};
         const updated = { ...current, ...data.employee };
@@ -83,14 +98,14 @@ export const api = {
 
   async getDemoAccounts() {
     const res = await fetch(`${BASE_URL}/auth/demo-accounts`);
-    return await res.json();
+    return await safeJson(res);
   },
 
   // Check health
   async checkHealth() {
     try {
       const res = await fetch(`${BASE_URL}/health`);
-      return await res.json();
+      return await safeJson(res);
     } catch {
       return { status: 'offline' };
     }
@@ -99,12 +114,12 @@ export const api = {
   // Employees
   async getEmployees() {
     const res = await fetchWithAuth(`${BASE_URL}/employees`);
-    return await res.json();
+    return await safeJson(res);
   },
 
   async getEmployee(id) {
     const res = await fetchWithAuth(`${BASE_URL}/employees/${id}`);
-    return await res.json();
+    return await safeJson(res);
   },
 
   async saveEmployee(employee) {
@@ -115,14 +130,14 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(employee)
     });
-    return await res.json();
+    return await safeJson(res);
   },
 
   async deleteEmployee(id, hard = false) {
     const res = await fetchWithAuth(`${BASE_URL}/employees/${id}?hardDelete=${hard}`, {
       method: 'DELETE'
     });
-    return await res.json();
+    return await safeJson(res);
   },
 
   async topupEmployee(id, amount, notes, paymentMode = 'Bank Transfer') {
@@ -131,14 +146,14 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ amount, notes, payment_mode: paymentMode })
     });
-    return await res.json();
+    return await safeJson(res);
   },
 
   async createZohoAccountForEmployee(id) {
     const res = await fetchWithAuth(`${BASE_URL}/employees/${id}/create-zoho-account`, {
       method: 'POST'
     });
-    return await res.json();
+    return await safeJson(res);
   },
 
   // Expenses
@@ -153,7 +168,7 @@ export const api = {
     try {
       const res = await fetchWithAuth(`${BASE_URL}/expenses?${params.toString()}`);
       if (!res.ok) throw new Error('Network error');
-      const data = await res.json();
+      const data = await safeJson(res);
       try {
         localStorage.setItem('cached_expenses', JSON.stringify(data.expenses || []));
       } catch (e) {
@@ -180,7 +195,7 @@ export const api = {
         method: 'POST',
         body: formData
       });
-      return await res.json();
+      return await safeJson(res);
     } catch {
       return this.queueOfflineExpense(formData);
     }
@@ -191,21 +206,21 @@ export const api = {
       method: 'PUT',
       body: formData
     });
-    return await res.json();
+    return await safeJson(res);
   },
 
   async deleteExpense(id) {
     const res = await fetchWithAuth(`${BASE_URL}/expenses/${id}`, {
       method: 'DELETE'
     });
-    return await res.json();
+    return await safeJson(res);
   },
 
   async retryExpenseSync(id) {
     const res = await fetchWithAuth(`${BASE_URL}/expenses/${id}/retry-sync`, {
       method: 'POST'
     });
-    return await res.json();
+    return await safeJson(res);
   },
 
   // Offline Queue handling
@@ -279,12 +294,12 @@ export const api = {
   // Zoho Books Config & Sync
   async getZohoStatus() {
     const res = await fetchWithAuth(`${BASE_URL}/zoho/status`);
-    return await res.json();
+    return await safeJson(res);
   },
 
   async getZohoAuthUrl() {
     const res = await fetchWithAuth(`${BASE_URL}/zoho/auth-url`);
-    return await res.json();
+    return await safeJson(res);
   },
 
   async updateZohoSettings(settings) {
@@ -293,34 +308,34 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(settings)
     });
-    return await res.json();
+    return await safeJson(res);
   },
 
   async triggerZohoSync() {
     const res = await fetchWithAuth(`${BASE_URL}/zoho/sync`, {
       method: 'POST'
     });
-    return await res.json();
+    return await safeJson(res);
   },
 
   async getChartOfAccounts() {
     const res = await fetchWithAuth(`${BASE_URL}/zoho/chart-of-accounts`);
-    return await res.json();
+    return await safeJson(res);
   },
 
   async getZohoProjects() {
     const res = await fetchWithAuth(`${BASE_URL}/zoho/projects`);
-    return await res.json();
+    return await safeJson(res);
   },
 
   async getZohoContacts() {
     const res = await fetchWithAuth(`${BASE_URL}/zoho/contacts`);
-    return await res.json();
+    return await safeJson(res);
   },
 
   async getSyncLogs() {
     const res = await fetchWithAuth(`${BASE_URL}/zoho/sync-logs`);
-    return await res.json();
+    return await safeJson(res);
   },
 
   // Reports
@@ -332,7 +347,7 @@ export const api = {
       }
     });
     const res = await fetchWithAuth(`${BASE_URL}/reports?${params.toString()}`);
-    return await res.json();
+    return await safeJson(res);
   },
 
   getCsvExportUrl(filters = {}) {

@@ -27,7 +27,11 @@ export default function ZohoSettingsView({
   const [activeTab, setActiveTab] = useState('oauth'); // 'oauth', 'accounts', 'projects', 'logs'
   const [clientId, setClientId] = useState('');
   const [clientSecret, setClientSecret] = useState('');
-  const [redirectUri, setRedirectUri] = useState('http://localhost:5000/api/zoho/callback');
+  const [redirectUri, setRedirectUri] = useState(
+    typeof window !== 'undefined'
+      ? `${window.location.origin}/api/zoho/callback`
+      : 'http://localhost:5000/api/zoho/callback'
+  );
   const [organizationId, setOrganizationId] = useState('');
   const [organizationName, setOrganizationName] = useState('');
   const [dcRegion, setDcRegion] = useState('com');

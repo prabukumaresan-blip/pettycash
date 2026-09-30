@@ -21,7 +21,9 @@ if (isLiveSupabase) {
 }
 
 // Local mock storage backup for out-of-the-box instant usability
-const DB_FILE = process.env.VERCEL === '1' ? '/tmp/data-store.json' : path.join(__dirname, '../../data-store.json');
+const DB_FILE = process.env.VERCEL === '1'
+  ? path.join('/tmp', 'data-store.json')
+  : path.join(process.cwd(), 'server', 'data-store.json');
 
 const initialSeedData = {
   zoho_config: {
@@ -244,7 +246,11 @@ const initialSeedData = {
 function loadLocalData() {
   try {
     if (!fs.existsSync(DB_FILE)) {
-      fs.writeFileSync(DB_FILE, JSON.stringify(initialSeedData, null, 2), 'utf-8');
+      try {
+        fs.writeFileSync(DB_FILE, JSON.stringify(initialSeedData, null, 2), 'utf-8');
+      } catch (wErr) {
+        console.warn('Could not initialize local DB_FILE:', wErr.message);
+      }
       return initialSeedData;
     }
     const raw = fs.readFileSync(DB_FILE, 'utf-8');
