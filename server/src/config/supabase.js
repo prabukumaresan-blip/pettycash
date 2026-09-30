@@ -21,7 +21,7 @@ if (isLiveSupabase) {
 }
 
 // Local mock storage backup for out-of-the-box instant usability
-const DB_FILE = path.join(__dirname, '../../data-store.json');
+const DB_FILE = process.env.VERCEL === '1' ? '/tmp/data-store.json' : path.join(__dirname, '../../data-store.json');
 
 const initialSeedData = {
   zoho_config: {

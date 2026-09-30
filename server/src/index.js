@@ -65,14 +65,17 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start Background Cron Sync
-syncService.init();
+// Start Background Cron Sync & Server (Local only)
+if (process.env.NODE_ENV !== 'production' && process.env.VERCEL !== '1') {
+  syncService.init();
 
-// Start Server
-app.listen(PORT, () => {
-  console.log(`====================================================`);
-  console.log(`🚀 Petty Cash Management API running on port ${PORT}`);
-  console.log(`📡 Zoho Books Sync & Supabase Bridge Active`);
-  console.log(`🌐 Local App URL: http://localhost:${PORT}`);
-  console.log(`====================================================`);
-});
+  app.listen(PORT, () => {
+    console.log(`====================================================`);
+    console.log(`🚀 Petty Cash Management API running on port ${PORT}`);
+    console.log(`📡 Zoho Books Sync & Supabase Bridge Active`);
+    console.log(`🌐 Local App URL: http://localhost:${PORT}`);
+    console.log(`====================================================`);
+  });
+}
+
+module.exports = app;
