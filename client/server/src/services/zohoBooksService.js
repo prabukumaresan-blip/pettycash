@@ -47,14 +47,27 @@ class ZohoBooksService {
   }
 
   // Generate OAuth 2.0 Authorization URL
-  async getAuthorizationUrl() {
+  async getAuthorizationUrl(req = null) {
     const config = await db.getZohoConfig();
     const { authUrl } = this.getEndpoints(config.dc_region);
+
+    let redirectUri = config.redirect_uri;
+    if (req) {
+      const protocol = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
+      const host = req.headers['x-forwarded-host'] || req.headers.host;
+      if (host && (!redirectUri || redirectUri.includes('localhost'))) {
+        redirectUri = `${protocol}://${host}/api/zoho/callback`;
+      }
+    }
+    if (!redirectUri || redirectUri.includes('localhost')) {
+      redirectUri = 'https://pettycash-pearl.vercel.app/api/zoho/callback';
+    }
+
     const params = new URLSearchParams({
       scope: 'ZohoBooks.fullaccess.all',
       client_id: config.client_id || 'demo_client_id',
       response_type: 'code',
-      redirect_uri: config.redirect_uri || 'http://localhost:5000/api/zoho/callback',
+      redirect_uri: redirectUri,
       access_type: 'offline',
       prompt: 'consent'
     });
@@ -62,9 +75,21 @@ class ZohoBooksService {
   }
 
   // Exchange Authorization Code for Access & Refresh Tokens
-  async handleOAuthCallback(code) {
+  async handleOAuthCallback(code, req = null) {
     const config = await db.getZohoConfig();
     const { tokenUrl } = this.getEndpoints(config.dc_region);
+
+    let redirectUri = config.redirect_uri;
+    if (req) {
+      const protocol = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
+      const host = req.headers['x-forwarded-host'] || req.headers.host;
+      if (host && (!redirectUri || redirectUri.includes('localhost'))) {
+        redirectUri = `${protocol}://${host}/api/zoho/callback`;
+      }
+    }
+    if (!redirectUri || redirectUri.includes('localhost')) {
+      redirectUri = 'https://pettycash-pearl.vercel.app/api/zoho/callback';
+    }
 
     if (config.mock_mode || !config.client_secret || config.client_secret.includes('dummy')) {
       console.log('🔄 [Zoho Mock] Simulating OAuth 2.0 token exchange for code:', code);
@@ -86,7 +111,7 @@ class ZohoBooksService {
           code,
           client_id: config.client_id,
           client_secret: config.client_secret,
-          redirect_uri: config.redirect_uri,
+          redirect_uri: redirectUri,
           grant_type: 'authorization_code'
         }
       });

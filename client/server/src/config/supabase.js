@@ -30,7 +30,7 @@ const initialSeedData = {
     id: 1,
     client_id: process.env.ZOHO_CLIENT_ID || '1000.DEMOZOHOCLIENTID12345',
     client_secret: process.env.ZOHO_CLIENT_SECRET || 'zoho_secret_dummy_key_67890',
-    redirect_uri: process.env.ZOHO_REDIRECT_URI || 'http://localhost:5000/api/zoho/callback',
+    redirect_uri: process.env.ZOHO_REDIRECT_URI || 'https://pettycash-pearl.vercel.app/api/zoho/callback',
     access_token: 'demo_access_token_active',
     refresh_token: 'demo_refresh_token_valid',
     token_expires_at: new Date(Date.now() + 3600000).toISOString(),

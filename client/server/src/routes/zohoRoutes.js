@@ -21,7 +21,11 @@ router.get('/status', async (req, res) => {
       config: {
         client_id: config.client_id ? '••••••••' + config.client_id.slice(-6) : '',
         raw_client_id: config.client_id || '',
-        redirect_uri: config.redirect_uri || 'http://localhost:5000/api/zoho/callback',
+        redirect_uri: (config.redirect_uri && !config.redirect_uri.includes('localhost:5000'))
+          ? config.redirect_uri
+          : ((req.headers['x-forwarded-host'] || req.headers.host)
+              ? `${req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http')}://${req.headers['x-forwarded-host'] || req.headers.host}/api/zoho/callback`
+              : 'https://pettycash-pearl.vercel.app/api/zoho/callback'),
         organization_id: config.organization_id || '',
         organization_name: config.organization_name || 'Zoho Books Demo Org',
         dc_region: config.dc_region || 'com',
@@ -47,7 +51,7 @@ router.get('/status', async (req, res) => {
 // GET OAuth 2.0 Authorization URL
 router.get('/auth-url', async (req, res) => {
   try {
-    const url = await zohoBooksService.getAuthorizationUrl();
+    const url = await zohoBooksService.getAuthorizationUrl(req);
     res.json({ success: true, url });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
@@ -58,7 +62,10 @@ router.get('/auth-url', async (req, res) => {
 router.get('/callback', async (req, res) => {
   const { code, error } = req.query;
 
-  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+  const protocol = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
+  const host = req.headers['x-forwarded-host'] || req.headers.host;
+  const detectedOrigin = host ? `${protocol}://${host}` : 'https://pettycash-pearl.vercel.app';
+  const frontendUrl = process.env.FRONTEND_URL || detectedOrigin;
 
   if (error) {
     return res.redirect(`${frontendUrl}/?zoho_error=${encodeURIComponent(error)}`);
@@ -69,7 +76,7 @@ router.get('/callback', async (req, res) => {
   }
 
   try {
-    await zohoBooksService.handleOAuthCallback(code);
+    await zohoBooksService.handleOAuthCallback(code, req);
     // Run an initial sync after connecting
     await syncService.runFullSync();
     res.redirect(`${frontendUrl}/?zoho_connected=true`);

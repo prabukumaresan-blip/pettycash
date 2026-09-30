@@ -3,7 +3,7 @@
     "id": 1,
     "client_id": "1000.BYLDNDDJMF36HIGK6ZJXGMMYILQ12O",
     "client_secret": "834dd49f629f1e095f2858a71217add0571131bd70",
-    "redirect_uri": "http://localhost:5000/api/zoho/callback",
+    "redirect_uri": "https://pettycash-pearl.vercel.app/api/zoho/callback",
     "access_token": "1000.37c17b6d6392ec9d9eb5bc267639ee1d.17f99b72a0567184b754bc53248c5e84",
     "refresh_token": "1000.70b3d3f7739447a1b5a16b1d535b0f94.860e4471704192a3fa442619dbd08417",
     "token_expires_at": "2026-09-30T20:40:44.409Z",
@@ -35,7 +35,7 @@
       "petty_cash_account_name": "Nihal Petty Cash",
       "is_active": true,
       "created_at": "2026-09-30T16:40:43.579Z",
-      "updated_at": "2026-09-30T20:14:53.743Z",
+      "updated_at": "2026-09-30T20:18:59.321Z",
       "auto_create_zoho_account": false
     },
     {
