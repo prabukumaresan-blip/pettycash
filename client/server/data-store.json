@@ -1,0 +1,6167 @@
+{
+  "zoho_config": {
+    "id": 1,
+    "client_id": "1000.BYLDNDDJMF36HIGK6ZJXGMMYILQ12O",
+    "client_secret": "834dd49f629f1e095f2858a71217add0571131bd70",
+    "redirect_uri": "http://localhost:5000/api/zoho/callback",
+    "access_token": "1000.37c17b6d6392ec9d9eb5bc267639ee1d.17f99b72a0567184b754bc53248c5e84",
+    "refresh_token": "1000.70b3d3f7739447a1b5a16b1d535b0f94.860e4471704192a3fa442619dbd08417",
+    "token_expires_at": "2026-09-30T20:40:44.409Z",
+    "organization_id": "771750431",
+    "organization_name": "Bright Flowers Trading LLC",
+    "dc_region": "com",
+    "is_connected": true,
+    "mock_mode": false,
+    "auto_sync_interval_mins": 15,
+    "default_expense_account_id": "acc-exp-petty",
+    "default_expense_account_name": "Petty Cash Purchases",
+    "last_sync_at": "2026-09-30T19:30:03.267Z",
+    "updated_at": "2026-09-30T19:40:44.413Z"
+  },
+  "employees": [
+    {
+      "id": "emp-101",
+      "name": "Sarah Connor",
+      "email": "sarah.c@company.com",
+      "employee_code": "EMP-001",
+      "password": "admin123",
+      "role": "admin",
+      "petty_cash_account_id": "acc-pc-001",
+      "petty_cash_account_name": "Petty Cash - Sarah Connor",
+      "initial_float": 1500,
+      "current_balance": 1500,
+      "default_project_id": "proj-101",
+      "default_project_name": "Metro Transit Hub Phase 2",
+      "department": "Field Operations",
+      "is_active": true,
+      "created_at": "2026-08-30T16:29:23.101Z",
+      "updated_at": "2026-09-29T16:41:29.064Z"
+    },
+    {
+      "id": "emp-102",
+      "name": "David Miller",
+      "email": "david.m@company.com",
+      "employee_code": "EMP-002",
+      "password": "emp123",
+      "role": "employee",
+      "petty_cash_account_id": "acc-pc-002",
+      "petty_cash_account_name": "Petty Cash - David Miller",
+      "initial_float": 1000,
+      "current_balance": 764.5,
+      "default_project_id": "proj-102",
+      "default_project_name": "Skyline Tower Renovations",
+      "department": "Site Engineering",
+      "is_active": true,
+      "created_at": "2026-09-09T16:29:23.101Z",
+      "updated_at": "2026-09-29T20:04:22.309Z"
+    },
+    {
+      "id": "emp-103",
+      "name": "Elena Rostova",
+      "email": "elena.r@company.com",
+      "employee_code": "EMP-003",
+      "password": "emp123",
+      "role": "employee",
+      "petty_cash_account_id": "acc-pc-003",
+      "petty_cash_account_name": "Petty Cash - Elena Rostova",
+      "initial_float": 800,
+      "current_balance": 620,
+      "default_project_id": "proj-103",
+      "default_project_name": "Green Energy Solar Park",
+      "department": "Logistics",
+      "is_active": true,
+      "created_at": "2026-09-19T16:29:23.101Z"
+    },
+    {
+      "id": "emp-bbcdae95",
+      "name": "Nihal",
+      "email": "nihal@company.com",
+      "employee_code": "EMP-502",
+      "password": "emp123",
+      "role": "employee",
+      "initial_float": 30.76,
+      "current_balance": 30.76,
+      "department": "Field Operations",
+      "default_project_id": null,
+      "default_project_name": null,
+      "petty_cash_account_id": "3095712000001367590",
+      "petty_cash_account_name": "Nihal Petty Cash",
+      "is_active": true,
+      "created_at": "2026-09-30T16:40:43.579Z",
+      "updated_at": "2026-09-30T19:41:56.144Z",
+      "auto_create_zoho_account": false
+    }
+  ],
+  "zoho_accounts": [
+    {
+      "account_id": "3095712000002878893",
+      "account_name": "BF Corpus Fund",
+      "account_code": "",
+      "account_type": "other_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000003605347",
+      "account_name": "Loan to Retail Division",
+      "account_code": "",
+      "account_type": "other_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000370",
+      "account_name": "Advance Tax",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000035001",
+      "account_name": "Employee Advance",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075352",
+      "account_name": "Cash Advance - Anggay Marma",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075358",
+      "account_name": "Cash  Advance - Falack",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075364",
+      "account_name": "Cash Advaance - Rabi Prakash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075370",
+      "account_name": "Cash Advanace - Aonsanthu Maram",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075376",
+      "account_name": "Cash Advanace - Devendra Singh",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075382",
+      "account_name": "Cash Advanace - Hari Prasad",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075388",
+      "account_name": "Cash Advanace - Periyasami",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075394",
+      "account_name": "Cash Advanace - Sonu",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075400",
+      "account_name": "Cash Advanace  - Ramjivan",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075412",
+      "account_name": "Sulaiman Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075418",
+      "account_name": "Ibrahim Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075424",
+      "account_name": "Cash Advance - Naresh Patel",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075430",
+      "account_name": "Cash Advance - Pawan Kumar",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075448",
+      "account_name": "Cash Advance - Tulsi",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075454",
+      "account_name": "Cash Advance - Ukyching Marma",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075460",
+      "account_name": "Umesh Petty cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075466",
+      "account_name": "Vasu Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075472",
+      "account_name": "Cash Advance  - Shabhuddin",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075508",
+      "account_name": "Hasna Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000258729",
+      "account_name": "Cash Advance - Rahul",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000292001",
+      "account_name": "Cash Advanace - Manish Kumar",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000399263",
+      "account_name": "Anil Kumar Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000589089",
+      "account_name": "Cash Advance - Sidhappa",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000710223",
+      "account_name": "Kaddus Ali Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001103288",
+      "account_name": "Cash Advanace - Jahir Uddin",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001367590",
+      "account_name": "Nihal Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002049033",
+      "account_name": "Kumaresan Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002075174",
+      "account_name": "Salim Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002083087",
+      "account_name": "Rahul Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002093708",
+      "account_name": "Falack Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002139689",
+      "account_name": "Khalid Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002203003",
+      "account_name": "Litton Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002403105",
+      "account_name": "Mohammed Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002583403",
+      "account_name": "Anil Jittu Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000003068153",
+      "account_name": "Yassin Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000003548772",
+      "account_name": "Ramjeevan Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000003974081",
+      "account_name": "Prabhu Swaminathan Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000004199952",
+      "account_name": "MD Sarowar Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000004235001",
+      "account_name": "Ram Shanker Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000004334377",
+      "account_name": "MD Nasser Uddin",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000004413002",
+      "account_name": "Harish Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000004448115",
+      "account_name": "Tulsi Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000004981183",
+      "account_name": "Chowdury Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000005707196",
+      "account_name": "Sakthi Petty cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000005933630",
+      "account_name": "Ramesh Petty cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000006564139",
+      "account_name": "MD MAYNUL ISLAM PETTY CASH",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000006564147",
+      "account_name": "MD MUTAHAR MIAH",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000006954736",
+      "account_name": "SAFI ULLAH Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000007094003",
+      "account_name": "Al Harith Petty cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000007094047",
+      "account_name": "ABUL HASNAT Petty cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000007419550",
+      "account_name": "Nezamuddin Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000007795002",
+      "account_name": "Afzal Petty cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000008117458",
+      "account_name": "Azzan Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000008171002",
+      "account_name": "Saikumar Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000008522002",
+      "account_name": "Ibrahim AL Shaibani",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000074012",
+      "account_name": "Vendor Advance",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000074041",
+      "account_name": "Input VAT",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075340",
+      "account_name": "Cash Account",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075478",
+      "account_name": "Loans Given",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075484",
+      "account_name": "Loan to Arun",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075490",
+      "account_name": "Loan to Dimah Al Raedah Trading LLC",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075496",
+      "account_name": "Loan To Hasna",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075502",
+      "account_name": "Loan to Kumaresan",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075514",
+      "account_name": "Loan to Mohammed Saif Sulaiman",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075520",
+      "account_name": "Loan to Pradeep Muthurangam",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075526",
+      "account_name": "Loan to Salim",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075532",
+      "account_name": "Loan to Zaher Company",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000179633",
+      "account_name": "Loan to Harish",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000549001",
+      "account_name": "Loan GIven to Coffee Farms Company LLC",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001734243",
+      "account_name": "Loan to Nihal",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001734267",
+      "account_name": "Loan to Ameer",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001994472",
+      "account_name": "Loan to Khalid",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002003023",
+      "account_name": "Loan to Fahad",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002686236",
+      "account_name": "Loan to AHMED AL HINAI",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000003424243",
+      "account_name": "Loan to SV",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000003987209",
+      "account_name": "Short Time Loan to Retail Division",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000006082227",
+      "account_name": "Loan to Nursery",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002049025",
+      "account_name": "Mizan Petty Cash",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075538",
+      "account_name": "Security Deposit Recivables",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075544",
+      "account_name": "Cheque guarantee",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075550",
+      "account_name": "Performance Bonds",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075568",
+      "account_name": "Accumulated Depreciation",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075574",
+      "account_name": "Furniture and Fixtures",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000578467",
+      "account_name": "Provision for Salary",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001208049",
+      "account_name": "Sales to Customers (Cash)",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000004694407",
+      "account_name": "Retention Receivable",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000004867061",
+      "account_name": "Goods In Transit",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000005550626",
+      "account_name": "Zoho Payroll - Loan Account",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000358",
+      "account_name": "Undeposited Funds",
+      "account_code": "",
+      "account_type": "cash",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000361",
+      "account_name": "Petty Cash",
+      "account_code": "",
+      "account_type": "cash",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075328",
+      "account_name": "Bank Muscat Corparate Account",
+      "account_code": "",
+      "account_type": "bank",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000003093687",
+      "account_name": "Barka Shop - Bank Muscat Account",
+      "account_code": "",
+      "account_type": "bank",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000005550305",
+      "account_name": "Zoho Payroll - Bank Account",
+      "account_code": "",
+      "account_type": "bank",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000008584381",
+      "account_name": "Thawani Pay",
+      "account_code": "",
+      "account_type": "bank",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000364",
+      "account_name": "Accounts Receivable",
+      "account_code": "",
+      "account_type": "accounts_receivable",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000367",
+      "account_name": "Furniture and Equipment",
+      "account_code": "",
+      "account_type": "fixed_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075580",
+      "account_name": "Tools",
+      "account_code": "",
+      "account_type": "fixed_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075586",
+      "account_name": "Office Equipment",
+      "account_code": "",
+      "account_type": "fixed_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075592",
+      "account_name": "Vehicles",
+      "account_code": "",
+      "account_type": "fixed_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075598",
+      "account_name": "Nissan Sunny - 60764",
+      "account_code": "",
+      "account_type": "fixed_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075604",
+      "account_name": "Toyota Yaris - 81077",
+      "account_code": "",
+      "account_type": "fixed_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075610",
+      "account_name": "Toyota Yaris - 93493",
+      "account_code": "",
+      "account_type": "fixed_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001283127",
+      "account_name": "Mitsubushi Pickup #1147 / WK",
+      "account_code": "",
+      "account_type": "fixed_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000003553229",
+      "account_name": "Yaris Car #58465 H",
+      "account_code": "",
+      "account_type": "fixed_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000005642854",
+      "account_name": "Bureimi Changan (Ibrahim)",
+      "account_code": "",
+      "account_type": "fixed_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000007629002",
+      "account_name": "Ford F-150 Pickup",
+      "account_code": "",
+      "account_type": "fixed_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000007930424",
+      "account_name": "BYD Cars",
+      "account_code": "",
+      "account_type": "fixed_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000096168",
+      "account_name": "Landscaping Equipment",
+      "account_code": "",
+      "account_type": "fixed_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000376",
+      "account_name": "VAT Payable",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000003001",
+      "account_name": "Opening Balance Adjustments",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000005001",
+      "account_name": "Unearned Revenue",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000035003",
+      "account_name": "Employee Reimbursements",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000074043",
+      "account_name": "Output VAT",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000074169",
+      "account_name": "GCC VAT Payable",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075622",
+      "account_name": "Advance Customer Payments",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075628",
+      "account_name": "Loan from Mohammed",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075634",
+      "account_name": "Loan from Salim Al Naabi",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075640",
+      "account_name": "Loan from Zaher Company",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075646",
+      "account_name": "Salaries Payable",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075652",
+      "account_name": "Tax Account (Sales Taxes)",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075658",
+      "account_name": "Tender Guarantee Cheques",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001367072",
+      "account_name": "Other Montly Expenses Payable",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001622427",
+      "account_name": "Rent Accumulated",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001622433",
+      "account_name": "Supply Labour Wages Accumulated",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001622439",
+      "account_name": "Water Charges Accumulated",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001622445",
+      "account_name": "Electricity Charges Accumulated",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001622451",
+      "account_name": "Other Expenses Accumulated",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001734335",
+      "account_name": "Visa Expenses Accumulated",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002417187",
+      "account_name": "Ibrahim",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002592009",
+      "account_name": "PDCs Issued",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000003568249",
+      "account_name": "Loan from Dimah to BF",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000003719299",
+      "account_name": "Loan from Barka Shop",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000003763228",
+      "account_name": "Loan from SV",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000005550249",
+      "account_name": "Reimbursements Payable",
+      "account_code": "Payroll-001",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000005550252",
+      "account_name": "Statutory Deductions Payable",
+      "account_code": "Payroll-002",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000005550255",
+      "account_name": "Deductions Payable",
+      "account_code": "Payroll-003",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000005550258",
+      "account_name": "Net Salary Payable",
+      "account_code": "Payroll-004",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000005550261",
+      "account_name": "Hold Salary Payable",
+      "account_code": "Payroll-005",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000005792824",
+      "account_name": "Loan for Bureimi Changan",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000006082367",
+      "account_name": "Dividends payable",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000007629006",
+      "account_name": "Loan for ford f-150 pickup",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000373",
+      "account_name": "Accounts Payable",
+      "account_code": "",
+      "account_type": "accounts_payable",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000007112001",
+      "account_name": "Gratuity Payable",
+      "account_code": "Payroll-006",
+      "account_type": "long_term_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000007418001",
+      "account_name": "Air Travel Allowance Payable",
+      "account_code": "Payroll-008",
+      "account_type": "long_term_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000045001",
+      "account_name": "Tag Adjustments",
+      "account_code": "",
+      "account_type": "other_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001283133",
+      "account_name": "Mitsubushi Pickcup #1147 / WK Loan Payable",
+      "account_code": "",
+      "account_type": "other_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000006092357",
+      "account_name": "Loan from Oman Development Bank",
+      "account_code": "",
+      "account_type": "other_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000007250003",
+      "account_name": "Loan payable for Ashok Leyland Bus #6065",
+      "account_code": "",
+      "account_type": "other_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000007930396",
+      "account_name": "Loan for 3 BYD Cars",
+      "account_code": "",
+      "account_type": "other_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000008432496",
+      "account_name": "Loan for Tipper Tuck",
+      "account_code": "",
+      "account_type": "other_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000379",
+      "account_name": "Retained Earnings",
+      "account_code": "",
+      "account_type": "equity",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000382",
+      "account_name": "Owner's Equity",
+      "account_code": "",
+      "account_type": "equity",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000385",
+      "account_name": "Opening Balance Offset",
+      "account_code": "",
+      "account_type": "equity",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000012001",
+      "account_name": "Drawings",
+      "account_code": "",
+      "account_type": "equity",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075664",
+      "account_name": "Mohammed Al Abri  Draws",
+      "account_code": "",
+      "account_type": "equity",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075668",
+      "account_name": "Mohammed Al Abri Equity",
+      "account_code": "",
+      "account_type": "equity",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075672",
+      "account_name": "Salim Al Abri Draws",
+      "account_code": "",
+      "account_type": "equity",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075676",
+      "account_name": "Salim Al Naabi Equity",
+      "account_code": "",
+      "account_type": "equity",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075680",
+      "account_name": "Share Capital Account",
+      "account_code": "",
+      "account_type": "equity",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000388",
+      "account_name": "Sales",
+      "account_code": "",
+      "account_type": "income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000391",
+      "account_name": "Other Income",
+      "account_code": "",
+      "account_type": "income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000394",
+      "account_name": "Interest Income",
+      "account_code": "",
+      "account_type": "income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000397",
+      "account_name": "Late Fee Income",
+      "account_code": "",
+      "account_type": "income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000406",
+      "account_name": "Discount",
+      "account_code": "",
+      "account_type": "income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000010001",
+      "account_name": "Other Charges",
+      "account_code": "",
+      "account_type": "income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000014001",
+      "account_name": "Shipping Charge",
+      "account_code": "",
+      "account_type": "income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075688",
+      "account_name": "Maintenance Services",
+      "account_code": "",
+      "account_type": "income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075692",
+      "account_name": "Project Works",
+      "account_code": "",
+      "account_type": "income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075700",
+      "account_name": "Sales Income",
+      "account_code": "",
+      "account_type": "income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075704",
+      "account_name": "Sales of Nursery",
+      "account_code": "",
+      "account_type": "income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075708",
+      "account_name": "Sales of fertilizer Nursery",
+      "account_code": "",
+      "account_type": "income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075712",
+      "account_name": "Sales of Pesticides Nursery",
+      "account_code": "",
+      "account_type": "income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075716",
+      "account_name": "Sales of Plants Nursery",
+      "account_code": "",
+      "account_type": "income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075720",
+      "account_name": "Sales of Tools Nursery",
+      "account_code": "",
+      "account_type": "income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075724",
+      "account_name": "Sales of Trees Nursery",
+      "account_code": "",
+      "account_type": "income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001615185",
+      "account_name": "Salary Support from Ministry",
+      "account_code": "",
+      "account_type": "income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001615305",
+      "account_name": "Salary support for Ibrahim",
+      "account_code": "",
+      "account_type": "income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002544082",
+      "account_name": "Sales - Barka Shop",
+      "account_code": "",
+      "account_type": "income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000007347557",
+      "account_name": "Gain from sale on fixed asset",
+      "account_code": "",
+      "account_type": "other_income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000007519007",
+      "account_name": "Dividends received",
+      "account_code": "",
+      "account_type": "other_income",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000400",
+      "account_name": "Office Supplies",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000403",
+      "account_name": "Advertising And Marketing",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000409",
+      "account_name": "Bank Fees and Charges",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000421",
+      "account_name": "Telephone & Internet Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000439",
+      "account_name": "Bad Debt",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000445",
+      "account_name": "Salaries and Employee Wages",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000451",
+      "account_name": "Depreciation Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000454",
+      "account_name": "Consultant Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000457",
+      "account_name": "Repairs and Maintenance",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000460",
+      "account_name": "Other Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000032023",
+      "account_name": "Lodging",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000035005",
+      "account_name": "Uncategorized",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000072001",
+      "account_name": "Purchase Discounts",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075854",
+      "account_name": "Accomadation Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075860",
+      "account_name": "Advertising and Promotion",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075872",
+      "account_name": "Donations",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075878",
+      "account_name": "Dues and Subscriptions",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075884",
+      "account_name": "Food Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075890",
+      "account_name": "Fuel Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075896",
+      "account_name": "Goverment Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075902",
+      "account_name": "Baladia",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075908",
+      "account_name": "Resident ID Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075914",
+      "account_name": "ROP",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075920",
+      "account_name": "Tender Costs",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075926",
+      "account_name": "HR Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075932",
+      "account_name": "HR Expenses:Employee Final Settlement",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075938",
+      "account_name": "Employee Vacation Pay",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076112",
+      "account_name": "Miscellaneous HR Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000202455",
+      "account_name": "Visa Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075944",
+      "account_name": "Medical Expenses for Workers",
+      "account_code": "108",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075950",
+      "account_name": "Abdul Ghani Medical Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075956",
+      "account_name": "Amir Medical Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075962",
+      "account_name": "Aravid Kumar Medical Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075968",
+      "account_name": "Aziz Shik(Ka Ka)Medical Expnese",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075974",
+      "account_name": "Bhaktha Medical Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075980",
+      "account_name": "Falack Medical Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075986",
+      "account_name": "Jitlal Medical Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075992",
+      "account_name": "Meciacal Exenses for Umesh",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075998",
+      "account_name": "Medical Exepnses for Mananvalan",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076004",
+      "account_name": "Medical Expense for Chawdary",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076010",
+      "account_name": "Medical Expense for Kumaresan",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076016",
+      "account_name": "Medical Expense for Tulsi",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076022",
+      "account_name": "Medical Expense for Upendra",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076028",
+      "account_name": "Medical Expenses - Pwan Kumar",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076034",
+      "account_name": "Medical Expenses - RABI PRAKASH",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076040",
+      "account_name": "Medical Expenses for Belal",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076046",
+      "account_name": "Medical Expenses for Dindayal",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076052",
+      "account_name": "Medical Expenses for Kala Marma",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076058",
+      "account_name": "Medical Expenses for Manish",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076064",
+      "account_name": "Medical Expenses for Omar",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076070",
+      "account_name": "Medical Expenses for Periyasami",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076076",
+      "account_name": "Medical Expenses for Ravindra",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076082",
+      "account_name": "Medical for Tanvir",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076088",
+      "account_name": "Santosh Medical Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076094",
+      "account_name": "Selvam Medical Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076100",
+      "account_name": "Upendra Medical Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076106",
+      "account_name": "Vasu Medical Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000170163",
+      "account_name": "Medical Expenses for Shabudeen",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000175082",
+      "account_name": "Harish Medical Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000461003",
+      "account_name": "Medical Expenses - Vignesh",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000663024",
+      "account_name": "Medical Expenses - Kaddus",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000690011",
+      "account_name": "Medical Expenses - Rahul",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000709113",
+      "account_name": "Medical Expenses - Patel",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000709157",
+      "account_name": "Medical Expenses - Anil",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000974001",
+      "account_name": "Sidappa - Medical Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000974007",
+      "account_name": "Devendra Singh - Medical Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000974013",
+      "account_name": "Sonu - Medical Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076118",
+      "account_name": "Insurance Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076124",
+      "account_name": "Interest Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076130",
+      "account_name": "Office Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076142",
+      "account_name": "Professional Fees",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076148",
+      "account_name": "Reconciliation Discrepancies",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076154",
+      "account_name": "Rent and Rates",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076160",
+      "account_name": "Salaries Paid to Workers",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076166",
+      "account_name": "Site expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076172",
+      "account_name": "Social Insurance for Omanis",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076178",
+      "account_name": "Taxes",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076184",
+      "account_name": "Employee Mobile Expenses",
+      "account_code": "109",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076190",
+      "account_name": "Falack Mobile Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076196",
+      "account_name": "Harish Mobile Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076202",
+      "account_name": "Kumaresh Mobile Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076208",
+      "account_name": "Mobile Expenses - Salim",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076214",
+      "account_name": "Umesh Mobile Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076220",
+      "account_name": "Vasu Mobile Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000663030",
+      "account_name": "Mobile Expenses - Kaddus",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000774001",
+      "account_name": "Mobile Expenses - Rahul",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000938001",
+      "account_name": "Mobile Expense - Sidappa",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000982055",
+      "account_name": "Litton Mobile Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076226",
+      "account_name": "Translation exp.",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076232",
+      "account_name": "Transport & Courier Charges",
+      "account_code": "106",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076238",
+      "account_name": "Travelling Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076244",
+      "account_name": "Air Ticket Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076256",
+      "account_name": "Uniform Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076262",
+      "account_name": "Utilities",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076268",
+      "account_name": "Electric City Bill",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076274",
+      "account_name": "Water Bill",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076280",
+      "account_name": "Vehicle Maintance Expense",
+      "account_code": "107",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076286",
+      "account_name": "Car # 60764 Maintanace Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076292",
+      "account_name": "Car #3334 - Maintanance Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076298",
+      "account_name": "Car #93493 Maintanance expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076304",
+      "account_name": "Car Maintanance #1055mm",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076310",
+      "account_name": "Car No. 81077 Maintance Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076316",
+      "account_name": "Car No.93493 Maintanace Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000189001",
+      "account_name": "#17642W - Car Maintenance",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000210301",
+      "account_name": "Pickup - 5152YS - Maintenance Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000652001",
+      "account_name": "Car #0522 Maintenance expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000663036",
+      "account_name": "Car Maintanance #65519M",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000728057",
+      "account_name": "Car Maintenance - #1005MM",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076322",
+      "account_name": "Vehicles fuel expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076328",
+      "account_name": "#17642 (Salim) - Fuel Expesnes",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076334",
+      "account_name": "Car 60764 Fuel Expense",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076340",
+      "account_name": "Fuel Expenses #51511Y - Camry",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076346",
+      "account_name": "Yaris #4698 R Fuel Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000076352",
+      "account_name": "Yaris 4896 fuel exp.",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000170169",
+      "account_name": "Fuel for 93493",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000170201",
+      "account_name": "Fuel for 81077B",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000112067",
+      "account_name": "Management Fee",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000174001",
+      "account_name": "Equipment Maintenance",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000185001",
+      "account_name": "Salim's Car Loan",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001050020",
+      "account_name": "Parking",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001050166",
+      "account_name": "Fuel/Mileage Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001251185",
+      "account_name": "In-Direct Staff",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002425033",
+      "account_name": "Purchase of Materials",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002466001",
+      "account_name": "Medical Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002749549",
+      "account_name": "Purchase from Barka Shop",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002835085",
+      "account_name": "Other Vehicle Related Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000003424525",
+      "account_name": "Staff Bounus",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000003512467",
+      "account_name": "Legal Fees",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000003974519",
+      "account_name": "Promotion Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000004940521",
+      "account_name": "Employee Welfare",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000005221243",
+      "account_name": "Car Rental Expenses",
+      "account_code": "",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000007112003",
+      "account_name": "Gratuity Expense",
+      "account_code": "Payroll-007",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000007418003",
+      "account_name": "Air Travel Allowance Expense",
+      "account_code": "Payroll-009",
+      "account_type": "expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000034003",
+      "account_name": "Cost of Goods Sold",
+      "account_code": "",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075728",
+      "account_name": "Direct Labour",
+      "account_code": "",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075734",
+      "account_name": "Company labour",
+      "account_code": "",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075740",
+      "account_name": "Outsourced labour",
+      "account_code": "",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075746",
+      "account_name": "Equipment Rental",
+      "account_code": "",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075776",
+      "account_name": "Other Direct Expenses",
+      "account_code": "",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075788",
+      "account_name": "Purchase of Direct Materials",
+      "account_code": "",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075782",
+      "account_name": "Purchase of Materials - Projects",
+      "account_code": "101",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075794",
+      "account_name": "Fertilizers & Pesticides - Maintanance",
+      "account_code": "",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075806",
+      "account_name": "Plants & Seasonal Flowers - Maintanance",
+      "account_code": "104",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000643685",
+      "account_name": "Purchase of Materials - Maintenance",
+      "account_code": "102",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001498571",
+      "account_name": "Fertilizers & Pesticides - Project",
+      "account_code": "",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000001503955",
+      "account_name": "Plants & Seasonal Flowers - Projects",
+      "account_code": "103",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002375645",
+      "account_name": "Purchase - Barka Shop",
+      "account_code": "",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075812",
+      "account_name": "Purchase of Nursery Materials",
+      "account_code": "",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075818",
+      "account_name": "Purchase of fertilizer Nursery",
+      "account_code": "",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075824",
+      "account_name": "Purchase of Pesticides Nursery",
+      "account_code": "",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075830",
+      "account_name": "Purchase of Plants Nursery",
+      "account_code": "",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075836",
+      "account_name": "Purchase of Tools Nursery",
+      "account_code": "",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075842",
+      "account_name": "Purchase of Trees Nursery",
+      "account_code": "",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000003786001",
+      "account_name": "Purchase Retail",
+      "account_code": "",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000075848",
+      "account_name": "Sales Transport charges Nursery",
+      "account_code": "",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000002159007",
+      "account_name": "Fuel for machinery and tools",
+      "account_code": "105",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000005604020",
+      "account_name": "Outsourced Works",
+      "account_code": "",
+      "account_type": "cost_of_goods_sold",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000000415",
+      "account_name": "Exchange Gain or Loss",
+      "account_code": "",
+      "account_type": "other_expense",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000034001",
+      "account_name": "Inventory Asset",
+      "account_code": "",
+      "account_type": "stock",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    },
+    {
+      "account_id": "3095712000000101470",
+      "account_name": "Bank Muscat Payment Clearing",
+      "account_code": "",
+      "account_type": "payment_clearing",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-09-30T19:30:01.673Z"
+    }
+  ],
+  "zoho_projects": [
+    {
+      "project_id": "3095712000008400055",
+      "project_name": "77 - IRRIGATION TRENCHING AND LANDSCAPE",
+      "project_code": "",
+      "customer_id": "3095712000000094128",
+      "customer_name": "OMAN SHAPOORJI COMPANY LLC",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000008373001",
+      "project_name": "76 - SUPPLY OF PRV",
+      "project_code": "",
+      "customer_id": "3095712000007085845",
+      "customer_name": "THE ROYAL OFFICE",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000007793001",
+      "project_name": "75 - AL QALAAH CLUB - LUBAN CAFE",
+      "project_code": "",
+      "customer_id": "3095712000007085845",
+      "customer_name": "THE ROYAL OFFICE",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000007653008",
+      "project_name": "74 - OCEC",
+      "project_code": "74",
+      "customer_id": "3095712000007653001",
+      "customer_name": "OMAN CONVENTION & EXHIBITION CENTRE",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000007334410",
+      "project_name": "76 - Ishaq Al salmi villa",
+      "project_code": "",
+      "customer_id": "3095712000007334396",
+      "customer_name": "Ishaq Al salmi",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000007089001",
+      "project_name": "72 - CONSTRUCTION OF WATER NETWORK AT AL HAMRA PROJECT",
+      "project_code": "",
+      "customer_id": "3095712000000090104",
+      "customer_name": "AGRICULTURE MODERN ENGINEERING LLC",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000007085859",
+      "project_name": "71 - ROYAL OFFICE MAIANTANANCE",
+      "project_code": "",
+      "customer_id": "3095712000007085845",
+      "customer_name": "THE ROYAL OFFICE",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000006377001",
+      "project_name": "73 - FATIMA MOSQUE",
+      "project_code": "",
+      "customer_id": "3095712000000094469",
+      "customer_name": "ROYAL COURT AFFAIRS",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000006209343",
+      "project_name": "70 - JABAL ALSHARQI PARK",
+      "project_code": "",
+      "customer_id": "3095712000006209329",
+      "customer_name": "Al-Dhakhiliyah Governorate",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000006140001",
+      "project_name": "69 - LANDSCAPING WORK HH DR TAGHREED TURKI AL SAID",
+      "project_code": "",
+      "customer_id": "3095712000005544001",
+      "customer_name": "HH Dr. Taghreed Turki Al Said",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000006099270",
+      "project_name": "68 - Jamal Villa Maintanance",
+      "project_code": "",
+      "customer_id": "3095712000004085001",
+      "customer_name": "Mr. Jamal Al Namaani",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000006099124",
+      "project_name": "67 - Abdulaziz",
+      "project_code": "",
+      "customer_id": "3095712000006099108",
+      "customer_name": "Mr. Abdulaziz",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000005911019",
+      "project_name": "66 -  ALI AL-RAWAS VILLA",
+      "project_code": "",
+      "customer_id": "3095712000005911003",
+      "customer_name": "Mr. ALI AL-RAWAS",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000005781677",
+      "project_name": "65 - Barka Nursary Project",
+      "project_code": "",
+      "customer_id": "3095712000003720509",
+      "customer_name": "BRIGHT FLOWERS TRADING LLC (NURSERY)",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000005407001",
+      "project_name": "64 - AL AMAL SPORTS COMPLEX",
+      "project_code": "",
+      "customer_id": "3095712000000092403",
+      "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000005379618",
+      "project_name": "63 - MR. SALMAN & HAMZA(LANDSCAPING & IRRIGATION)",
+      "project_code": "",
+      "customer_id": "3095712000005379604",
+      "customer_name": "JENFEL LLC",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000005334056",
+      "project_name": "62 - Jabal Al Akhdar Festival and Eid Prayer Ground - Zaher Company",
+      "project_code": "",
+      "customer_id": "3095712000000103001",
+      "customer_name": "ZAHER COMPANY",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000005334036",
+      "project_name": "61 - Jabal Al Akhdar Festivel and Eid Prayer Ground - AME",
+      "project_code": "",
+      "customer_id": "3095712000000090104",
+      "customer_name": "AGRICULTURE MODERN ENGINEERING LLC",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000005334030",
+      "project_name": "60 - Jabal Al Akhdar Festival and Eid Prayer Ground",
+      "project_code": "",
+      "customer_id": "3095712000004222901",
+      "customer_name": "Nizwa Municipality",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000005083042",
+      "project_name": "59 - Intercity Maintenance",
+      "project_code": "",
+      "customer_id": "3095712000001918024",
+      "customer_name": "TAKAMUL HOSPITALITY AND INVEST. SAOC",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000005007123",
+      "project_name": "58 - Salalah Project",
+      "project_code": "",
+      "customer_id": "3095712000000092403",
+      "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000004833001",
+      "project_name": "57 - Leyan Al Mawali Villa",
+      "project_code": "",
+      "customer_id": "3095712000004832163",
+      "customer_name": "Ms. Leyan Al Mawali",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000004806001",
+      "project_name": "56 - D & G Villa",
+      "project_code": "",
+      "customer_id": "3095712000000621171",
+      "customer_name": "Mr. Sami Macki",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000004786029",
+      "project_name": "55 -  Mohammed Hamad Al-Sarmi - Maintanance",
+      "project_code": "",
+      "customer_id": "3095712000004786005",
+      "customer_name": "Mr. H.S. Mohammed Hamad Al-Sarmi",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000004786001",
+      "project_name": "54 - Nasser Al Kindi Villa Miantanance",
+      "project_code": "",
+      "customer_id": "3095712000004221016",
+      "customer_name": "Mr. Nasser Al Kindi",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000004612023",
+      "project_name": "53 - Royal Acadamy Maintanance",
+      "project_code": "",
+      "customer_id": "3095712000003108057",
+      "customer_name": "EFS Facilities Services Limited L.L.C",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000004502040",
+      "project_name": "52 - Yasir Villa",
+      "project_code": "",
+      "customer_id": "3095712000004502001",
+      "customer_name": "Mustafa Ahmed Salman Trading Ent, LLC.",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000004489001",
+      "project_name": "51 - Jamal Villa",
+      "project_code": "51",
+      "customer_id": "3095712000004085001",
+      "customer_name": "Mr. Jamal Al Namaani",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000004222933",
+      "project_name": "50 - Dina Ahmed Macki",
+      "project_code": "",
+      "customer_id": "3095712000004222917",
+      "customer_name": "Mr. Dina Ahmed Macki",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000004222913",
+      "project_name": "49 - Nizwa Flyover",
+      "project_code": "",
+      "customer_id": "3095712000004222901",
+      "customer_name": "Nizwa Municipality",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000004045007",
+      "project_name": "48 - MOHAMMED AL HARTHY VILLA",
+      "project_code": "",
+      "customer_id": "3095712000001418129",
+      "customer_name": "MR. MOHAMMED AL HARTHY",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000003481005",
+      "project_name": "47 - Aloft Mainitanance",
+      "project_code": "",
+      "customer_id": "3095712000003336001",
+      "customer_name": "New Rotana Enterprises LLC",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000003232028",
+      "project_name": "Al Khoud Villa",
+      "project_code": "",
+      "customer_id": "3095712000003232005",
+      "customer_name": "Mohammed Jaberi Al Abri",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000002872190",
+      "project_name": "46 - SULTAN QABOOS GRAND MOSQUE",
+      "project_code": "46",
+      "customer_id": "3095712000000094469",
+      "customer_name": "ROYAL COURT AFFAIRS",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000002468186",
+      "project_name": "45 - Landscape maintenance at France Embassy",
+      "project_code": "45",
+      "customer_id": "3095712000000286001",
+      "customer_name": "EMBASSY OF FRANCE IN MUSCAT",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000002468180",
+      "project_name": "44 - Landscaping Maintenance at Al Fayha Hotel",
+      "project_code": "44",
+      "customer_id": "3095712000000091001",
+      "customer_name": "AL FEYHA TOURISM LLC",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000002400092",
+      "project_name": "43 - Braka & Rasul Al Adha Mosques",
+      "project_code": "43",
+      "customer_id": "3095712000002400069",
+      "customer_name": "BAKER AL LAWATI",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000002375037",
+      "project_name": "42 - SMEs BUILDING",
+      "project_code": "",
+      "customer_id": "3095712000002083761",
+      "customer_name": "SMEs DEVELOPMENT AUTHORITY",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000002173975",
+      "project_name": "40 - Iraq Embassy - Maintanance",
+      "project_code": "40",
+      "customer_id": "3095712000000101449",
+      "customer_name": "IRAQ EMABASSY",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000002135033",
+      "project_name": "39 - Oman Botanical Garden - Project",
+      "project_code": "",
+      "customer_id": "3095712000002082548",
+      "customer_name": "L & T Oman",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000002119163",
+      "project_name": "38 - THE EIGHT HOTEL - Maintanance",
+      "project_code": "",
+      "customer_id": "3095712000001251001",
+      "customer_name": "The Eight Hotel S.P.C",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000002084412",
+      "project_name": "37 - Retail Area",
+      "project_code": "",
+      "customer_id": "3095712000001918024",
+      "customer_name": "TAKAMUL HOSPITALITY AND INVEST. SAOC",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000001895409",
+      "project_name": "36 - Supply of Plants",
+      "project_code": "",
+      "customer_id": "3095712000001002047",
+      "customer_name": "Intercity Hotel",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000001827069",
+      "project_name": "41 - France Embassy - Project",
+      "project_code": "41",
+      "customer_id": "3095712000000286001",
+      "customer_name": "EMBASSY OF FRANCE IN MUSCAT",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000001765001",
+      "project_name": "34 - AUTOMATION OF IRIGATION SYSTEM PHASE - 1",
+      "project_code": "",
+      "customer_id": "3095712000000286001",
+      "customer_name": "EMBASSY OF FRANCE IN MUSCAT",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000001709175",
+      "project_name": "33 - AL MOUJ VILLA",
+      "project_code": "",
+      "customer_id": "3095712000001479306",
+      "customer_name": "Mr. NABIL",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000001579061",
+      "project_name": "32 - IRAQ EMBASSY",
+      "project_code": "32",
+      "customer_id": "3095712000000101449",
+      "customer_name": "IRAQ EMABASSY",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000001535061",
+      "project_name": "31 - BAIT AL YASMIN",
+      "project_code": "31",
+      "customer_id": "3095712000001447022",
+      "customer_name": "AL AKKAD NATIONAL PROJECTS LLC",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000001520047",
+      "project_name": "30 - HILTON HOTEL",
+      "project_code": "30",
+      "customer_id": "3095712000001447022",
+      "customer_name": "AL AKKAD NATIONAL PROJECTS LLC",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000001260142",
+      "project_name": "29 - ROYAL ACADAMY",
+      "project_code": "",
+      "customer_id": "3095712000001152032",
+      "customer_name": "ROYAL ACADAMY OF MANAGEMENT",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000001125036",
+      "project_name": "28 - SOFT LANDSCAPING WORKS - ABU TUBUL",
+      "project_code": "",
+      "customer_id": "3095712000000983001",
+      "customer_name": "GULF PETROCHEMICAL SERVICES & TRDG LLC, OMAN",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000001111113",
+      "project_name": "27 - SALALAH FOOTBALL STADIUM",
+      "project_code": "27",
+      "customer_id": "3095712000000092403",
+      "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000001096122",
+      "project_name": "26 - ENG. SUKAINA AL LAWATI PRIVATE VILLA",
+      "project_code": "26",
+      "customer_id": "3095712000001064091",
+      "customer_name": "ENG. SUKAINA AL LAWATI",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000001069001",
+      "project_name": "25 - AHALI BANK",
+      "project_code": "25",
+      "customer_id": "3095712000000092062",
+      "customer_name": "DIMAH AL RAEDAH TRADING LLC",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000001001020",
+      "project_name": "24 -MUSTAFA AL LAWATI PRIVATE VILLA (TWIN VILLA)",
+      "project_code": "",
+      "customer_id": "3095712000000945001",
+      "customer_name": "MR. MUSTAFA AL LAWATI",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000761011",
+      "project_name": "23 - BAHALA MOSQUE (NEW)",
+      "project_code": "",
+      "customer_id": "3095712000000590105",
+      "customer_name": "MINISTRY OF INTERIER",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000742147",
+      "project_name": "22 - PDO - PDO Club- Ras Al Hamra",
+      "project_code": "",
+      "customer_id": "3095712000000729213",
+      "customer_name": "PETROLEUM DEVELOPMENT OMAN",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000690001",
+      "project_name": "21 - SAMI MAKHI VILLA",
+      "project_code": "",
+      "customer_id": "3095712000000621171",
+      "customer_name": "Mr. Sami Macki",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000606013",
+      "project_name": "20 - IRRIGATION FOR SHRUBS AND GROUND COVER AT FRANCE EMBASSY",
+      "project_code": "",
+      "customer_id": "3095712000000286001",
+      "customer_name": "EMBASSY OF FRANCE IN MUSCAT",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000590127",
+      "project_name": "19 - JALAN BANI BU HASSAN MAINTANANCE",
+      "project_code": "",
+      "customer_id": "3095712000000590105",
+      "customer_name": "MINISTRY OF INTERIER",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000548049",
+      "project_name": "18 - FOOTBALL GROUND",
+      "project_code": "",
+      "customer_id": "3095712000000548027",
+      "customer_name": "AL HAMRA YOUTH CLUB",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000548023",
+      "project_name": "17 - AL ANSAB VILLA",
+      "project_code": "",
+      "customer_id": "3095712000000548001",
+      "customer_name": "MOHMOOD ZAHIR AL ABRI",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000415649",
+      "project_name": "16 - DR. FERAS VILLA",
+      "project_code": "",
+      "customer_id": "3095712000000117026",
+      "customer_name": "BLOX Design",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000415645",
+      "project_name": "15 - HITHAM MAKHI VILLA",
+      "project_code": "",
+      "customer_id": "3095712000000554067",
+      "customer_name": "AL HAYTHEM TRADING & CONTRACTING CO LLC",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000399527",
+      "project_name": "14 - FERTILIZER TESTING",
+      "project_code": "",
+      "customer_id": "3095712000000293092",
+      "customer_name": "GULF MUSHROOM PRODUCTS CO S.A.O.G",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000286023",
+      "project_name": "13 - Haya Water Connection for Embassy of France - Muscat",
+      "project_code": "",
+      "customer_id": "3095712000000286001",
+      "customer_name": "EMBASSY OF FRANCE IN MUSCAT",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000189033",
+      "project_name": "12 - SULTAN VILLA",
+      "project_code": "",
+      "customer_id": "3095712000000119001",
+      "customer_name": "SULTAN AL RAWAHI",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000170001",
+      "project_name": "11 - AL KHOUD 6 - SHOPPING COMPLEX",
+      "project_code": "",
+      "customer_id": "3095712000000093393",
+      "customer_name": "MR. HAMOOD ALJUFEI",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000117057",
+      "project_name": "10 - PRIVATE VILLA - AL ANSAB",
+      "project_code": "",
+      "customer_id": "3095712000000117026",
+      "customer_name": "BLOX Design",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000108501",
+      "project_name": "09 - BADER SAOUD AL ABRI PROJECT",
+      "project_code": "",
+      "customer_id": "3095712000000108374",
+      "customer_name": "BADER SAOUD AL ABRI",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000108497",
+      "project_name": "08 - MANNAH FOOTBALL GROUND",
+      "project_code": "",
+      "customer_id": "3095712000000090506",
+      "customer_name": "AL NSOOR FOOTBALL TEAM",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000103026",
+      "project_name": "07 - SAMI MAKHI VILLA",
+      "project_code": "",
+      "customer_id": "3095712000000093738",
+      "customer_name": "MR. YASIR OTBI",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000103022",
+      "project_name": "06 - BAHALA MOSQUE",
+      "project_code": "",
+      "customer_id": "3095712000000094469",
+      "customer_name": "ROYAL COURT AFFAIRS",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000101305",
+      "project_name": "05 - SAUDI EMBASSY",
+      "project_code": "",
+      "customer_id": "3095712000000092403",
+      "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000101297",
+      "project_name": "04 - SUR STADIUM",
+      "project_code": "",
+      "customer_id": "3095712000000092403",
+      "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000101281",
+      "project_name": "03 - NIZWA STADIUM",
+      "project_code": "",
+      "customer_id": "3095712000000092403",
+      "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000101277",
+      "project_name": "02 - AL SAADH STADIUM",
+      "project_code": "",
+      "customer_id": "3095712000000092403",
+      "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
+      "status": "active",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    },
+    {
+      "project_id": "3095712000000101267",
+      "project_name": "01 - IPA",
+      "project_code": "",
+      "customer_id": "3095712000000091683",
+      "customer_name": "SPML-OSCO Joint Venture",
+      "status": "inactive",
+      "last_synced": "2026-09-30T19:30:02.105Z"
+    }
+  ],
+  "zoho_contacts": [
+    {
+      "contact_id": "3095712000000719001",
+      "contact_name": "A'NASSIR AL ARABI TRANSPORT & EQUIPMENTS",
+      "contact_type": "vendor",
+      "company_name": "A'NASSIR AL ARABI TRANSPORT & EQUIPMENTS",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.230Z"
+    },
+    {
+      "contact_id": "3095712000003688663",
+      "contact_name": "Aal Hareeb Building Materials LLC",
+      "contact_type": "vendor",
+      "company_name": "Aal Hareeb Building Materials LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.230Z"
+    },
+    {
+      "contact_id": "3095712000008016023",
+      "contact_name": "AALEM ALADHWAA TRADING",
+      "contact_type": "vendor",
+      "company_name": "AALEM ALADHWAA TRADING",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.230Z"
+    },
+    {
+      "contact_id": "3095712000001770045",
+      "contact_name": "ABDUL WAHEED AHMED BALOSHI",
+      "contact_type": "vendor",
+      "company_name": "ABDUL WAHEED AHMED BALOSHI",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.230Z"
+    },
+    {
+      "contact_id": "3095712000000718501",
+      "contact_name": "ABDULLAH DADIN INTERNATIONAL LLC",
+      "contact_type": "vendor",
+      "company_name": "ABDULLAH DADIN INTERNATIONAL LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000003336218",
+      "contact_name": "Abeer Hospitals",
+      "contact_type": "vendor",
+      "company_name": "Abeer Hospitals",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007764593",
+      "contact_name": "ABNA FRESH CENTER",
+      "contact_type": "vendor",
+      "company_name": "ABNA FRESH CENTER",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000005814831",
+      "contact_name": "ABNA NASSER BIN RABIA AL-ABRI CO",
+      "contact_type": "vendor",
+      "company_name": "ABNA NASSER BIN RABIA AL-ABRI CO",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000005640001",
+      "contact_name": "ABRAJ BOWSHER BUSINESS AND SERVICES LLC",
+      "contact_type": "vendor",
+      "company_name": "ABRAJ BOWSHER BUSINESS AND SERVICES LLC",
+      "email": "abrajbowsher@gmail.com",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002039183",
+      "contact_name": "ABRAJ MUSCAT ALAMYT ELECTRONICS",
+      "contact_type": "vendor",
+      "company_name": "ABRAJ MUSCAT ALAMYT ELECTRONICS",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008218467",
+      "contact_name": "ABU ABDUL AZIZ TRAD. & CONT",
+      "contact_type": "vendor",
+      "company_name": "ABU ABDUL AZIZ TRAD. & CONT",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000006937783",
+      "contact_name": "ABU ABEER AL-GWABRI TRADING",
+      "contact_type": "vendor",
+      "company_name": "",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007815180",
+      "contact_name": "ABU AL RAIABU AL RAIM AL YAHYAI TRADING M AL YAHYAI TRADING",
+      "contact_type": "vendor",
+      "company_name": "ABU AL RAIM AL YAHYAI TRADING",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007766357",
+      "contact_name": "ABU AYAN UNITED SPC",
+      "contact_type": "vendor",
+      "company_name": "ABU AYAN UNITED SPC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008163121",
+      "contact_name": "Abu Eilaf AI Yahmadi Trad. SPC",
+      "contact_type": "vendor",
+      "company_name": "Abu Eilaf AI Yahmadi Trad. SPC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007625568",
+      "contact_name": "Abu Haitham AL-Hattali",
+      "contact_type": "vendor",
+      "company_name": "Abu Haitham AL-Hattali",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002009085",
+      "contact_name": "ABU HARIS INTERNATIONAL SPC",
+      "contact_type": "vendor",
+      "company_name": "ABU HARIS INTERNATIONAL SPC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008099003",
+      "contact_name": "Abu Haris International SPC",
+      "contact_type": "vendor",
+      "company_name": "Abu Haris International SPC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008242183",
+      "contact_name": "ABU IMAD FOR AGRICULTURAL PRODUCTS",
+      "contact_type": "vendor",
+      "company_name": "ABU IMAD FOR AGRICULTURAL PRODUCTS",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000907205",
+      "contact_name": "Abu Muaz Al-Kiyumi Trading & Contracting",
+      "contact_type": "vendor",
+      "company_name": "Abu Muaz Al-Kiyumi Trading & Contracting",
+      "email": "abu-muaz@hotmail.com",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007815580",
+      "contact_name": "ABU MUNEER NATIONAL LLC",
+      "contact_type": "vendor",
+      "company_name": "ABU MUNEER NATIONAL LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008043624",
+      "contact_name": "ABU MUNIR AL-DAWOODI TRAD & CONT.",
+      "contact_type": "vendor",
+      "company_name": "ABU MUNIR AL-DAWOODI TRAD & CONT.",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007912236",
+      "contact_name": "ABU SAAD ENTREPRENEUR SPC",
+      "contact_type": "vendor",
+      "company_name": "ABU SAAD ENTREPRENEUR SPC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008589425",
+      "contact_name": "ABU SAID TRADING",
+      "contact_type": "vendor",
+      "company_name": "ABU SAID TRADING",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007895090",
+      "contact_name": "ABU SHAZN AL HADHRAMI TRAD",
+      "contact_type": "vendor",
+      "company_name": "ABU SHAZN AL HADHRAMI TRAD",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007625531",
+      "contact_name": "Abu Vishal Trading SPC",
+      "contact_type": "vendor",
+      "company_name": "Abu Vishal Trading SPC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008208465",
+      "contact_name": "ABU ZEENAT & PARTNER TRAD. EST",
+      "contact_type": "vendor",
+      "company_name": "ABU ZEENAT & PARTNER TRAD. EST",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008491680",
+      "contact_name": "ABUSHIHAB AL KHANBASHY TRADING",
+      "contact_type": "vendor",
+      "company_name": "ABUSHIHAB AL KHANBASHY TRADING",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007165001",
+      "contact_name": "AFA'AQ AL-MADA TRAD. & TRANSPORT",
+      "contact_type": "vendor",
+      "company_name": "AFA'AQ AL-MADA TRAD. & TRANSPORT",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000004664030",
+      "contact_name": "AFAQ AL KAWTHAR TRADING",
+      "contact_type": "vendor",
+      "company_name": "AFAQ AL KAWTHAR TRADING",
+      "email": "info@afaqalkawthar.com",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008391021",
+      "contact_name": "AFAQ ALKRAM TRADING",
+      "contact_type": "vendor",
+      "company_name": "AFAQ ALKRAM TRADING",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007888314",
+      "contact_name": "AFAQ DUBAI TRAD. & CONT",
+      "contact_type": "vendor",
+      "company_name": "AFAQ DUBAI TRAD. & CONT",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007975044",
+      "contact_name": "Afi Al Arabiya Genuine Parts LLC",
+      "contact_type": "vendor",
+      "company_name": "Afi Al Arabiya Genuine Parts LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008329696",
+      "contact_name": "AFTAB UDDIN INTERNATIONAL TRADING",
+      "contact_type": "vendor",
+      "company_name": "AFTAB UDDIN INTERNATIONAL TRADING",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008515671",
+      "contact_name": "Agricultural Materials Company LTD L.L.C",
+      "contact_type": "vendor",
+      "company_name": "Agricultural Materials Company LTD L.L.C",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000142001",
+      "contact_name": "AGRICULTURE MATERIALS CO LIMITED LLC",
+      "contact_type": "vendor",
+      "company_name": "AGRICULTURE MATERIALS CO LIMITED LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000230001",
+      "contact_name": "AGRICULTURE MODERN ENGINEERING CO LLC",
+      "contact_type": "vendor",
+      "company_name": "AGRICULTURE MODERN ENGINEERING CO LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000090104",
+      "contact_name": "AGRICULTURE MODERN ENGINEERING LLC",
+      "contact_type": "customer",
+      "company_name": "AGRICULTURE MODERN ENGINEERING LLC",
+      "email": "senthil@muscatoverseas.com",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008387406",
+      "contact_name": "Agrimatco",
+      "contact_type": "vendor",
+      "company_name": "Agrimatco",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000004596044",
+      "contact_name": "AGS Logistics Shiping & Trading LLC",
+      "contact_type": "vendor",
+      "company_name": "AGS Logistics Shiping & Trading LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000005963731",
+      "contact_name": "AGW-MO AGRI WADI KABIR",
+      "contact_type": "vendor",
+      "company_name": "AGW-MO AGRI WADI KABIR",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002369497",
+      "contact_name": "Ahmed Al-Qalem Trading LLC",
+      "contact_type": "vendor",
+      "company_name": "Ahmed Al-Qalem Trading LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008289339",
+      "contact_name": "AHMED BIN SAEED BIN AHMED QATTAN TRAD",
+      "contact_type": "vendor",
+      "company_name": "AHMED BIN SAEED BIN AHMED QATTAN TRAD",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002757605",
+      "contact_name": "Ahmed Mahfood Al- Sheedad & Partners Trad. & Cont. Co",
+      "contact_type": "vendor",
+      "company_name": "Ahmed Mahfood Al- Sheedad & Partners Trad. & Cont. Co",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007704513",
+      "contact_name": "AHMED MOHAMED & PARTNERS TRAD.CO.LLC",
+      "contact_type": "vendor",
+      "company_name": "AHMED MOHAMED & PARTNERS TRAD.CO.LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007335853",
+      "contact_name": "AI ASRIYA ADVANCVED TRADING LLC",
+      "contact_type": "vendor",
+      "company_name": "AI ASRIYA ADVANCVED TRADING LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008307636",
+      "contact_name": "AI Khalaf International est.",
+      "contact_type": "vendor",
+      "company_name": "AI Khalaf International est.",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000006231318",
+      "contact_name": "AI Sahal Printing Press LLC",
+      "contact_type": "vendor",
+      "company_name": "AI Sahal Printing Press LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000006320410",
+      "contact_name": "AI-Arabiya Unlimited Company llc",
+      "contact_type": "vendor",
+      "company_name": "AI-Arabiya Unlimited Company llc",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007764777",
+      "contact_name": "AI-Sharq National Projects L.L.C",
+      "contact_type": "vendor",
+      "company_name": "AI-Sharq National Projects L.L.C",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007802042",
+      "contact_name": "AIFATH Industries  and Business Co.S.P.C",
+      "contact_type": "vendor",
+      "company_name": "AIFATH Industries  and Business Co.S.P.C",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008308981",
+      "contact_name": "AIN LIMSAS TRAD",
+      "contact_type": "vendor",
+      "company_name": "AIN LIMSAS TRAD",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002106001",
+      "contact_name": "AIN SHADOUN TRAD LLC",
+      "contact_type": "vendor",
+      "company_name": "",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000129048",
+      "contact_name": "AJMAL PRINTING PRESS",
+      "contact_type": "vendor",
+      "company_name": "AJMAL PRINTING PRESS",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007599001",
+      "contact_name": "AL ADIYAT GATE FOR COMMERCIAL SERVICES",
+      "contact_type": "vendor",
+      "company_name": "AL ADIYAT GATE FOR COMMERCIAL SERVICES",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000001773130",
+      "contact_name": "AL AFFQ",
+      "contact_type": "vendor",
+      "company_name": "AL AFFQ",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000001447022",
+      "contact_name": "AL AKKAD NATIONAL PROJECTS LLC",
+      "contact_type": "customer",
+      "company_name": "AL AKKAD NATIONAL PROJECTS LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002037023",
+      "contact_name": "Al Ansari Trading Enterprise LLC",
+      "contact_type": "vendor",
+      "company_name": "",
+      "email": "suresh.kumar@alansariglobal.com",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008003196",
+      "contact_name": "AL ARAB CERAMICS",
+      "contact_type": "vendor",
+      "company_name": "AL ARAB CERAMICS",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000004573001",
+      "contact_name": "AL ARIQ EQUIPMENT LLC",
+      "contact_type": "vendor",
+      "company_name": "AL ARIQ EQUIPMENT LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000895001",
+      "contact_name": "AL ATTWARAH NAKHAL AREA DEVELOPEMENT",
+      "contact_type": "customer",
+      "company_name": "AL ATTWARAH NAKHAL AREA DEVELOPEMENT",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002160587",
+      "contact_name": "AL BARAKA MOSQUE",
+      "contact_type": "customer",
+      "company_name": "AL BARAKA MOSQUE",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000003783136",
+      "contact_name": "AL BASHAYER SPECIALIZED MEDICAL CENTER",
+      "contact_type": "vendor",
+      "company_name": "AL BASHAYER SPECIALIZED MEDICAL CENTER",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008313705",
+      "contact_name": "AL BATAH BUILDING MATERIALS S.P.C",
+      "contact_type": "vendor",
+      "company_name": "AL BATAH BUILDING MATERIALS S.P.C",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000006092978",
+      "contact_name": "AL BATINI TRADING",
+      "contact_type": "vendor",
+      "company_name": "AL BATINI TRADING",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000001930204",
+      "contact_name": "AL BAYAN COLLEGE & UNIVERSITIES , BARKHA (LANDSCAPING WORKS)",
+      "contact_type": "customer",
+      "company_name": "",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000006954856",
+      "contact_name": "AL BURJ WORK FOR HYDROLIC PIPE & HEAVY",
+      "contact_type": "vendor",
+      "company_name": "AL BURJ WORK FOR HYDROLIC PIPE & HEAVY",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008307285",
+      "contact_name": "AL BUSTAN INTERNATIONAL LINES LLC",
+      "contact_type": "vendor",
+      "company_name": "AL BUSTAN INTERNATIONAL LINES LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000135009",
+      "contact_name": "AL DASSER TRANSPORT",
+      "contact_type": "vendor",
+      "company_name": "AL DASSER TRANSPORT",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000005565178",
+      "contact_name": "AL DAYAA GOLDEN TRADING LLC",
+      "contact_type": "vendor",
+      "company_name": "AL DAYAA GOLDEN TRADING LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000005596018",
+      "contact_name": "AL FALAK AL AALI INTEGRATED ENT.",
+      "contact_type": "vendor",
+      "company_name": "AL FALAK AL AALI INTEGRATED ENT.",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000001049001",
+      "contact_name": "AL FAZAL IDEAL TRADING LLC",
+      "contact_type": "vendor",
+      "company_name": "AL FAZAL IDEAL TRADING LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000988001",
+      "contact_name": "AL FERSAN SPORTS CLOTHS TAILORING",
+      "contact_type": "vendor",
+      "company_name": "AL FERSAN SPORTS CLOTHS TAILORING",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000091001",
+      "contact_name": "AL FEYHA TOURISM LLC",
+      "contact_type": "customer",
+      "company_name": "AL FEYHA TOURISM LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007330175",
+      "contact_name": "Al Futtaim Auto Centers",
+      "contact_type": "vendor",
+      "company_name": "Al Futtaim Auto Centers",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000004222795",
+      "contact_name": "AL HAIL MANUFACTURING OF FIBRE GLASS PRODUCT LLC",
+      "contact_type": "vendor",
+      "company_name": "AL HAIL MANUFACTURING OF FIBRE GLASS PRODUCT LLC",
+      "email": "alhailoman@gmail.com",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002103205",
+      "contact_name": "AL HAIL WAVES INVESTMENT LLC",
+      "contact_type": "vendor",
+      "company_name": "",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000548027",
+      "contact_name": "AL HAMRA YOUTH CLUB",
+      "contact_type": "customer",
+      "company_name": "AL HAMRA YOUTH CLUB",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008589277",
+      "contact_name": "AL HARITH TRADING & SERVICES EST.",
+      "contact_type": "vendor",
+      "company_name": "AL HARITH TRADING & SERVICES EST.",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000554067",
+      "contact_name": "AL HAYTHEM TRADING & CONTRACTING CO LLC",
+      "contact_type": "customer",
+      "company_name": "AL HAYTHEM TRADING & CONTRACTING CO LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002173168",
+      "contact_name": "AL INMA BUILDING MATERIALS L.L.C",
+      "contact_type": "vendor",
+      "company_name": "",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008494064",
+      "contact_name": "Al Inma Building Materials L.L.C.",
+      "contact_type": "vendor",
+      "company_name": "Al Inma Building Materials L.L.C.",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000004378001",
+      "contact_name": "AL JAHWARI INT'L BUSINESS LLC",
+      "contact_type": "vendor",
+      "company_name": "AL JAHWARI INT'L BUSINESS LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000001830041",
+      "contact_name": "AL JOOD TRADING & CONT. CO. LLC",
+      "contact_type": "customer",
+      "company_name": "AL JOOD TRADING & CONT. CO. LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000001251127",
+      "contact_name": "Al Khalili Construction LLC",
+      "contact_type": "customer",
+      "company_name": "Al Khalili Construction LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008106369",
+      "contact_name": "AL KHALILI UNITED ENTERPRISES LLC",
+      "contact_type": "vendor",
+      "company_name": "AL KHALILI UNITED ENTERPRISES LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002302369",
+      "contact_name": "AL KHUWAIR PRIVATE VILLA",
+      "contact_type": "customer",
+      "company_name": "AL KHUWAIR PRIVATE VILLA",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008176257",
+      "contact_name": "AL KIDHA DEVELOPMENT",
+      "contact_type": "vendor",
+      "company_name": "AL KIDHA DEVELOPMENT",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002103561",
+      "contact_name": "AL KIYUMI ELECTRIC TRADING COMPANY",
+      "contact_type": "vendor",
+      "company_name": "",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000293027",
+      "contact_name": "AL MADAH FOOTBALL TEAM",
+      "contact_type": "customer",
+      "company_name": "AL MADAH FOOTBALL TEAM",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008476961",
+      "contact_name": "Al Madina Taka",
+      "contact_type": "vendor",
+      "company_name": "Al Madina Taka",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007895756",
+      "contact_name": "AL MAGZA UNITED",
+      "contact_type": "vendor",
+      "company_name": "AL MAGZA UNITED",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000185035",
+      "contact_name": "AL MAHA PETOLEUM PRODUCTS MARKETING CO. SAOG",
+      "contact_type": "vendor",
+      "company_name": "AL MAHA PETOLEUM PRODUCTS MARKETING CO. SAOG",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007510621",
+      "contact_name": "AL Mahur trad. & Business SPC",
+      "contact_type": "vendor",
+      "company_name": "AL Mahur trad. & Business SPC",
+      "email": "srungaram.santhosh.3675@gmail.com",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000111001",
+      "contact_name": "AL MAJALES INTERGRATED CO LLC",
+      "contact_type": "vendor",
+      "company_name": "AL MAJALES INTERGRATED CO LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007938260",
+      "contact_name": "AL MAJID FOODS",
+      "contact_type": "vendor",
+      "company_name": "AL MAJID FOODS",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007748176",
+      "contact_name": "AL MANARA FOR BUSINESS",
+      "contact_type": "vendor",
+      "company_name": "AL MANARA FOR BUSINESS",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000275001",
+      "contact_name": "AL MAROOJ FOR AGRICULTURE SERVICE & TRADE LLC",
+      "contact_type": "vendor",
+      "company_name": "AL MAROOJ FOR AGRICULTURE SERVICE & TRADE LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002173813",
+      "contact_name": "AL MATAR GENERAL TRADING",
+      "contact_type": "vendor",
+      "company_name": "",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007720132",
+      "contact_name": "AL MIHRAB UNITED CO.L.L.C",
+      "contact_type": "vendor",
+      "company_name": "AL MIHRAB UNITED CO.L.L.C",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000005296778",
+      "contact_name": "AL MISBAH UNITED ENTERRISES LLC",
+      "contact_type": "vendor",
+      "company_name": "AL MISBAH UNITED ENTERRISES LLC",
+      "email": "inf@almisbah.net",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007994439",
+      "contact_name": "AL MUNASIB BUILDING MATERIALS TRADING LLC",
+      "contact_type": "vendor",
+      "company_name": "AL MUNASIB BUILDING MATERIALS TRADING LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007748307",
+      "contact_name": "AL MUZN OASIS MEDICAL CENTER",
+      "contact_type": "vendor",
+      "company_name": "AL MUZN OASIS MEDICAL CENTER",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000003107001",
+      "contact_name": "Al Naba Services LLC",
+      "contact_type": "customer",
+      "company_name": "Al Naba Services LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000005422001",
+      "contact_name": "AL NAJEM AL ABUD AL RAUD LLC",
+      "contact_type": "vendor",
+      "company_name": "AL NAJEM AL ABUD AL RAUD LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000763001",
+      "contact_name": "AL NASSER FOOTBALL GROUND #5",
+      "contact_type": "customer",
+      "company_name": "AL NASSER FOOTBALL GROUND #5",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002885089",
+      "contact_name": "Al Nawafil Trading",
+      "contact_type": "vendor",
+      "company_name": "Al Nawafil Trading",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000294001",
+      "contact_name": "AL NAZAHA INTEGRATED LLC",
+      "contact_type": "vendor",
+      "company_name": "AL NAZAHA INTEGRATED LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000003920001",
+      "contact_name": "AL NIMR INTERNATIONAL EXHIBITION ORGANIZERS LLC",
+      "contact_type": "vendor",
+      "company_name": "AL NIMR INTERNATIONAL EXHIBITION ORGANIZERS LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000090506",
+      "contact_name": "AL NSOOR FOOTBALL TEAM",
+      "contact_type": "customer",
+      "company_name": "AL NSOOR FOOTBALL TEAM",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000001592009",
+      "contact_name": "AL QADEEMA TRADING",
+      "contact_type": "vendor",
+      "company_name": "AL QADEEMA TRADING",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008559278",
+      "contact_name": "AL QUBTAN ALNAJEH TRADING",
+      "contact_type": "vendor",
+      "company_name": "AL QUBTAN ALNAJEH TRADING",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002073217",
+      "contact_name": "AL RABEA BUILDING MATERIALLS",
+      "contact_type": "vendor",
+      "company_name": "",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008003053",
+      "contact_name": "AL RAHA FURNITURE",
+      "contact_type": "vendor",
+      "company_name": "AL RAHA FURNITURE",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000727001",
+      "contact_name": "AL RASHID MODERN ENTERPRISES",
+      "contact_type": "vendor",
+      "company_name": "AL RASHID MODERN ENTERPRISES",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000001940001",
+      "contact_name": "AL ROUBA Electrical & Services LLC",
+      "contact_type": "vendor",
+      "company_name": "AL ROUBA Electrical & Services LLC",
+      "email": "samson@alrouba.com",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002920050",
+      "contact_name": "Al Rouba Ent & Trad. LLC",
+      "contact_type": "vendor",
+      "company_name": "Al Rouba Ent & Trad. LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007106232",
+      "contact_name": "AL ROUBA ENT.& TRAD L.L.C",
+      "contact_type": "vendor",
+      "company_name": "AL ROUBA ENT.& TRAD L.L.C",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007921209",
+      "contact_name": "AL SAADI WAREHOUSE",
+      "contact_type": "vendor",
+      "company_name": "AL SAADI WAREHOUSE",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000003198117",
+      "contact_name": "Al Safwa Trading",
+      "contact_type": "vendor",
+      "company_name": "Al Safwa Trading",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007815613",
+      "contact_name": "AL SAWAH BUILDING MATERIALS LLC",
+      "contact_type": "vendor",
+      "company_name": "AL SAWAH BUILDING MATERIALS LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007789001",
+      "contact_name": "Al Shafaq Club",
+      "contact_type": "customer",
+      "company_name": "Al Shafaq Club",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008242400",
+      "contact_name": "AL SHAHAD PHARMACY",
+      "contact_type": "vendor",
+      "company_name": "AL SHAHAD PHARMACY",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007023132",
+      "contact_name": "AL SHAMS LAND TRANSPORT COMPANY SPC",
+      "contact_type": "vendor",
+      "company_name": "AL SHAMS LAND TRANSPORT COMPANY SPC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008308467",
+      "contact_name": "Al Shaqra International LLC",
+      "contact_type": "vendor",
+      "company_name": "Al Shaqra International LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008074900",
+      "contact_name": "AL SHARAH AL JADEED TRADING",
+      "contact_type": "vendor",
+      "company_name": "AL SHARAH AL JADEED TRADING",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000005337368",
+      "contact_name": "AL SHARIF AL TOBI TRADING",
+      "contact_type": "vendor",
+      "company_name": "AL SHARIF AL TOBI TRADING",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000752001",
+      "contact_name": "AL SHUELA FOOTBALL TEAM",
+      "contact_type": "customer",
+      "company_name": "AL SHUELA FOOTBALL TEAM",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000001668131",
+      "contact_name": "AL SUMOOD FOORBALL GROUNG",
+      "contact_type": "customer",
+      "company_name": "AL SUMOOD FOORBALL GROUNG",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000006001097",
+      "contact_name": "AL TAMAM HYPERMARKET",
+      "contact_type": "vendor",
+      "company_name": "AL TAMAM HYPERMARKET",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000001735055",
+      "contact_name": "AL TASNIM CEMENT PRODUCTS LLC",
+      "contact_type": "vendor",
+      "company_name": "AL TASNIM CEMENT PRODUCTS LLC",
+      "email": "NIKHIL.THANKI@ALTASNIM.COM",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000091342",
+      "contact_name": "AL TAWIN FOOTBALL TEAM",
+      "contact_type": "customer",
+      "company_name": "AL TAWIN FOOTBALL TEAM",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000006231698",
+      "contact_name": "AL TUHAMI COMMERCIAL PROJECTS",
+      "contact_type": "vendor",
+      "company_name": "AL TUHAMI COMMERCIAL PROJECTS",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000003465001",
+      "contact_name": "AL WAHID INTERNATIONAL LLC",
+      "contact_type": "vendor",
+      "company_name": "AL WAHID INTERNATIONAL LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007815069",
+      "contact_name": "AL YEN GENERAL TRADING L.L.C",
+      "contact_type": "vendor",
+      "company_name": "AL YEN GENERAL TRADING L.L.C",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000004324295",
+      "contact_name": "AL YUSR INTERNATINAL LLC",
+      "contact_type": "vendor",
+      "company_name": "AL YUSR INTERNATINAL LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008424300",
+      "contact_name": "AL ZAIN AL MITHALIA TRADING",
+      "contact_type": "vendor",
+      "company_name": "AL ZAIN AL MITHALIA TRADING",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002076101",
+      "contact_name": "AL-AZGHAB TRADING",
+      "contact_type": "vendor",
+      "company_name": "",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008491806",
+      "contact_name": "AL-BAHLANI TRANSPORT",
+      "contact_type": "vendor",
+      "company_name": "AL-BAHLANI TRANSPORT",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000006209329",
+      "contact_name": "Al-Dhakhiliyah Governorate",
+      "contact_type": "customer",
+      "company_name": "Al-Dhakhiliyah Governorate",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008589247",
+      "contact_name": "AL-JARHAS TRADING & CONTRACTING ENTERPRISES",
+      "contact_type": "vendor",
+      "company_name": "AL-JARHAS TRADING & CONTRACTING ENTERPRISES",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007688002",
+      "contact_name": "AL-KAMYANI ENTERPRISES LLC",
+      "contact_type": "vendor",
+      "company_name": "",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000258473",
+      "contact_name": "AL-KHUWAIR ANDS OVERALL TRAD LLC",
+      "contact_type": "vendor",
+      "company_name": "AL-KHUWAIR ANDS OVERALL TRAD LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000005927159",
+      "contact_name": "AL-MAHA PETROL",
+      "contact_type": "vendor",
+      "company_name": "AL-MAHA PETROL",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000005898095",
+      "contact_name": "AL-MAWALLEH INTERNATIONAL L.L.C",
+      "contact_type": "vendor",
+      "company_name": "AL-MAWALLEH INTERNATIONAL L.L.C",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000005355513",
+      "contact_name": "AL-MEEDANIA ENGINEERING CONSULTANCY",
+      "contact_type": "vendor",
+      "company_name": "AL-MEEDANIA ENGINEERING CONSULTANCY",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007898356",
+      "contact_name": "AL-NASR TRADING &CONTRACTING L.L.C.",
+      "contact_type": "vendor",
+      "company_name": "AL-NASR TRADING &CONTRACTING L.L.C.",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007195192",
+      "contact_name": "AL-QALAM TRAD. CO. - ASSTD",
+      "contact_type": "vendor",
+      "company_name": "AL-QALAM TRAD. CO. - ASSTD",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007898296",
+      "contact_name": "AL-RAFIAH DISTINGUISHED PROJECTS LLC",
+      "contact_type": "vendor",
+      "company_name": "AL-RAFIAH DISTINGUISHED PROJECTS LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002134001",
+      "contact_name": "AL-RAMAD TRADING",
+      "contact_type": "vendor",
+      "company_name": "AL-RAMAD TRADING",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007895286",
+      "contact_name": "AL-RASHAHAL-RASHAH TRAD. & CONT. EST TRAD. & CONT. EST",
+      "contact_type": "vendor",
+      "company_name": "AL-RASHAH TRAD. & CONT. EST",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008491729",
+      "contact_name": "Al-Saad United Trading Services L.LC",
+      "contact_type": "vendor",
+      "company_name": "Al-Saad United Trading Services L.LC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000006249277",
+      "contact_name": "AL-SAFWA UNITED ENTERPRISES L.L.C",
+      "contact_type": "vendor",
+      "company_name": "AL-SAFWA UNITED ENTERPRISES L.L.C",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007220001",
+      "contact_name": "Al-Shawsi Al-Shamela Ent",
+      "contact_type": "vendor",
+      "company_name": "Al-Shawsi Al-Shamela Ent",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000001088027",
+      "contact_name": "AL-SHKAILI UNITED ENT. TRAD.",
+      "contact_type": "vendor",
+      "company_name": "AL-SHKAILI UNITED ENT. TRAD.",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000005895767",
+      "contact_name": "AL-THURAYA UNITED EST",
+      "contact_type": "vendor",
+      "company_name": "AL-THURAYA UNITED EST",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008771227",
+      "contact_name": "Al-Wajeeh Trading",
+      "contact_type": "vendor",
+      "company_name": "Al-Wajeeh Trading",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000006797003",
+      "contact_name": "AL-WAQIA SHOES CO.SP.C.",
+      "contact_type": "vendor",
+      "company_name": "AL-WAQIA SHOES CO.SP.C.",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000005845826",
+      "contact_name": "ALI AMIN RAMDHAN TRADING L.L.C",
+      "contact_type": "vendor",
+      "company_name": "ALI AMIN RAMDHAN TRADING L.L.C",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002960643",
+      "contact_name": "Allied Oil Gas Services LLC",
+      "contact_type": "vendor",
+      "company_name": "Allied Oil Gas Services LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002050345",
+      "contact_name": "ALMATAR GENERAL TRADING",
+      "contact_type": "vendor",
+      "company_name": "",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000001830148",
+      "contact_name": "ALPHA ELECTRIC & CONT. CO. L.L.C",
+      "contact_type": "customer",
+      "company_name": "ALPHA ELECTRIC & CONT. CO. L.L.C",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002196194",
+      "contact_name": "ALPHA MOTORS LLC",
+      "contact_type": "vendor",
+      "company_name": "",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007855212",
+      "contact_name": "ALRASYA TRADING",
+      "contact_type": "vendor",
+      "company_name": "ALRASYA TRADING",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007815145",
+      "contact_name": "ALWADQ INVESTMENTS S.P.C",
+      "contact_type": "vendor",
+      "company_name": "ALWADQ INVESTMENTS S.P.C",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000003772001",
+      "contact_name": "Alyara Trad & Cont SPC",
+      "contact_type": "vendor",
+      "company_name": "Alyara Trad & Cont SPC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000360029",
+      "contact_name": "AMIANTIT OMAN COMPANY LLC",
+      "contact_type": "vendor",
+      "company_name": "AMIANTIT OMAN COMPANY LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002269157",
+      "contact_name": "AMIR & BABAR ENGINEERING SERVICES LLC-3",
+      "contact_type": "vendor",
+      "company_name": "",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000186743",
+      "contact_name": "AMIR KHAN AL TAB",
+      "contact_type": "vendor",
+      "company_name": "AMIR KHAN AL TAB",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007764558",
+      "contact_name": "AMJAAD JALAN TRADING CO.",
+      "contact_type": "vendor",
+      "company_name": "AMJAAD JALAN TRADING CO.",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000001386016",
+      "contact_name": "AMJAAD MAQSHAN",
+      "contact_type": "vendor",
+      "company_name": "AMJAAD MAQSHAN",
+      "email": "hirequip.amjaad@gmail.com",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007775001",
+      "contact_name": "AMPLE TECHNOLOGY L.L.C",
+      "contact_type": "vendor",
+      "company_name": "AMPLE TECHNOLOGY L.L.C",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000182007",
+      "contact_name": "ANAAM AL HAYA",
+      "contact_type": "vendor",
+      "company_name": "ANAAM AL HAYA",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008313735",
+      "contact_name": "ANAR AL MUZIN TRADING",
+      "contact_type": "vendor",
+      "company_name": "ANAR AL MUZIN TRADING",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002622320",
+      "contact_name": "Anbi Air Condition Trading LLC",
+      "contact_type": "vendor",
+      "company_name": "Anbi Air Condition Trading LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000689061",
+      "contact_name": "ARABIA FALCON INSURANCE",
+      "contact_type": "vendor",
+      "company_name": "ARABIA FALCON INSURANCE",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008080001",
+      "contact_name": "ARABIAN WATER TECH LLC",
+      "contact_type": "vendor",
+      "company_name": "ARABIAN WATER TECH LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008307678",
+      "contact_name": "Aramex Muscat LLC",
+      "contact_type": "vendor",
+      "company_name": "Aramex Muscat LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007734173",
+      "contact_name": "ARCHITECTURAL PRODUCTS LLC",
+      "contact_type": "vendor",
+      "company_name": "ARCHITECTURAL PRODUCTS LLC",
+      "email": "ferrocon.om@gmail.com",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002196650",
+      "contact_name": "ARDAF TRADING COMPANY",
+      "contact_type": "vendor",
+      "company_name": "",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007967003",
+      "contact_name": "Arkan Logistics",
+      "contact_type": "vendor",
+      "company_name": "Arkan Logistics",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008656304",
+      "contact_name": "Arms International Trading LLC",
+      "contact_type": "vendor",
+      "company_name": "Arms International Trading LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007650095",
+      "contact_name": "ARSHAD SPARE PARIS FOR HEAVY VEHICLE",
+      "contact_type": "vendor",
+      "company_name": "ARSHAD SPARE PARIS FOR HEAVY VEHICLE",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000003960391",
+      "contact_name": "Asas Muscat Business & Development",
+      "contact_type": "vendor",
+      "company_name": "Asas Muscat Business & Development",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008351041",
+      "contact_name": "ASB GREEN WORLD EESTI",
+      "contact_type": "vendor",
+      "company_name": "ASB GREEN WORLD EESTI",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007792001",
+      "contact_name": "ASSARAIN CONCRETE PRODUCTS",
+      "contact_type": "vendor",
+      "company_name": "ASSARAIN CONCRETE PRODUCTS & TRADING LLC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000003452521",
+      "contact_name": "ASSER AL HADATH UNITED CO LLC (AL-HAIL)",
+      "contact_type": "vendor",
+      "company_name": "ASSER AL HADATH UNITED CO LLC (AL-HAIL)",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000006092001",
+      "contact_name": "Asthar Trading Co",
+      "contact_type": "vendor",
+      "company_name": "Asthar Trading Co",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000001303001",
+      "contact_name": "ASTRA INDUSTRIAL COMPLEX CO.",
+      "contact_type": "vendor",
+      "company_name": "ASTRA INDUSTRIAL COMPLEX CO.",
+      "email": "bahaa.dakhlallah@astrachem.net",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000006745309",
+      "contact_name": "ASTWRT ALQRYT LLTJART",
+      "contact_type": "vendor",
+      "company_name": "ASTWRT ALQRYT LLTJART",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000006310005",
+      "contact_name": "Aswar Al Hamra Trad.",
+      "contact_type": "vendor",
+      "company_name": "Aswar Al Hamra Trad.",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000000267415",
+      "contact_name": "ASWAR AL HASAN AL MTMYZI",
+      "contact_type": "vendor",
+      "company_name": "ASWAR AL HASAN AL MTMYZI",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007748087",
+      "contact_name": "Atheer  AI Jaoda AI Raqia",
+      "contact_type": "vendor",
+      "company_name": "Atheer  AI Jaoda AI RA",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008343358",
+      "contact_name": "ATHWAA ALIHTRIAF TRADING",
+      "contact_type": "vendor",
+      "company_name": "ATHWAA ALIHTRIAF TRADING",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002073168",
+      "contact_name": "ATRAF AL-SAHIL TRADING",
+      "contact_type": "vendor",
+      "company_name": "",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000005449055",
+      "contact_name": "AWADH SAEED AMER AL-HADARI TRADING & CONT EST",
+      "contact_type": "vendor",
+      "company_name": "AWADH SAEED AMER AL-HADARI TRADING & CONT EST",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008235039",
+      "contact_name": "AWAN COMPANY L.L.C",
+      "contact_type": "vendor",
+      "company_name": "AWAN COMPANY L.L.C",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000008113763",
+      "contact_name": "AZAIBA DREAMS INTERNATIONAL SPC",
+      "contact_type": "vendor",
+      "company_name": "AZAIBA DREAMS INTERNATIONAL SPC",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000002790171",
+      "contact_name": "B Engineering",
+      "contact_type": "customer",
+      "company_name": "B Engineering",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    },
+    {
+      "contact_id": "3095712000007027538",
+      "contact_name": "Babil National Gardens Trad. & Cont.",
+      "contact_type": "vendor",
+      "company_name": "Babil National Gardens Trad. & Cont.",
+      "email": "",
+      "last_synced": "2026-09-30T19:30:03.231Z"
+    }
+  ],
+  "expenses": [
+    {
+      "id": "exp-31e17c77",
+      "employee_id": "emp-102",
+      "employee_name": "David Miller",
+      "expense_date": "2026-09-29",
+      "amount": 15.5,
+      "category_id": "acc-exp-petty",
+      "category_name": "Petty Cash Purchases",
+      "paid_through_account_id": "acc-pc-002",
+      "paid_through_account_name": "Petty Cash - David Miller",
+      "description": "Emergency hardware screws & bolts for site",
+      "project_id": null,
+      "project_name": null,
+      "customer_id": null,
+      "customer_name": null,
+      "cost_center": null,
+      "receipt_url": null,
+      "receipt_file_name": null,
+      "zoho_journal_id": "jn-830796",
+      "zoho_journal_number": "JRN-2026-5800",
+      "sync_status": "synced",
+      "sync_error": null,
+      "last_synced_at": "2026-09-29T19:01:04.318Z",
+      "created_by": "David Miller",
+      "created_at": "2026-09-29T19:01:04.321Z",
+      "updated_at": "2026-09-29T19:01:04.321Z"
+    },
+    {
+      "id": "exp-903",
+      "employee_id": "emp-102",
+      "employee_name": "David Miller",
+      "expense_date": "2026-09-26",
+      "amount": 220,
+      "category_id": "acc-exp-02",
+      "category_name": "Site Refreshments & Meals",
+      "description": "Catering and hydration water cans for subcontractor crew overtime",
+      "project_id": "proj-102",
+      "project_name": "Skyline Tower Renovations",
+      "customer_id": "cust-202",
+      "customer_name": "Apex Real Estate Partners",
+      "cost_center": "Subcontractors",
+      "receipt_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&auto=format&fit=crop&q=80",
+      "receipt_file_name": "crew_meals_receipt.jpg",
+      "zoho_journal_id": "jn-881003",
+      "zoho_journal_number": "JRN-2026-0063",
+      "sync_status": "synced",
+      "sync_error": null,
+      "last_synced_at": "2026-09-26T16:29:23.101Z",
+      "created_by": "David Miller",
+      "created_at": "2026-09-26T16:29:23.101Z"
+    },
+    {
+      "id": "exp-904",
+      "employee_id": "emp-103",
+      "employee_name": "Elena Rostova",
+      "expense_date": "2026-09-28",
+      "amount": 180,
+      "category_id": "acc-exp-04",
+      "category_name": "Courier & Postage",
+      "description": "Urgent express shipment of solar sensor calibration samples to lab",
+      "project_id": "proj-103",
+      "project_name": "Green Energy Solar Park",
+      "customer_id": "cust-203",
+      "customer_name": "TerraPower Solutions",
+      "cost_center": "Logistics",
+      "receipt_url": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=600&auto=format&fit=crop&q=80",
+      "receipt_file_name": "dhl_express_airway.jpg",
+      "zoho_journal_id": "jn-866424",
+      "zoho_journal_number": "JRN-2026-3675",
+      "sync_status": "synced",
+      "sync_error": null,
+      "last_synced_at": "2026-09-29T16:30:00.314Z",
+      "created_by": "Elena Rostova",
+      "created_at": "2026-09-28T16:29:23.101Z",
+      "updated_at": "2026-09-29T16:30:00.317Z"
+    }
+  ],
+  "sync_logs": [
+    {
+      "id": "log-1790796603272",
+      "sync_type": "full_sync",
+      "status": "success",
+      "details": {
+        "started_at": "2026-09-30T19:30:00.186Z",
+        "coa_synced": 344,
+        "projects_synced": 78,
+        "contacts_synced": 200,
+        "pending_expenses": {
+          "total": 0,
+          "synced": 0,
+          "failed": 0
+        },
+        "errors": []
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T19:30:03.272Z"
+    },
+    {
+      "id": "log-1790796603235",
+      "sync_type": "contacts_sync",
+      "status": "success",
+      "details": {
+        "count": 200
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T19:30:03.235Z"
+    },
+    {
+      "id": "log-1790796602113",
+      "sync_type": "projects_sync",
+      "status": "success",
+      "details": {
+        "count": 78
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T19:30:02.113Z"
+    },
+    {
+      "id": "log-1790796601680",
+      "sync_type": "coa_sync",
+      "status": "success",
+      "details": {
+        "count": 344
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T19:30:01.680Z"
+    },
+    {
+      "id": "log-1790795702808",
+      "sync_type": "full_sync",
+      "status": "success",
+      "details": {
+        "started_at": "2026-09-30T19:15:00.258Z",
+        "coa_synced": 344,
+        "projects_synced": 78,
+        "contacts_synced": 200,
+        "pending_expenses": {
+          "total": 0,
+          "synced": 0,
+          "failed": 0
+        },
+        "errors": []
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T19:15:02.808Z"
+    },
+    {
+      "id": "log-1790795702778",
+      "sync_type": "contacts_sync",
+      "status": "success",
+      "details": {
+        "count": 200
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T19:15:02.778Z"
+    },
+    {
+      "id": "log-1790795701881",
+      "sync_type": "projects_sync",
+      "status": "success",
+      "details": {
+        "count": 78
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T19:15:01.881Z"
+    },
+    {
+      "id": "log-1790795701444",
+      "sync_type": "coa_sync",
+      "status": "success",
+      "details": {
+        "count": 344
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T19:15:01.444Z"
+    },
+    {
+      "id": "log-1790794803039",
+      "sync_type": "full_sync",
+      "status": "success",
+      "details": {
+        "started_at": "2026-09-30T19:00:00.223Z",
+        "coa_synced": 344,
+        "projects_synced": 78,
+        "contacts_synced": 200,
+        "pending_expenses": {
+          "total": 0,
+          "synced": 0,
+          "failed": 0
+        },
+        "errors": []
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T19:00:03.039Z"
+    },
+    {
+      "id": "log-1790794803019",
+      "sync_type": "contacts_sync",
+      "status": "success",
+      "details": {
+        "count": 200
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T19:00:03.019Z"
+    },
+    {
+      "id": "log-1790794801866",
+      "sync_type": "projects_sync",
+      "status": "success",
+      "details": {
+        "count": 78
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T19:00:01.866Z"
+    },
+    {
+      "id": "log-1790794801408",
+      "sync_type": "coa_sync",
+      "status": "success",
+      "details": {
+        "count": 344
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T19:00:01.408Z"
+    },
+    {
+      "id": "log-1790794126357",
+      "sync_type": "expense_delete",
+      "status": "success",
+      "details": {
+        "zoho_expense_id": "3095712000008831001"
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:48:46.357Z"
+    },
+    {
+      "id": "log-1790794123050",
+      "sync_type": "expense_delete",
+      "status": "success",
+      "details": {
+        "zoho_expense_id": "3095712000008830001"
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:48:43.050Z"
+    },
+    {
+      "id": "log-1790794119709",
+      "sync_type": "expense_delete",
+      "status": "success",
+      "details": {
+        "zoho_expense_id": "3095712000008829001"
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:48:39.709Z"
+    },
+    {
+      "id": "log-1790793903211",
+      "sync_type": "full_sync",
+      "status": "success",
+      "details": {
+        "started_at": "2026-09-30T18:45:00.297Z",
+        "coa_synced": 344,
+        "projects_synced": 78,
+        "contacts_synced": 200,
+        "pending_expenses": {
+          "total": 0,
+          "synced": 0,
+          "failed": 0
+        },
+        "errors": []
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:45:03.211Z"
+    },
+    {
+      "id": "log-1790793903179",
+      "sync_type": "contacts_sync",
+      "status": "success",
+      "details": {
+        "count": 200
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:45:03.179Z"
+    },
+    {
+      "id": "log-1790793902524",
+      "sync_type": "projects_sync",
+      "status": "success",
+      "details": {
+        "count": 78
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:45:02.524Z"
+    },
+    {
+      "id": "log-1790793901504",
+      "sync_type": "coa_sync",
+      "status": "success",
+      "details": {
+        "count": 344
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:45:01.504Z"
+    },
+    {
+      "id": "log-1790793720300",
+      "sync_type": "expense_create",
+      "status": "success",
+      "details": {
+        "expense_id": "exp-9d31452f",
+        "zoho_expense_id": "3095712000008831001",
+        "zoho_expense_number": "9280"
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:42:00.300Z"
+    },
+    {
+      "id": "log-1790793698941",
+      "sync_type": "expense_create",
+      "status": "success",
+      "details": {
+        "expense_id": "exp-74ef7e55",
+        "zoho_expense_id": "3095712000008830001",
+        "zoho_expense_number": "9279"
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:41:38.941Z"
+    },
+    {
+      "id": "log-1790793682841",
+      "sync_type": "expense_create",
+      "status": "success",
+      "details": {
+        "expense_id": "exp-cdc75291",
+        "zoho_expense_id": "3095712000008829001",
+        "zoho_expense_number": "9278"
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:41:22.841Z"
+    },
+    {
+      "id": "log-1790793332065",
+      "sync_type": "expense_delete",
+      "status": "failure",
+      "details": {
+        "zoho_expense_id": "jn-881001"
+      },
+      "error_message": "Zoho API Request Error [/expenses/jn-881001]: We couldnt find any resource for the given ID. Please verify the ID and try again.",
+      "created_at": "2026-09-30T18:35:32.065Z"
+    },
+    {
+      "id": "log-1790793329638",
+      "sync_type": "expense_delete",
+      "status": "failure",
+      "details": {
+        "zoho_expense_id": "jn-881002"
+      },
+      "error_message": "Zoho API Request Error [/expenses/jn-881002]: We couldnt find any resource for the given ID. Please verify the ID and try again.",
+      "created_at": "2026-09-30T18:35:29.638Z"
+    },
+    {
+      "id": "log-1790793253498",
+      "sync_type": "expense_delete",
+      "status": "success",
+      "details": {
+        "zoho_expense_id": "3095712000008827001"
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:34:13.498Z"
+    },
+    {
+      "id": "log-1790793158473",
+      "sync_type": "expense_create",
+      "status": "success",
+      "details": {
+        "expense_id": "exp-434e1008",
+        "zoho_expense_id": "3095712000008827001",
+        "zoho_expense_number": "9277"
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:32:38.473Z"
+    },
+    {
+      "id": "log-1790793145120",
+      "sync_type": "expense_delete",
+      "status": "success",
+      "details": {
+        "zoho_expense_id": "3095712000008825001"
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:32:25.120Z"
+    },
+    {
+      "id": "log-1790793003136",
+      "sync_type": "full_sync",
+      "status": "success",
+      "details": {
+        "started_at": "2026-09-30T18:30:00.297Z",
+        "coa_synced": 344,
+        "projects_synced": 78,
+        "contacts_synced": 200,
+        "pending_expenses": {
+          "total": 0,
+          "synced": 0,
+          "failed": 0
+        },
+        "errors": []
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:30:03.136Z"
+    },
+    {
+      "id": "log-1790793003113",
+      "sync_type": "contacts_sync",
+      "status": "success",
+      "details": {
+        "count": 200
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:30:03.113Z"
+    },
+    {
+      "id": "log-1790793002034",
+      "sync_type": "projects_sync",
+      "status": "success",
+      "details": {
+        "count": 78
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:30:02.034Z"
+    },
+    {
+      "id": "log-1790793001545",
+      "sync_type": "coa_sync",
+      "status": "success",
+      "details": {
+        "count": 344
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:30:01.545Z"
+    },
+    {
+      "id": "log-1790792854366",
+      "sync_type": "expense_create",
+      "status": "success",
+      "details": {
+        "expense_id": "exp-489f8b0c",
+        "zoho_expense_id": "3095712000008825001",
+        "zoho_expense_number": "N/A"
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:27:34.366Z"
+    },
+    {
+      "id": "log-1790792828125",
+      "sync_type": "expense_delete",
+      "status": "success",
+      "details": {
+        "zoho_expense_id": "3095712000008823001"
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:27:08.125Z"
+    },
+    {
+      "id": "log-1790792530508",
+      "sync_type": "expense_create",
+      "status": "success",
+      "details": {
+        "expense_id": "exp-003df468",
+        "zoho_expense_id": "3095712000008823001",
+        "zoho_expense_number": "3095712000008823001"
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:22:10.508Z"
+    },
+    {
+      "id": "log-1790792439181",
+      "sync_type": "expense_delete",
+      "status": "success",
+      "details": {
+        "zoho_expense_id": "3095712000008821001"
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:20:39.181Z"
+    },
+    {
+      "id": "log-1790792201968",
+      "sync_type": "expense_create",
+      "status": "success",
+      "details": {
+        "expense_id": "exp-624fca4a",
+        "zoho_expense_id": "3095712000008821001",
+        "zoho_expense_number": "exp-624fca4a"
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:16:41.969Z"
+    },
+    {
+      "id": "log-1790792162264",
+      "sync_type": "expense_delete",
+      "status": "success",
+      "details": {
+        "zoho_expense_id": "3095712000008794003"
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:16:02.264Z"
+    },
+    {
+      "id": "log-1790792103027",
+      "sync_type": "full_sync",
+      "status": "success",
+      "details": {
+        "started_at": "2026-09-30T18:15:00.330Z",
+        "coa_synced": 344,
+        "projects_synced": 78,
+        "contacts_synced": 200,
+        "pending_expenses": {
+          "total": 0,
+          "synced": 0,
+          "failed": 0
+        },
+        "errors": []
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:15:03.027Z"
+    },
+    {
+      "id": "log-1790792102997",
+      "sync_type": "contacts_sync",
+      "status": "success",
+      "details": {
+        "count": 200
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:15:02.997Z"
+    },
+    {
+      "id": "log-1790792102034",
+      "sync_type": "projects_sync",
+      "status": "success",
+      "details": {
+        "count": 78
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:15:02.034Z"
+    },
+    {
+      "id": "log-1790792101609",
+      "sync_type": "coa_sync",
+      "status": "success",
+      "details": {
+        "count": 344
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:15:01.609Z"
+    },
+    {
+      "id": "log-1790791203357",
+      "sync_type": "full_sync",
+      "status": "success",
+      "details": {
+        "started_at": "2026-09-30T18:00:00.087Z",
+        "coa_synced": 344,
+        "projects_synced": 78,
+        "contacts_synced": 200,
+        "pending_expenses": {
+          "total": 0,
+          "synced": 0,
+          "failed": 0
+        },
+        "errors": []
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:00:03.357Z"
+    },
+    {
+      "id": "log-1790791203334",
+      "sync_type": "contacts_sync",
+      "status": "success",
+      "details": {
+        "count": 200
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:00:03.334Z"
+    },
+    {
+      "id": "log-1790791201823",
+      "sync_type": "projects_sync",
+      "status": "success",
+      "details": {
+        "count": 78
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:00:01.823Z"
+    },
+    {
+      "id": "log-1790791201420",
+      "sync_type": "coa_sync",
+      "status": "success",
+      "details": {
+        "count": 344
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T18:00:01.420Z"
+    },
+    {
+      "id": "log-1790790906795",
+      "sync_type": "expense_create",
+      "status": "success",
+      "details": {
+        "expense_id": "exp-7b347aa5",
+        "zoho_expense_id": "3095712000008794003",
+        "zoho_expense_number": "EXP-2026-2871"
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T17:55:06.795Z"
+    },
+    {
+      "id": "log-1790790853135",
+      "sync_type": "expense_delete",
+      "status": "success",
+      "details": {
+        "zoho_expense_id": "3095712000008814043"
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T17:54:13.135Z"
+    },
+    {
+      "id": "log-1790790302499",
+      "sync_type": "full_sync",
+      "status": "success",
+      "details": {
+        "started_at": "2026-09-30T17:45:00.323Z",
+        "coa_synced": 344,
+        "projects_synced": 78,
+        "contacts_synced": 200,
+        "pending_expenses": {
+          "total": 0,
+          "synced": 0,
+          "failed": 0
+        },
+        "errors": []
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T17:45:02.499Z"
+    },
+    {
+      "id": "log-1790790302477",
+      "sync_type": "contacts_sync",
+      "status": "success",
+      "details": {
+        "count": 200
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T17:45:02.477Z"
+    },
+    {
+      "id": "log-1790790301859",
+      "sync_type": "projects_sync",
+      "status": "success",
+      "details": {
+        "count": 78
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T17:45:01.859Z"
+    }
+  ]
+}
