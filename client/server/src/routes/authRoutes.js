@@ -114,23 +114,9 @@ router.post('/logout', (req, res) => {
   res.json({ success: true, message: 'Logged out successfully.' });
 });
 
-// GET /api/auth/demo-accounts - Convenience for fast login testing
+// GET /api/auth/demo-accounts - Deprecated/Removed
 router.get('/demo-accounts', async (req, res) => {
-  try {
-    const all = await db.getEmployees();
-    const active = all.filter(e => e.is_active !== false);
-    const demo = active.map(e => ({
-      id: e.id,
-      name: e.name,
-      email: e.email,
-      employee_code: e.employee_code,
-      role: e.role,
-      password_hint: e.password || (e.role === 'admin' ? 'admin123' : 'emp123')
-    }));
-    res.json({ success: true, accounts: demo });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
+  res.json({ success: true, accounts: [] });
 });
 
 module.exports = router;

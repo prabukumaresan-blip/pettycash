@@ -15,63 +15,10 @@
     "auto_sync_interval_mins": 15,
     "default_expense_account_id": "acc-exp-petty",
     "default_expense_account_name": "Petty Cash Purchases",
-    "last_sync_at": "2026-09-30T19:30:03.267Z",
-    "updated_at": "2026-09-30T19:40:44.413Z"
+    "last_sync_at": "2026-09-30T20:00:03.220Z",
+    "updated_at": "2026-09-30T20:00:03.222Z"
   },
   "employees": [
-    {
-      "id": "emp-101",
-      "name": "Sarah Connor",
-      "email": "sarah.c@company.com",
-      "employee_code": "EMP-001",
-      "password": "admin123",
-      "role": "admin",
-      "petty_cash_account_id": "acc-pc-001",
-      "petty_cash_account_name": "Petty Cash - Sarah Connor",
-      "initial_float": 1500,
-      "current_balance": 1500,
-      "default_project_id": "proj-101",
-      "default_project_name": "Metro Transit Hub Phase 2",
-      "department": "Field Operations",
-      "is_active": true,
-      "created_at": "2026-08-30T16:29:23.101Z",
-      "updated_at": "2026-09-29T16:41:29.064Z"
-    },
-    {
-      "id": "emp-102",
-      "name": "David Miller",
-      "email": "david.m@company.com",
-      "employee_code": "EMP-002",
-      "password": "emp123",
-      "role": "employee",
-      "petty_cash_account_id": "acc-pc-002",
-      "petty_cash_account_name": "Petty Cash - David Miller",
-      "initial_float": 1000,
-      "current_balance": 764.5,
-      "default_project_id": "proj-102",
-      "default_project_name": "Skyline Tower Renovations",
-      "department": "Site Engineering",
-      "is_active": true,
-      "created_at": "2026-09-09T16:29:23.101Z",
-      "updated_at": "2026-09-29T20:04:22.309Z"
-    },
-    {
-      "id": "emp-103",
-      "name": "Elena Rostova",
-      "email": "elena.r@company.com",
-      "employee_code": "EMP-003",
-      "password": "emp123",
-      "role": "employee",
-      "petty_cash_account_id": "acc-pc-003",
-      "petty_cash_account_name": "Petty Cash - Elena Rostova",
-      "initial_float": 800,
-      "current_balance": 620,
-      "default_project_id": "proj-103",
-      "default_project_name": "Green Energy Solar Park",
-      "department": "Logistics",
-      "is_active": true,
-      "created_at": "2026-09-19T16:29:23.101Z"
-    },
     {
       "id": "emp-bbcdae95",
       "name": "Nihal",
@@ -90,6 +37,24 @@
       "created_at": "2026-09-30T16:40:43.579Z",
       "updated_at": "2026-09-30T19:41:56.144Z",
       "auto_create_zoho_account": false
+    },
+    {
+      "id": "emp-9fe07453",
+      "name": "Kumaresan",
+      "email": "kumaresan@company.com",
+      "employee_code": "EMP-803",
+      "password": "admin123",
+      "role": "admin",
+      "initial_float": 172.602,
+      "current_balance": 172.602,
+      "department": "Field Operations",
+      "default_project_id": null,
+      "default_project_name": null,
+      "petty_cash_account_id": "3095712000002049033",
+      "petty_cash_account_name": "Kumaresan Petty Cash",
+      "is_active": true,
+      "created_at": "2026-09-30T20:00:54.188Z",
+      "updated_at": "2026-09-30T20:00:54.188Z"
     }
   ],
   "zoho_accounts": [
@@ -100,7 +65,7 @@
       "account_type": "other_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.780Z"
     },
     {
       "account_id": "3095712000003605347",
@@ -109,7 +74,7 @@
       "account_type": "other_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.780Z"
     },
     {
       "account_id": "3095712000000000370",
@@ -118,7 +83,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.780Z"
     },
     {
       "account_id": "3095712000000035001",
@@ -127,7 +92,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.780Z"
     },
     {
       "account_id": "3095712000000075352",
@@ -136,7 +101,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.780Z"
     },
     {
       "account_id": "3095712000000075358",
@@ -145,7 +110,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.780Z"
     },
     {
       "account_id": "3095712000000075364",
@@ -154,7 +119,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.780Z"
     },
     {
       "account_id": "3095712000000075370",
@@ -163,7 +128,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.780Z"
     },
     {
       "account_id": "3095712000000075376",
@@ -172,7 +137,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.780Z"
     },
     {
       "account_id": "3095712000000075382",
@@ -181,7 +146,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075388",
@@ -190,7 +155,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075394",
@@ -199,7 +164,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075400",
@@ -208,7 +173,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075412",
@@ -217,7 +182,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075418",
@@ -226,7 +191,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075424",
@@ -235,7 +200,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075430",
@@ -244,7 +209,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075448",
@@ -253,7 +218,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075454",
@@ -262,7 +227,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075460",
@@ -271,7 +236,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075466",
@@ -280,7 +245,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075472",
@@ -289,7 +254,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075508",
@@ -298,7 +263,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000258729",
@@ -307,7 +272,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000292001",
@@ -316,7 +281,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000399263",
@@ -325,7 +290,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000589089",
@@ -334,7 +299,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000710223",
@@ -343,7 +308,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001103288",
@@ -352,7 +317,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001367590",
@@ -361,7 +326,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000002049033",
@@ -370,7 +335,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000002075174",
@@ -379,7 +344,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000002083087",
@@ -388,7 +353,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000002093708",
@@ -397,7 +362,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000002139689",
@@ -406,7 +371,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000002203003",
@@ -415,7 +380,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000002403105",
@@ -424,7 +389,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000002583403",
@@ -433,7 +398,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000003068153",
@@ -442,7 +407,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000003548772",
@@ -451,7 +416,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000003974081",
@@ -460,7 +425,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000004199952",
@@ -469,7 +434,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000004235001",
@@ -478,7 +443,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000004334377",
@@ -487,7 +452,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000004413002",
@@ -496,7 +461,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000004448115",
@@ -505,7 +470,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000004981183",
@@ -514,7 +479,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000005707196",
@@ -523,7 +488,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000005933630",
@@ -532,7 +497,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000006564139",
@@ -541,7 +506,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000006564147",
@@ -550,7 +515,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000006954736",
@@ -559,7 +524,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000007094003",
@@ -568,7 +533,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000007094047",
@@ -577,7 +542,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000007419550",
@@ -586,7 +551,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000007795002",
@@ -595,7 +560,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000008117458",
@@ -604,7 +569,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000008171002",
@@ -613,7 +578,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000008522002",
@@ -622,7 +587,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000074012",
@@ -631,7 +596,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000074041",
@@ -640,7 +605,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075340",
@@ -649,7 +614,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075478",
@@ -658,7 +623,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075484",
@@ -667,7 +632,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075490",
@@ -676,7 +641,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075496",
@@ -685,7 +650,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075502",
@@ -694,7 +659,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075514",
@@ -703,7 +668,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075520",
@@ -712,7 +677,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075526",
@@ -721,7 +686,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075532",
@@ -730,7 +695,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000179633",
@@ -739,7 +704,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000549001",
@@ -748,7 +713,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001734243",
@@ -757,7 +722,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001734267",
@@ -766,7 +731,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001994472",
@@ -775,7 +740,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000002003023",
@@ -784,7 +749,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000002686236",
@@ -793,7 +758,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000003424243",
@@ -802,7 +767,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000003987209",
@@ -811,7 +776,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000006082227",
@@ -820,7 +785,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000002049025",
@@ -829,7 +794,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075538",
@@ -838,7 +803,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075544",
@@ -847,7 +812,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075550",
@@ -856,7 +821,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075568",
@@ -865,7 +830,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075574",
@@ -874,7 +839,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000578467",
@@ -883,7 +848,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001208049",
@@ -892,7 +857,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000004694407",
@@ -901,7 +866,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000004867061",
@@ -910,7 +875,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000005550626",
@@ -919,7 +884,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000358",
@@ -928,7 +893,7 @@
       "account_type": "cash",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000361",
@@ -937,7 +902,7 @@
       "account_type": "cash",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075328",
@@ -946,7 +911,7 @@
       "account_type": "bank",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000003093687",
@@ -955,7 +920,7 @@
       "account_type": "bank",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000005550305",
@@ -964,7 +929,7 @@
       "account_type": "bank",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000008584381",
@@ -973,7 +938,7 @@
       "account_type": "bank",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000364",
@@ -982,7 +947,7 @@
       "account_type": "accounts_receivable",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000367",
@@ -991,7 +956,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075580",
@@ -1000,7 +965,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075586",
@@ -1009,7 +974,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075592",
@@ -1018,7 +983,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075598",
@@ -1027,7 +992,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075604",
@@ -1036,7 +1001,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075610",
@@ -1045,7 +1010,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001283127",
@@ -1054,7 +1019,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000003553229",
@@ -1063,7 +1028,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000005642854",
@@ -1072,7 +1037,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000007629002",
@@ -1081,7 +1046,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000007930424",
@@ -1090,7 +1055,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000096168",
@@ -1099,7 +1064,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000376",
@@ -1108,7 +1073,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000003001",
@@ -1117,7 +1082,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000005001",
@@ -1126,7 +1091,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000035003",
@@ -1135,7 +1100,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000074043",
@@ -1144,7 +1109,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000074169",
@@ -1153,7 +1118,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075622",
@@ -1162,7 +1127,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075628",
@@ -1171,7 +1136,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075634",
@@ -1180,7 +1145,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075640",
@@ -1189,7 +1154,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075646",
@@ -1198,7 +1163,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075652",
@@ -1207,7 +1172,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075658",
@@ -1216,7 +1181,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001367072",
@@ -1225,7 +1190,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001622427",
@@ -1234,7 +1199,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001622433",
@@ -1243,7 +1208,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001622439",
@@ -1252,7 +1217,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001622445",
@@ -1261,7 +1226,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001622451",
@@ -1270,7 +1235,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001734335",
@@ -1279,7 +1244,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000002417187",
@@ -1288,7 +1253,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000002592009",
@@ -1297,7 +1262,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000003568249",
@@ -1306,7 +1271,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000003719299",
@@ -1315,7 +1280,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000003763228",
@@ -1324,7 +1289,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000005550249",
@@ -1333,7 +1298,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000005550252",
@@ -1342,7 +1307,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000005550255",
@@ -1351,7 +1316,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000005550258",
@@ -1360,7 +1325,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000005550261",
@@ -1369,7 +1334,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000005792824",
@@ -1378,7 +1343,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000006082367",
@@ -1387,7 +1352,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000007629006",
@@ -1396,7 +1361,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000373",
@@ -1405,7 +1370,7 @@
       "account_type": "accounts_payable",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000007112001",
@@ -1414,7 +1379,7 @@
       "account_type": "long_term_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000007418001",
@@ -1423,7 +1388,7 @@
       "account_type": "long_term_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000045001",
@@ -1432,7 +1397,7 @@
       "account_type": "other_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001283133",
@@ -1441,7 +1406,7 @@
       "account_type": "other_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000006092357",
@@ -1450,7 +1415,7 @@
       "account_type": "other_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000007250003",
@@ -1459,7 +1424,7 @@
       "account_type": "other_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000007930396",
@@ -1468,7 +1433,7 @@
       "account_type": "other_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000008432496",
@@ -1477,7 +1442,7 @@
       "account_type": "other_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000379",
@@ -1486,7 +1451,7 @@
       "account_type": "equity",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000382",
@@ -1495,7 +1460,7 @@
       "account_type": "equity",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000385",
@@ -1504,7 +1469,7 @@
       "account_type": "equity",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000012001",
@@ -1513,7 +1478,7 @@
       "account_type": "equity",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075664",
@@ -1522,7 +1487,7 @@
       "account_type": "equity",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075668",
@@ -1531,7 +1496,7 @@
       "account_type": "equity",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075672",
@@ -1540,7 +1505,7 @@
       "account_type": "equity",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075676",
@@ -1549,7 +1514,7 @@
       "account_type": "equity",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075680",
@@ -1558,7 +1523,7 @@
       "account_type": "equity",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000388",
@@ -1567,7 +1532,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000391",
@@ -1576,7 +1541,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000394",
@@ -1585,7 +1550,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000397",
@@ -1594,7 +1559,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000406",
@@ -1603,7 +1568,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000010001",
@@ -1612,7 +1577,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000014001",
@@ -1621,7 +1586,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075688",
@@ -1630,7 +1595,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075692",
@@ -1639,7 +1604,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075700",
@@ -1648,7 +1613,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075704",
@@ -1657,7 +1622,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075708",
@@ -1666,7 +1631,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075712",
@@ -1675,7 +1640,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075716",
@@ -1684,7 +1649,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075720",
@@ -1693,7 +1658,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075724",
@@ -1702,7 +1667,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001615185",
@@ -1711,7 +1676,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001615305",
@@ -1720,7 +1685,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000002544082",
@@ -1729,7 +1694,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000007347557",
@@ -1738,7 +1703,7 @@
       "account_type": "other_income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000007519007",
@@ -1747,7 +1712,7 @@
       "account_type": "other_income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000400",
@@ -1756,7 +1721,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000403",
@@ -1765,7 +1730,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000409",
@@ -1774,7 +1739,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000421",
@@ -1783,7 +1748,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000439",
@@ -1792,7 +1757,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000445",
@@ -1801,7 +1766,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000451",
@@ -1810,7 +1775,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000454",
@@ -1819,7 +1784,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000457",
@@ -1828,7 +1793,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000000460",
@@ -1837,7 +1802,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000032023",
@@ -1846,7 +1811,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000035005",
@@ -1855,7 +1820,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000072001",
@@ -1864,7 +1829,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075854",
@@ -1873,7 +1838,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075860",
@@ -1882,7 +1847,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075872",
@@ -1891,7 +1856,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075878",
@@ -1900,7 +1865,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075884",
@@ -1909,7 +1874,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075890",
@@ -1918,7 +1883,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075896",
@@ -1927,7 +1892,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075902",
@@ -1936,7 +1901,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075908",
@@ -1945,7 +1910,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075914",
@@ -1954,7 +1919,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075920",
@@ -1963,7 +1928,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075926",
@@ -1972,7 +1937,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075932",
@@ -1981,7 +1946,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075938",
@@ -1990,7 +1955,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076112",
@@ -1999,7 +1964,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000202455",
@@ -2008,7 +1973,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075944",
@@ -2017,7 +1982,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075950",
@@ -2026,7 +1991,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075956",
@@ -2035,7 +2000,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075962",
@@ -2044,7 +2009,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075968",
@@ -2053,7 +2018,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075974",
@@ -2062,7 +2027,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075980",
@@ -2071,7 +2036,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075986",
@@ -2080,7 +2045,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075992",
@@ -2089,7 +2054,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075998",
@@ -2098,7 +2063,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076004",
@@ -2107,7 +2072,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076010",
@@ -2116,7 +2081,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076016",
@@ -2125,7 +2090,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076022",
@@ -2134,7 +2099,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076028",
@@ -2143,7 +2108,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076034",
@@ -2152,7 +2117,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076040",
@@ -2161,7 +2126,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076046",
@@ -2170,7 +2135,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076052",
@@ -2179,7 +2144,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076058",
@@ -2188,7 +2153,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076064",
@@ -2197,7 +2162,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076070",
@@ -2206,7 +2171,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076076",
@@ -2215,7 +2180,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076082",
@@ -2224,7 +2189,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076088",
@@ -2233,7 +2198,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076094",
@@ -2242,7 +2207,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076100",
@@ -2251,7 +2216,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076106",
@@ -2260,7 +2225,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000170163",
@@ -2269,7 +2234,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000175082",
@@ -2278,7 +2243,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000461003",
@@ -2287,7 +2252,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000663024",
@@ -2296,7 +2261,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000690011",
@@ -2305,7 +2270,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000709113",
@@ -2314,7 +2279,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000709157",
@@ -2323,7 +2288,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000974001",
@@ -2332,7 +2297,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000974007",
@@ -2341,7 +2306,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000974013",
@@ -2350,7 +2315,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076118",
@@ -2359,7 +2324,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076124",
@@ -2368,7 +2333,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076130",
@@ -2377,7 +2342,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076142",
@@ -2386,7 +2351,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076148",
@@ -2395,7 +2360,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076154",
@@ -2404,7 +2369,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076160",
@@ -2413,7 +2378,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076166",
@@ -2422,7 +2387,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076172",
@@ -2431,7 +2396,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076178",
@@ -2440,7 +2405,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076184",
@@ -2449,7 +2414,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076190",
@@ -2458,7 +2423,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076196",
@@ -2467,7 +2432,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076202",
@@ -2476,7 +2441,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076208",
@@ -2485,7 +2450,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076214",
@@ -2494,7 +2459,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076220",
@@ -2503,7 +2468,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000663030",
@@ -2512,7 +2477,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000774001",
@@ -2521,7 +2486,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000938001",
@@ -2530,7 +2495,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000982055",
@@ -2539,7 +2504,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076226",
@@ -2548,7 +2513,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076232",
@@ -2557,7 +2522,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076238",
@@ -2566,7 +2531,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076244",
@@ -2575,7 +2540,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076256",
@@ -2584,7 +2549,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076262",
@@ -2593,7 +2558,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076268",
@@ -2602,7 +2567,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076274",
@@ -2611,7 +2576,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076280",
@@ -2620,7 +2585,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076286",
@@ -2629,7 +2594,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076292",
@@ -2638,7 +2603,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076298",
@@ -2647,7 +2612,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076304",
@@ -2656,7 +2621,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076310",
@@ -2665,7 +2630,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076316",
@@ -2674,7 +2639,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000189001",
@@ -2683,7 +2648,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000210301",
@@ -2692,7 +2657,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000652001",
@@ -2701,7 +2666,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000663036",
@@ -2710,7 +2675,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000728057",
@@ -2719,7 +2684,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076322",
@@ -2728,7 +2693,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076328",
@@ -2737,7 +2702,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076334",
@@ -2746,7 +2711,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076340",
@@ -2755,7 +2720,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076346",
@@ -2764,7 +2729,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000076352",
@@ -2773,7 +2738,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000170169",
@@ -2782,7 +2747,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000170201",
@@ -2791,7 +2756,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000112067",
@@ -2800,7 +2765,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000174001",
@@ -2809,7 +2774,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000185001",
@@ -2818,7 +2783,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001050020",
@@ -2827,7 +2792,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001050166",
@@ -2836,7 +2801,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000001251185",
@@ -2845,7 +2810,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000002425033",
@@ -2854,7 +2819,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000002466001",
@@ -2863,7 +2828,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000002749549",
@@ -2872,7 +2837,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000002835085",
@@ -2881,7 +2846,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000003424525",
@@ -2890,7 +2855,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000003512467",
@@ -2899,7 +2864,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000003974519",
@@ -2908,7 +2873,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000004940521",
@@ -2917,7 +2882,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000005221243",
@@ -2926,7 +2891,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000007112003",
@@ -2935,7 +2900,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000007418003",
@@ -2944,7 +2909,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000034003",
@@ -2953,7 +2918,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075728",
@@ -2962,7 +2927,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075734",
@@ -2971,7 +2936,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075740",
@@ -2980,7 +2945,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075746",
@@ -2989,7 +2954,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075776",
@@ -2998,7 +2963,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.781Z"
     },
     {
       "account_id": "3095712000000075788",
@@ -3007,7 +2972,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000000075782",
@@ -3016,7 +2981,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000000075794",
@@ -3025,7 +2990,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000000075806",
@@ -3034,7 +2999,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000000643685",
@@ -3043,7 +3008,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000001498571",
@@ -3052,7 +3017,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000001503955",
@@ -3061,7 +3026,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000002375645",
@@ -3070,7 +3035,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000000075812",
@@ -3079,7 +3044,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000000075818",
@@ -3088,7 +3053,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000000075824",
@@ -3097,7 +3062,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000000075830",
@@ -3106,7 +3071,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000000075836",
@@ -3115,7 +3080,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000000075842",
@@ -3124,7 +3089,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000003786001",
@@ -3133,7 +3098,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000000075848",
@@ -3142,7 +3107,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000002159007",
@@ -3151,7 +3116,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000005604020",
@@ -3160,7 +3125,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000000000415",
@@ -3169,7 +3134,7 @@
       "account_type": "other_expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000000034001",
@@ -3178,7 +3143,7 @@
       "account_type": "stock",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     },
     {
       "account_id": "3095712000000101470",
@@ -3187,7 +3152,7 @@
       "account_type": "payment_clearing",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-09-30T19:30:01.673Z"
+      "last_synced": "2026-09-30T20:00:01.782Z"
     }
   ],
   "zoho_projects": [
@@ -3198,7 +3163,7 @@
       "customer_id": "3095712000000094128",
       "customer_name": "OMAN SHAPOORJI COMPANY LLC",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000008373001",
@@ -3207,7 +3172,7 @@
       "customer_id": "3095712000007085845",
       "customer_name": "THE ROYAL OFFICE",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000007793001",
@@ -3216,7 +3181,7 @@
       "customer_id": "3095712000007085845",
       "customer_name": "THE ROYAL OFFICE",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000007653008",
@@ -3225,7 +3190,7 @@
       "customer_id": "3095712000007653001",
       "customer_name": "OMAN CONVENTION & EXHIBITION CENTRE",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000007334410",
@@ -3234,7 +3199,7 @@
       "customer_id": "3095712000007334396",
       "customer_name": "Ishaq Al salmi",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000007089001",
@@ -3243,7 +3208,7 @@
       "customer_id": "3095712000000090104",
       "customer_name": "AGRICULTURE MODERN ENGINEERING LLC",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000007085859",
@@ -3252,7 +3217,7 @@
       "customer_id": "3095712000007085845",
       "customer_name": "THE ROYAL OFFICE",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000006377001",
@@ -3261,7 +3226,7 @@
       "customer_id": "3095712000000094469",
       "customer_name": "ROYAL COURT AFFAIRS",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000006209343",
@@ -3270,7 +3235,7 @@
       "customer_id": "3095712000006209329",
       "customer_name": "Al-Dhakhiliyah Governorate",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000006140001",
@@ -3279,7 +3244,7 @@
       "customer_id": "3095712000005544001",
       "customer_name": "HH Dr. Taghreed Turki Al Said",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000006099270",
@@ -3288,7 +3253,7 @@
       "customer_id": "3095712000004085001",
       "customer_name": "Mr. Jamal Al Namaani",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000006099124",
@@ -3297,7 +3262,7 @@
       "customer_id": "3095712000006099108",
       "customer_name": "Mr. Abdulaziz",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000005911019",
@@ -3306,7 +3271,7 @@
       "customer_id": "3095712000005911003",
       "customer_name": "Mr. ALI AL-RAWAS",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000005781677",
@@ -3315,7 +3280,7 @@
       "customer_id": "3095712000003720509",
       "customer_name": "BRIGHT FLOWERS TRADING LLC (NURSERY)",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000005407001",
@@ -3324,7 +3289,7 @@
       "customer_id": "3095712000000092403",
       "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000005379618",
@@ -3333,7 +3298,7 @@
       "customer_id": "3095712000005379604",
       "customer_name": "JENFEL LLC",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000005334056",
@@ -3342,7 +3307,7 @@
       "customer_id": "3095712000000103001",
       "customer_name": "ZAHER COMPANY",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000005334036",
@@ -3351,7 +3316,7 @@
       "customer_id": "3095712000000090104",
       "customer_name": "AGRICULTURE MODERN ENGINEERING LLC",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000005334030",
@@ -3360,7 +3325,7 @@
       "customer_id": "3095712000004222901",
       "customer_name": "Nizwa Municipality",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000005083042",
@@ -3369,7 +3334,7 @@
       "customer_id": "3095712000001918024",
       "customer_name": "TAKAMUL HOSPITALITY AND INVEST. SAOC",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000005007123",
@@ -3378,7 +3343,7 @@
       "customer_id": "3095712000000092403",
       "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000004833001",
@@ -3387,7 +3352,7 @@
       "customer_id": "3095712000004832163",
       "customer_name": "Ms. Leyan Al Mawali",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000004806001",
@@ -3396,7 +3361,7 @@
       "customer_id": "3095712000000621171",
       "customer_name": "Mr. Sami Macki",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000004786029",
@@ -3405,7 +3370,7 @@
       "customer_id": "3095712000004786005",
       "customer_name": "Mr. H.S. Mohammed Hamad Al-Sarmi",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000004786001",
@@ -3414,7 +3379,7 @@
       "customer_id": "3095712000004221016",
       "customer_name": "Mr. Nasser Al Kindi",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000004612023",
@@ -3423,7 +3388,7 @@
       "customer_id": "3095712000003108057",
       "customer_name": "EFS Facilities Services Limited L.L.C",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000004502040",
@@ -3432,7 +3397,7 @@
       "customer_id": "3095712000004502001",
       "customer_name": "Mustafa Ahmed Salman Trading Ent, LLC.",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000004489001",
@@ -3441,7 +3406,7 @@
       "customer_id": "3095712000004085001",
       "customer_name": "Mr. Jamal Al Namaani",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000004222933",
@@ -3450,7 +3415,7 @@
       "customer_id": "3095712000004222917",
       "customer_name": "Mr. Dina Ahmed Macki",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000004222913",
@@ -3459,7 +3424,7 @@
       "customer_id": "3095712000004222901",
       "customer_name": "Nizwa Municipality",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000004045007",
@@ -3468,7 +3433,7 @@
       "customer_id": "3095712000001418129",
       "customer_name": "MR. MOHAMMED AL HARTHY",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000003481005",
@@ -3477,7 +3442,7 @@
       "customer_id": "3095712000003336001",
       "customer_name": "New Rotana Enterprises LLC",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000003232028",
@@ -3486,7 +3451,7 @@
       "customer_id": "3095712000003232005",
       "customer_name": "Mohammed Jaberi Al Abri",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000002872190",
@@ -3495,7 +3460,7 @@
       "customer_id": "3095712000000094469",
       "customer_name": "ROYAL COURT AFFAIRS",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000002468186",
@@ -3504,7 +3469,7 @@
       "customer_id": "3095712000000286001",
       "customer_name": "EMBASSY OF FRANCE IN MUSCAT",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000002468180",
@@ -3513,7 +3478,7 @@
       "customer_id": "3095712000000091001",
       "customer_name": "AL FEYHA TOURISM LLC",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000002400092",
@@ -3522,7 +3487,7 @@
       "customer_id": "3095712000002400069",
       "customer_name": "BAKER AL LAWATI",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000002375037",
@@ -3531,7 +3496,7 @@
       "customer_id": "3095712000002083761",
       "customer_name": "SMEs DEVELOPMENT AUTHORITY",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000002173975",
@@ -3540,7 +3505,7 @@
       "customer_id": "3095712000000101449",
       "customer_name": "IRAQ EMABASSY",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000002135033",
@@ -3549,7 +3514,7 @@
       "customer_id": "3095712000002082548",
       "customer_name": "L & T Oman",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000002119163",
@@ -3558,7 +3523,7 @@
       "customer_id": "3095712000001251001",
       "customer_name": "The Eight Hotel S.P.C",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000002084412",
@@ -3567,7 +3532,7 @@
       "customer_id": "3095712000001918024",
       "customer_name": "TAKAMUL HOSPITALITY AND INVEST. SAOC",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000001895409",
@@ -3576,7 +3541,7 @@
       "customer_id": "3095712000001002047",
       "customer_name": "Intercity Hotel",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000001827069",
@@ -3585,7 +3550,7 @@
       "customer_id": "3095712000000286001",
       "customer_name": "EMBASSY OF FRANCE IN MUSCAT",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000001765001",
@@ -3594,7 +3559,7 @@
       "customer_id": "3095712000000286001",
       "customer_name": "EMBASSY OF FRANCE IN MUSCAT",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000001709175",
@@ -3603,7 +3568,7 @@
       "customer_id": "3095712000001479306",
       "customer_name": "Mr. NABIL",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000001579061",
@@ -3612,7 +3577,7 @@
       "customer_id": "3095712000000101449",
       "customer_name": "IRAQ EMABASSY",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000001535061",
@@ -3621,7 +3586,7 @@
       "customer_id": "3095712000001447022",
       "customer_name": "AL AKKAD NATIONAL PROJECTS LLC",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000001520047",
@@ -3630,7 +3595,7 @@
       "customer_id": "3095712000001447022",
       "customer_name": "AL AKKAD NATIONAL PROJECTS LLC",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000001260142",
@@ -3639,7 +3604,7 @@
       "customer_id": "3095712000001152032",
       "customer_name": "ROYAL ACADAMY OF MANAGEMENT",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000001125036",
@@ -3648,7 +3613,7 @@
       "customer_id": "3095712000000983001",
       "customer_name": "GULF PETROCHEMICAL SERVICES & TRDG LLC, OMAN",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000001111113",
@@ -3657,7 +3622,7 @@
       "customer_id": "3095712000000092403",
       "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000001096122",
@@ -3666,7 +3631,7 @@
       "customer_id": "3095712000001064091",
       "customer_name": "ENG. SUKAINA AL LAWATI",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000001069001",
@@ -3675,7 +3640,7 @@
       "customer_id": "3095712000000092062",
       "customer_name": "DIMAH AL RAEDAH TRADING LLC",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000001001020",
@@ -3684,7 +3649,7 @@
       "customer_id": "3095712000000945001",
       "customer_name": "MR. MUSTAFA AL LAWATI",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000761011",
@@ -3693,7 +3658,7 @@
       "customer_id": "3095712000000590105",
       "customer_name": "MINISTRY OF INTERIER",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000742147",
@@ -3702,7 +3667,7 @@
       "customer_id": "3095712000000729213",
       "customer_name": "PETROLEUM DEVELOPMENT OMAN",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000690001",
@@ -3711,7 +3676,7 @@
       "customer_id": "3095712000000621171",
       "customer_name": "Mr. Sami Macki",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000606013",
@@ -3720,7 +3685,7 @@
       "customer_id": "3095712000000286001",
       "customer_name": "EMBASSY OF FRANCE IN MUSCAT",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000590127",
@@ -3729,7 +3694,7 @@
       "customer_id": "3095712000000590105",
       "customer_name": "MINISTRY OF INTERIER",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000548049",
@@ -3738,7 +3703,7 @@
       "customer_id": "3095712000000548027",
       "customer_name": "AL HAMRA YOUTH CLUB",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000548023",
@@ -3747,7 +3712,7 @@
       "customer_id": "3095712000000548001",
       "customer_name": "MOHMOOD ZAHIR AL ABRI",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000415649",
@@ -3756,7 +3721,7 @@
       "customer_id": "3095712000000117026",
       "customer_name": "BLOX Design",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000415645",
@@ -3765,7 +3730,7 @@
       "customer_id": "3095712000000554067",
       "customer_name": "AL HAYTHEM TRADING & CONTRACTING CO LLC",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000399527",
@@ -3774,7 +3739,7 @@
       "customer_id": "3095712000000293092",
       "customer_name": "GULF MUSHROOM PRODUCTS CO S.A.O.G",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000286023",
@@ -3783,7 +3748,7 @@
       "customer_id": "3095712000000286001",
       "customer_name": "EMBASSY OF FRANCE IN MUSCAT",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000189033",
@@ -3792,7 +3757,7 @@
       "customer_id": "3095712000000119001",
       "customer_name": "SULTAN AL RAWAHI",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000170001",
@@ -3801,7 +3766,7 @@
       "customer_id": "3095712000000093393",
       "customer_name": "MR. HAMOOD ALJUFEI",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000117057",
@@ -3810,7 +3775,7 @@
       "customer_id": "3095712000000117026",
       "customer_name": "BLOX Design",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000108501",
@@ -3819,7 +3784,7 @@
       "customer_id": "3095712000000108374",
       "customer_name": "BADER SAOUD AL ABRI",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000108497",
@@ -3828,7 +3793,7 @@
       "customer_id": "3095712000000090506",
       "customer_name": "AL NSOOR FOOTBALL TEAM",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000103026",
@@ -3837,7 +3802,7 @@
       "customer_id": "3095712000000093738",
       "customer_name": "MR. YASIR OTBI",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000103022",
@@ -3846,7 +3811,7 @@
       "customer_id": "3095712000000094469",
       "customer_name": "ROYAL COURT AFFAIRS",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000101305",
@@ -3855,7 +3820,7 @@
       "customer_id": "3095712000000092403",
       "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000101297",
@@ -3864,7 +3829,7 @@
       "customer_id": "3095712000000092403",
       "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000101281",
@@ -3873,7 +3838,7 @@
       "customer_id": "3095712000000092403",
       "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000101277",
@@ -3882,7 +3847,7 @@
       "customer_id": "3095712000000092403",
       "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
       "status": "active",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     },
     {
       "project_id": "3095712000000101267",
@@ -3891,7 +3856,7 @@
       "customer_id": "3095712000000091683",
       "customer_name": "SPML-OSCO Joint Venture",
       "status": "inactive",
-      "last_synced": "2026-09-30T19:30:02.105Z"
+      "last_synced": "2026-09-30T20:00:02.226Z"
     }
   ],
   "zoho_contacts": [
@@ -3901,7 +3866,7 @@
       "contact_type": "vendor",
       "company_name": "A'NASSIR AL ARABI TRANSPORT & EQUIPMENTS",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.230Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000003688663",
@@ -3909,7 +3874,7 @@
       "contact_type": "vendor",
       "company_name": "Aal Hareeb Building Materials LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.230Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008016023",
@@ -3917,7 +3882,7 @@
       "contact_type": "vendor",
       "company_name": "AALEM ALADHWAA TRADING",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.230Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000001770045",
@@ -3925,7 +3890,7 @@
       "contact_type": "vendor",
       "company_name": "ABDUL WAHEED AHMED BALOSHI",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.230Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000000718501",
@@ -3933,7 +3898,7 @@
       "contact_type": "vendor",
       "company_name": "ABDULLAH DADIN INTERNATIONAL LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000003336218",
@@ -3941,7 +3906,7 @@
       "contact_type": "vendor",
       "company_name": "Abeer Hospitals",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007764593",
@@ -3949,7 +3914,7 @@
       "contact_type": "vendor",
       "company_name": "ABNA FRESH CENTER",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000005814831",
@@ -3957,7 +3922,7 @@
       "contact_type": "vendor",
       "company_name": "ABNA NASSER BIN RABIA AL-ABRI CO",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000005640001",
@@ -3965,7 +3930,7 @@
       "contact_type": "vendor",
       "company_name": "ABRAJ BOWSHER BUSINESS AND SERVICES LLC",
       "email": "abrajbowsher@gmail.com",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000002039183",
@@ -3973,7 +3938,7 @@
       "contact_type": "vendor",
       "company_name": "ABRAJ MUSCAT ALAMYT ELECTRONICS",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008218467",
@@ -3981,7 +3946,7 @@
       "contact_type": "vendor",
       "company_name": "ABU ABDUL AZIZ TRAD. & CONT",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000006937783",
@@ -3989,7 +3954,7 @@
       "contact_type": "vendor",
       "company_name": "",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007815180",
@@ -3997,7 +3962,7 @@
       "contact_type": "vendor",
       "company_name": "ABU AL RAIM AL YAHYAI TRADING",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007766357",
@@ -4005,7 +3970,7 @@
       "contact_type": "vendor",
       "company_name": "ABU AYAN UNITED SPC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008163121",
@@ -4013,7 +3978,7 @@
       "contact_type": "vendor",
       "company_name": "Abu Eilaf AI Yahmadi Trad. SPC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007625568",
@@ -4021,7 +3986,7 @@
       "contact_type": "vendor",
       "company_name": "Abu Haitham AL-Hattali",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000002009085",
@@ -4029,7 +3994,7 @@
       "contact_type": "vendor",
       "company_name": "ABU HARIS INTERNATIONAL SPC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008099003",
@@ -4037,7 +4002,7 @@
       "contact_type": "vendor",
       "company_name": "Abu Haris International SPC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008242183",
@@ -4045,7 +4010,7 @@
       "contact_type": "vendor",
       "company_name": "ABU IMAD FOR AGRICULTURAL PRODUCTS",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000000907205",
@@ -4053,7 +4018,7 @@
       "contact_type": "vendor",
       "company_name": "Abu Muaz Al-Kiyumi Trading & Contracting",
       "email": "abu-muaz@hotmail.com",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007815580",
@@ -4061,7 +4026,7 @@
       "contact_type": "vendor",
       "company_name": "ABU MUNEER NATIONAL LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008043624",
@@ -4069,7 +4034,7 @@
       "contact_type": "vendor",
       "company_name": "ABU MUNIR AL-DAWOODI TRAD & CONT.",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007912236",
@@ -4077,7 +4042,7 @@
       "contact_type": "vendor",
       "company_name": "ABU SAAD ENTREPRENEUR SPC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008589425",
@@ -4085,7 +4050,7 @@
       "contact_type": "vendor",
       "company_name": "ABU SAID TRADING",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007895090",
@@ -4093,7 +4058,7 @@
       "contact_type": "vendor",
       "company_name": "ABU SHAZN AL HADHRAMI TRAD",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007625531",
@@ -4101,7 +4066,7 @@
       "contact_type": "vendor",
       "company_name": "Abu Vishal Trading SPC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008208465",
@@ -4109,7 +4074,7 @@
       "contact_type": "vendor",
       "company_name": "ABU ZEENAT & PARTNER TRAD. EST",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008491680",
@@ -4117,7 +4082,7 @@
       "contact_type": "vendor",
       "company_name": "ABUSHIHAB AL KHANBASHY TRADING",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007165001",
@@ -4125,7 +4090,7 @@
       "contact_type": "vendor",
       "company_name": "AFA'AQ AL-MADA TRAD. & TRANSPORT",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000004664030",
@@ -4133,7 +4098,7 @@
       "contact_type": "vendor",
       "company_name": "AFAQ AL KAWTHAR TRADING",
       "email": "info@afaqalkawthar.com",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008391021",
@@ -4141,7 +4106,7 @@
       "contact_type": "vendor",
       "company_name": "AFAQ ALKRAM TRADING",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007888314",
@@ -4149,7 +4114,7 @@
       "contact_type": "vendor",
       "company_name": "AFAQ DUBAI TRAD. & CONT",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007975044",
@@ -4157,7 +4122,7 @@
       "contact_type": "vendor",
       "company_name": "Afi Al Arabiya Genuine Parts LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008329696",
@@ -4165,7 +4130,7 @@
       "contact_type": "vendor",
       "company_name": "AFTAB UDDIN INTERNATIONAL TRADING",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008515671",
@@ -4173,7 +4138,7 @@
       "contact_type": "vendor",
       "company_name": "Agricultural Materials Company LTD L.L.C",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000000142001",
@@ -4181,7 +4146,7 @@
       "contact_type": "vendor",
       "company_name": "AGRICULTURE MATERIALS CO LIMITED LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000000230001",
@@ -4189,7 +4154,7 @@
       "contact_type": "vendor",
       "company_name": "AGRICULTURE MODERN ENGINEERING CO LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000000090104",
@@ -4197,7 +4162,7 @@
       "contact_type": "customer",
       "company_name": "AGRICULTURE MODERN ENGINEERING LLC",
       "email": "senthil@muscatoverseas.com",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008387406",
@@ -4205,7 +4170,7 @@
       "contact_type": "vendor",
       "company_name": "Agrimatco",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000004596044",
@@ -4213,7 +4178,7 @@
       "contact_type": "vendor",
       "company_name": "AGS Logistics Shiping & Trading LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000005963731",
@@ -4221,7 +4186,7 @@
       "contact_type": "vendor",
       "company_name": "AGW-MO AGRI WADI KABIR",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000002369497",
@@ -4229,7 +4194,7 @@
       "contact_type": "vendor",
       "company_name": "Ahmed Al-Qalem Trading LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008289339",
@@ -4237,7 +4202,7 @@
       "contact_type": "vendor",
       "company_name": "AHMED BIN SAEED BIN AHMED QATTAN TRAD",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000002757605",
@@ -4245,7 +4210,7 @@
       "contact_type": "vendor",
       "company_name": "Ahmed Mahfood Al- Sheedad & Partners Trad. & Cont. Co",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007704513",
@@ -4253,7 +4218,7 @@
       "contact_type": "vendor",
       "company_name": "AHMED MOHAMED & PARTNERS TRAD.CO.LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007335853",
@@ -4261,7 +4226,7 @@
       "contact_type": "vendor",
       "company_name": "AI ASRIYA ADVANCVED TRADING LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008307636",
@@ -4269,7 +4234,7 @@
       "contact_type": "vendor",
       "company_name": "AI Khalaf International est.",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000006231318",
@@ -4277,7 +4242,7 @@
       "contact_type": "vendor",
       "company_name": "AI Sahal Printing Press LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000006320410",
@@ -4285,7 +4250,7 @@
       "contact_type": "vendor",
       "company_name": "AI-Arabiya Unlimited Company llc",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007764777",
@@ -4293,7 +4258,7 @@
       "contact_type": "vendor",
       "company_name": "AI-Sharq National Projects L.L.C",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007802042",
@@ -4301,7 +4266,7 @@
       "contact_type": "vendor",
       "company_name": "AIFATH Industries  and Business Co.S.P.C",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008308981",
@@ -4309,7 +4274,7 @@
       "contact_type": "vendor",
       "company_name": "AIN LIMSAS TRAD",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000002106001",
@@ -4317,7 +4282,7 @@
       "contact_type": "vendor",
       "company_name": "",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000000129048",
@@ -4325,7 +4290,7 @@
       "contact_type": "vendor",
       "company_name": "AJMAL PRINTING PRESS",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007599001",
@@ -4333,7 +4298,7 @@
       "contact_type": "vendor",
       "company_name": "AL ADIYAT GATE FOR COMMERCIAL SERVICES",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000001773130",
@@ -4341,7 +4306,7 @@
       "contact_type": "vendor",
       "company_name": "AL AFFQ",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000001447022",
@@ -4349,7 +4314,7 @@
       "contact_type": "customer",
       "company_name": "AL AKKAD NATIONAL PROJECTS LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000002037023",
@@ -4357,7 +4322,7 @@
       "contact_type": "vendor",
       "company_name": "",
       "email": "suresh.kumar@alansariglobal.com",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008003196",
@@ -4365,7 +4330,7 @@
       "contact_type": "vendor",
       "company_name": "AL ARAB CERAMICS",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000004573001",
@@ -4373,7 +4338,7 @@
       "contact_type": "vendor",
       "company_name": "AL ARIQ EQUIPMENT LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000000895001",
@@ -4381,7 +4346,7 @@
       "contact_type": "customer",
       "company_name": "AL ATTWARAH NAKHAL AREA DEVELOPEMENT",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000002160587",
@@ -4389,7 +4354,7 @@
       "contact_type": "customer",
       "company_name": "AL BARAKA MOSQUE",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000003783136",
@@ -4397,7 +4362,7 @@
       "contact_type": "vendor",
       "company_name": "AL BASHAYER SPECIALIZED MEDICAL CENTER",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008313705",
@@ -4405,7 +4370,7 @@
       "contact_type": "vendor",
       "company_name": "AL BATAH BUILDING MATERIALS S.P.C",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000006092978",
@@ -4413,7 +4378,7 @@
       "contact_type": "vendor",
       "company_name": "AL BATINI TRADING",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000001930204",
@@ -4421,7 +4386,7 @@
       "contact_type": "customer",
       "company_name": "",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000006954856",
@@ -4429,7 +4394,7 @@
       "contact_type": "vendor",
       "company_name": "AL BURJ WORK FOR HYDROLIC PIPE & HEAVY",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008307285",
@@ -4437,7 +4402,7 @@
       "contact_type": "vendor",
       "company_name": "AL BUSTAN INTERNATIONAL LINES LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000000135009",
@@ -4445,7 +4410,7 @@
       "contact_type": "vendor",
       "company_name": "AL DASSER TRANSPORT",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000005565178",
@@ -4453,7 +4418,7 @@
       "contact_type": "vendor",
       "company_name": "AL DAYAA GOLDEN TRADING LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000005596018",
@@ -4461,7 +4426,7 @@
       "contact_type": "vendor",
       "company_name": "AL FALAK AL AALI INTEGRATED ENT.",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000001049001",
@@ -4469,7 +4434,7 @@
       "contact_type": "vendor",
       "company_name": "AL FAZAL IDEAL TRADING LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000000988001",
@@ -4477,7 +4442,7 @@
       "contact_type": "vendor",
       "company_name": "AL FERSAN SPORTS CLOTHS TAILORING",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000000091001",
@@ -4485,7 +4450,7 @@
       "contact_type": "customer",
       "company_name": "AL FEYHA TOURISM LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007330175",
@@ -4493,7 +4458,7 @@
       "contact_type": "vendor",
       "company_name": "Al Futtaim Auto Centers",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000004222795",
@@ -4501,7 +4466,7 @@
       "contact_type": "vendor",
       "company_name": "AL HAIL MANUFACTURING OF FIBRE GLASS PRODUCT LLC",
       "email": "alhailoman@gmail.com",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000002103205",
@@ -4509,7 +4474,7 @@
       "contact_type": "vendor",
       "company_name": "",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000000548027",
@@ -4517,7 +4482,7 @@
       "contact_type": "customer",
       "company_name": "AL HAMRA YOUTH CLUB",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008589277",
@@ -4525,7 +4490,7 @@
       "contact_type": "vendor",
       "company_name": "AL HARITH TRADING & SERVICES EST.",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000000554067",
@@ -4533,7 +4498,7 @@
       "contact_type": "customer",
       "company_name": "AL HAYTHEM TRADING & CONTRACTING CO LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000002173168",
@@ -4541,7 +4506,7 @@
       "contact_type": "vendor",
       "company_name": "",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008494064",
@@ -4549,7 +4514,7 @@
       "contact_type": "vendor",
       "company_name": "Al Inma Building Materials L.L.C.",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000004378001",
@@ -4557,7 +4522,7 @@
       "contact_type": "vendor",
       "company_name": "AL JAHWARI INT'L BUSINESS LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000001830041",
@@ -4565,7 +4530,7 @@
       "contact_type": "customer",
       "company_name": "AL JOOD TRADING & CONT. CO. LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000001251127",
@@ -4573,7 +4538,7 @@
       "contact_type": "customer",
       "company_name": "Al Khalili Construction LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008106369",
@@ -4581,7 +4546,7 @@
       "contact_type": "vendor",
       "company_name": "AL KHALILI UNITED ENTERPRISES LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000002302369",
@@ -4589,7 +4554,7 @@
       "contact_type": "customer",
       "company_name": "AL KHUWAIR PRIVATE VILLA",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008176257",
@@ -4597,7 +4562,7 @@
       "contact_type": "vendor",
       "company_name": "AL KIDHA DEVELOPMENT",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000002103561",
@@ -4605,7 +4570,7 @@
       "contact_type": "vendor",
       "company_name": "",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000000293027",
@@ -4613,7 +4578,7 @@
       "contact_type": "customer",
       "company_name": "AL MADAH FOOTBALL TEAM",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000008476961",
@@ -4621,7 +4586,7 @@
       "contact_type": "vendor",
       "company_name": "Al Madina Taka",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007895756",
@@ -4629,7 +4594,7 @@
       "contact_type": "vendor",
       "company_name": "AL MAGZA UNITED",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000000185035",
@@ -4637,7 +4602,7 @@
       "contact_type": "vendor",
       "company_name": "AL MAHA PETOLEUM PRODUCTS MARKETING CO. SAOG",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007510621",
@@ -4645,7 +4610,7 @@
       "contact_type": "vendor",
       "company_name": "AL Mahur trad. & Business SPC",
       "email": "srungaram.santhosh.3675@gmail.com",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000000111001",
@@ -4653,7 +4618,7 @@
       "contact_type": "vendor",
       "company_name": "AL MAJALES INTERGRATED CO LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007938260",
@@ -4661,7 +4626,7 @@
       "contact_type": "vendor",
       "company_name": "AL MAJID FOODS",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007748176",
@@ -4669,7 +4634,7 @@
       "contact_type": "vendor",
       "company_name": "AL MANARA FOR BUSINESS",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000000275001",
@@ -4677,7 +4642,7 @@
       "contact_type": "vendor",
       "company_name": "AL MAROOJ FOR AGRICULTURE SERVICE & TRADE LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000002173813",
@@ -4685,7 +4650,7 @@
       "contact_type": "vendor",
       "company_name": "",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007720132",
@@ -4693,7 +4658,7 @@
       "contact_type": "vendor",
       "company_name": "AL MIHRAB UNITED CO.L.L.C",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000005296778",
@@ -4701,7 +4666,7 @@
       "contact_type": "vendor",
       "company_name": "AL MISBAH UNITED ENTERRISES LLC",
       "email": "inf@almisbah.net",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007994439",
@@ -4709,7 +4674,7 @@
       "contact_type": "vendor",
       "company_name": "AL MUNASIB BUILDING MATERIALS TRADING LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000007748307",
@@ -4717,7 +4682,7 @@
       "contact_type": "vendor",
       "company_name": "AL MUZN OASIS MEDICAL CENTER",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000003107001",
@@ -4725,7 +4690,7 @@
       "contact_type": "customer",
       "company_name": "Al Naba Services LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000005422001",
@@ -4733,7 +4698,7 @@
       "contact_type": "vendor",
       "company_name": "AL NAJEM AL ABUD AL RAUD LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000000763001",
@@ -4741,7 +4706,7 @@
       "contact_type": "customer",
       "company_name": "AL NASSER FOOTBALL GROUND #5",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000002885089",
@@ -4749,7 +4714,7 @@
       "contact_type": "vendor",
       "company_name": "Al Nawafil Trading",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000000294001",
@@ -4757,7 +4722,7 @@
       "contact_type": "vendor",
       "company_name": "AL NAZAHA INTEGRATED LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000003920001",
@@ -4765,7 +4730,7 @@
       "contact_type": "vendor",
       "company_name": "AL NIMR INTERNATIONAL EXHIBITION ORGANIZERS LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000000090506",
@@ -4773,7 +4738,7 @@
       "contact_type": "customer",
       "company_name": "AL NSOOR FOOTBALL TEAM",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.182Z"
     },
     {
       "contact_id": "3095712000001592009",
@@ -4781,7 +4746,7 @@
       "contact_type": "vendor",
       "company_name": "AL QADEEMA TRADING",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000008559278",
@@ -4789,7 +4754,7 @@
       "contact_type": "vendor",
       "company_name": "AL QUBTAN ALNAJEH TRADING",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000002073217",
@@ -4797,7 +4762,7 @@
       "contact_type": "vendor",
       "company_name": "",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000008003053",
@@ -4805,7 +4770,7 @@
       "contact_type": "vendor",
       "company_name": "AL RAHA FURNITURE",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000000727001",
@@ -4813,7 +4778,7 @@
       "contact_type": "vendor",
       "company_name": "AL RASHID MODERN ENTERPRISES",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000001940001",
@@ -4821,7 +4786,7 @@
       "contact_type": "vendor",
       "company_name": "AL ROUBA Electrical & Services LLC",
       "email": "samson@alrouba.com",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000002920050",
@@ -4829,7 +4794,7 @@
       "contact_type": "vendor",
       "company_name": "Al Rouba Ent & Trad. LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007106232",
@@ -4837,7 +4802,7 @@
       "contact_type": "vendor",
       "company_name": "AL ROUBA ENT.& TRAD L.L.C",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007921209",
@@ -4845,7 +4810,7 @@
       "contact_type": "vendor",
       "company_name": "AL SAADI WAREHOUSE",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000003198117",
@@ -4853,7 +4818,7 @@
       "contact_type": "vendor",
       "company_name": "Al Safwa Trading",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007815613",
@@ -4861,7 +4826,7 @@
       "contact_type": "vendor",
       "company_name": "AL SAWAH BUILDING MATERIALS LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007789001",
@@ -4869,7 +4834,7 @@
       "contact_type": "customer",
       "company_name": "Al Shafaq Club",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000008242400",
@@ -4877,7 +4842,7 @@
       "contact_type": "vendor",
       "company_name": "AL SHAHAD PHARMACY",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007023132",
@@ -4885,7 +4850,7 @@
       "contact_type": "vendor",
       "company_name": "AL SHAMS LAND TRANSPORT COMPANY SPC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000008308467",
@@ -4893,7 +4858,7 @@
       "contact_type": "vendor",
       "company_name": "Al Shaqra International LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000008074900",
@@ -4901,7 +4866,7 @@
       "contact_type": "vendor",
       "company_name": "AL SHARAH AL JADEED TRADING",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000005337368",
@@ -4909,7 +4874,7 @@
       "contact_type": "vendor",
       "company_name": "AL SHARIF AL TOBI TRADING",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000000752001",
@@ -4917,7 +4882,7 @@
       "contact_type": "customer",
       "company_name": "AL SHUELA FOOTBALL TEAM",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000001668131",
@@ -4925,7 +4890,7 @@
       "contact_type": "customer",
       "company_name": "AL SUMOOD FOORBALL GROUNG",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000006001097",
@@ -4933,7 +4898,7 @@
       "contact_type": "vendor",
       "company_name": "AL TAMAM HYPERMARKET",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000001735055",
@@ -4941,7 +4906,7 @@
       "contact_type": "vendor",
       "company_name": "AL TASNIM CEMENT PRODUCTS LLC",
       "email": "NIKHIL.THANKI@ALTASNIM.COM",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000000091342",
@@ -4949,7 +4914,7 @@
       "contact_type": "customer",
       "company_name": "AL TAWIN FOOTBALL TEAM",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000006231698",
@@ -4957,7 +4922,7 @@
       "contact_type": "vendor",
       "company_name": "AL TUHAMI COMMERCIAL PROJECTS",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000003465001",
@@ -4965,7 +4930,7 @@
       "contact_type": "vendor",
       "company_name": "AL WAHID INTERNATIONAL LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007815069",
@@ -4973,7 +4938,7 @@
       "contact_type": "vendor",
       "company_name": "AL YEN GENERAL TRADING L.L.C",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000004324295",
@@ -4981,7 +4946,7 @@
       "contact_type": "vendor",
       "company_name": "AL YUSR INTERNATINAL LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000008424300",
@@ -4989,7 +4954,7 @@
       "contact_type": "vendor",
       "company_name": "AL ZAIN AL MITHALIA TRADING",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000002076101",
@@ -4997,7 +4962,7 @@
       "contact_type": "vendor",
       "company_name": "",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000008491806",
@@ -5005,7 +4970,7 @@
       "contact_type": "vendor",
       "company_name": "AL-BAHLANI TRANSPORT",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000006209329",
@@ -5013,7 +4978,7 @@
       "contact_type": "customer",
       "company_name": "Al-Dhakhiliyah Governorate",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000008589247",
@@ -5021,7 +4986,7 @@
       "contact_type": "vendor",
       "company_name": "AL-JARHAS TRADING & CONTRACTING ENTERPRISES",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007688002",
@@ -5029,7 +4994,7 @@
       "contact_type": "vendor",
       "company_name": "",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000000258473",
@@ -5037,7 +5002,7 @@
       "contact_type": "vendor",
       "company_name": "AL-KHUWAIR ANDS OVERALL TRAD LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000005927159",
@@ -5045,7 +5010,7 @@
       "contact_type": "vendor",
       "company_name": "AL-MAHA PETROL",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000005898095",
@@ -5053,7 +5018,7 @@
       "contact_type": "vendor",
       "company_name": "AL-MAWALLEH INTERNATIONAL L.L.C",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000005355513",
@@ -5061,7 +5026,7 @@
       "contact_type": "vendor",
       "company_name": "AL-MEEDANIA ENGINEERING CONSULTANCY",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007898356",
@@ -5069,7 +5034,7 @@
       "contact_type": "vendor",
       "company_name": "AL-NASR TRADING &CONTRACTING L.L.C.",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007195192",
@@ -5077,7 +5042,7 @@
       "contact_type": "vendor",
       "company_name": "AL-QALAM TRAD. CO. - ASSTD",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007898296",
@@ -5085,7 +5050,7 @@
       "contact_type": "vendor",
       "company_name": "AL-RAFIAH DISTINGUISHED PROJECTS LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000002134001",
@@ -5093,7 +5058,7 @@
       "contact_type": "vendor",
       "company_name": "AL-RAMAD TRADING",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007895286",
@@ -5101,7 +5066,7 @@
       "contact_type": "vendor",
       "company_name": "AL-RASHAH TRAD. & CONT. EST",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000008491729",
@@ -5109,7 +5074,7 @@
       "contact_type": "vendor",
       "company_name": "Al-Saad United Trading Services L.LC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000006249277",
@@ -5117,7 +5082,7 @@
       "contact_type": "vendor",
       "company_name": "AL-SAFWA UNITED ENTERPRISES L.L.C",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007220001",
@@ -5125,7 +5090,7 @@
       "contact_type": "vendor",
       "company_name": "Al-Shawsi Al-Shamela Ent",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000001088027",
@@ -5133,7 +5098,7 @@
       "contact_type": "vendor",
       "company_name": "AL-SHKAILI UNITED ENT. TRAD.",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000005895767",
@@ -5141,7 +5106,7 @@
       "contact_type": "vendor",
       "company_name": "AL-THURAYA UNITED EST",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000008771227",
@@ -5149,7 +5114,7 @@
       "contact_type": "vendor",
       "company_name": "Al-Wajeeh Trading",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000006797003",
@@ -5157,7 +5122,7 @@
       "contact_type": "vendor",
       "company_name": "AL-WAQIA SHOES CO.SP.C.",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000005845826",
@@ -5165,7 +5130,7 @@
       "contact_type": "vendor",
       "company_name": "ALI AMIN RAMDHAN TRADING L.L.C",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000002960643",
@@ -5173,7 +5138,7 @@
       "contact_type": "vendor",
       "company_name": "Allied Oil Gas Services LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000002050345",
@@ -5181,7 +5146,7 @@
       "contact_type": "vendor",
       "company_name": "",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000001830148",
@@ -5189,7 +5154,7 @@
       "contact_type": "customer",
       "company_name": "ALPHA ELECTRIC & CONT. CO. L.L.C",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000002196194",
@@ -5197,7 +5162,7 @@
       "contact_type": "vendor",
       "company_name": "",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007855212",
@@ -5205,7 +5170,7 @@
       "contact_type": "vendor",
       "company_name": "ALRASYA TRADING",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007815145",
@@ -5213,7 +5178,7 @@
       "contact_type": "vendor",
       "company_name": "ALWADQ INVESTMENTS S.P.C",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000003772001",
@@ -5221,7 +5186,7 @@
       "contact_type": "vendor",
       "company_name": "Alyara Trad & Cont SPC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000000360029",
@@ -5229,7 +5194,7 @@
       "contact_type": "vendor",
       "company_name": "AMIANTIT OMAN COMPANY LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000002269157",
@@ -5237,7 +5202,7 @@
       "contact_type": "vendor",
       "company_name": "",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000000186743",
@@ -5245,7 +5210,7 @@
       "contact_type": "vendor",
       "company_name": "AMIR KHAN AL TAB",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007764558",
@@ -5253,7 +5218,7 @@
       "contact_type": "vendor",
       "company_name": "AMJAAD JALAN TRADING CO.",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000001386016",
@@ -5261,7 +5226,7 @@
       "contact_type": "vendor",
       "company_name": "AMJAAD MAQSHAN",
       "email": "hirequip.amjaad@gmail.com",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007775001",
@@ -5269,7 +5234,7 @@
       "contact_type": "vendor",
       "company_name": "AMPLE TECHNOLOGY L.L.C",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000000182007",
@@ -5277,7 +5242,7 @@
       "contact_type": "vendor",
       "company_name": "ANAAM AL HAYA",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000008313735",
@@ -5285,7 +5250,7 @@
       "contact_type": "vendor",
       "company_name": "ANAR AL MUZIN TRADING",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000002622320",
@@ -5293,7 +5258,7 @@
       "contact_type": "vendor",
       "company_name": "Anbi Air Condition Trading LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000000689061",
@@ -5301,7 +5266,7 @@
       "contact_type": "vendor",
       "company_name": "ARABIA FALCON INSURANCE",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000008080001",
@@ -5309,7 +5274,7 @@
       "contact_type": "vendor",
       "company_name": "ARABIAN WATER TECH LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000008307678",
@@ -5317,7 +5282,7 @@
       "contact_type": "vendor",
       "company_name": "Aramex Muscat LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007734173",
@@ -5325,7 +5290,7 @@
       "contact_type": "vendor",
       "company_name": "ARCHITECTURAL PRODUCTS LLC",
       "email": "ferrocon.om@gmail.com",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000002196650",
@@ -5333,7 +5298,7 @@
       "contact_type": "vendor",
       "company_name": "",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007967003",
@@ -5341,7 +5306,7 @@
       "contact_type": "vendor",
       "company_name": "Arkan Logistics",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000008656304",
@@ -5349,7 +5314,7 @@
       "contact_type": "vendor",
       "company_name": "Arms International Trading LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007650095",
@@ -5357,7 +5322,7 @@
       "contact_type": "vendor",
       "company_name": "ARSHAD SPARE PARIS FOR HEAVY VEHICLE",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000003960391",
@@ -5365,7 +5330,7 @@
       "contact_type": "vendor",
       "company_name": "Asas Muscat Business & Development",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000008351041",
@@ -5373,7 +5338,7 @@
       "contact_type": "vendor",
       "company_name": "ASB GREEN WORLD EESTI",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007792001",
@@ -5381,7 +5346,7 @@
       "contact_type": "vendor",
       "company_name": "ASSARAIN CONCRETE PRODUCTS & TRADING LLC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000003452521",
@@ -5389,7 +5354,7 @@
       "contact_type": "vendor",
       "company_name": "ASSER AL HADATH UNITED CO LLC (AL-HAIL)",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000006092001",
@@ -5397,7 +5362,7 @@
       "contact_type": "vendor",
       "company_name": "Asthar Trading Co",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000001303001",
@@ -5405,7 +5370,7 @@
       "contact_type": "vendor",
       "company_name": "ASTRA INDUSTRIAL COMPLEX CO.",
       "email": "bahaa.dakhlallah@astrachem.net",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000006745309",
@@ -5413,7 +5378,7 @@
       "contact_type": "vendor",
       "company_name": "ASTWRT ALQRYT LLTJART",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000006310005",
@@ -5421,7 +5386,7 @@
       "contact_type": "vendor",
       "company_name": "Aswar Al Hamra Trad.",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000000267415",
@@ -5429,7 +5394,7 @@
       "contact_type": "vendor",
       "company_name": "ASWAR AL HASAN AL MTMYZI",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007748087",
@@ -5437,7 +5402,7 @@
       "contact_type": "vendor",
       "company_name": "Atheer  AI Jaoda AI RA",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000008343358",
@@ -5445,7 +5410,7 @@
       "contact_type": "vendor",
       "company_name": "ATHWAA ALIHTRIAF TRADING",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000002073168",
@@ -5453,7 +5418,7 @@
       "contact_type": "vendor",
       "company_name": "",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000005449055",
@@ -5461,7 +5426,7 @@
       "contact_type": "vendor",
       "company_name": "AWADH SAEED AMER AL-HADARI TRADING & CONT EST",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000008235039",
@@ -5469,7 +5434,7 @@
       "contact_type": "vendor",
       "company_name": "AWAN COMPANY L.L.C",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000008113763",
@@ -5477,7 +5442,7 @@
       "contact_type": "vendor",
       "company_name": "AZAIBA DREAMS INTERNATIONAL SPC",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000002790171",
@@ -5485,7 +5450,7 @@
       "contact_type": "customer",
       "company_name": "B Engineering",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     },
     {
       "contact_id": "3095712000007027538",
@@ -5493,88 +5458,60 @@
       "contact_type": "vendor",
       "company_name": "Babil National Gardens Trad. & Cont.",
       "email": "",
-      "last_synced": "2026-09-30T19:30:03.231Z"
+      "last_synced": "2026-09-30T20:00:03.183Z"
     }
   ],
-  "expenses": [
-    {
-      "id": "exp-31e17c77",
-      "employee_id": "emp-102",
-      "employee_name": "David Miller",
-      "expense_date": "2026-09-29",
-      "amount": 15.5,
-      "category_id": "acc-exp-petty",
-      "category_name": "Petty Cash Purchases",
-      "paid_through_account_id": "acc-pc-002",
-      "paid_through_account_name": "Petty Cash - David Miller",
-      "description": "Emergency hardware screws & bolts for site",
-      "project_id": null,
-      "project_name": null,
-      "customer_id": null,
-      "customer_name": null,
-      "cost_center": null,
-      "receipt_url": null,
-      "receipt_file_name": null,
-      "zoho_journal_id": "jn-830796",
-      "zoho_journal_number": "JRN-2026-5800",
-      "sync_status": "synced",
-      "sync_error": null,
-      "last_synced_at": "2026-09-29T19:01:04.318Z",
-      "created_by": "David Miller",
-      "created_at": "2026-09-29T19:01:04.321Z",
-      "updated_at": "2026-09-29T19:01:04.321Z"
-    },
-    {
-      "id": "exp-903",
-      "employee_id": "emp-102",
-      "employee_name": "David Miller",
-      "expense_date": "2026-09-26",
-      "amount": 220,
-      "category_id": "acc-exp-02",
-      "category_name": "Site Refreshments & Meals",
-      "description": "Catering and hydration water cans for subcontractor crew overtime",
-      "project_id": "proj-102",
-      "project_name": "Skyline Tower Renovations",
-      "customer_id": "cust-202",
-      "customer_name": "Apex Real Estate Partners",
-      "cost_center": "Subcontractors",
-      "receipt_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&auto=format&fit=crop&q=80",
-      "receipt_file_name": "crew_meals_receipt.jpg",
-      "zoho_journal_id": "jn-881003",
-      "zoho_journal_number": "JRN-2026-0063",
-      "sync_status": "synced",
-      "sync_error": null,
-      "last_synced_at": "2026-09-26T16:29:23.101Z",
-      "created_by": "David Miller",
-      "created_at": "2026-09-26T16:29:23.101Z"
-    },
-    {
-      "id": "exp-904",
-      "employee_id": "emp-103",
-      "employee_name": "Elena Rostova",
-      "expense_date": "2026-09-28",
-      "amount": 180,
-      "category_id": "acc-exp-04",
-      "category_name": "Courier & Postage",
-      "description": "Urgent express shipment of solar sensor calibration samples to lab",
-      "project_id": "proj-103",
-      "project_name": "Green Energy Solar Park",
-      "customer_id": "cust-203",
-      "customer_name": "TerraPower Solutions",
-      "cost_center": "Logistics",
-      "receipt_url": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=600&auto=format&fit=crop&q=80",
-      "receipt_file_name": "dhl_express_airway.jpg",
-      "zoho_journal_id": "jn-866424",
-      "zoho_journal_number": "JRN-2026-3675",
-      "sync_status": "synced",
-      "sync_error": null,
-      "last_synced_at": "2026-09-29T16:30:00.314Z",
-      "created_by": "Elena Rostova",
-      "created_at": "2026-09-28T16:29:23.101Z",
-      "updated_at": "2026-09-29T16:30:00.317Z"
-    }
-  ],
+  "expenses": [],
   "sync_logs": [
+    {
+      "id": "log-1790798403224",
+      "sync_type": "full_sync",
+      "status": "success",
+      "details": {
+        "started_at": "2026-09-30T20:00:00.315Z",
+        "coa_synced": 344,
+        "projects_synced": 78,
+        "contacts_synced": 200,
+        "pending_expenses": {
+          "total": 0,
+          "synced": 0,
+          "failed": 0
+        },
+        "errors": []
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T20:00:03.224Z"
+    },
+    {
+      "id": "log-1790798403192",
+      "sync_type": "contacts_sync",
+      "status": "success",
+      "details": {
+        "count": 200
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T20:00:03.192Z"
+    },
+    {
+      "id": "log-1790798402230",
+      "sync_type": "projects_sync",
+      "status": "success",
+      "details": {
+        "count": 78
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T20:00:02.230Z"
+    },
+    {
+      "id": "log-1790798401786",
+      "sync_type": "coa_sync",
+      "status": "success",
+      "details": {
+        "count": 344
+      },
+      "error_message": null,
+      "created_at": "2026-09-30T20:00:01.786Z"
+    },
     {
       "id": "log-1790796603272",
       "sync_type": "full_sync",
@@ -6113,55 +6050,6 @@
       },
       "error_message": null,
       "created_at": "2026-09-30T17:55:06.795Z"
-    },
-    {
-      "id": "log-1790790853135",
-      "sync_type": "expense_delete",
-      "status": "success",
-      "details": {
-        "zoho_expense_id": "3095712000008814043"
-      },
-      "error_message": null,
-      "created_at": "2026-09-30T17:54:13.135Z"
-    },
-    {
-      "id": "log-1790790302499",
-      "sync_type": "full_sync",
-      "status": "success",
-      "details": {
-        "started_at": "2026-09-30T17:45:00.323Z",
-        "coa_synced": 344,
-        "projects_synced": 78,
-        "contacts_synced": 200,
-        "pending_expenses": {
-          "total": 0,
-          "synced": 0,
-          "failed": 0
-        },
-        "errors": []
-      },
-      "error_message": null,
-      "created_at": "2026-09-30T17:45:02.499Z"
-    },
-    {
-      "id": "log-1790790302477",
-      "sync_type": "contacts_sync",
-      "status": "success",
-      "details": {
-        "count": 200
-      },
-      "error_message": null,
-      "created_at": "2026-09-30T17:45:02.477Z"
-    },
-    {
-      "id": "log-1790790301859",
-      "sync_type": "projects_sync",
-      "status": "success",
-      "details": {
-        "count": 78
-      },
-      "error_message": null,
-      "created_at": "2026-09-30T17:45:01.859Z"
     }
   ]
 }

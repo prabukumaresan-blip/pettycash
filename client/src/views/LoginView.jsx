@@ -2,16 +2,11 @@ import React, { useState, useEffect } from 'react';
 import {
   Wallet,
   Lock,
-  Mail,
   ArrowRight,
   ShieldCheck,
   User,
-  KeyRound,
   Eye,
   EyeOff,
-  Sparkles,
-  Building2,
-  CheckCircle2,
   AlertCircle
 } from 'lucide-react';
 import { api } from '../utils/api';
@@ -22,30 +17,15 @@ export default function LoginView({ onLoginSuccess }) {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [demoAccounts, setDemoAccounts] = useState([]);
 
-  useEffect(() => {
-    // Load available demo accounts for quick testing
-    api.getDemoAccounts()
-      .then(res => {
-        if (res.success && res.accounts) {
-          setDemoAccounts(res.accounts);
-        }
-      })
-      .catch(() => {});
-  }, []);
-
-  const handleLogin = async (e, customId = null, customPass = null) => {
+  const handleLogin = async (e) => {
     if (e) e.preventDefault();
 
-    const targetId = customId || identifier;
-    const targetPass = customPass || password;
-
-    if (!targetId.trim()) {
+    if (!identifier.trim()) {
       setError('Please enter your Employee Code or Email.');
       return;
     }
-    if (!targetPass) {
+    if (!password) {
       setError('Please enter your Password.');
       return;
     }
@@ -54,7 +34,7 @@ export default function LoginView({ onLoginSuccess }) {
     setError('');
 
     try {
-      const res = await api.login(targetId, targetPass);
+      const res = await api.login(identifier, password);
       if (res.success && res.user) {
         onLoginSuccess(res.user);
       } else {
@@ -65,12 +45,6 @@ export default function LoginView({ onLoginSuccess }) {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleQuickLogin = (acc) => {
-    setIdentifier(acc.employee_code);
-    setPassword(acc.password_hint);
-    handleLogin(null, acc.employee_code, acc.password_hint);
   };
 
   return (
@@ -192,57 +166,6 @@ export default function LoginView({ onLoginSuccess }) {
             <span>Employees access only their personal petty cash records</span>
           </div>
         </div>
-
-        {/* Demo Fast Login Switcher Cards */}
-        {demoAccounts.length > 0 && (
-          <div className="mt-6 bg-slate-900/60 backdrop-blur-md rounded-3xl p-5 border border-slate-800 text-left">
-            <div className="flex items-center space-x-2 text-xs font-bold text-slate-300 mb-3 uppercase tracking-wider">
-              <KeyRound className="w-3.5 h-3.5 text-amber-400" />
-              <span>One-Click Test Accounts</span>
-            </div>
-            <div className="grid grid-cols-1 gap-2">
-              {demoAccounts.map(acc => (
-                <button
-                  key={acc.id}
-                  onClick={() => handleQuickLogin(acc)}
-                  disabled={isLoading}
-                  className="w-full text-left p-2.5 rounded-2xl bg-slate-800/80 hover:bg-slate-800 hover:border-blue-500/50 border border-slate-700/60 transition group flex items-center justify-between"
-                >
-                  <div className="flex items-center space-x-2.5">
-                    <div className={`w-8 h-8 rounded-xl font-bold text-xs flex items-center justify-center ${
-                      acc.role === 'admin'
-                        ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
-                        : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
-                    }`}>
-                      {acc.name.split(' ').map(n => n[0]).join('')}
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-white group-hover:text-blue-300 transition">
-                        {acc.name}
-                      </div>
-                      <div className="text-[10px] text-slate-400 font-mono">
-                        {acc.employee_code} • {acc.email}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="text-right">
-                    <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
-                      acc.role === 'admin'
-                        ? 'bg-purple-900/50 text-purple-300 border border-purple-700/50'
-                        : 'bg-slate-700 text-slate-300'
-                    }`}>
-                      {acc.role === 'admin' ? 'Admin' : 'Employee'}
-                    </span>
-                    <div className="text-[9px] text-slate-500 mt-0.5">
-                      Pass: {acc.password_hint}
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

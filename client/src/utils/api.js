@@ -97,8 +97,7 @@ export const api = {
   },
 
   async getDemoAccounts() {
-    const res = await fetch(`${BASE_URL}/auth/demo-accounts`);
-    return await safeJson(res);
+    return { success: true, accounts: [] };
   },
 
   // Check health
