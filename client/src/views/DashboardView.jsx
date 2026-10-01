@@ -106,7 +106,7 @@ export default function DashboardView({
 
           {/* Quick Action Buttons */}
           <div className="flex flex-wrap sm:flex-nowrap gap-3 items-center">
-            {onSyncNow && (
+            {currentEmployee?.role === 'admin' && onSyncNow && (
               <button
                 onClick={onSyncNow}
                 disabled={isSyncing}

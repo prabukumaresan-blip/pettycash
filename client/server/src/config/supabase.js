@@ -20,10 +20,11 @@ if (isLiveSupabase) {
   console.log('ℹ️ Running in Supabase Local Store Mode. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env to connect to live PostgreSQL.');
 }
 
-// Local mock storage backup for out-of-the-box instant usability
+// Local data storage path with fallback to bundled data-store
+const BUNDLED_DB_FILE = path.resolve(__dirname, '../../data-store.json');
 const DB_FILE = process.env.VERCEL === '1'
   ? path.join('/tmp', 'data-store.json')
-  : path.join(process.cwd(), 'server', 'data-store.json');
+  : (fs.existsSync(BUNDLED_DB_FILE) ? BUNDLED_DB_FILE : path.join(process.cwd(), 'server', 'data-store.json'));
 
 const initialSeedData = {
   zoho_config: {
@@ -31,13 +32,13 @@ const initialSeedData = {
     client_id: process.env.ZOHO_CLIENT_ID || '1000.BYLDNDDJMF36HIGK6ZJXGMMYILQ12O',
     client_secret: process.env.ZOHO_CLIENT_SECRET || '834dd49f629f1e095f2858a71217add0571131bd70',
     redirect_uri: process.env.ZOHO_REDIRECT_URI || 'https://pettycash-pearl.vercel.app/api/zoho/callback',
-    access_token: '',
-    refresh_token: '',
-    token_expires_at: null,
+    access_token: '1000.37c17b6d6392ec9d9eb5bc267639ee1d.17f99b72a0567184b754bc53248c5e84',
+    refresh_token: process.env.ZOHO_REFRESH_TOKEN || '1000.70b3d3f7739447a1b5a16b1d535b0f94.860e4471704192a3fa442619dbd08417',
+    token_expires_at: '2026-09-30T20:40:44.409Z',
     organization_id: process.env.ZOHO_ORG_ID || '771750431',
     organization_name: 'Bright Flowers Trading LLC',
     dc_region: 'com',
-    is_connected: false,
+    is_connected: true,
     mock_mode: false,
     auto_sync_interval_mins: 15,
     default_expense_account_id: 'acc-exp-petty',
@@ -129,6 +130,15 @@ const initialSeedData = {
 function loadLocalData() {
   try {
     if (!fs.existsSync(DB_FILE)) {
+      if (fs.existsSync(BUNDLED_DB_FILE)) {
+        try {
+          const bundledRaw = fs.readFileSync(BUNDLED_DB_FILE, 'utf-8');
+          fs.writeFileSync(DB_FILE, bundledRaw, 'utf-8');
+          return JSON.parse(bundledRaw);
+        } catch (copyErr) {
+          console.warn('Could not copy bundled DB_FILE:', copyErr.message);
+        }
+      }
       try {
         fs.writeFileSync(DB_FILE, JSON.stringify(initialSeedData, null, 2), 'utf-8');
       } catch (wErr) {
@@ -137,7 +147,34 @@ function loadLocalData() {
       return initialSeedData;
     }
     const raw = fs.readFileSync(DB_FILE, 'utf-8');
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+
+    // Merge bundled real tokens and projects if parsed lacks them
+    if (fs.existsSync(BUNDLED_DB_FILE)) {
+      try {
+        const bundled = JSON.parse(fs.readFileSync(BUNDLED_DB_FILE, 'utf-8'));
+        let needsSave = false;
+        if (!parsed.zoho_config?.refresh_token && bundled.zoho_config?.refresh_token) {
+          parsed.zoho_config.refresh_token = bundled.zoho_config.refresh_token;
+          parsed.zoho_config.access_token = bundled.zoho_config.access_token;
+          parsed.zoho_config.is_connected = true;
+          needsSave = true;
+        }
+        if ((!parsed.zoho_projects || parsed.zoho_projects.length < 5) && bundled.zoho_projects?.length) {
+          parsed.zoho_projects = bundled.zoho_projects;
+          needsSave = true;
+        }
+        if ((!parsed.zoho_accounts || parsed.zoho_accounts.length < 5) && bundled.zoho_accounts?.length) {
+          parsed.zoho_accounts = bundled.zoho_accounts;
+          needsSave = true;
+        }
+        if (needsSave) {
+          saveLocalData(parsed);
+        }
+      } catch (mErr) {}
+    }
+
+    return parsed;
   } catch (err) {
     console.error('Error loading local data store:', err.message);
     return initialSeedData;
@@ -174,7 +211,8 @@ const db = {
       client_secret: process.env.ZOHO_CLIENT_SECRET || cfg?.client_secret,
       redirect_uri: process.env.ZOHO_REDIRECT_URI || cfg?.redirect_uri,
       organization_id: process.env.ZOHO_ORG_ID || cfg?.organization_id,
-      dc_region: process.env.ZOHO_DC || cfg?.dc_region || 'com'
+      dc_region: process.env.ZOHO_DC || cfg?.dc_region || 'com',
+      refresh_token: process.env.ZOHO_REFRESH_TOKEN || cfg?.refresh_token
     };
   },
 
@@ -375,7 +413,11 @@ const db = {
 
   async setZohoAccounts(accounts) {
     if (isLiveSupabase) {
-      await supabase.from('zoho_accounts_cache').upsert(accounts);
+      try {
+        await supabase.from('zoho_accounts_cache').upsert(accounts);
+      } catch (err) {
+        console.warn('Supabase accounts upsert notice:', err.message);
+      }
     }
     const store = loadLocalData();
     store.zoho_accounts = accounts;
@@ -384,16 +426,24 @@ const db = {
 
   async getZohoProjects() {
     if (isLiveSupabase) {
-      const { data } = await supabase.from('zoho_projects_cache').select('*');
-      if (data && data.length) return data;
+      try {
+        const { data, error } = await supabase.from('zoho_projects_cache').select('*');
+        if (!error && data && data.length) return data;
+      } catch (err) {
+        console.warn('Supabase projects query notice:', err.message);
+      }
     }
     const store = loadLocalData();
-    return store.zoho_projects;
+    return store.zoho_projects || [];
   },
 
   async setZohoProjects(projects) {
     if (isLiveSupabase) {
-      await supabase.from('zoho_projects_cache').upsert(projects);
+      try {
+        await supabase.from('zoho_projects_cache').upsert(projects);
+      } catch (err) {
+        console.warn('Supabase projects upsert notice:', err.message);
+      }
     }
     const store = loadLocalData();
     store.zoho_projects = projects;
@@ -402,16 +452,24 @@ const db = {
 
   async getZohoContacts() {
     if (isLiveSupabase) {
-      const { data } = await supabase.from('zoho_contacts_cache').select('*');
-      if (data && data.length) return data;
+      try {
+        const { data, error } = await supabase.from('zoho_contacts_cache').select('*');
+        if (!error && data && data.length) return data;
+      } catch (err) {
+        console.warn('Supabase contacts query notice:', err.message);
+      }
     }
     const store = loadLocalData();
-    return store.zoho_contacts;
+    return store.zoho_contacts || [];
   },
 
   async setZohoContacts(contacts) {
     if (isLiveSupabase) {
-      await supabase.from('zoho_contacts_cache').upsert(contacts);
+      try {
+        await supabase.from('zoho_contacts_cache').upsert(contacts);
+      } catch (err) {
+        console.warn('Supabase contacts upsert notice:', err.message);
+      }
     }
     const store = loadLocalData();
     store.zoho_contacts = contacts;

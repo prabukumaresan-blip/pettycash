@@ -23,7 +23,7 @@ export default function MobileBottomNav({
   if (!isAdmin) {
     return (
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-lg border-t border-slate-200/90 safe-bottom shadow-lg">
-        <div className="grid grid-cols-5 h-16 items-center px-1">
+        <div className="grid grid-cols-4 h-16 items-center px-3">
           {/* Dashboard / Wallet */}
           <button
             onClick={() => setActiveTab('dashboard')}
@@ -33,17 +33,6 @@ export default function MobileBottomNav({
           >
             <Wallet className={`w-5 h-5 ${activeTab === 'dashboard' ? 'stroke-[2.5]' : 'stroke-2'}`} />
             <span className="text-[10px] mt-1 font-medium">Wallet</span>
-          </button>
-
-          {/* Sync Zoho */}
-          <button
-            onClick={onSyncNow}
-            disabled={isSyncing}
-            className="flex flex-col items-center justify-center py-1 text-slate-500 hover:text-blue-600 active:scale-95 transition disabled:opacity-50"
-            title="Sync Zoho Books"
-          >
-            <RefreshCw className={`w-5 h-5 ${isSyncing ? 'animate-spin text-blue-600' : 'stroke-2'}`} />
-            <span className="text-[10px] mt-1 font-medium">{isSyncing ? 'Syncing...' : 'Sync'}</span>
           </button>
 
           {/* Center Floating Action Button (FAB) */}

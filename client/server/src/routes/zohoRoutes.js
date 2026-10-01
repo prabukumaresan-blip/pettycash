@@ -144,11 +144,18 @@ router.get('/chart-of-accounts', async (req, res) => {
   }
 });
 
-// GET Synced Projects
+// GET Synced Projects (auto-syncs from Zoho Books if empty or stale)
 router.get('/projects', async (req, res) => {
   try {
-    const projects = await db.getZohoProjects();
-    res.json({ success: true, projects });
+    let projects = await db.getZohoProjects();
+    if (!projects || projects.length === 0 || (projects.length <= 4 && projects[0]?.project_id?.startsWith('proj-'))) {
+      try {
+        projects = await zohoBooksService.syncProjects();
+      } catch (syncErr) {
+        console.warn('Real-time projects sync notice:', syncErr.message);
+      }
+    }
+    res.json({ success: true, projects: projects || [] });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }

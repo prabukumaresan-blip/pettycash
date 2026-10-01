@@ -132,7 +132,7 @@ export default function App() {
       const empRes = await api.getEmployees();
       if (empRes.success && empRes.employees) {
         setEmployees(empRes.employees);
-        const self = empRes.employees.find((e) => e.id === user.id) || (user.role === 'employee' ? empRes.employees[0] : null) || user;
+        const self = empRes.employees.find((e) => e.id === user.id || (e.email && e.email.toLowerCase() === user.email?.toLowerCase())) || user;
         setCurrentEmployee(self);
         setCurrentUser(self);
       }
@@ -172,6 +172,28 @@ export default function App() {
     if (currentUser) {
       loadAllData();
     }
+  }, [currentUser, loadAllData]);
+
+  // Real-time automatic data sync on window focus / re-entry
+  useEffect(() => {
+    if (!currentUser) return;
+    const handleSyncOnFocus = () => {
+      if (document.visibilityState === 'visible') {
+        loadAllData();
+      }
+    };
+    window.addEventListener('visibilitychange', handleSyncOnFocus);
+    window.addEventListener('focus', handleSyncOnFocus);
+    // Real-time interval refresh (every 45s) for live balance & projects without manual clicks
+    const interval = setInterval(() => {
+      loadAllData();
+    }, 45000);
+
+    return () => {
+      window.removeEventListener('visibilitychange', handleSyncOnFocus);
+      window.removeEventListener('focus', handleSyncOnFocus);
+      clearInterval(interval);
+    };
   }, [currentUser, loadAllData]);
 
   // Safety: reset restricted tabs if non-admin
