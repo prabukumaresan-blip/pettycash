@@ -191,10 +191,25 @@ export const api = {
       const res = await fetchWithAuth(`${BASE_URL}/expenses?${params.toString()}`);
       if (!res.ok) throw new Error('Network error');
       const data = await safeJson(res);
-      try {
-        localStorage.setItem(cacheKey, JSON.stringify(data.expenses || []));
-      } catch (e) {
-        console.warn('Storage quota warning', e);
+      if (data && data.success && Array.isArray(data.expenses)) {
+        if (data.expenses.length > 0) {
+          try {
+            localStorage.setItem(cacheKey, JSON.stringify(data.expenses));
+          } catch (e) {
+            console.warn('Storage quota warning', e);
+          }
+        } else {
+          // If server returned empty, fallback to cached items if available
+          const cached = localStorage.getItem(cacheKey);
+          if (cached) {
+            try {
+              const parsed = JSON.parse(cached);
+              if (parsed.length > 0) {
+                data.expenses = parsed;
+              }
+            } catch {}
+          }
+        }
       }
       return data;
     } catch {

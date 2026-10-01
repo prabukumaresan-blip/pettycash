@@ -63,6 +63,9 @@ async function uploadReceiptFile(file) {
   };
 }
 
+let lastZohoSyncTime = 0;
+let isZohoSyncing = false;
+
 // GET all expenses with optional filters
 router.get('/', async (req, res) => {
   try {
@@ -79,14 +82,25 @@ router.get('/', async (req, res) => {
       search: req.query.search
     };
 
-    // Synchronize latest app expenses from Zoho Books so all serverless instances have stable data
-    try {
-      await zohoBooksService.syncExpensesFromZoho();
-    } catch (zErr) {
-      console.warn('Real-time expenses sync notice:', zErr.message);
+    let expenses = await db.getExpenses(filters);
+
+    // Sync from Zoho Books if local cache is empty or older than 20 seconds, avoiding duplicate concurrent syncs
+    const now = Date.now();
+    const shouldSync = (expenses.length === 0 || (now - lastZohoSyncTime > 20000) || req.query.refresh === 'true') && !isZohoSyncing;
+
+    if (shouldSync) {
+      isZohoSyncing = true;
+      try {
+        await zohoBooksService.syncExpensesFromZoho();
+        lastZohoSyncTime = Date.now();
+        expenses = await db.getExpenses(filters);
+      } catch (zErr) {
+        console.warn('Real-time expenses sync notice:', zErr.message);
+      } finally {
+        isZohoSyncing = false;
+      }
     }
 
-    const expenses = await db.getExpenses(filters);
     res.json({ success: true, expenses });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });

@@ -19,7 +19,17 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [employees, setEmployees] = useState([]);
   const [currentEmployee, setCurrentEmployee] = useState(null);
-  const [expenses, setExpenses] = useState([]);
+  const [expenses, setExpenses] = useState(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const user = api.getStoredUser();
+      const cacheKey = user && user.id ? `cached_expenses_${user.id}` : 'cached_expenses';
+      const cached = localStorage.getItem(cacheKey) || localStorage.getItem('cached_expenses');
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
   const [zohoStatus, setZohoStatus] = useState(null);
   const [categories, setCategories] = useState([]);
   const [zohoAccounts, setZohoAccounts] = useState([]);
@@ -146,8 +156,12 @@ export default function App() {
       // 2. Expenses (backend enforces employee_id scoping for regular employees)
       const expRes = await api.getExpenses();
       if (!api.getStoredUser()) return;
-      if (expRes.success && expRes.expenses) {
-        setExpenses(expRes.expenses);
+      if (expRes.success && Array.isArray(expRes.expenses)) {
+        if (expRes.expenses.length > 0) {
+          setExpenses(expRes.expenses);
+        } else {
+          setExpenses(prev => (prev.length > 0 ? prev : []));
+        }
       }
 
       // 3. Zoho Status (Admin only)

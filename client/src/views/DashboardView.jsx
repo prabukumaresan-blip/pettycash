@@ -34,7 +34,10 @@ export default function DashboardView({
 
   // Filter expenses for current employee (or show all if admin is viewing whole company)
   const employeeExpenses = expenses.filter(
-    (e) => !currentEmployee || currentEmployee.role === 'admin' || e.employee_id === currentEmployee.id
+    (e) => !currentEmployee ||
+      currentEmployee.role === 'admin' ||
+      e.employee_id === currentEmployee.id ||
+      (e.employee_name && currentEmployee.name && e.employee_name.toLowerCase().trim() === currentEmployee.name.toLowerCase().trim())
   );
 
   const currentBal = parseFloat(currentEmployee?.current_balance || 0);
