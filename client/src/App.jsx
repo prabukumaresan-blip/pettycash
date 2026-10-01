@@ -124,21 +124,25 @@ export default function App() {
 
   // Load All Core Data scoped to logged-in user
   const loadAllData = useCallback(async (userOverride = null) => {
-    const user = userOverride || currentUser || api.getStoredUser();
-    if (!user) return;
+    const stored = api.getStoredUser();
+    const user = userOverride || currentUser || stored;
+    if (!user || !stored) return;
 
     try {
       // 1. Employees (strictly resolve active employee to the logged in user)
       const empRes = await api.getEmployees();
+      if (!api.getStoredUser()) return; // Abort if user logged out while request was in-flight
       if (empRes.success && empRes.employees) {
         setEmployees(empRes.employees);
         const self = empRes.employees.find((e) => e.id === user.id || (e.email && e.email.toLowerCase() === user.email?.toLowerCase())) || user;
         setCurrentEmployee(self);
-        setCurrentUser(self);
       }
+
+      if (!api.getStoredUser()) return;
 
       // 2. Expenses (backend enforces employee_id scoping for regular employees)
       const expRes = await api.getExpenses();
+      if (!api.getStoredUser()) return;
       if (expRes.success && expRes.expenses) {
         setExpenses(expRes.expenses);
       }
@@ -146,6 +150,7 @@ export default function App() {
       // 3. Zoho Status (Admin only)
       if (user.role === 'admin') {
         const zRes = await api.getZohoStatus();
+        if (!api.getStoredUser()) return;
         if (zRes.success) {
           setZohoStatus(zRes);
         }
@@ -153,6 +158,7 @@ export default function App() {
 
       // 4. Zoho Chart of Accounts
       const coaRes = await api.getChartOfAccounts();
+      if (!api.getStoredUser()) return;
       if (coaRes.success) {
         if (coaRes.accounts) setZohoAccounts(coaRes.accounts);
         if (coaRes.expense_accounts) setCategories(coaRes.expense_accounts);
@@ -160,6 +166,7 @@ export default function App() {
 
       // 5. Zoho Projects (synced with Zoho Books)
       const projRes = await api.getZohoProjects();
+      if (!api.getStoredUser()) return;
       if (projRes.success && projRes.projects) {
         setProjects(projRes.projects);
       }
@@ -169,7 +176,7 @@ export default function App() {
   }, [currentUser]);
 
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser && api.getStoredUser()) {
       loadAllData();
     }
   }, [currentUser, loadAllData]);
@@ -178,7 +185,7 @@ export default function App() {
   useEffect(() => {
     if (!currentUser) return;
     const handleSyncOnFocus = () => {
-      if (document.visibilityState === 'visible') {
+      if (document.visibilityState === 'visible' && api.getStoredUser()) {
         loadAllData();
       }
     };
@@ -186,7 +193,9 @@ export default function App() {
     window.addEventListener('focus', handleSyncOnFocus);
     // Real-time interval refresh (every 45s) for live balance & projects without manual clicks
     const interval = setInterval(() => {
-      loadAllData();
+      if (api.getStoredUser()) {
+        loadAllData();
+      }
     }, 45000);
 
     return () => {
@@ -224,7 +233,7 @@ export default function App() {
     // Auto-trigger Zoho sync after login to fetch live balances & accounts
     api.triggerZohoSync()
       .then((res) => {
-        if (res && res.success) {
+        if (res && res.success && api.getStoredUser()) {
           loadAllData(user);
         }
       })
@@ -233,11 +242,21 @@ export default function App() {
       });
   };
 
-  // Handle Logout (Clean all state across device)
-  const handleLogout = async () => {
+  // Handle Logout (Clean all state across device synchronously and immediately)
+  const handleLogout = () => {
+    // 1. Immediately wipe localStorage tokens & cached sessions
     try {
-      await api.logout();
+      localStorage.removeItem('petty_cash_user');
+      localStorage.removeItem('cached_expenses');
+      const keys = Object.keys(localStorage);
+      for (const k of keys) {
+        if (k.startsWith('cached_expenses_')) {
+          localStorage.removeItem(k);
+        }
+      }
     } catch {}
+
+    // 2. Immediately reset all React states so UI instantly switches to LoginView
     setCurrentUser(null);
     setCurrentEmployee(null);
     setEmployees([]);
@@ -247,6 +266,9 @@ export default function App() {
     setCategories([]);
     setProjects([]);
     setActiveTab('dashboard');
+
+    // 3. Fire server logout in the background
+    api.logout().catch(() => {});
     showToast('Signed out successfully.');
   };
 

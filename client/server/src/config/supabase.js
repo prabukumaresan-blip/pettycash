@@ -7,12 +7,28 @@ const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || '';
 
 let supabase = null;
-const isLiveSupabase = Boolean(SUPABASE_URL && SUPABASE_KEY && !SUPABASE_URL.includes('your-supabase'));
+let isLiveSupabase = false;
 
-if (isLiveSupabase) {
+if (SUPABASE_URL && SUPABASE_KEY && !SUPABASE_URL.includes('your-supabase')) {
   try {
     supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-    console.log('✅ Connected to live Supabase project:', SUPABASE_URL);
+    // Verify if tables actually exist before enabling Supabase mode
+    supabase
+      .from('employees')
+      .select('id')
+      .limit(1)
+      .then(({ error }) => {
+        if (!error) {
+          isLiveSupabase = true;
+          console.log('✅ Supabase PostgreSQL tables verified and active');
+        } else {
+          isLiveSupabase = false;
+          console.log('ℹ️ Running in Local Data Store mode (Supabase schema tables not yet migrated).');
+        }
+      })
+      .catch(() => {
+        isLiveSupabase = false;
+      });
   } catch (err) {
     console.warn('⚠️ Could not initialize Supabase client:', err.message);
   }
@@ -191,7 +207,9 @@ function saveLocalData(data) {
 
 // Unified Database Access Layer
 const db = {
-  isLive: isLiveSupabase,
+  get isLive() {
+    return isLiveSupabase;
+  },
   supabase,
 
   async getZohoConfig() {

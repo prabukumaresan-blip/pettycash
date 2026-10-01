@@ -93,15 +93,26 @@ export const api = {
   },
 
   async logout() {
+    // Purge session synchronously and immediately
+    try {
+      const user = getStoredUser();
+      if (user && user.id) {
+        localStorage.removeItem(`cached_expenses_${user.id}`);
+      }
+      localStorage.removeItem('petty_cash_user');
+      localStorage.removeItem('cached_expenses');
+      const keys = Object.keys(localStorage);
+      for (const k of keys) {
+        if (k.startsWith('cached_expenses_')) {
+          localStorage.removeItem(k);
+        }
+      }
+    } catch {}
+
     try {
       await fetchWithAuth(`${BASE_URL}/auth/logout`, { method: 'POST' });
     } catch {}
-    const user = getStoredUser();
-    if (user && user.id) {
-      localStorage.removeItem(`cached_expenses_${user.id}`);
-    }
-    localStorage.removeItem('petty_cash_user');
-    localStorage.removeItem('cached_expenses');
+
     return { success: true };
   },
 

@@ -59,8 +59,13 @@ export default function MobileBottomNav({
 
           {/* Sign Out */}
           <button
-            onClick={onLogout}
-            className="flex flex-col items-center justify-center py-1 text-rose-500 hover:text-rose-700 active:scale-95 transition"
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onLogout();
+            }}
+            className="flex flex-col items-center justify-center py-1 text-rose-500 hover:text-rose-700 active:scale-95 transition cursor-pointer"
             title="Sign Out"
           >
             <LogOut className="w-5 h-5 stroke-2" />
@@ -131,8 +136,13 @@ export default function MobileBottomNav({
 
         {/* Sign Out */}
         <button
-          onClick={onLogout}
-          className="flex flex-col items-center justify-center py-1 text-rose-500 hover:text-rose-700 active:scale-95 transition"
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onLogout();
+          }}
+          className="flex flex-col items-center justify-center py-1 text-rose-500 hover:text-rose-700 active:scale-95 transition cursor-pointer"
           title="Sign Out"
         >
           <LogOut className="w-5 h-5 stroke-2" />

@@ -314,14 +314,14 @@ class ZohoBooksService {
 
       await db.setZohoAccounts(mapped);
 
-      // Synchronize employee ending balances with Zoho Books petty cash account balances
+      // Synchronize employee ending balances with live Zoho Books petty cash account balances
       try {
         const employees = await db.getEmployees();
         for (const emp of employees) {
           if (emp.petty_cash_account_id) {
-            const matchedAcc = mapped.find(a => a.account_id === emp.petty_cash_account_id);
-            if (matchedAcc && matchedAcc.current_balance !== undefined) {
-              await db.updateEmployeeBalance(emp.id, matchedAcc.current_balance);
+            const liveBal = await this.getPettyCashBalance(emp.petty_cash_account_id);
+            if (typeof liveBal === 'number') {
+              await db.updateEmployeeBalance(emp.id, liveBal);
             }
           }
         }
