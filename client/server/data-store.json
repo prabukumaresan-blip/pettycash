@@ -4,9 +4,9 @@
     "client_id": "1000.BYLDNDDJMF36HIGK6ZJXGMMYILQ12O",
     "client_secret": "834dd49f629f1e095f2858a71217add0571131bd70",
     "redirect_uri": "https://pettycash-pearl.vercel.app/api/zoho/callback",
-    "access_token": "1000.830cce4655bdd3d25d9a653c3467d2c8.75a2e053cd37a813ffef5e9d7e2228b4",
+    "access_token": "1000.c04962a10a34d373e56dc03824326e8c.25611ac87535d6c161834c8701859ff0",
     "refresh_token": "1000.70b3d3f7739447a1b5a16b1d535b0f94.860e4471704192a3fa442619dbd08417",
-    "token_expires_at": "2026-10-01T15:45:50.090Z",
+    "token_expires_at": "2026-10-01T16:52:14.594Z",
     "organization_id": "771750431",
     "organization_name": "Bright Flowers Trading LLC",
     "dc_region": "com",
@@ -16,7 +16,7 @@
     "default_expense_account_id": "acc-exp-petty",
     "default_expense_account_name": "Petty Cash Purchases",
     "last_sync_at": "2026-10-01T14:51:20.968Z",
-    "updated_at": "2026-10-01T14:51:20.970Z"
+    "updated_at": "2026-10-01T15:52:14.597Z"
   },
   "employees": [
     {
@@ -27,7 +27,7 @@
       "password": "emp123",
       "role": "employee",
       "initial_float": 40.76,
-      "current_balance": 40.76,
+      "current_balance": 30.76,
       "department": "Field Operations",
       "default_project_id": null,
       "default_project_name": null,
@@ -35,7 +35,7 @@
       "petty_cash_account_name": "Nihal Petty Cash",
       "is_active": true,
       "created_at": "2026-09-30T16:40:43.579Z",
-      "updated_at": "2026-10-01T14:51:18.519Z",
+      "updated_at": "2026-10-01T15:57:51.132Z",
       "auto_create_zoho_account": false
     },
     {
@@ -54,7 +54,7 @@
       "petty_cash_account_name": "Kumaresan Petty Cash",
       "is_active": true,
       "created_at": "2026-09-30T20:00:54.188Z",
-      "updated_at": "2026-10-01T14:51:18.933Z"
+      "updated_at": "2026-10-01T15:57:51.540Z"
     }
   ],
   "zoho_accounts": [
@@ -3163,7 +3163,7 @@
       "customer_id": "3095712000000094128",
       "customer_name": "OMAN SHAPOORJI COMPANY LLC",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.753Z"
     },
     {
       "project_id": "3095712000008373001",
@@ -3172,7 +3172,7 @@
       "customer_id": "3095712000007085845",
       "customer_name": "THE ROYAL OFFICE",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.753Z"
     },
     {
       "project_id": "3095712000007793001",
@@ -3181,7 +3181,7 @@
       "customer_id": "3095712000007085845",
       "customer_name": "THE ROYAL OFFICE",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.753Z"
     },
     {
       "project_id": "3095712000007653008",
@@ -3190,7 +3190,7 @@
       "customer_id": "3095712000007653001",
       "customer_name": "OMAN CONVENTION & EXHIBITION CENTRE",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.753Z"
     },
     {
       "project_id": "3095712000007334410",
@@ -3199,7 +3199,7 @@
       "customer_id": "3095712000007334396",
       "customer_name": "Ishaq Al salmi",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.753Z"
     },
     {
       "project_id": "3095712000007089001",
@@ -3208,7 +3208,7 @@
       "customer_id": "3095712000000090104",
       "customer_name": "AGRICULTURE MODERN ENGINEERING LLC",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.753Z"
     },
     {
       "project_id": "3095712000007085859",
@@ -3217,7 +3217,7 @@
       "customer_id": "3095712000007085845",
       "customer_name": "THE ROYAL OFFICE",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.753Z"
     },
     {
       "project_id": "3095712000006377001",
@@ -3226,7 +3226,7 @@
       "customer_id": "3095712000000094469",
       "customer_name": "ROYAL COURT AFFAIRS",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.753Z"
     },
     {
       "project_id": "3095712000006209343",
@@ -3235,7 +3235,7 @@
       "customer_id": "3095712000006209329",
       "customer_name": "Al-Dhakhiliyah Governorate",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.753Z"
     },
     {
       "project_id": "3095712000006140001",
@@ -3244,7 +3244,7 @@
       "customer_id": "3095712000005544001",
       "customer_name": "HH Dr. Taghreed Turki Al Said",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.753Z"
     },
     {
       "project_id": "3095712000006099270",
@@ -3253,7 +3253,7 @@
       "customer_id": "3095712000004085001",
       "customer_name": "Mr. Jamal Al Namaani",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.753Z"
     },
     {
       "project_id": "3095712000006099124",
@@ -3262,7 +3262,7 @@
       "customer_id": "3095712000006099108",
       "customer_name": "Mr. Abdulaziz",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000005911019",
@@ -3271,7 +3271,7 @@
       "customer_id": "3095712000005911003",
       "customer_name": "Mr. ALI AL-RAWAS",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000005781677",
@@ -3280,7 +3280,7 @@
       "customer_id": "3095712000003720509",
       "customer_name": "BRIGHT FLOWERS TRADING LLC (NURSERY)",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000005407001",
@@ -3289,7 +3289,7 @@
       "customer_id": "3095712000000092403",
       "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000005379618",
@@ -3298,7 +3298,7 @@
       "customer_id": "3095712000005379604",
       "customer_name": "JENFEL LLC",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000005334056",
@@ -3307,7 +3307,7 @@
       "customer_id": "3095712000000103001",
       "customer_name": "ZAHER COMPANY",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000005334036",
@@ -3316,7 +3316,7 @@
       "customer_id": "3095712000000090104",
       "customer_name": "AGRICULTURE MODERN ENGINEERING LLC",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000005334030",
@@ -3325,7 +3325,7 @@
       "customer_id": "3095712000004222901",
       "customer_name": "Nizwa Municipality",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000005083042",
@@ -3334,7 +3334,7 @@
       "customer_id": "3095712000001918024",
       "customer_name": "TAKAMUL HOSPITALITY AND INVEST. SAOC",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000005007123",
@@ -3343,7 +3343,7 @@
       "customer_id": "3095712000000092403",
       "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000004833001",
@@ -3352,7 +3352,7 @@
       "customer_id": "3095712000004832163",
       "customer_name": "Ms. Leyan Al Mawali",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000004806001",
@@ -3361,7 +3361,7 @@
       "customer_id": "3095712000000621171",
       "customer_name": "Mr. Sami Macki",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000004786029",
@@ -3370,7 +3370,7 @@
       "customer_id": "3095712000004786005",
       "customer_name": "Mr. H.S. Mohammed Hamad Al-Sarmi",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000004786001",
@@ -3379,7 +3379,7 @@
       "customer_id": "3095712000004221016",
       "customer_name": "Mr. Nasser Al Kindi",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000004612023",
@@ -3388,7 +3388,7 @@
       "customer_id": "3095712000003108057",
       "customer_name": "EFS Facilities Services Limited L.L.C",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000004502040",
@@ -3397,7 +3397,7 @@
       "customer_id": "3095712000004502001",
       "customer_name": "Mustafa Ahmed Salman Trading Ent, LLC.",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000004489001",
@@ -3406,7 +3406,7 @@
       "customer_id": "3095712000004085001",
       "customer_name": "Mr. Jamal Al Namaani",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000004222933",
@@ -3415,7 +3415,7 @@
       "customer_id": "3095712000004222917",
       "customer_name": "Mr. Dina Ahmed Macki",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000004222913",
@@ -3424,7 +3424,7 @@
       "customer_id": "3095712000004222901",
       "customer_name": "Nizwa Municipality",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000004045007",
@@ -3433,7 +3433,7 @@
       "customer_id": "3095712000001418129",
       "customer_name": "MR. MOHAMMED AL HARTHY",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000003481005",
@@ -3442,7 +3442,7 @@
       "customer_id": "3095712000003336001",
       "customer_name": "New Rotana Enterprises LLC",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000003232028",
@@ -3451,7 +3451,7 @@
       "customer_id": "3095712000003232005",
       "customer_name": "Mohammed Jaberi Al Abri",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000002872190",
@@ -3460,7 +3460,7 @@
       "customer_id": "3095712000000094469",
       "customer_name": "ROYAL COURT AFFAIRS",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000002468186",
@@ -3469,7 +3469,7 @@
       "customer_id": "3095712000000286001",
       "customer_name": "EMBASSY OF FRANCE IN MUSCAT",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000002468180",
@@ -3478,7 +3478,7 @@
       "customer_id": "3095712000000091001",
       "customer_name": "AL FEYHA TOURISM LLC",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000002400092",
@@ -3487,7 +3487,7 @@
       "customer_id": "3095712000002400069",
       "customer_name": "BAKER AL LAWATI",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000002375037",
@@ -3496,7 +3496,7 @@
       "customer_id": "3095712000002083761",
       "customer_name": "SMEs DEVELOPMENT AUTHORITY",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000002173975",
@@ -3505,7 +3505,7 @@
       "customer_id": "3095712000000101449",
       "customer_name": "IRAQ EMABASSY",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000002135033",
@@ -3514,7 +3514,7 @@
       "customer_id": "3095712000002082548",
       "customer_name": "L & T Oman",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000002119163",
@@ -3523,7 +3523,7 @@
       "customer_id": "3095712000001251001",
       "customer_name": "The Eight Hotel S.P.C",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000002084412",
@@ -3532,7 +3532,7 @@
       "customer_id": "3095712000001918024",
       "customer_name": "TAKAMUL HOSPITALITY AND INVEST. SAOC",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000001895409",
@@ -3541,7 +3541,7 @@
       "customer_id": "3095712000001002047",
       "customer_name": "Intercity Hotel",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000001827069",
@@ -3550,7 +3550,7 @@
       "customer_id": "3095712000000286001",
       "customer_name": "EMBASSY OF FRANCE IN MUSCAT",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000001765001",
@@ -3559,7 +3559,7 @@
       "customer_id": "3095712000000286001",
       "customer_name": "EMBASSY OF FRANCE IN MUSCAT",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000001709175",
@@ -3568,7 +3568,7 @@
       "customer_id": "3095712000001479306",
       "customer_name": "Mr. NABIL",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000001579061",
@@ -3577,7 +3577,7 @@
       "customer_id": "3095712000000101449",
       "customer_name": "IRAQ EMABASSY",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000001535061",
@@ -3586,7 +3586,7 @@
       "customer_id": "3095712000001447022",
       "customer_name": "AL AKKAD NATIONAL PROJECTS LLC",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000001520047",
@@ -3595,7 +3595,7 @@
       "customer_id": "3095712000001447022",
       "customer_name": "AL AKKAD NATIONAL PROJECTS LLC",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000001260142",
@@ -3604,7 +3604,7 @@
       "customer_id": "3095712000001152032",
       "customer_name": "ROYAL ACADAMY OF MANAGEMENT",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000001125036",
@@ -3613,7 +3613,7 @@
       "customer_id": "3095712000000983001",
       "customer_name": "GULF PETROCHEMICAL SERVICES & TRDG LLC, OMAN",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000001111113",
@@ -3622,7 +3622,7 @@
       "customer_id": "3095712000000092403",
       "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000001096122",
@@ -3631,7 +3631,7 @@
       "customer_id": "3095712000001064091",
       "customer_name": "ENG. SUKAINA AL LAWATI",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000001069001",
@@ -3640,7 +3640,7 @@
       "customer_id": "3095712000000092062",
       "customer_name": "DIMAH AL RAEDAH TRADING LLC",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.341Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000001001020",
@@ -3649,7 +3649,7 @@
       "customer_id": "3095712000000945001",
       "customer_name": "MR. MUSTAFA AL LAWATI",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000761011",
@@ -3658,7 +3658,7 @@
       "customer_id": "3095712000000590105",
       "customer_name": "MINISTRY OF INTERIER",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000742147",
@@ -3667,7 +3667,7 @@
       "customer_id": "3095712000000729213",
       "customer_name": "PETROLEUM DEVELOPMENT OMAN",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000690001",
@@ -3676,7 +3676,7 @@
       "customer_id": "3095712000000621171",
       "customer_name": "Mr. Sami Macki",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000606013",
@@ -3685,7 +3685,7 @@
       "customer_id": "3095712000000286001",
       "customer_name": "EMBASSY OF FRANCE IN MUSCAT",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000590127",
@@ -3694,7 +3694,7 @@
       "customer_id": "3095712000000590105",
       "customer_name": "MINISTRY OF INTERIER",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000548049",
@@ -3703,7 +3703,7 @@
       "customer_id": "3095712000000548027",
       "customer_name": "AL HAMRA YOUTH CLUB",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000548023",
@@ -3712,7 +3712,7 @@
       "customer_id": "3095712000000548001",
       "customer_name": "MOHMOOD ZAHIR AL ABRI",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000415649",
@@ -3721,7 +3721,7 @@
       "customer_id": "3095712000000117026",
       "customer_name": "BLOX Design",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000415645",
@@ -3730,7 +3730,7 @@
       "customer_id": "3095712000000554067",
       "customer_name": "AL HAYTHEM TRADING & CONTRACTING CO LLC",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000399527",
@@ -3739,7 +3739,7 @@
       "customer_id": "3095712000000293092",
       "customer_name": "GULF MUSHROOM PRODUCTS CO S.A.O.G",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000286023",
@@ -3748,7 +3748,7 @@
       "customer_id": "3095712000000286001",
       "customer_name": "EMBASSY OF FRANCE IN MUSCAT",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000189033",
@@ -3757,7 +3757,7 @@
       "customer_id": "3095712000000119001",
       "customer_name": "SULTAN AL RAWAHI",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000170001",
@@ -3766,7 +3766,7 @@
       "customer_id": "3095712000000093393",
       "customer_name": "MR. HAMOOD ALJUFEI",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000117057",
@@ -3775,7 +3775,7 @@
       "customer_id": "3095712000000117026",
       "customer_name": "BLOX Design",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000108501",
@@ -3784,7 +3784,7 @@
       "customer_id": "3095712000000108374",
       "customer_name": "BADER SAOUD AL ABRI",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000108497",
@@ -3793,7 +3793,7 @@
       "customer_id": "3095712000000090506",
       "customer_name": "AL NSOOR FOOTBALL TEAM",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000103026",
@@ -3802,7 +3802,7 @@
       "customer_id": "3095712000000093738",
       "customer_name": "MR. YASIR OTBI",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000103022",
@@ -3811,7 +3811,7 @@
       "customer_id": "3095712000000094469",
       "customer_name": "ROYAL COURT AFFAIRS",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000101305",
@@ -3820,7 +3820,7 @@
       "customer_id": "3095712000000092403",
       "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000101297",
@@ -3829,7 +3829,7 @@
       "customer_id": "3095712000000092403",
       "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000101281",
@@ -3838,7 +3838,7 @@
       "customer_id": "3095712000000092403",
       "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000101277",
@@ -3847,7 +3847,7 @@
       "customer_id": "3095712000000092403",
       "customer_name": "GENERAL ELECTRIC & TRADING CO LLC",
       "status": "active",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     },
     {
       "project_id": "3095712000000101267",
@@ -3856,7 +3856,7 @@
       "customer_id": "3095712000000091683",
       "customer_name": "SPML-OSCO Joint Venture",
       "status": "inactive",
-      "last_synced": "2026-10-01T14:51:19.342Z"
+      "last_synced": "2026-10-01T15:53:38.754Z"
     }
   ],
   "zoho_contacts": [
@@ -5464,6 +5464,132 @@
   "expenses": [],
   "sync_logs": [
     {
+      "id": "log-1790870242807",
+      "sync_type": "expense_delete",
+      "status": "success",
+      "details": {
+        "zoho_expense_id": "3095712000008874001"
+      },
+      "error_message": null,
+      "created_at": "2026-10-01T15:57:22.807Z"
+    },
+    {
+      "id": "log-1790870241788",
+      "sync_type": "expense_create",
+      "status": "success",
+      "details": {
+        "expense_id": "exp-test-0895",
+        "zoho_expense_id": "3095712000008874001",
+        "zoho_expense_number": "9321"
+      },
+      "error_message": null,
+      "created_at": "2026-10-01T15:57:21.788Z"
+    },
+    {
+      "id": "log-1790870020509",
+      "sync_type": "expense_delete",
+      "status": "success",
+      "details": {
+        "zoho_expense_id": "3095712000008872001"
+      },
+      "error_message": null,
+      "created_at": "2026-10-01T15:53:40.509Z"
+    },
+    {
+      "id": "log-1790870019904",
+      "sync_type": "expense_create",
+      "status": "success",
+      "details": {
+        "expense_id": "test-proj-exp",
+        "zoho_expense_id": "3095712000008872001",
+        "zoho_expense_number": "9320"
+      },
+      "error_message": null,
+      "created_at": "2026-10-01T15:53:39.904Z"
+    },
+    {
+      "id": "log-1790870018760",
+      "sync_type": "projects_sync",
+      "status": "success",
+      "details": {
+        "count": 78
+      },
+      "error_message": null,
+      "created_at": "2026-10-01T15:53:38.760Z"
+    },
+    {
+      "id": "log-1790869937668",
+      "sync_type": "expense_delete",
+      "status": "success",
+      "details": {
+        "zoho_expense_id": "3095712000008870001"
+      },
+      "error_message": null,
+      "created_at": "2026-10-01T15:52:17.668Z"
+    },
+    {
+      "id": "log-1790869936952",
+      "sync_type": "expense_create",
+      "status": "success",
+      "details": {
+        "expense_id": "test-sync-force",
+        "zoho_expense_id": "3095712000008870001",
+        "zoho_expense_number": "9319"
+      },
+      "error_message": null,
+      "created_at": "2026-10-01T15:52:16.952Z"
+    },
+    {
+      "id": "log-1790868990939",
+      "sync_type": "expense_create",
+      "status": "failure",
+      "details": {
+        "expense_id": "test-sync-01"
+      },
+      "error_message": "Zoho API Request Error [/expenses]: You are not authorized to perform this operation",
+      "created_at": "2026-10-01T15:36:30.939Z"
+    },
+    {
+      "id": "log-1790867658073",
+      "sync_type": "expense_create",
+      "status": "failure",
+      "details": {
+        "expense_id": "test-3"
+      },
+      "error_message": "Zoho API Request Error [/expenses]: You are not authorized to perform this operation",
+      "created_at": "2026-10-01T15:14:18.073Z"
+    },
+    {
+      "id": "log-1790867657766",
+      "sync_type": "expense_create",
+      "status": "failure",
+      "details": {
+        "expense_id": "test-2"
+      },
+      "error_message": "Zoho API Request Error [/expenses]: You are not authorized to perform this operation",
+      "created_at": "2026-10-01T15:14:17.766Z"
+    },
+    {
+      "id": "log-1790867657441",
+      "sync_type": "expense_create",
+      "status": "failure",
+      "details": {
+        "expense_id": "test-1"
+      },
+      "error_message": "Zoho API Request Error [/expenses]: You are not authorized to perform this operation",
+      "created_at": "2026-10-01T15:14:17.441Z"
+    },
+    {
+      "id": "log-1790867642271",
+      "sync_type": "expense_create",
+      "status": "failure",
+      "details": {
+        "expense_id": "test-exp-02"
+      },
+      "error_message": "Zoho API Request Error [/expenses]: You are not authorized to perform this operation",
+      "created_at": "2026-10-01T15:14:02.271Z"
+    },
+    {
       "id": "log-1790866280972",
       "sync_type": "full_sync",
       "status": "success",
@@ -5918,143 +6044,6 @@
       },
       "error_message": null,
       "created_at": "2026-09-30T18:42:00.300Z"
-    },
-    {
-      "id": "log-1790793698941",
-      "sync_type": "expense_create",
-      "status": "success",
-      "details": {
-        "expense_id": "exp-74ef7e55",
-        "zoho_expense_id": "3095712000008830001",
-        "zoho_expense_number": "9279"
-      },
-      "error_message": null,
-      "created_at": "2026-09-30T18:41:38.941Z"
-    },
-    {
-      "id": "log-1790793682841",
-      "sync_type": "expense_create",
-      "status": "success",
-      "details": {
-        "expense_id": "exp-cdc75291",
-        "zoho_expense_id": "3095712000008829001",
-        "zoho_expense_number": "9278"
-      },
-      "error_message": null,
-      "created_at": "2026-09-30T18:41:22.841Z"
-    },
-    {
-      "id": "log-1790793332065",
-      "sync_type": "expense_delete",
-      "status": "failure",
-      "details": {
-        "zoho_expense_id": "jn-881001"
-      },
-      "error_message": "Zoho API Request Error [/expenses/jn-881001]: We couldnt find any resource for the given ID. Please verify the ID and try again.",
-      "created_at": "2026-09-30T18:35:32.065Z"
-    },
-    {
-      "id": "log-1790793329638",
-      "sync_type": "expense_delete",
-      "status": "failure",
-      "details": {
-        "zoho_expense_id": "jn-881002"
-      },
-      "error_message": "Zoho API Request Error [/expenses/jn-881002]: We couldnt find any resource for the given ID. Please verify the ID and try again.",
-      "created_at": "2026-09-30T18:35:29.638Z"
-    },
-    {
-      "id": "log-1790793253498",
-      "sync_type": "expense_delete",
-      "status": "success",
-      "details": {
-        "zoho_expense_id": "3095712000008827001"
-      },
-      "error_message": null,
-      "created_at": "2026-09-30T18:34:13.498Z"
-    },
-    {
-      "id": "log-1790793158473",
-      "sync_type": "expense_create",
-      "status": "success",
-      "details": {
-        "expense_id": "exp-434e1008",
-        "zoho_expense_id": "3095712000008827001",
-        "zoho_expense_number": "9277"
-      },
-      "error_message": null,
-      "created_at": "2026-09-30T18:32:38.473Z"
-    },
-    {
-      "id": "log-1790793145120",
-      "sync_type": "expense_delete",
-      "status": "success",
-      "details": {
-        "zoho_expense_id": "3095712000008825001"
-      },
-      "error_message": null,
-      "created_at": "2026-09-30T18:32:25.120Z"
-    },
-    {
-      "id": "log-1790793003136",
-      "sync_type": "full_sync",
-      "status": "success",
-      "details": {
-        "started_at": "2026-09-30T18:30:00.297Z",
-        "coa_synced": 344,
-        "projects_synced": 78,
-        "contacts_synced": 200,
-        "pending_expenses": {
-          "total": 0,
-          "synced": 0,
-          "failed": 0
-        },
-        "errors": []
-      },
-      "error_message": null,
-      "created_at": "2026-09-30T18:30:03.136Z"
-    },
-    {
-      "id": "log-1790793003113",
-      "sync_type": "contacts_sync",
-      "status": "success",
-      "details": {
-        "count": 200
-      },
-      "error_message": null,
-      "created_at": "2026-09-30T18:30:03.113Z"
-    },
-    {
-      "id": "log-1790793002034",
-      "sync_type": "projects_sync",
-      "status": "success",
-      "details": {
-        "count": 78
-      },
-      "error_message": null,
-      "created_at": "2026-09-30T18:30:02.034Z"
-    },
-    {
-      "id": "log-1790793001545",
-      "sync_type": "coa_sync",
-      "status": "success",
-      "details": {
-        "count": 344
-      },
-      "error_message": null,
-      "created_at": "2026-09-30T18:30:01.545Z"
-    },
-    {
-      "id": "log-1790792854366",
-      "sync_type": "expense_create",
-      "status": "success",
-      "details": {
-        "expense_id": "exp-489f8b0c",
-        "zoho_expense_id": "3095712000008825001",
-        "zoho_expense_number": "N/A"
-      },
-      "error_message": null,
-      "created_at": "2026-09-30T18:27:34.366Z"
     }
   ]
 }

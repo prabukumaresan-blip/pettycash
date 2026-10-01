@@ -60,13 +60,14 @@ export default function LogExpenseModal({
     } else {
       setAmount('');
       setExpenseDate(new Date().toISOString().split('T')[0]);
-      setCategoryId(categories.length > 0 ? categories[0].account_id : 'acc-exp-01');
+      const defaultExp = categories.find(c => c.account_name.toLowerCase() === 'other expenses') || categories[0];
+      setCategoryId(defaultExp ? defaultExp.account_id : '3095712000000000460');
       setDescription('');
       const defaultProj = currentEmployee?.default_project_id || (zohoProjects.length > 0 ? zohoProjects[0].project_id : '');
       setProjectId(defaultProj);
     }
     setErrorMessage('');
-  }, [isOpen, editExpense]);
+  }, [isOpen, editExpense, categories]);
 
   // Set default project if projects finish loading later and projectId is still empty
   useEffect(() => {
@@ -112,11 +113,12 @@ export default function LogExpenseModal({
 
     try {
       // Determine selected expense account
-      // Automatically choose "Other Expenses" by default as requested
-      const defaultExpenseAcc = categories.find(c => c.account_name.toLowerCase() === 'other expenses') || categories[0] || {
-        account_id: '3095712000000000460',
-        account_name: 'Other Expenses'
-      };
+      const selectedExp = categories.find(c => c.account_id === categoryId) ||
+        categories.find(c => c.account_name.toLowerCase() === 'other expenses') ||
+        categories[0] || {
+          account_id: '3095712000000000460',
+          account_name: 'Other Expenses'
+        };
       const selectedProj = zohoProjects.find(p => p.project_id === projectId);
       const paidThroughAccId = currentEmployee?.petty_cash_account_id || '';
       const paidThroughAccName = currentEmployee?.petty_cash_account_name || `Petty Cash - ${currentEmployee?.name}`;
@@ -125,8 +127,8 @@ export default function LogExpenseModal({
       formData.append('employee_id', employeeId);
       formData.append('expense_date', expenseDate);
       formData.append('amount', parsedAmount);
-      formData.append('category_id', defaultExpenseAcc.account_id);
-      formData.append('category_name', defaultExpenseAcc.account_name);
+      formData.append('category_id', selectedExp.account_id);
+      formData.append('category_name', selectedExp.account_name);
       formData.append('paid_through_account_id', paidThroughAccId);
       formData.append('paid_through_account_name', paidThroughAccName);
       formData.append('description', description);
@@ -303,15 +305,36 @@ export default function LogExpenseModal({
             </select>
           </div>
 
+          {/* Category / Expense Account Selection */}
+          {categories && categories.length > 0 && (
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center space-x-1">
+                <Tag className="w-3.5 h-3.5 text-blue-600" />
+                <span>Expense Category (Zoho Chart of Accounts)</span>
+              </label>
+              <select
+                value={categoryId}
+                onChange={(e) => setCategoryId(e.target.value)}
+                className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:bg-white transition truncate"
+              >
+                {categories.map((c) => (
+                  <option key={c.account_id} value={c.account_id}>
+                    {c.account_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
           {/* Automatic Accounting Linkage Card */}
           <div className="p-3.5 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/50 border border-slate-200/90 text-xs space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-slate-500 font-semibold flex items-center space-x-1.5">
                 <span className="w-2 h-2 rounded-full bg-blue-600"></span>
-                <span>Expense Account:</span>
+                <span>Debit Expense:</span>
               </span>
               <span className="font-bold text-slate-800 bg-white px-2.5 py-0.5 rounded-md border border-slate-200 max-w-[200px] truncate">
-                Other Expenses
+                {categories.find(c => c.account_id === categoryId)?.account_name || 'Other Expenses'}
               </span>
             </div>
             <div className="flex items-center justify-between">

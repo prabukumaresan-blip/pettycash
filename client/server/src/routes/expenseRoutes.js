@@ -181,7 +181,7 @@ router.post('/', upload.single('receipt'), async (req, res) => {
       created_by: employee.name
     };
 
-    // Attempt immediate Zoho Books Journal Entry creation
+    // Attempt immediate Zoho Books Expense creation
     try {
       const journalRes = await zohoBooksService.createExpenseJournal(newExpense, employee);
       newExpense.zoho_journal_id = journalRes.zoho_journal_id;
@@ -189,8 +189,22 @@ router.post('/', upload.single('receipt'), async (req, res) => {
       newExpense.sync_status = 'synced';
       newExpense.last_synced_at = new Date().toISOString();
       newExpense.sync_error = null;
+
+      // Immediately synchronize live closing balance from Zoho Books
+      if (employee.petty_cash_account_id) {
+        try {
+          const liveBal = await zohoBooksService.getPettyCashBalance(employee.petty_cash_account_id);
+          if (typeof liveBal === 'number') {
+            await db.updateEmployeeBalance(employee_id, liveBal);
+          } else {
+            await db.updateEmployeeBalance(employee_id, (parseFloat(employee.current_balance || 0) - parseFloat(amount)));
+          }
+        } catch {
+          await db.updateEmployeeBalance(employee_id, (parseFloat(employee.current_balance || 0) - parseFloat(amount)));
+        }
+      }
     } catch (zErr) {
-      console.warn('⚠️ Zoho Journal creation deferred to background sync:', zErr.message);
+      console.warn('⚠️ Zoho Expense creation deferred to background sync:', zErr.message);
       newExpense.sync_status = 'pending';
       newExpense.sync_error = zErr.message;
     }
@@ -243,6 +257,14 @@ router.put('/:id', upload.single('receipt'), async (req, res) => {
         updates.sync_status = 'synced';
         updates.sync_error = null;
         updates.last_synced_at = new Date().toISOString();
+
+        // Update live balance
+        try {
+          const liveBal = await zohoBooksService.getPettyCashBalance(employee.petty_cash_account_id);
+          if (typeof liveBal === 'number') {
+            await db.updateEmployeeBalance(existing.employee_id, liveBal);
+          }
+        } catch {}
       } catch (zErr) {
         updates.sync_status = 'failed';
         updates.sync_error = zErr.message;
@@ -274,16 +296,28 @@ router.delete('/:id', async (req, res) => {
       return res.status(403).json({ success: false, error: 'Access denied: You can only delete your own expenses' });
     }
 
-    // If synced with Zoho Books, delete the Journal entry in Zoho
+    const employee = await db.getEmployeeById(expense.employee_id);
+
+    // If synced with Zoho Books, delete the Expense in Zoho
     if (expense.zoho_journal_id) {
       try {
         await zohoBooksService.deleteExpenseJournal(expense.zoho_journal_id);
       } catch (zErr) {
-        console.warn('⚠️ Could not delete journal in Zoho:', zErr.message);
+        console.warn('⚠️ Could not delete expense in Zoho:', zErr.message);
       }
     }
 
     await db.deleteExpense(req.params.id);
+
+    if (employee && employee.petty_cash_account_id) {
+      try {
+        const liveBal = await zohoBooksService.getPettyCashBalance(employee.petty_cash_account_id);
+        if (typeof liveBal === 'number') {
+          await db.updateEmployeeBalance(employee.id, liveBal);
+        }
+      } catch {}
+    }
+
     const updatedEmployee = await db.getEmployeeById(expense.employee_id);
 
     res.json({
@@ -316,8 +350,17 @@ router.post('/:id/retry-sync', async (req, res) => {
     expense.sync_error = null;
     expense.last_synced_at = new Date().toISOString();
 
+    if (employee.petty_cash_account_id) {
+      try {
+        const liveBal = await zohoBooksService.getPettyCashBalance(employee.petty_cash_account_id);
+        if (typeof liveBal === 'number') {
+          await db.updateEmployeeBalance(employee.id, liveBal);
+        }
+      } catch {}
+    }
+
     const saved = await db.saveExpense(expense);
-    res.json({ success: true, expense: saved, message: 'Expense synced with Zoho Books journal entry' });
+    res.json({ success: true, expense: saved, message: 'Expense synced with Zoho Books' });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }

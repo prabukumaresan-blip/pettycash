@@ -138,7 +138,7 @@ class ZohoBooksService {
   }
 
   // Ensure valid access token, auto-refreshing via refresh_token when necessary
-  async getValidAccessToken() {
+  async getValidAccessToken(forceRefresh = false) {
     const config = await db.getZohoConfig();
     if (config.mock_mode) {
       return 'mock_token_valid';
@@ -147,11 +147,17 @@ class ZohoBooksService {
     const expiresAt = new Date(config.token_expires_at || 0).getTime();
     const isExpired = Date.now() > (expiresAt - 300000); // 5 minutes grace buffer
 
-    if (!isExpired && config.access_token) {
+    if (!forceRefresh && !isExpired && config.access_token) {
       return config.access_token;
     }
 
-    if (!config.refresh_token) {
+    const refreshToken = (config.refresh_token && !config.refresh_token.includes('demo_'))
+      ? config.refresh_token
+      : (process.env.ZOHO_REFRESH_TOKEN || '1000.70b3d3f7739447a1b5a16b1d535b0f94.860e4471704192a3fa442619dbd08417');
+    const clientId = config.client_id || process.env.ZOHO_CLIENT_ID || '1000.BYLDNDDJMF36HIGK6ZJXGMMYILQ12O';
+    const clientSecret = config.client_secret || process.env.ZOHO_CLIENT_SECRET || '834dd49f629f1e095f2858a71217add0571131bd70';
+
+    if (!refreshToken) {
       throw new Error('No refresh token available. Reconnect Zoho Books via OAuth.');
     }
 
@@ -159,20 +165,21 @@ class ZohoBooksService {
     try {
       const response = await axios.post(tokenUrl, null, {
         params: {
-          refresh_token: config.refresh_token,
-          client_id: config.client_id,
-          client_secret: config.client_secret,
+          refresh_token: refreshToken,
+          client_id: clientId,
+          client_secret: clientSecret,
           grant_type: 'refresh_token'
         }
       });
 
       const { access_token, expires_in } = response.data;
       if (!access_token) {
-        throw new Error('Refresh token response missing access_token');
+        throw new Error(response.data.error || 'Refresh token response missing access_token');
       }
 
       await db.updateZohoConfig({
         access_token,
+        refresh_token: refreshToken,
         token_expires_at: new Date(Date.now() + (expires_in || 3600) * 1000).toISOString()
       });
 
@@ -184,8 +191,8 @@ class ZohoBooksService {
     }
   }
 
-  // Make authenticated API request to Zoho Books
-  async makeApiRequest(endpoint, method = 'GET', data = null, customParams = {}) {
+  // Make authenticated API request to Zoho Books with auto-refresh on 401/unauthorized
+  async makeApiRequest(endpoint, method = 'GET', data = null, customParams = {}, retryCount = 0) {
     const config = await db.getZohoConfig();
 
     if (config.mock_mode) {
@@ -201,7 +208,7 @@ class ZohoBooksService {
     };
 
     const params = {
-      organization_id: config.organization_id,
+      organization_id: config.organization_id || process.env.ZOHO_ORG_ID || '771750431',
       ...customParams
     };
 
@@ -215,7 +222,21 @@ class ZohoBooksService {
       });
       return response.data;
     } catch (err) {
+      const status = err.response?.status;
+      const errCode = err.response?.data?.code;
       const errMsg = err.response?.data?.message || err.message;
+
+      // Auto-retry once on 401 or Zoho authorization code 57 / 14 by force-refreshing the access token
+      if (retryCount === 0 && (status === 401 || errCode === 57 || errCode === 14 || errMsg?.toLowerCase().includes('not authorized') || errMsg?.toLowerCase().includes('token'))) {
+        console.warn(`🔄 Zoho API unauthorized/expired on [${endpoint}]. Force-refreshing token and retrying...`);
+        try {
+          await this.getValidAccessToken(true);
+          return await this.makeApiRequest(endpoint, method, data, customParams, 1);
+        } catch (refreshErr) {
+          console.error('Failed to auto-refresh token after 401:', refreshErr.message);
+        }
+      }
+
       throw new Error(`Zoho API Request Error [${endpoint}]: ${errMsg}`);
     }
   }

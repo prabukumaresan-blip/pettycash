@@ -48,6 +48,15 @@ class SyncService {
           sync_error: null,
           last_synced_at: new Date().toISOString()
         });
+
+        if (employee.petty_cash_account_id) {
+          try {
+            const liveBal = await zohoBooksService.getPettyCashBalance(employee.petty_cash_account_id);
+            if (typeof liveBal === 'number') {
+              await db.updateEmployeeBalance(employee.id, liveBal);
+            }
+          } catch {}
+        }
         synced++;
       } catch (err) {
         failed++;
