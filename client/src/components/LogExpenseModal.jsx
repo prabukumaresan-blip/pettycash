@@ -306,26 +306,15 @@ export default function LogExpenseModal({
           </div>
 
 
-          {/* Automatic Accounting Linkage Card */}
-          <div className="p-3.5 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/50 border border-slate-200/90 text-xs space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-slate-500 font-semibold flex items-center space-x-1.5">
-                <span className="w-2 h-2 rounded-full bg-blue-600"></span>
-                <span>Debit Expense:</span>
-              </span>
-              <span className="font-bold text-slate-800 bg-white px-2.5 py-0.5 rounded-md border border-slate-200 max-w-[200px] truncate">
-                {categories.find(c => c.account_id === categoryId)?.account_name || 'Other Expenses'}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-500 font-semibold flex items-center space-x-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
-                <span>Paid Through:</span>
-              </span>
-              <span className="font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200 truncate max-w-[220px]">
-                {currentEmployee?.petty_cash_account_name || `Petty Cash - ${currentEmployee?.name}`}
-              </span>
-            </div>
+          {/* Paid Through Account Card */}
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/50 border border-slate-200/90 text-xs flex items-center justify-between">
+            <span className="text-slate-500 font-semibold flex items-center space-x-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
+              <span>Paid Through Account:</span>
+            </span>
+            <span className="font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200 truncate max-w-[220px]">
+              {currentEmployee?.petty_cash_account_name || `Petty Cash - ${currentEmployee?.name}`}
+            </span>
           </div>
 
           {/* Submit Action */}

@@ -34,8 +34,31 @@ export default function RootLayout({ children }) {
             __html: `
               if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
                 window.addEventListener('load', () => {
-                  navigator.serviceWorker.register('/sw.js').catch(err => {
+                  navigator.serviceWorker.register('/sw.js').then((reg) => {
+                    reg.update();
+                    if (reg.waiting) {
+                      reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+                    }
+                    reg.addEventListener('updatefound', () => {
+                      const newWorker = reg.installing;
+                      if (newWorker) {
+                        newWorker.addEventListener('statechange', () => {
+                          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            newWorker.postMessage({ type: 'SKIP_WAITING' });
+                          }
+                        });
+                      }
+                    });
+                  }).catch(err => {
                     console.log('SW registration skipped:', err.message);
+                  });
+
+                  let refreshing = false;
+                  navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (!refreshing) {
+                      refreshing = true;
+                      window.location.reload();
+                    }
                   });
                 });
               }
