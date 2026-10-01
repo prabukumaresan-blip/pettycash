@@ -307,6 +307,12 @@ const db = {
     const emp = store.employees.find(e => e.id === employeeId);
     if (!emp) return;
 
+    // Do NOT recalculate or overwrite balance for employees linked to a Zoho Books petty cash account.
+    // The balance is strictly controlled by Zoho Books live closing balance.
+    if (emp.petty_cash_account_id) {
+      return;
+    }
+
     const totalSpent = store.expenses
       .filter(ex => ex.employee_id === employeeId)
       .reduce((sum, ex) => sum + parseFloat(ex.amount || 0), 0);
@@ -315,7 +321,9 @@ const db = {
     saveLocalData(store);
 
     if (isLiveSupabase) {
-      await supabase.from('employees').update({ current_balance: emp.current_balance }).eq('id', employeeId);
+      try {
+        await supabase.from('employees').update({ current_balance: emp.current_balance }).eq('id', employeeId);
+      } catch {}
     }
   },
 

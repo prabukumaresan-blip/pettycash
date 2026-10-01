@@ -49,11 +49,9 @@ export default function App() {
   useEffect(() => {
     const stored = api.getStoredUser();
     if (stored) {
-      setCurrentUser(stored);
-      setCurrentEmployee(stored);
       api.getMe()
         .then((res) => {
-          if (res.success && res.user) {
+          if (res.success && res.user && api.getStoredUser()) {
             setCurrentUser(res.user);
             setCurrentEmployee(res.user);
           } else {
@@ -62,7 +60,12 @@ export default function App() {
             setCurrentEmployee(null);
           }
         })
-        .catch(() => {})
+        .catch(() => {
+          if (api.getStoredUser()) {
+            setCurrentUser(stored);
+            setCurrentEmployee(stored);
+          }
+        })
         .finally(() => {
           setIsAuthChecking(false);
         });

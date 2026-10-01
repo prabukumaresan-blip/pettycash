@@ -8,10 +8,33 @@ const zohoBooksService = require('../services/zohoBooksService');
 router.get('/', async (req, res) => {
   try {
     if (req.user && req.user.role === 'employee') {
-      const { password, ...safe } = req.user;
+      const emp = await db.getEmployeeById(req.user.id);
+      if (emp && emp.petty_cash_account_id) {
+        try {
+          const liveBal = await zohoBooksService.getPettyCashBalance(emp.petty_cash_account_id);
+          if (typeof liveBal === 'number') {
+            emp.current_balance = liveBal;
+            await db.updateEmployeeBalance(emp.id, liveBal);
+          }
+        } catch (zErr) {}
+      }
+      const { password, ...safe } = emp || req.user;
       return res.json({ success: true, employees: [safe] });
     }
+
     const employees = await db.getEmployees();
+    // Live sync Zoho closing balances for all employees with linked accounts
+    for (const emp of employees) {
+      if (emp.petty_cash_account_id) {
+        try {
+          const liveBal = await zohoBooksService.getPettyCashBalance(emp.petty_cash_account_id);
+          if (typeof liveBal === 'number') {
+            emp.current_balance = liveBal;
+            await db.updateEmployeeBalance(emp.id, liveBal);
+          }
+        } catch (zErr) {}
+      }
+    }
     const safeEmployees = employees.map(e => {
       const { password, ...safe } = e;
       return safe;
@@ -31,6 +54,15 @@ router.get('/:id', async (req, res) => {
     const employee = await db.getEmployeeById(req.params.id);
     if (!employee) {
       return res.status(404).json({ success: false, error: 'Employee not found' });
+    }
+    if (employee.petty_cash_account_id) {
+      try {
+        const liveBal = await zohoBooksService.getPettyCashBalance(employee.petty_cash_account_id);
+        if (typeof liveBal === 'number') {
+          employee.current_balance = liveBal;
+          await db.updateEmployeeBalance(employee.id, liveBal);
+        }
+      } catch (zErr) {}
     }
     const { password, ...safe } = employee;
     res.json({ success: true, employee: safe });
