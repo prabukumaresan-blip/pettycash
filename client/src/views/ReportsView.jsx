@@ -8,7 +8,6 @@ import {
   Search,
   CheckCircle2,
   Clock,
-  Briefcase,
   User,
   ExternalLink,
   Printer,
@@ -121,8 +120,6 @@ export default function ReportsView({
 
   const expenses = reportData?.expenses || [];
   const meta = reportData?.meta || {};
-  const projectBreakdown = reportData?.analytics?.project_breakdown || {};
-  const categoryBreakdown = reportData?.analytics?.category_breakdown || {};
 
   return (
     <div className="space-y-6">
@@ -315,35 +312,7 @@ export default function ReportsView({
         </div>
       </div>
 
-      {/* Project Breakdown */}
-      <div className="grid grid-cols-1 gap-4">
-        <div className="bg-white p-5 rounded-3xl border border-slate-200/90 shadow-xs">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 flex items-center space-x-1.5">
-            <Briefcase className="w-3.5 h-3.5 text-blue-600" />
-            <span>Spend by Zoho Project</span>
-          </h3>
-          <div className="space-y-2.5">
-            {Object.keys(projectBreakdown).length === 0 ? (
-              <p className="text-xs text-slate-400">No project allocations in range</p>
-            ) : (
-              Object.entries(projectBreakdown).map(([proj, amt]) => {
-                const pct = meta.total_amount > 0 ? (amt / meta.total_amount) * 100 : 0;
-                return (
-                  <div key={proj} className="space-y-1">
-                    <div className="flex justify-between text-xs font-semibold text-slate-700">
-                      <span className="truncate max-w-[200px]">{proj}</span>
-                      <span>{formatOMR(amt)} ({pct.toFixed(0)}%)</span>
-                    </div>
-                    <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                      <div className="h-full bg-blue-600 rounded-full" style={{ width: `${pct}%` }}></div>
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
-        </div>
-      </div>
+
 
       {/* Main Expense Report Data Table */}
       <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs overflow-hidden">
