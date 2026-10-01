@@ -4,9 +4,9 @@
     "client_id": "1000.BYLDNDDJMF36HIGK6ZJXGMMYILQ12O",
     "client_secret": "834dd49f629f1e095f2858a71217add0571131bd70",
     "redirect_uri": "https://pettycash-pearl.vercel.app/api/zoho/callback",
-    "access_token": "1000.c04962a10a34d373e56dc03824326e8c.25611ac87535d6c161834c8701859ff0",
+    "access_token": "1000.742ca8aa7931a736d9032f6eb2bc5575.ce73e3db1f4b591e8cc2149ad0b8948a",
     "refresh_token": "1000.70b3d3f7739447a1b5a16b1d535b0f94.860e4471704192a3fa442619dbd08417",
-    "token_expires_at": "2026-10-01T16:52:14.594Z",
+    "token_expires_at": "2026-10-01T17:50:26.485Z",
     "organization_id": "771750431",
     "organization_name": "Bright Flowers Trading LLC",
     "dc_region": "com",
@@ -16,7 +16,7 @@
     "default_expense_account_id": "acc-exp-petty",
     "default_expense_account_name": "Petty Cash Purchases",
     "last_sync_at": "2026-10-01T14:51:20.968Z",
-    "updated_at": "2026-10-01T15:52:14.597Z"
+    "updated_at": "2026-10-01T16:50:26.488Z"
   },
   "employees": [
     {
@@ -5463,6 +5463,60 @@
   ],
   "expenses": [
     {
+      "id": "3095712000008878001",
+      "employee_id": "emp-bbcdae95",
+      "employee_name": "Nihal",
+      "expense_date": "2026-10-01",
+      "amount": 5,
+      "category_id": "3095712000000000460",
+      "category_name": "Other Expenses",
+      "paid_through_account_id": "3095712000001367590",
+      "paid_through_account_name": "Nihal Petty Cash",
+      "description": "Testing Purpose",
+      "project_id": null,
+      "project_name": null,
+      "customer_id": "3095712000007653001",
+      "customer_name": "OMAN CONVENTION & EXHIBITION CENTRE",
+      "cost_center": null,
+      "receipt_url": null,
+      "receipt_file_name": null,
+      "zoho_journal_id": "3095712000008878001",
+      "zoho_journal_number": "9323",
+      "sync_status": "synced",
+      "sync_error": null,
+      "last_synced_at": "2026-10-01T16:52:45.612Z",
+      "created_by": "Nihal",
+      "created_at": "2026-10-01T16:52:46.067Z",
+      "updated_at": "2026-10-01T16:52:46.067Z"
+    },
+    {
+      "id": "3095712000008868020",
+      "employee_id": "emp-bbcdae95",
+      "employee_name": "Nihal",
+      "expense_date": "2026-10-01",
+      "amount": 12,
+      "category_id": "3095712000000000460",
+      "category_name": "Other Expenses",
+      "paid_through_account_id": "3095712000001367590",
+      "paid_through_account_name": "Nihal Petty Cash",
+      "description": "Office expense",
+      "project_id": null,
+      "project_name": null,
+      "customer_id": "3095712000004085001",
+      "customer_name": "Mr. Jamal Al Namaani",
+      "cost_center": null,
+      "receipt_url": null,
+      "receipt_file_name": null,
+      "zoho_journal_id": "3095712000008868020",
+      "zoho_journal_number": "9324",
+      "sync_status": "synced",
+      "sync_error": null,
+      "last_synced_at": "2026-10-01T16:52:45.612Z",
+      "created_by": "Nihal",
+      "created_at": "2026-10-01T16:52:46.048Z",
+      "updated_at": "2026-10-01T16:52:46.048Z"
+    },
+    {
       "id": "3095712000008869012",
       "employee_id": "emp-bbcdae95",
       "employee_name": "Nihal",
@@ -5491,6 +5545,16 @@
     }
   ],
   "sync_logs": [
+    {
+      "id": "log-1790873566079",
+      "sync_type": "expenses_sync",
+      "status": "success",
+      "details": {
+        "count": 2
+      },
+      "error_message": null,
+      "created_at": "2026-10-01T16:52:46.079Z"
+    },
     {
       "id": "log-1790870938911",
       "sync_type": "expenses_sync",
@@ -6060,16 +6124,6 @@
       },
       "error_message": null,
       "created_at": "2026-09-30T18:45:02.524Z"
-    },
-    {
-      "id": "log-1790793901504",
-      "sync_type": "coa_sync",
-      "status": "success",
-      "details": {
-        "count": 344
-      },
-      "error_message": null,
-      "created_at": "2026-09-30T18:45:01.504Z"
     }
   ]
 }

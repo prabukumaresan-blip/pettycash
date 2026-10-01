@@ -78,6 +78,14 @@ router.get('/', async (req, res) => {
       end_date: req.query.end_date,
       search: req.query.search
     };
+
+    // Synchronize latest app expenses from Zoho Books so all serverless instances have stable data
+    try {
+      await zohoBooksService.syncExpensesFromZoho();
+    } catch (zErr) {
+      console.warn('Real-time expenses sync notice:', zErr.message);
+    }
+
     const expenses = await db.getExpenses(filters);
     res.json({ success: true, expenses });
   } catch (err) {

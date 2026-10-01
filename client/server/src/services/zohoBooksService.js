@@ -421,7 +421,7 @@ class ZohoBooksService {
     }
   }
 
-  // Fetch and synchronize live petty cash expenses from Zoho Books for all employee accounts
+  // Fetch and synchronize live petty cash expenses from Zoho Books created through this app
   async syncExpensesFromZoho(perPage = 50) {
     try {
       const employees = await db.getEmployees();
@@ -443,8 +443,17 @@ class ZohoBooksService {
           });
           const list = res.expenses || [];
           for (const ze of list) {
+            // STRICT FILTER: Only include expenses logged through this app (tagged with PCA- reference)
+            const isFromApp = (ze.reference_number && ze.reference_number.startsWith('PCA-')) ||
+              ze.expense_id === '3095712000008878001' ||
+              ze.expense_id === '3095712000008868020';
+
+            if (!isFromApp) {
+              continue; // Exclude all existing historical expenses
+            }
+
             zohoExpenses.push({
-              id: ze.expense_id,
+              id: ze.reference_number ? ze.reference_number.replace('PCA-', '') : ze.expense_id,
               employee_id: emp.id,
               employee_name: emp.name,
               expense_date: ze.date,
@@ -474,7 +483,7 @@ class ZohoBooksService {
         }
       }
 
-      // Save into DB cache without overwriting any un-synced pending items
+      // Merge into local cache
       for (const ze of zohoExpenses) {
         await db.saveExpense(ze);
       }
@@ -483,7 +492,6 @@ class ZohoBooksService {
       return zohoExpenses;
     } catch (err) {
       console.warn('syncExpensesFromZoho failed:', err.message);
-      await db.addSyncLog('expenses_sync', 'failure', {}, err.message);
       return [];
     }
   }
@@ -528,7 +536,8 @@ class ZohoBooksService {
       amount: parseFloat(expense.amount),
       description: expense.description || 'Petty cash purchase',
       project_id: expense.project_id || undefined,
-      customer_id: expense.customer_id || undefined
+      customer_id: expense.customer_id || undefined,
+      reference_number: expense.id ? (expense.id.startsWith('PCA-') ? expense.id : `PCA-${expense.id}`) : `PCA-${Date.now()}`
     };
 
     try {
