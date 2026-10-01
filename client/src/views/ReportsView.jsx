@@ -355,7 +355,9 @@ export default function ReportsView({
                       <span className="font-bold text-slate-800">{exp.employee_name || 'Team Member'}</span>
                     </td>
                     <td className="py-3 px-4 whitespace-nowrap">
-                      <span className="text-slate-600">{exp.project_name || 'N/A'}</span>
+                      <span className="text-slate-600">
+                        {exp.project_name || projects.find(p => String(p.project_id) === String(exp.project_id) || (exp.customer_id && String(p.customer_id) === String(exp.customer_id)))?.project_name || 'N/A'}
+                      </span>
                     </td>
                     <td className="py-3 px-4 text-right font-black text-slate-900 whitespace-nowrap">
                       {formatOMR(exp.amount)}

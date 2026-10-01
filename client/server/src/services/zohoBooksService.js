@@ -452,8 +452,40 @@ class ZohoBooksService {
               continue; // Exclude all existing historical expenses
             }
 
+            const localId = ze.reference_number ? ze.reference_number.replace('PCA-', '') : ze.expense_id;
+            const existingExp = (await db.getExpenses()).find(e => e.id === localId || e.zoho_journal_id === ze.expense_id);
+            let projId = ze.project_id || (existingExp ? existingExp.project_id : null);
+            let projName = ze.project_name || (existingExp ? existingExp.project_name : null);
+
+            // Fetch detail from Zoho single-expense API if project is missing from list endpoint
+            if (!projId || !projName) {
+              try {
+                const singleRes = await this.makeApiRequest(`/expenses/${ze.expense_id}`, 'GET');
+                if (singleRes && singleRes.expense) {
+                  projId = singleRes.expense.project_id || projId;
+                  projName = singleRes.expense.project_name || projName;
+                }
+              } catch (singleErr) {
+                console.warn(`Could not fetch details for Zoho expense ${ze.expense_id}:`, singleErr.message);
+              }
+            }
+
+            // Fallback match project by ID or customer ID from cached Zoho projects
+            const cachedProjects = await db.getZohoProjects();
+            if (projId && !projName && cachedProjects) {
+              const matchedProj = cachedProjects.find(p => String(p.project_id) === String(projId));
+              if (matchedProj) projName = matchedProj.project_name;
+            }
+            if (!projId && ze.customer_id && cachedProjects) {
+              const matchedByCust = cachedProjects.find(p => String(p.customer_id) === String(ze.customer_id));
+              if (matchedByCust) {
+                projId = matchedByCust.project_id;
+                projName = matchedByCust.project_name;
+              }
+            }
+
             zohoExpenses.push({
-              id: ze.reference_number ? ze.reference_number.replace('PCA-', '') : ze.expense_id,
+              id: localId,
               employee_id: emp.id,
               employee_name: emp.name,
               expense_date: ze.date,
@@ -463,8 +495,8 @@ class ZohoBooksService {
               paid_through_account_id: ze.paid_through_account_id || accountId,
               paid_through_account_name: ze.paid_through_account_name || emp.petty_cash_account_name,
               description: ze.description || ze.account_name || 'Petty cash purchase',
-              project_id: ze.project_id || null,
-              project_name: ze.project_name || null,
+              project_id: projId || null,
+              project_name: projName || null,
               customer_id: ze.customer_id || null,
               customer_name: ze.customer_name || null,
               cost_center: null,

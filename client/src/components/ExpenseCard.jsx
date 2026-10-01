@@ -74,12 +74,12 @@ export default function ExpenseCard({
               <span className="font-semibold text-slate-700">{expense.employee_name || 'Employee'}</span>
               <span>•</span>
               <span>{expense.expense_date}</span>
-              {expense.project_name && (
+              {(expense.project_name || expense.customer_name) && (
                 <>
                   <span>•</span>
                   <span className="inline-flex items-center space-x-1 text-slate-600">
                     <Briefcase className="w-3 h-3 text-slate-400" />
-                    <span className="truncate max-w-[130px]">{expense.project_name}</span>
+                    <span className="truncate max-w-[150px]">{expense.project_name || expense.customer_name}</span>
                   </span>
                 </>
               )}

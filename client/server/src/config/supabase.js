@@ -387,6 +387,31 @@ const db = {
       expense.employee_name = emp.name;
     }
 
+    // Preserve existing project details if incoming data is missing them
+    const existing = store.expenses.find(e => e.id === expense.id || (expense.zoho_journal_id && e.zoho_journal_id === expense.zoho_journal_id));
+    if (existing) {
+      if (!expense.project_id && existing.project_id) {
+        expense.project_id = existing.project_id;
+      }
+      if (!expense.project_name && existing.project_name) {
+        expense.project_name = existing.project_name;
+      }
+    }
+
+    // Resolve project_name from cached projects if missing
+    if (store.zoho_projects && (!expense.project_name || !expense.project_id)) {
+      if (expense.project_id && !expense.project_name) {
+        const p = store.zoho_projects.find(proj => String(proj.project_id) === String(expense.project_id));
+        if (p) expense.project_name = p.project_name;
+      } else if (!expense.project_id && expense.customer_id) {
+        const p = store.zoho_projects.find(proj => String(proj.customer_id) === String(expense.customer_id));
+        if (p) {
+          expense.project_id = p.project_id;
+          expense.project_name = p.project_name;
+        }
+      }
+    }
+
     if (isLiveSupabase) {
       const { data, error } = await supabase.from('expenses').upsert(expense).select().single();
       if (!error && data) {

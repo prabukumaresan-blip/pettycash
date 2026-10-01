@@ -119,7 +119,7 @@ export default function LogExpenseModal({
           account_id: '3095712000000000460',
           account_name: 'Other Expenses'
         };
-      const selectedProj = zohoProjects.find(p => p.project_id === projectId);
+      const selectedProj = zohoProjects.find(p => String(p.project_id) === String(projectId));
       const paidThroughAccId = currentEmployee?.petty_cash_account_id || '';
       const paidThroughAccName = currentEmployee?.petty_cash_account_name || `Petty Cash - ${currentEmployee?.name}`;
 
@@ -132,12 +132,14 @@ export default function LogExpenseModal({
       formData.append('paid_through_account_id', paidThroughAccId);
       formData.append('paid_through_account_name', paidThroughAccName);
       formData.append('description', description);
-      if (projectId && selectedProj) {
+      if (projectId) {
         formData.append('project_id', projectId);
-        formData.append('project_name', selectedProj.project_name || '');
-        if (selectedProj.customer_id) {
-          formData.append('customer_id', selectedProj.customer_id);
-          formData.append('customer_name', selectedProj.customer_name || '');
+        if (selectedProj) {
+          formData.append('project_name', selectedProj.project_name || '');
+          if (selectedProj.customer_id) {
+            formData.append('customer_id', selectedProj.customer_id);
+            formData.append('customer_name', selectedProj.customer_name || '');
+          }
         }
       }
 
