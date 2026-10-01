@@ -305,26 +305,6 @@ export default function LogExpenseModal({
             </select>
           </div>
 
-          {/* Category / Expense Account Selection */}
-          {categories && categories.length > 0 && (
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center space-x-1">
-                <Tag className="w-3.5 h-3.5 text-blue-600" />
-                <span>Expense Category (Zoho Chart of Accounts)</span>
-              </label>
-              <select
-                value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:bg-white transition truncate"
-              >
-                {categories.map((c) => (
-                  <option key={c.account_id} value={c.account_id}>
-                    {c.account_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
 
           {/* Automatic Accounting Linkage Card */}
           <div className="p-3.5 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/50 border border-slate-200/90 text-xs space-y-2">
