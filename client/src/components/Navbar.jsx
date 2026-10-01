@@ -165,10 +165,10 @@ export default function Navbar({
             <button
               onClick={onLogout}
               title="Sign Out"
-              className="flex items-center space-x-1 px-2.5 py-1.5 sm:px-3 rounded-xl border border-slate-200 bg-white hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 text-slate-600 text-xs font-bold transition shadow-xs active:scale-95"
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-700 text-xs font-bold transition shadow-xs"
             >
               <LogOut className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Logout</span>
+              <span>Sign Out</span>
             </button>
           </div>
         </div>

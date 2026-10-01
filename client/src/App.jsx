@@ -128,21 +128,13 @@ export default function App() {
     if (!user) return;
 
     try {
-      // 1. Employees (backend automatically returns only self for employees)
+      // 1. Employees (strictly resolve active employee to the logged in user)
       const empRes = await api.getEmployees();
       if (empRes.success && empRes.employees) {
         setEmployees(empRes.employees);
-        if (user.role === 'employee') {
-          const self = empRes.employees[0] || user;
-          setCurrentEmployee(self);
-          setCurrentUser(self);
-        } else {
-          setCurrentEmployee((prev) => {
-            if (!prev) return user;
-            const found = empRes.employees.find((e) => e.id === prev.id);
-            return found || user;
-          });
-        }
+        const self = empRes.employees.find((e) => e.id === user.id) || (user.role === 'employee' ? empRes.employees[0] : null) || user;
+        setCurrentEmployee(self);
+        setCurrentUser(self);
       }
 
       // 2. Expenses (backend enforces employee_id scoping for regular employees)
@@ -191,21 +183,47 @@ export default function App() {
     }
   }, [currentUser, activeTab]);
 
-  // Handle Login Success
+  // Handle Login Success (Clear prior state, switch user, load fresh data & trigger auto-sync)
   const handleLoginSuccess = async (user) => {
+    setEmployees([]);
+    setExpenses([]);
+    setZohoAccounts([]);
+    setCategories([]);
+    setProjects([]);
+    setZohoStatus(null);
     setCurrentUser(user);
     setCurrentEmployee(user);
     setActiveTab('dashboard');
     showToast(`Welcome back, ${user.name}!`);
+
+    // Load initial user data
     await loadAllData(user);
+
+    // Auto-trigger Zoho sync after login to fetch live balances & accounts
+    api.triggerZohoSync()
+      .then((res) => {
+        if (res && res.success) {
+          loadAllData(user);
+        }
+      })
+      .catch((err) => {
+        console.warn('Post-login Zoho sync notice:', err.message);
+      });
   };
 
-  // Handle Logout
+  // Handle Logout (Clean all state across device)
   const handleLogout = async () => {
-    await api.logout();
+    try {
+      await api.logout();
+    } catch {}
     setCurrentUser(null);
     setCurrentEmployee(null);
+    setEmployees([]);
     setExpenses([]);
+    setZohoStatus(null);
+    setZohoAccounts([]);
+    setCategories([]);
+    setProjects([]);
     setActiveTab('dashboard');
     showToast('Signed out successfully.');
   };
@@ -422,6 +440,9 @@ export default function App() {
           setIsLogModalOpen(true);
         }}
         currentUser={currentUser}
+        onLogout={handleLogout}
+        onSyncNow={handleTriggerFullSync}
+        isSyncing={isFullSyncing}
       />
 
       {/* Log / Edit Expense Modal (Locked to the logged-in employee) */}

@@ -263,6 +263,20 @@ const db = {
     }
   },
 
+  async updateEmployeeBalance(employeeId, newBalance) {
+    const store = loadLocalData();
+    const emp = store.employees.find(e => e.id === employeeId);
+    if (emp) {
+      emp.current_balance = parseFloat(newBalance);
+      emp.updated_at = new Date().toISOString();
+      saveLocalData(store);
+    }
+
+    if (isLiveSupabase) {
+      await supabase.from('employees').update({ current_balance: parseFloat(newBalance) }).eq('id', employeeId);
+    }
+  },
+
   async getExpenses(filters = {}) {
     let list = [];
     if (isLiveSupabase) {

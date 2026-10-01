@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { db } = require('../config/supabase');
 const zohoBooksService = require('../services/zohoBooksService');
+const syncService = require('../services/syncService');
 const { requireAuth } = require('../middleware/authMiddleware');
 
 function sanitizeEmployee(emp) {
@@ -60,7 +61,7 @@ router.post('/login', async (req, res) => {
         const liveBal = await zohoBooksService.getPettyCashBalance(emp.petty_cash_account_id);
         if (typeof liveBal === 'number') {
           emp.current_balance = liveBal;
-          await db.saveEmployee(emp);
+          await db.updateEmployeeBalance(emp.id, liveBal);
         }
       } catch (zErr) {
         console.warn('Could not refresh balance during login:', zErr.message);
@@ -68,6 +69,11 @@ router.post('/login', async (req, res) => {
     }
 
     const token = `pc-token-${emp.id}`;
+
+    // Kick off background Zoho sync (syncs pending expenses and refreshes COA)
+    syncService.runFullSync().catch(err => {
+      console.warn('Background sync on login error:', err.message);
+    });
 
     res.json({
       success: true,
@@ -93,7 +99,7 @@ router.get('/me', requireAuth, async (req, res) => {
         const liveBal = await zohoBooksService.getPettyCashBalance(emp.petty_cash_account_id);
         if (typeof liveBal === 'number') {
           emp.current_balance = liveBal;
-          await db.saveEmployee(emp);
+          await db.updateEmployeeBalance(emp.id, liveBal);
         }
       } catch (zErr) {
         // Soft fail

@@ -55,6 +55,10 @@ export const api = {
   },
 
   async login(identifier, password) {
+    // Purge any stale user session & cached expenses before logging in
+    localStorage.removeItem('petty_cash_user');
+    localStorage.removeItem('cached_expenses');
+
     const res = await fetch(`${BASE_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -92,7 +96,12 @@ export const api = {
     try {
       await fetchWithAuth(`${BASE_URL}/auth/logout`, { method: 'POST' });
     } catch {}
+    const user = getStoredUser();
+    if (user && user.id) {
+      localStorage.removeItem(`cached_expenses_${user.id}`);
+    }
     localStorage.removeItem('petty_cash_user');
+    localStorage.removeItem('cached_expenses');
     return { success: true };
   },
 
@@ -164,18 +173,21 @@ export const api = {
       }
     });
 
+    const user = getStoredUser();
+    const cacheKey = user && user.id ? `cached_expenses_${user.id}` : 'cached_expenses';
+
     try {
       const res = await fetchWithAuth(`${BASE_URL}/expenses?${params.toString()}`);
       if (!res.ok) throw new Error('Network error');
       const data = await safeJson(res);
       try {
-        localStorage.setItem('cached_expenses', JSON.stringify(data.expenses || []));
+        localStorage.setItem(cacheKey, JSON.stringify(data.expenses || []));
       } catch (e) {
         console.warn('Storage quota warning', e);
       }
       return data;
     } catch {
-      const cached = localStorage.getItem('cached_expenses');
+      const cached = localStorage.getItem(cacheKey);
       return {
         success: true,
         expenses: cached ? JSON.parse(cached) : [],

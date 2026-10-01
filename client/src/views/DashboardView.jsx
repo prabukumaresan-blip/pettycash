@@ -11,7 +11,8 @@ import {
   Sparkles,
   BookOpen,
   Briefcase,
-  AlertCircle
+  AlertCircle,
+  RefreshCw
 } from 'lucide-react';
 import ExpenseCard from '../components/ExpenseCard';
 import { formatOMR } from '../utils/currency';
@@ -105,6 +106,17 @@ export default function DashboardView({
 
           {/* Quick Action Buttons */}
           <div className="flex flex-wrap sm:flex-nowrap gap-3 items-center">
+            {onSyncNow && (
+              <button
+                onClick={onSyncNow}
+                disabled={isSyncing}
+                className="w-full sm:w-auto px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/20 active:scale-95 text-white font-semibold text-sm border border-white/20 flex items-center justify-center space-x-2 transition disabled:opacity-50"
+                title="Sync Zoho Books balance and transactions"
+              >
+                <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin text-blue-400' : 'text-slate-300'}`} />
+                <span>{isSyncing ? 'Syncing...' : 'Sync Zoho'}</span>
+              </button>
+            )}
             <button
               onClick={onOpenLogModal}
               className="w-full sm:w-auto px-5 py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 active:scale-95 text-white font-bold text-sm shadow-lg shadow-blue-500/30 flex items-center justify-center space-x-2 transition"
