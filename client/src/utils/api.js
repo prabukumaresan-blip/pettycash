@@ -217,7 +217,16 @@ export const api = {
         method: 'POST',
         body: formData
       });
-      return await safeJson(res);
+      const data = await safeJson(res);
+      if (data.success && data.expense) {
+        const user = getStoredUser();
+        const cacheKey = user && user.id ? `cached_expenses_${user.id}` : 'cached_expenses';
+        try {
+          const current = JSON.parse(localStorage.getItem(cacheKey) || '[]');
+          localStorage.setItem(cacheKey, JSON.stringify([data.expense, ...current.filter(e => e.id !== data.expense.id)]));
+        } catch {}
+      }
+      return data;
     } catch {
       return this.queueOfflineExpense(formData);
     }
@@ -235,7 +244,16 @@ export const api = {
     const res = await fetchWithAuth(`${BASE_URL}/expenses/${id}`, {
       method: 'DELETE'
     });
-    return await safeJson(res);
+    const data = await safeJson(res);
+    if (data.success) {
+      const user = getStoredUser();
+      const cacheKey = user && user.id ? `cached_expenses_${user.id}` : 'cached_expenses';
+      try {
+        const current = JSON.parse(localStorage.getItem(cacheKey) || '[]');
+        localStorage.setItem(cacheKey, JSON.stringify(current.filter(e => e.id !== id)));
+      } catch {}
+    }
+    return data;
   },
 
   async retryExpenseSync(id) {

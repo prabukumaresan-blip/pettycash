@@ -421,6 +421,73 @@ class ZohoBooksService {
     }
   }
 
+  // Fetch and synchronize live petty cash expenses from Zoho Books for all employee accounts
+  async syncExpensesFromZoho(perPage = 50) {
+    try {
+      const employees = await db.getEmployees();
+      const pcAccountMap = {};
+      employees.forEach(emp => {
+        if (emp.petty_cash_account_id) {
+          pcAccountMap[emp.petty_cash_account_id] = emp;
+        }
+      });
+
+      const zohoExpenses = [];
+      for (const [accountId, emp] of Object.entries(pcAccountMap)) {
+        try {
+          const res = await this.makeApiRequest('/expenses', 'GET', null, {
+            paid_through_account_id: accountId,
+            sort_column: 'date',
+            sort_order: 'D',
+            per_page: perPage
+          });
+          const list = res.expenses || [];
+          for (const ze of list) {
+            zohoExpenses.push({
+              id: ze.expense_id,
+              employee_id: emp.id,
+              employee_name: emp.name,
+              expense_date: ze.date,
+              amount: parseFloat(ze.total || ze.bcy_total || 0),
+              category_id: ze.account_id || '3095712000000000460',
+              category_name: ze.account_name || 'Other Expenses',
+              paid_through_account_id: ze.paid_through_account_id || accountId,
+              paid_through_account_name: ze.paid_through_account_name || emp.petty_cash_account_name,
+              description: ze.description || ze.account_name || 'Petty cash purchase',
+              project_id: ze.project_id || null,
+              project_name: ze.project_name || null,
+              customer_id: ze.customer_id || null,
+              customer_name: ze.customer_name || null,
+              cost_center: null,
+              receipt_url: null,
+              receipt_file_name: ze.expense_receipt_name || null,
+              zoho_journal_id: ze.expense_id,
+              zoho_journal_number: (ze.custom_field_hash && ze.custom_field_hash.cf_expenses_no) || ze.cf_expenses_no || ze.expense_number || 'N/A',
+              sync_status: 'synced',
+              sync_error: null,
+              last_synced_at: new Date().toISOString(),
+              created_by: emp.name
+            });
+          }
+        } catch (accErr) {
+          console.warn(`Could not sync expenses for account ${accountId}:`, accErr.message);
+        }
+      }
+
+      // Save into DB cache without overwriting any un-synced pending items
+      for (const ze of zohoExpenses) {
+        await db.saveExpense(ze);
+      }
+
+      await db.addSyncLog('expenses_sync', 'success', { count: zohoExpenses.length });
+      return zohoExpenses;
+    } catch (err) {
+      console.warn('syncExpensesFromZoho failed:', err.message);
+      await db.addSyncLog('expenses_sync', 'failure', {}, err.message);
+      return [];
+    }
+  }
+
   // Create or link Petty Cash Account for an Employee in Zoho Books
   async createEmployeePettyCashAccount(employee) {
     const accountName = `Petty Cash - ${employee.name}`;

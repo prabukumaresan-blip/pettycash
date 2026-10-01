@@ -115,7 +115,15 @@ class SyncService {
         summary.errors.push(`Contacts: ${err.message}`);
       }
 
-      // 4. Push Pending Expenses
+      // 4. Sync Live Expenses from Zoho Books
+      try {
+        const liveExpenses = await zohoBooksService.syncExpensesFromZoho();
+        summary.expenses_synced = liveExpenses.length;
+      } catch (err) {
+        summary.errors.push(`Live Expenses: ${err.message}`);
+      }
+
+      // 5. Push Pending Expenses
       summary.pending_expenses = await this.syncPendingExpenses();
 
       await db.updateZohoConfig({ last_sync_at: new Date().toISOString() });

@@ -296,7 +296,10 @@ export default function App() {
     if (expenseId) {
       const res = await api.updateExpense(expenseId, formData);
       if (res.success) {
-        showToast('Expense updated & synced with Zoho Books journal!');
+        showToast('Expense updated & synced with Zoho Books!');
+        if (res.expense) {
+          setExpenses((prev) => prev.map((e) => (e.id === expenseId ? res.expense : e)));
+        }
       }
     } else {
       const res = await api.saveExpense(formData);
@@ -306,9 +309,13 @@ export default function App() {
       } else if (res.success) {
         showToast(
           res.synced
-            ? 'Expense saved & Journal entry posted to Zoho Books!'
-            : 'Expense saved! Zoho Books journal queued for background sync.'
+            ? 'Expense saved & posted to Zoho Books!'
+            : 'Expense saved! Zoho Books sync queued in background.'
         );
+        // Immediately add newly saved expense to the Recent Activity list!
+        if (res.expense) {
+          setExpenses((prev) => [res.expense, ...prev.filter((e) => e.id !== res.expense.id)]);
+        }
       }
     }
     await loadAllData();
@@ -316,13 +323,14 @@ export default function App() {
 
   // Handle Deleting Expense
   const handleDeleteExpense = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this expense? This will reverse the journal entry in Zoho Books.')) {
+    if (!window.confirm('Are you sure you want to delete this expense? This will reverse the expense entry in Zoho Books.')) {
       return;
     }
     try {
       const res = await api.deleteExpense(id);
       if (res.success) {
         showToast('Expense deleted and cash balance restored');
+        setExpenses((prev) => prev.filter((e) => e.id !== id));
         await loadAllData();
       }
     } catch (err) {
