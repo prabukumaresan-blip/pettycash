@@ -78,29 +78,8 @@ router.get('/', async (req, res) => {
       end_date: req.query.end_date,
       search: req.query.search
     };
-    let expenses = await db.getExpenses(filters);
-
-    // If local expenses are empty or sync requested, pull directly from Zoho Books!
-    if (!expenses || expenses.length === 0 || req.query.sync_zoho === 'true') {
-      try {
-        await zohoBooksService.syncExpensesFromZoho();
-        expenses = await db.getExpenses(filters);
-      } catch (zErr) {
-        console.warn('Real-time expenses sync notice:', zErr.message);
-      }
-    }
-
+    const expenses = await db.getExpenses(filters);
     res.json({ success: true, expenses });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
-
-// POST Sync live expenses directly from Zoho Books
-router.post('/sync-from-zoho', async (req, res) => {
-  try {
-    const expenses = await zohoBooksService.syncExpensesFromZoho();
-    res.json({ success: true, count: expenses.length, expenses });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
