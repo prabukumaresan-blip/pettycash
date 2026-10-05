@@ -8,10 +8,12 @@ import {
   FileText,
   CheckCircle,
   AlertCircle,
-  Sparkles
+  Sparkles,
+  ArrowUpRight,
+  ArrowDownLeft
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { formatOMR } from '../utils/currency';
+import { formatOMR, getSettlementStatus } from '../utils/currency';
 import { api } from '../utils/api';
 
 export default function LogExpenseModal({
@@ -248,11 +250,43 @@ export default function LogExpenseModal({
             </div>
 
             {/* Live Balance Impact */}
-            <div className="mt-2 pt-2 border-t border-blue-200/50 flex items-center justify-between text-xs">
-              <span className="text-slate-600 font-medium">Account Ending Balance Impact:</span>
-              <span className={`font-bold ${remainingBal < 0 ? 'text-red-600' : 'text-slate-800'}`}>
-                {formatOMR(currentBal)} → {formatOMR(remainingBal)}
-              </span>
+            <div className="mt-2.5 pt-2.5 border-t border-blue-200/60 space-y-1.5 text-xs">
+              {(() => {
+                const curSet = getSettlementStatus(currentBal, currentEmployee?.name || 'He');
+                const remSet = getSettlementStatus(remainingBal, currentEmployee?.name || 'He');
+                return (
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-600 font-medium">Account Ending Balance Impact:</span>
+                    <span className={`font-bold font-mono ${remainingBal < 0 ? 'text-amber-600' : 'text-slate-800'}`}>
+                      {curSet.formattedAmount} {curSet.accountingSideShort} → {remSet.formattedAmount} {remSet.accountingSideShort}
+                    </span>
+                  </div>
+                );
+              })()}
+              {amount && !isNaN(parseFloat(amount)) && parseFloat(amount) > 0 && (() => {
+                const impactSettlement = getSettlementStatus(remainingBal, currentEmployee?.name || 'He');
+                return (
+                  <div className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold flex items-center justify-between border ${
+                    impactSettlement.isEmployeeOwing
+                      ? 'bg-emerald-50 text-emerald-900 border-emerald-200'
+                      : impactSettlement.isCompanyOwing
+                      ? 'bg-amber-50 text-amber-900 border-amber-200'
+                      : 'bg-slate-50 text-slate-700 border-slate-200'
+                  }`}>
+                    <div className="flex items-center space-x-1.5 min-w-0 pr-1">
+                      {impactSettlement.isEmployeeOwing ? (
+                        <ArrowUpRight className="w-3.5 h-3.5 text-emerald-600 stroke-[2.5] shrink-0" />
+                      ) : impactSettlement.isCompanyOwing ? (
+                        <ArrowDownLeft className="w-3.5 h-3.5 text-amber-600 stroke-[2.5] shrink-0" />
+                      ) : (
+                        <CheckCircle className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                      )}
+                      <span className="truncate">After this: {impactSettlement.accountingLabel}</span>
+                    </div>
+                    <span className="font-mono font-black shrink-0">{impactSettlement.formattedAmount} {impactSettlement.accountingSideShort}</span>
+                  </div>
+                );
+              })()}
             </div>
           </div>
 

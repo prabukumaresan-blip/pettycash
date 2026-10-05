@@ -78,16 +78,28 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start Background Cron Sync & Server (Local only)
-if (process.env.NODE_ENV !== 'production' && process.env.VERCEL !== '1') {
+// Start Background Cron Sync & Server (only when run directly as standalone server)
+if (require.main === module) {
   syncService.init();
 
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log(`====================================================`);
     console.log(`🚀 Petty Cash Management API running on port ${PORT}`);
     console.log(`📡 Zoho Books Sync & Supabase Bridge Active`);
     console.log(`🌐 Local App URL: http://localhost:${PORT}`);
     console.log(`====================================================`);
+  });
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      const fallbackPort = Number(PORT) + 1;
+      console.warn(`⚠️ Port ${PORT} is in use (often macOS AirPlay Receiver). Retrying on port ${fallbackPort}...`);
+      app.listen(fallbackPort, () => {
+        console.log(`🚀 Petty Cash Management API running on port ${fallbackPort}`);
+      });
+    } else {
+      console.error('Server listen error:', err);
+    }
   });
 }
 

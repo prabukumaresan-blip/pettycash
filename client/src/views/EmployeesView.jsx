@@ -11,9 +11,13 @@ import {
   ShieldCheck,
   KeyRound,
   Mail,
-  Hash
+  Hash,
+  ArrowUpRight,
+  ArrowDownLeft,
+  Scale,
+  Wallet
 } from 'lucide-react';
-import { formatOMR } from '../utils/currency';
+import { formatOMR, getSettlementStatus } from '../utils/currency';
 
 export default function EmployeesView({
   employees = [],
@@ -21,6 +25,16 @@ export default function EmployeesView({
   onDeleteEmployee,
   onCreateZohoAccount
 }) {
+  const totalHeOwesCompany = employees.reduce((sum, e) => {
+    const bal = parseFloat(e.current_balance || 0);
+    return sum + (bal > 0.0005 ? bal : 0);
+  }, 0);
+
+  const totalCompanyOwesHim = employees.reduce((sum, e) => {
+    const bal = parseFloat(e.current_balance || 0);
+    return sum + (bal < -0.0005 ? Math.abs(bal) : 0);
+  }, 0);
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -49,6 +63,56 @@ export default function EmployeesView({
           <UserPlus className="w-4 h-4 stroke-[2.5]" />
           <span>Add New User</span>
         </button>
+      </div>
+
+      {/* Company Settlement Summary Matrix */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs flex items-center justify-between">
+          <div>
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Team Users</span>
+            <div className="text-2xl font-black text-slate-900 mt-1">{employees.length}</div>
+            <div className="text-[11px] text-slate-400 mt-0.5">Active team members</div>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center">
+            <Users className="w-5 h-5" />
+          </div>
+        </div>
+
+        <div className="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200 shadow-xs flex items-center justify-between">
+          <div>
+            <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800 flex items-center space-x-1">
+              <span>They have to pay to Company</span>
+              <span className="px-1.5 py-0.2 rounded bg-emerald-200/80 text-emerald-900 text-[10px] font-mono">Dr</span>
+            </span>
+            <div className="text-2xl font-black text-emerald-950 mt-1 font-mono">
+              {formatOMR(totalHeOwesCompany)}
+            </div>
+            <div className="text-[11px] text-emerald-700 font-medium mt-0.5">
+              Debit balances (unspent cash in hand)
+            </div>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-emerald-200/80 text-emerald-800 flex items-center justify-center">
+            <ArrowUpRight className="w-5 h-5 stroke-[2.5]" />
+          </div>
+        </div>
+
+        <div className="bg-amber-50/70 p-4 rounded-2xl border border-amber-200 shadow-xs flex items-center justify-between">
+          <div>
+            <span className="text-[11px] font-bold uppercase tracking-wider text-amber-800 flex items-center space-x-1">
+              <span>Company needs to pay to Them</span>
+              <span className="px-1.5 py-0.2 rounded bg-amber-200/80 text-amber-900 text-[10px] font-mono">Cr</span>
+            </span>
+            <div className="text-2xl font-black text-amber-950 mt-1 font-mono">
+              {formatOMR(totalCompanyOwesHim)}
+            </div>
+            <div className="text-[11px] text-amber-700 font-medium mt-0.5">
+              Credit balances (out-of-pocket reimbursements)
+            </div>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-amber-200/80 text-amber-800 flex items-center justify-center">
+            <ArrowDownLeft className="w-5 h-5 stroke-[2.5]" />
+          </div>
+        </div>
       </div>
 
       {/* User Cards Grid */}
@@ -127,23 +191,70 @@ export default function EmployeesView({
                   </div>
                 </div>
 
-                {/* Petty Cash Account Ending Balance Card */}
-                <div className="mt-3.5 p-4 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/40 border border-slate-200/80">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-500 font-semibold">Petty Cash Ending Balance:</span>
-                    <span className="font-extrabold text-base text-slate-900">
-                      {formatOMR(currentBal)}
-                    </span>
-                  </div>
+                {/* Petty Cash Account Ending Balance & Settlement Card */}
+                {(() => {
+                  const settlement = getSettlementStatus(currentBal, emp.name || 'He');
+                  return (
+                    <div className={`mt-3.5 p-4 rounded-2xl border transition-all ${
+                      settlement.isEmployeeOwing
+                        ? 'bg-gradient-to-br from-emerald-50/70 to-slate-50 border-emerald-200'
+                        : settlement.isCompanyOwing
+                        ? 'bg-gradient-to-br from-amber-50/80 to-orange-50/40 border-amber-200'
+                        : 'bg-gradient-to-br from-slate-50 to-blue-50/40 border-slate-200/80'
+                    }`}>
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-slate-500 font-semibold">Petty Cash Ending Balance:</span>
+                        <div className="flex items-center space-x-1.5">
+                          <span className="font-extrabold text-base text-slate-900 font-mono">
+                            {settlement.formattedAmount}
+                          </span>
+                          <span className={`text-[10px] font-black px-1.5 py-0.5 rounded font-mono uppercase ${
+                            settlement.isEmployeeOwing
+                              ? 'bg-emerald-100 text-emerald-800'
+                              : settlement.isCompanyOwing
+                              ? 'bg-amber-100 text-amber-800'
+                              : 'bg-slate-100 text-slate-700'
+                          }`}>
+                            {settlement.accountingSideShort}
+                          </span>
+                        </div>
+                      </div>
 
-                  <div className="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600 font-medium">
-                    <span className="inline-flex items-center space-x-1 text-emerald-700 font-semibold">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>Zoho Ending Balance</span>
-                    </span>
-                    <span className="text-slate-400 font-mono text-[10px]">{emp.petty_cash_account_id || 'acc-pc-auto'}</span>
-                  </div>
-                </div>
+                      {/* Explicit Settlement Status Banner */}
+                      <div className={`mt-2.5 px-3 py-2 rounded-xl flex items-center justify-between text-xs font-bold border ${
+                        settlement.isEmployeeOwing
+                          ? 'bg-emerald-100/90 border-emerald-300 text-emerald-950 shadow-2xs'
+                          : settlement.isCompanyOwing
+                          ? 'bg-amber-100/90 border-amber-300 text-amber-950 shadow-2xs'
+                          : 'bg-slate-100 border-slate-200 text-slate-700'
+                      }`}>
+                        <div className="flex items-center space-x-1.5 min-w-0 pr-1">
+                          {settlement.isEmployeeOwing ? (
+                            <ArrowUpRight className="w-4 h-4 text-emerald-700 stroke-[2.5] shrink-0" />
+                          ) : settlement.isCompanyOwing ? (
+                            <ArrowDownLeft className="w-4 h-4 text-amber-700 stroke-[2.5] shrink-0" />
+                          ) : (
+                            <CheckCircle2 className="w-4 h-4 text-slate-500 stroke-[2.5] shrink-0" />
+                          )}
+                          <span className="truncate">
+                            {settlement.accountingLabel}
+                          </span>
+                        </div>
+                        <span className="font-black font-mono text-xs shrink-0">
+                          {settlement.formattedAmount} {settlement.accountingSideShort}
+                        </span>
+                      </div>
+
+                      <div className="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600 font-medium">
+                        <span className="inline-flex items-center space-x-1 text-emerald-700 font-semibold">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>Zoho Ending Balance</span>
+                        </span>
+                        <span className="text-slate-400 font-mono text-[10px]">{emp.petty_cash_account_id || 'acc-pc-auto'}</span>
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 {/* Zoho Account Mapping Tag */}
                 <div className="mt-3.5 space-y-1.5 text-xs">

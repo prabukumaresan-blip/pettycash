@@ -1,0 +1,12 @@
+{
+  "name": "zoho-petty-cash-solution",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix client run dev",
+    "build": "npm --prefix client run build",
+    "start": "npm --prefix client run start",
+    "server": "npm --prefix client/server run dev",
+    "client": "npm --prefix client run dev"
+  }
+}

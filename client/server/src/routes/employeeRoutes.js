@@ -135,12 +135,8 @@ router.post('/', async (req, res) => {
       if (matchedAcc) {
         newEmp.petty_cash_account_name = matchedAcc.account_name;
         try {
-          const zRes = await zohoBooksService.makeApiRequest(`/chartofaccounts/${matchedAcc.account_id}`);
-          if (zRes && zRes.chart_of_account && zRes.chart_of_account.closing_balance !== undefined) {
-            newEmp.initial_float = zRes.chart_of_account.closing_balance;
-          } else {
-            newEmp.initial_float = matchedAcc.current_balance || 0;
-          }
+          const liveBal = await zohoBooksService.getPettyCashBalance(matchedAcc.account_id);
+          newEmp.initial_float = typeof liveBal === 'number' ? liveBal : (matchedAcc.current_balance || 0);
         } catch (e) {
           newEmp.initial_float = matchedAcc.current_balance || 0;
         }
@@ -177,12 +173,8 @@ router.put('/:id', async (req, res) => {
       if (matchedAcc) {
         req.body.petty_cash_account_name = matchedAcc.account_name;
         try {
-          const zRes = await zohoBooksService.makeApiRequest(`/chartofaccounts/${matchedAcc.account_id}`);
-          if (zRes && zRes.chart_of_account && zRes.chart_of_account.closing_balance !== undefined) {
-            req.body.initial_float = zRes.chart_of_account.closing_balance;
-          } else {
-            req.body.initial_float = matchedAcc.current_balance || 0;
-          }
+          const liveBal = await zohoBooksService.getPettyCashBalance(matchedAcc.account_id);
+          req.body.initial_float = typeof liveBal === 'number' ? liveBal : (matchedAcc.current_balance || 0);
         } catch (e) {
           req.body.initial_float = matchedAcc.current_balance || 0;
         }

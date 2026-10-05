@@ -200,6 +200,8 @@ router.post('/', upload.single('receipt'), async (req, res) => {
       sync_status: 'pending',
       sync_error: null,
       last_synced_at: null,
+      added_to_report: false,
+      added_to_report_at: null,
       created_by: employee.name
     };
 
@@ -257,6 +259,10 @@ router.put('/:id', upload.single('receipt'), async (req, res) => {
       return res.status(403).json({ success: false, error: 'Access denied: You can only modify your own expenses' });
     }
 
+    if (existing.is_exported && (!req.user || req.user.role !== 'admin')) {
+      return res.status(403).json({ success: false, error: 'Access denied: This expense has been exported in an official report. Only an Administrator can edit it.' });
+    }
+
     const employee = await db.getEmployeeById(existing.employee_id);
     const updates = { ...existing, ...req.body };
 
@@ -312,6 +318,18 @@ router.delete('/:id', async (req, res) => {
     const expense = await db.getExpenseById(req.params.id);
     if (!expense) {
       return res.status(404).json({ success: false, error: 'Expense not found' });
+    }
+
+    // Permission Check: Once exported as report, ONLY admin user can delete the expense.
+    // If not exported, employee can delete even if added to report!
+    const isExported = Boolean(expense.is_exported);
+    const isAdmin = req.user && req.user.role === 'admin';
+
+    if (isExported && !isAdmin) {
+      return res.status(403).json({
+        success: false,
+        error: 'Access denied: This expense has been exported in an official report. Only an Administrator can delete it.'
+      });
     }
 
     if (req.user && req.user.role === 'employee' && expense.employee_id !== req.user.id) {
@@ -383,6 +401,251 @@ router.post('/:id/retry-sync', async (req, res) => {
 
     const saved = await db.saveExpense(expense);
     res.json({ success: true, expense: saved, message: 'Expense synced with Zoho Books' });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/expenses/report-status - Bulk add or remove expenses from report
+router.post('/report-status', async (req, res) => {
+  try {
+    const { expense_ids, added_to_report } = req.body;
+    if (!Array.isArray(expense_ids) || expense_ids.length === 0) {
+      return res.status(400).json({ success: false, error: 'expense_ids array is required' });
+    }
+
+    const isAdded = Boolean(added_to_report);
+    const updated = [];
+
+    for (const id of expense_ids) {
+      const exp = await db.getExpenseById(id);
+      if (exp) {
+        if (req.user && req.user.role === 'employee' && exp.employee_id !== req.user.id) {
+          continue;
+        }
+        exp.added_to_report = isAdded;
+        exp.added_to_report_at = isAdded ? new Date().toISOString() : null;
+        const saved = await db.saveExpense(exp);
+        updated.push(saved);
+      }
+    }
+
+    res.json({
+      success: true,
+      updated_count: updated.length,
+      expenses: updated,
+      message: isAdded
+        ? `Successfully added ${updated.length} expense(s) to the Expense Report`
+        : `Successfully removed ${updated.length} expense(s) from the Expense Report`
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// PATCH /api/expenses/:id/report-status - Single expense report status toggle
+router.patch('/:id/report-status', async (req, res) => {
+  try {
+    const exp = await db.getExpenseById(req.params.id);
+    if (!exp) {
+      return res.status(404).json({ success: false, error: 'Expense not found' });
+    }
+    if (req.user && req.user.role === 'employee' && exp.employee_id !== req.user.id) {
+      return res.status(403).json({ success: false, error: 'Access denied' });
+    }
+
+    const isAdded = req.body.added_to_report !== undefined ? Boolean(req.body.added_to_report) : !exp.added_to_report;
+
+    if (exp.is_exported && !isAdded && (!req.user || req.user.role !== 'admin')) {
+      return res.status(403).json({
+        success: false,
+        error: 'Access denied: This expense has been exported in an official report. Only an Administrator can remove it from reports.'
+      });
+    }
+
+    exp.added_to_report = isAdded;
+    exp.added_to_report_at = isAdded ? new Date().toISOString() : null;
+    const saved = await db.saveExpense(exp);
+
+    res.json({
+      success: true,
+      expense: saved,
+      message: isAdded ? 'Expense added to report' : 'Expense removed from report'
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/expenses/:id/request-recall - Request to call back an exported expense
+router.post('/:id/request-recall', async (req, res) => {
+  try {
+    const exp = await db.getExpenseById(req.params.id);
+    if (!exp) {
+      return res.status(404).json({ success: false, error: 'Expense not found' });
+    }
+    if (!exp.is_exported) {
+      return res.status(400).json({ success: false, error: 'Expense has not been exported yet' });
+    }
+
+    const isAdmin = req.user && req.user.role === 'admin';
+
+    // If Admin requests call back, directly unlock it immediately!
+    if (isAdmin) {
+      exp.is_exported = false;
+      exp.exported_at = null;
+      exp.recall_status = 'approved';
+      exp.recall_reason = req.body.reason || 'Admin direct call back';
+      exp.recall_reviewed_by = req.user.name || 'Admin';
+      exp.recall_reviewed_at = new Date().toISOString();
+      const saved = await db.saveExpense(exp);
+      return res.json({
+        success: true,
+        message: 'Expense called back and unlocked from exported report by Administrator.',
+        expense: saved
+      });
+    }
+
+    // If Employee requests, verify ownership and set pending admin approval
+    if (req.user && req.user.role === 'employee' && exp.employee_id !== req.user.id) {
+      return res.status(403).json({ success: false, error: 'Access denied: You can only call back your own expenses' });
+    }
+
+    exp.recall_status = 'pending';
+    exp.recall_reason = req.body.reason || '';
+    exp.recall_requested_at = new Date().toISOString();
+    exp.recall_requested_by = req.user?.name || req.user?.id || 'Employee';
+    const saved = await db.saveExpense(exp);
+
+    res.json({
+      success: true,
+      message: 'Call back request submitted. Waiting for Administrator approval.',
+      expense: saved
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/expenses/:id/approve-recall - Admin approves call back and unlocks expense
+router.post('/:id/approve-recall', async (req, res) => {
+  try {
+    if (!req.user || req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        error: 'Administrator permissions required to approve expense call back.'
+      });
+    }
+
+    const exp = await db.getExpenseById(req.params.id);
+    if (!exp) {
+      return res.status(404).json({ success: false, error: 'Expense not found' });
+    }
+
+    exp.is_exported = false;
+    exp.exported_at = null;
+    exp.recall_status = 'approved';
+    exp.recall_reviewed_by = req.user.name || 'Admin';
+    exp.recall_reviewed_at = new Date().toISOString();
+    const saved = await db.saveExpense(exp);
+
+    res.json({
+      success: true,
+      message: 'Call back approved. Expense is now unlocked from the exported report and can be edited or deleted.',
+      expense: saved
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/expenses/:id/reject-recall - Admin rejects call back request
+router.post('/:id/reject-recall', async (req, res) => {
+  try {
+    if (!req.user || req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        error: 'Administrator permissions required to reject expense call back.'
+      });
+    }
+
+    const exp = await db.getExpenseById(req.params.id);
+    if (!exp) {
+      return res.status(404).json({ success: false, error: 'Expense not found' });
+    }
+
+    exp.recall_status = 'rejected';
+    exp.recall_reviewed_by = req.user.name || 'Admin';
+    exp.recall_reviewed_at = new Date().toISOString();
+    const saved = await db.saveExpense(exp);
+
+    res.json({
+      success: true,
+      message: 'Call back request rejected. Expense remains locked.',
+      expense: saved
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/expenses/bulk-recall - Bulk request or approve call back
+router.post('/bulk-recall', async (req, res) => {
+  try {
+    const { expense_ids, action, reason } = req.body;
+    if (!Array.isArray(expense_ids) || expense_ids.length === 0) {
+      return res.status(400).json({ success: false, error: 'expense_ids array is required' });
+    }
+
+    const isAdmin = req.user && req.user.role === 'admin';
+    if ((action === 'approve' || action === 'reject') && !isAdmin) {
+      return res.status(403).json({ success: false, error: 'Administrator permissions required' });
+    }
+
+    const updated = [];
+    const now = new Date().toISOString();
+
+    for (const id of expense_ids) {
+      const exp = await db.getExpenseById(id);
+      if (!exp) continue;
+
+      if (action === 'approve') {
+        exp.is_exported = false;
+        exp.exported_at = null;
+        exp.recall_status = 'approved';
+        exp.recall_reviewed_by = req.user?.name || 'Admin';
+        exp.recall_reviewed_at = now;
+      } else if (action === 'reject') {
+        exp.recall_status = 'rejected';
+        exp.recall_reviewed_by = req.user?.name || 'Admin';
+        exp.recall_reviewed_at = now;
+      } else {
+        // Request action
+        if (isAdmin) {
+          exp.is_exported = false;
+          exp.exported_at = null;
+          exp.recall_status = 'approved';
+          exp.recall_reviewed_by = req.user?.name || 'Admin';
+          exp.recall_reviewed_at = now;
+        } else {
+          if (exp.employee_id !== req.user?.id) continue;
+          exp.recall_status = 'pending';
+          exp.recall_reason = reason || '';
+          exp.recall_requested_at = now;
+          exp.recall_requested_by = req.user?.name || 'Employee';
+        }
+      }
+
+      const saved = await db.saveExpense(exp);
+      updated.push(saved);
+    }
+
+    res.json({
+      success: true,
+      updated_count: updated.length,
+      expenses: updated,
+      message: `Processed call back for ${updated.length} expense(s)`
+    });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }

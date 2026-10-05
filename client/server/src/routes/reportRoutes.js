@@ -23,7 +23,9 @@ async function getFilteredExpenses(query, user) {
     start_date,
     end_date,
     sync_status,
-    search
+    search,
+    added_to_report,
+    is_exported
   } = query;
 
   let expenses = await db.getExpenses({
@@ -31,7 +33,9 @@ async function getFilteredExpenses(query, user) {
     project_id,
     start_date,
     end_date,
-    search
+    search,
+    added_to_report,
+    is_exported
   });
 
   if (customer_id) {
@@ -39,6 +43,14 @@ async function getFilteredExpenses(query, user) {
   }
   if (sync_status) {
     expenses = expenses.filter(e => e.sync_status === sync_status);
+  }
+  if (added_to_report !== undefined && added_to_report !== '') {
+    const isBool = added_to_report === 'true' || added_to_report === true;
+    expenses = expenses.filter(e => Boolean(e.added_to_report) === isBool);
+  }
+  if (is_exported !== undefined && is_exported !== '') {
+    const isBool = is_exported === 'true' || is_exported === true;
+    expenses = expenses.filter(e => Boolean(e.is_exported) === isBool);
   }
 
   return expenses;
@@ -103,6 +115,18 @@ router.get('/export/csv', async (req, res) => {
 
     const expenses = await getFilteredExpenses(req.query, req.user);
 
+    // Mark all exported expenses as officially exported
+    const now = new Date().toISOString();
+    for (const exp of expenses) {
+      if (!exp.is_exported) {
+        exp.is_exported = true;
+        exp.exported_at = now;
+        exp.added_to_report = true;
+        if (!exp.added_to_report_at) exp.added_to_report_at = now;
+        await db.saveExpense(exp);
+      }
+    }
+
     const fields = [
       { label: 'Date', value: 'expense_date' },
       { label: 'Employee', value: 'employee_name' },
@@ -113,7 +137,9 @@ router.get('/export/csv', async (req, res) => {
       { label: 'Description', value: 'description' },
       { label: 'Zoho Books Journal ID', value: row => row.zoho_journal_id || 'Pending Sync' },
       { label: 'Zoho Journal Number', value: row => row.zoho_journal_number || 'N/A' },
-      { label: 'Sync Status', value: 'sync_status' }
+      { label: 'Sync Status', value: 'sync_status' },
+      { label: 'Added to Report', value: row => row.added_to_report ? 'Yes' : 'No' },
+      { label: 'Exported as Report', value: row => row.is_exported ? 'Yes' : 'No' }
     ];
 
     const json2csvParser = new Parser({ fields });
@@ -135,6 +161,19 @@ router.get('/export/pdf', async (req, res) => {
     }
 
     const expenses = await getFilteredExpenses(req.query, req.user);
+
+    // Mark all exported expenses as officially exported
+    const now = new Date().toISOString();
+    for (const exp of expenses) {
+      if (!exp.is_exported) {
+        exp.is_exported = true;
+        exp.exported_at = now;
+        exp.added_to_report = true;
+        if (!exp.added_to_report_at) exp.added_to_report_at = now;
+        await db.saveExpense(exp);
+      }
+    }
+
     const totalAmount = expenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
 
     const doc = new PDFDocument({ margin: 40, size: 'A4', bufferPages: true });
@@ -255,6 +294,40 @@ router.get('/export/pdf', async (req, res) => {
     }
 
     doc.end();
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/reports/mark-exported - Explicitly mark expenses as exported in report
+router.post('/mark-exported', async (req, res) => {
+  try {
+    const { expense_ids } = req.body;
+    if (!Array.isArray(expense_ids) || expense_ids.length === 0) {
+      return res.status(400).json({ success: false, error: 'expense_ids array is required' });
+    }
+
+    const now = new Date().toISOString();
+    const updated = [];
+
+    for (const id of expense_ids) {
+      const exp = await db.getExpenseById(id);
+      if (exp) {
+        exp.is_exported = true;
+        exp.exported_at = now;
+        exp.added_to_report = true;
+        if (!exp.added_to_report_at) exp.added_to_report_at = now;
+        const saved = await db.saveExpense(exp);
+        updated.push(saved);
+      }
+    }
+
+    res.json({
+      success: true,
+      updated_count: updated.length,
+      expenses: updated,
+      message: `Successfully locked ${updated.length} expense(s) as exported report`
+    });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }

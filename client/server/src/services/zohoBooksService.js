@@ -363,8 +363,16 @@ class ZohoBooksService {
     try {
       const response = await this.makeApiRequest(`/chartofaccounts/${accountId}`, 'GET');
       if (response && response.chart_of_account) {
-        if (response.chart_of_account.closing_balance !== undefined) {
-          return response.chart_of_account.closing_balance;
+        const coa = response.chart_of_account;
+        if (coa.closing_balance !== undefined) {
+          const rawBal = parseFloat(coa.closing_balance || 0);
+          // In Zoho Books, isdebit indicates the ledger balance side:
+          // isdebit === true  -> Debit (Dr) -> Positive balance (Employee holds cash, owes company)
+          // isdebit === false -> Credit (Cr) -> Negative balance (Company owes employee reimbursement)
+          if (coa.isdebit === false && rawBal > 0) {
+            return -rawBal;
+          }
+          return rawBal;
         }
       }
       return null;

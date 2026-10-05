@@ -278,6 +278,65 @@ export const api = {
     return await safeJson(res);
   },
 
+  async updateExpensesReportStatus(expenseIds, addedToReport) {
+    const res = await fetchWithAuth(`${BASE_URL}/expenses/report-status`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ expense_ids: expenseIds, added_to_report: addedToReport })
+    });
+    return await safeJson(res);
+  },
+
+  async toggleExpenseReportStatus(expenseId, addedToReport) {
+    const res = await fetchWithAuth(`${BASE_URL}/expenses/${expenseId}/report-status`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ added_to_report: addedToReport })
+    });
+    return await safeJson(res);
+  },
+
+  async markExpensesAsExported(expenseIds) {
+    const res = await fetchWithAuth(`${BASE_URL}/reports/mark-exported`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ expense_ids: expenseIds })
+    });
+    return await safeJson(res);
+  },
+
+  async requestExpenseRecall(id, reason = '') {
+    const res = await fetchWithAuth(`${BASE_URL}/expenses/${id}/request-recall`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reason })
+    });
+    return await safeJson(res);
+  },
+
+  async approveExpenseRecall(id) {
+    const res = await fetchWithAuth(`${BASE_URL}/expenses/${id}/approve-recall`, {
+      method: 'POST'
+    });
+    return await safeJson(res);
+  },
+
+  async rejectExpenseRecall(id) {
+    const res = await fetchWithAuth(`${BASE_URL}/expenses/${id}/reject-recall`, {
+      method: 'POST'
+    });
+    return await safeJson(res);
+  },
+
+  async bulkExpenseRecall(expenseIds, action = 'request', reason = '') {
+    const res = await fetchWithAuth(`${BASE_URL}/expenses/bulk-recall`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ expense_ids: expenseIds, action, reason })
+    });
+    return await safeJson(res);
+  },
+
   // Offline Queue handling
   queueOfflineExpense(formData) {
     const user = getStoredUser();

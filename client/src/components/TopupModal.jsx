@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { X, ArrowUpRight, DollarSign, CreditCard, FileText } from 'lucide-react';
-import { formatOMR } from '../utils/currency';
+import { X, ArrowUpRight, ArrowDownLeft, DollarSign, CreditCard, FileText, CheckCircle2 } from 'lucide-react';
+import { formatOMR, getSettlementStatus } from '../utils/currency';
 
 export default function TopupModal({
   isOpen,
@@ -67,13 +67,49 @@ export default function TopupModal({
             </div>
           )}
 
-          {/* Current balance display */}
-          <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
-            <span className="text-xs text-slate-600 font-medium">Current Available Float:</span>
-            <span className="text-sm font-black text-slate-900">
-              {formatOMR(employee.current_balance)}
-            </span>
-          </div>
+          {/* Current balance display & settlement position */}
+          {(() => {
+            const currentBal = parseFloat(employee.current_balance || 0);
+            const settlement = getSettlementStatus(currentBal, employee.name || 'He');
+            const topupAmt = parseFloat(amount || 0);
+            const newBal = currentBal + (isNaN(topupAmt) ? 0 : topupAmt);
+            const newSettlement = getSettlementStatus(newBal, employee.name || 'He');
+
+            return (
+              <div className="space-y-2">
+                <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
+                  <div>
+                    <span className="text-xs text-slate-500 font-medium block">Current Ending Balance:</span>
+                    <span className="text-sm font-black text-slate-900 font-mono">
+                      {settlement.formattedAmount} {settlement.accountingSideShort}
+                    </span>
+                  </div>
+                  <div className={`px-2.5 py-1 rounded-xl text-xs font-bold border ${
+                    settlement.isEmployeeOwing
+                      ? 'bg-emerald-100 text-emerald-900 border-emerald-300'
+                      : settlement.isCompanyOwing
+                      ? 'bg-amber-100 text-amber-900 border-amber-300'
+                      : 'bg-slate-100 text-slate-700 border-slate-200'
+                  }`}>
+                    {settlement.accountingSide}: {settlement.formattedAmount}
+                  </div>
+                </div>
+
+                {topupAmt > 0 && (
+                  <div className={`p-2.5 rounded-xl text-xs font-semibold flex items-center justify-between border ${
+                    newSettlement.isEmployeeOwing
+                      ? 'bg-emerald-50 text-emerald-900 border-emerald-200'
+                      : newSettlement.isCompanyOwing
+                      ? 'bg-amber-50 text-amber-900 border-amber-200'
+                      : 'bg-slate-50 text-slate-700 border-slate-200'
+                  }`}>
+                    <span className="text-[11px]">After Top-up: {newSettlement.accountingLabel}</span>
+                    <span className="font-mono font-black">{newSettlement.formattedAmount} {newSettlement.accountingSideShort}</span>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
 
           {/* Amount input */}
           <div>

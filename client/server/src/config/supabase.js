@@ -358,6 +358,14 @@ const db = {
       if (filters.project_id) list = list.filter(e => e.project_id === filters.project_id);
       if (filters.start_date) list = list.filter(e => e.expense_date >= filters.start_date);
       if (filters.end_date) list = list.filter(e => e.expense_date <= filters.end_date);
+      if (filters.added_to_report !== undefined && filters.added_to_report !== '') {
+        const boolVal = filters.added_to_report === true || filters.added_to_report === 'true';
+        list = list.filter(e => Boolean(e.added_to_report) === boolVal);
+      }
+      if (filters.is_exported !== undefined && filters.is_exported !== '') {
+        const boolVal = filters.is_exported === true || filters.is_exported === 'true';
+        list = list.filter(e => Boolean(e.is_exported) === boolVal);
+      }
       if (filters.search) {
         const s = filters.search.toLowerCase();
         list = list.filter(e =>
@@ -387,14 +395,42 @@ const db = {
       expense.employee_name = emp.name;
     }
 
-    // Preserve existing project details if incoming data is missing them
+    // Preserve existing project details, report status, and export status if incoming data is missing them
     const existing = store.expenses.find(e => e.id === expense.id || (expense.zoho_journal_id && e.zoho_journal_id === expense.zoho_journal_id));
     if (existing) {
+      if (expense.added_to_report === undefined && existing.added_to_report !== undefined) {
+        expense.added_to_report = existing.added_to_report;
+        expense.added_to_report_at = existing.added_to_report_at;
+      }
+      if (expense.is_exported === undefined && existing.is_exported !== undefined) {
+        expense.is_exported = existing.is_exported;
+        expense.exported_at = existing.exported_at;
+      }
+      if (expense.recall_status === undefined && existing.recall_status !== undefined) {
+        expense.recall_status = existing.recall_status;
+        expense.recall_reason = existing.recall_reason;
+        expense.recall_requested_at = existing.recall_requested_at;
+        expense.recall_requested_by = existing.recall_requested_by;
+        expense.recall_reviewed_by = existing.recall_reviewed_by;
+        expense.recall_reviewed_at = existing.recall_reviewed_at;
+      }
       if (!expense.project_id && existing.project_id) {
         expense.project_id = existing.project_id;
       }
       if (!expense.project_name && existing.project_name) {
         expense.project_name = existing.project_name;
+      }
+    } else {
+      if (expense.added_to_report === undefined) {
+        expense.added_to_report = false;
+        expense.added_to_report_at = null;
+      }
+      if (expense.is_exported === undefined) {
+        expense.is_exported = false;
+        expense.exported_at = null;
+      }
+      if (expense.recall_status === undefined) {
+        expense.recall_status = null;
       }
     }
 

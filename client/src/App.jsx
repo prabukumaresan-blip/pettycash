@@ -149,6 +149,12 @@ export default function App() {
         setEmployees(empRes.employees);
         const self = empRes.employees.find((e) => e.id === user.id || (e.email && e.email.toLowerCase() === user.email?.toLowerCase())) || user;
         setCurrentEmployee(self);
+        try {
+          const currentStored = api.getStoredUser();
+          if (currentStored && currentStored.id === self.id) {
+            localStorage.setItem('petty_cash_user', JSON.stringify({ ...currentStored, ...self }));
+          }
+        } catch {}
       }
 
       if (!api.getStoredUser()) return;
@@ -343,12 +349,82 @@ export default function App() {
     try {
       const res = await api.deleteExpense(id);
       if (res.success) {
-        showToast('Expense deleted and cash balance restored');
+        showToast('Expense deleted and cash balance restored', 'success');
         setExpenses((prev) => prev.filter((e) => e.id !== id));
         await loadAllData();
+      } else {
+        showToast(res.error || 'Failed to delete expense', 'error');
       }
     } catch (err) {
       showToast('Delete error: ' + err.message, 'error');
+    }
+  };
+
+  // Handle Requesting Call Back (Recall) of Exported Expense
+  const handleRequestExpenseRecall = async (expense) => {
+    const isAdmin = currentUser?.role === 'admin';
+    if (isAdmin) {
+      if (!window.confirm(`Admin Call Back: Unlock expense "${expense.description}" from the exported report?`)) {
+        return;
+      }
+      try {
+        const res = await api.requestExpenseRecall(expense.id, 'Admin direct call back');
+        if (res.success) {
+          showToast('Expense called back and unlocked from report.', 'success');
+          await loadAllData();
+        } else {
+          showToast(res.error || 'Failed to call back expense', 'error');
+        }
+      } catch (err) {
+        showToast('Call back error: ' + err.message, 'error');
+      }
+    } else {
+      const reason = window.prompt(
+        `Request Admin approval to call back expense "${expense.description}" from the report.\nEnter reason:`,
+        'Correction required'
+      );
+      if (reason === null) return;
+      try {
+        const res = await api.requestExpenseRecall(expense.id, reason);
+        if (res.success) {
+          showToast('Call back request submitted. Waiting for Admin approval.', 'success');
+          await loadAllData();
+        } else {
+          showToast(res.error || 'Failed to submit call back request', 'error');
+        }
+      } catch (err) {
+        showToast('Call back error: ' + err.message, 'error');
+      }
+    }
+  };
+
+  // Handle Admin Approving Call Back
+  const handleApproveExpenseRecall = async (id) => {
+    try {
+      const res = await api.approveExpenseRecall(id);
+      if (res.success) {
+        showToast('Call back approved! Expense is now unlocked from the report.', 'success');
+        await loadAllData();
+      } else {
+        showToast(res.error || 'Failed to approve call back', 'error');
+      }
+    } catch (err) {
+      showToast('Approval error: ' + err.message, 'error');
+    }
+  };
+
+  // Handle Admin Rejecting Call Back
+  const handleRejectExpenseRecall = async (id) => {
+    try {
+      const res = await api.rejectExpenseRecall(id);
+      if (res.success) {
+        showToast('Call back request rejected.', 'info');
+        await loadAllData();
+      } else {
+        showToast(res.error || 'Failed to reject call back', 'error');
+      }
+    } catch (err) {
+      showToast('Rejection error: ' + err.message, 'error');
     }
   };
 
@@ -362,6 +438,39 @@ export default function App() {
       }
     } catch (err) {
       showToast('Sync retry failed: ' + err.message, 'error');
+    }
+  };
+
+  // Handle Adding or Removing Expenses from Expense Report
+  const handleUpdateExpenseReportStatus = async (expenseIds, addedToReport) => {
+    try {
+      const res = await api.updateExpensesReportStatus(expenseIds, addedToReport);
+      if (res.success) {
+        setExpenses((prev) =>
+          prev.map((e) =>
+            expenseIds.includes(e.id)
+              ? {
+                  ...e,
+                  added_to_report: addedToReport,
+                  added_to_report_at: addedToReport ? new Date().toISOString() : null
+                }
+              : e
+          )
+        );
+        showToast(
+          addedToReport
+            ? `Added ${expenseIds.length} expense(s) to the Expense Report!`
+            : `Removed ${expenseIds.length} expense(s) from the Expense Report.`,
+          'success'
+        );
+        return true;
+      } else {
+        showToast(res.error || 'Failed to update report status', 'error');
+        return false;
+      }
+    } catch (err) {
+      showToast('Report status error: ' + err.message, 'error');
+      return false;
     }
   };
 
@@ -454,6 +563,7 @@ export default function App() {
         {activeTab === 'dashboard' && (
           <DashboardView
             currentEmployee={currentEmployee || currentUser}
+            currentUser={currentUser}
             expenses={expenses}
             onOpenLogModal={() => {
               setEditingExpense(null);
@@ -467,6 +577,11 @@ export default function App() {
             onRetrySync={handleRetrySync}
             onSyncNow={handleTriggerFullSync}
             isSyncing={isFullSyncing}
+            onUpdateReportStatus={handleUpdateExpenseReportStatus}
+            onNavigateToReports={() => setActiveTab('reports')}
+            onRequestRecall={handleRequestExpenseRecall}
+            onApproveRecall={handleApproveExpenseRecall}
+            onRejectRecall={handleRejectExpenseRecall}
           />
         )}
 
@@ -475,6 +590,11 @@ export default function App() {
             employees={employees}
             projects={projects}
             currentUser={currentUser}
+            onUpdateReportStatus={handleUpdateExpenseReportStatus}
+            onRequestRecall={handleRequestExpenseRecall}
+            onApproveRecall={handleApproveExpenseRecall}
+            onRejectRecall={handleRejectExpenseRecall}
+            onRefreshData={loadAllData}
           />
         )}
 
