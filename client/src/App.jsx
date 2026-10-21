@@ -446,9 +446,10 @@ export default function App() {
     try {
       const res = await api.updateExpensesReportStatus(expenseIds, addedToReport);
       if (res.success) {
+        const idSet = new Set(expenseIds.map(String));
         setExpenses((prev) =>
           prev.map((e) =>
-            expenseIds.includes(e.id)
+            idSet.has(String(e.id)) || (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id)))
               ? {
                   ...e,
                   added_to_report: addedToReport,
@@ -463,6 +464,8 @@ export default function App() {
             : `Removed ${expenseIds.length} expense(s) from the Expense Report.`,
           'success'
         );
+        // Refresh app state in background
+        loadAllData();
         return true;
       } else {
         showToast(res.error || 'Failed to update report status', 'error');

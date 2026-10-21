@@ -462,10 +462,13 @@ class ZohoBooksService {
               continue; // Exclude all existing historical expenses
             }
 
-            const localId = ze.reference_number && ze.reference_number.startsWith('PCA-') 
-              ? ze.reference_number.replace('PCA-', '') 
-              : (allLocalExpenses.find(e => e.zoho_journal_id === ze.expense_id || (ze.reference_number && e.invoice_number === ze.reference_number))?.id || ze.expense_id);
-            const existingExp = allLocalExpenses.find(e => e.id === localId || e.zoho_journal_id === ze.expense_id);
+            const existingExp = allLocalExpenses.find(e => 
+              (ze.reference_number && ze.reference_number.startsWith('PCA-') && (e.id === ze.reference_number.replace('PCA-', '') || e.id === ze.reference_number)) ||
+              e.zoho_journal_id === ze.expense_id || 
+              (ze.reference_number && e.invoice_number && String(e.invoice_number) === String(ze.reference_number))
+            );
+
+            const localId = existingExp ? existingExp.id : (ze.reference_number && ze.reference_number.startsWith('PCA-') ? ze.reference_number.replace('PCA-', '') : ze.expense_id);
             let projId = ze.project_id || (existingExp ? existingExp.project_id : null);
             let projName = ze.project_name || (existingExp ? existingExp.project_name : null);
 
@@ -511,15 +514,20 @@ class ZohoBooksService {
               project_name: projName || null,
               customer_id: ze.customer_id || null,
               customer_name: ze.customer_name || null,
-              invoice_number: ze.reference_number || (existingExp ? existingExp.invoice_number : null),
+              invoice_number: (existingExp ? existingExp.invoice_number : null) || (ze.reference_number && !ze.reference_number.startsWith('PCA-') ? ze.reference_number : null),
               cost_center: null,
-              receipt_url: null,
-              receipt_file_name: ze.expense_receipt_name || null,
+              receipt_url: existingExp?.receipt_url || null,
+              receipt_file_name: existingExp?.receipt_file_name || ze.expense_receipt_name || null,
               zoho_journal_id: ze.expense_id,
               zoho_journal_number: (ze.custom_field_hash && ze.custom_field_hash.cf_expenses_no) || ze.cf_expenses_no || ze.expense_number || 'N/A',
               sync_status: 'synced',
               sync_error: null,
               last_synced_at: new Date().toISOString(),
+              added_to_report: existingExp?.added_to_report !== undefined ? existingExp.added_to_report : false,
+              added_to_report_at: existingExp?.added_to_report_at || null,
+              is_exported: existingExp?.is_exported !== undefined ? existingExp.is_exported : false,
+              exported_at: existingExp?.exported_at || null,
+              recall_status: existingExp?.recall_status || null,
               created_by: emp.name
             });
           }

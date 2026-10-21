@@ -382,11 +382,15 @@ const db = {
 
   async getExpenseById(id) {
     if (isLiveSupabase) {
-      const { data } = await supabase.from('expenses').select('*').eq('id', id).single();
+      const { data } = await supabase.from('expenses').select('*').or(`id.eq.${id},zoho_journal_id.eq.${id}`).single();
       if (data) return data;
     }
     const store = loadLocalData();
-    return store.expenses.find(e => e.id === id);
+    return store.expenses.find(e => 
+      e.id === id || 
+      (e.zoho_journal_id && String(e.zoho_journal_id) === String(id)) ||
+      (e.invoice_number && String(e.invoice_number) === String(id))
+    );
   },
 
   async saveExpense(expense) {
@@ -396,9 +400,18 @@ const db = {
       expense.employee_name = emp.name;
     }
 
-    // Preserve existing project details, report status, and export status if incoming data is missing them
-    const existing = store.expenses.find(e => e.id === expense.id || (expense.zoho_journal_id && e.zoho_journal_id === expense.zoho_journal_id));
+    // Match existing by id, zoho_journal_id, or invoice_number
+    const existing = store.expenses.find(e => 
+      e.id === expense.id || 
+      (expense.zoho_journal_id && e.zoho_journal_id && String(e.zoho_journal_id) === String(expense.zoho_journal_id)) ||
+      (expense.invoice_number && e.invoice_number && String(e.invoice_number) === String(expense.invoice_number))
+    );
+
     if (existing) {
+      // If incoming expense has a different ID (e.g. Zoho ID vs local exp- ID), adopt the local ID or preserve consistency
+      if (!expense.id) {
+        expense.id = existing.id;
+      }
       if (expense.added_to_report === undefined && existing.added_to_report !== undefined) {
         expense.added_to_report = existing.added_to_report;
         expense.added_to_report_at = existing.added_to_report_at;
@@ -423,6 +436,12 @@ const db = {
       }
       if (!expense.invoice_number && existing.invoice_number) {
         expense.invoice_number = existing.invoice_number;
+      }
+      if (!expense.receipt_url && existing.receipt_url) {
+        expense.receipt_url = existing.receipt_url;
+      }
+      if (!expense.receipt_file_name && existing.receipt_file_name) {
+        expense.receipt_file_name = existing.receipt_file_name;
       }
     } else {
       if (expense.added_to_report === undefined) {
@@ -460,9 +479,22 @@ const db = {
       }
     }
 
-    const idx = store.expenses.findIndex(e => e.id === expense.id);
+    // Find index of existing item by id, zoho_journal_id, or invoice_number to update in place
+    let idx = store.expenses.findIndex(e => e.id === expense.id);
+    if (idx < 0 && existing) {
+      idx = store.expenses.findIndex(e => e.id === existing.id);
+    }
+    if (idx < 0 && expense.zoho_journal_id) {
+      idx = store.expenses.findIndex(e => e.zoho_journal_id && String(e.zoho_journal_id) === String(expense.zoho_journal_id));
+    }
+
     if (idx >= 0) {
-      store.expenses[idx] = { ...store.expenses[idx], ...expense, updated_at: new Date().toISOString() };
+      store.expenses[idx] = { 
+        ...store.expenses[idx], 
+        ...expense, 
+        id: store.expenses[idx].id || expense.id,
+        updated_at: new Date().toISOString() 
+      };
     } else {
       store.expenses.unshift({
         ...expense,
