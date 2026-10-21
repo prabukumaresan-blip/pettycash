@@ -214,18 +214,6 @@ export default function DashboardView({
                 </span>
               </div>
             </div>
-
-            {/* Account Status Badge */}
-            <div className="flex items-center space-x-3 text-xs text-blue-200/90 pt-1 flex-wrap gap-y-1">
-              <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold">
-                <CheckCircle className="w-3.5 h-3.5" />
-                <span>Zoho Books Ending Balance Active</span>
-              </span>
-              <span className="text-slate-400 hidden sm:inline">•</span>
-              <span className="text-slate-300 font-medium">
-                {settlement.isEmployeeOwing ? 'Debited / Cash held by employee' : settlement.isCompanyOwing ? 'Credited / Reimbursement due to employee' : 'Balanced account'}
-              </span>
-            </div>
           </div>
 
           {/* Quick Action Buttons */}
@@ -256,10 +244,6 @@ export default function DashboardView({
           <div className="flex items-center space-x-1.5">
             <Briefcase className="w-3.5 h-3.5 text-blue-400" />
             <span>Default Project: <strong>{currentEmployee?.default_project_name || 'General Operations'}</strong></span>
-          </div>
-          <div className="flex items-center space-x-1.5">
-            <BookOpen className="w-3.5 h-3.5 text-indigo-400" />
-            <span>Zoho Account ID: <strong>{currentEmployee?.petty_cash_account_id || 'Auto-Provisioned'}</strong></span>
           </div>
         </div>
       </div>
