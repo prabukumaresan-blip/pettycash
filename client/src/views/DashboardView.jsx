@@ -157,15 +157,6 @@ export default function DashboardView({
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white font-mono">
                   {settlement.formattedAmount}
                 </h1>
-                <span className={`text-xs sm:text-sm font-extrabold px-2.5 py-1 rounded-xl border uppercase tracking-wider font-mono ${
-                  settlement.isEmployeeOwing
-                    ? 'bg-emerald-500/25 text-emerald-300 border-emerald-500/40'
-                    : settlement.isCompanyOwing
-                    ? 'bg-amber-500/25 text-amber-300 border-amber-500/40'
-                    : 'bg-white/10 text-slate-300 border-white/20'
-                }`}>
-                  {settlement.accountingSide}
-                </span>
               </div>
             </div>
 
