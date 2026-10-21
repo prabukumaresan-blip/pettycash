@@ -113,36 +113,55 @@ export default function ReportsView({
     }
   };
 
-  const handleExportCsv = () => {
-    const filters = {
-      start_date: startDate || undefined,
-      end_date: endDate || undefined,
-      employee_id: selectedEmployeeId || undefined,
-      project_id: selectedProjectId || undefined,
-      sync_status: syncStatusFilter || undefined,
-      added_to_report: activeReportTab === 'report' ? 'true' : (activeReportTab === 'unreported' ? 'false' : undefined)
-    };
-    window.open(api.getCsvExportUrl(filters), '_blank');
-    setTimeout(() => {
+  const [isExportingPdf, setIsExportingPdf] = useState(false);
+  const [isExportingCsv, setIsExportingCsv] = useState(false);
+
+  const handleExportCsv = async () => {
+    setIsExportingCsv(true);
+    try {
+      const filters = {
+        start_date: startDate || undefined,
+        end_date: endDate || undefined,
+        employee_id: selectedEmployeeId || undefined,
+        project_id: selectedProjectId || undefined,
+        sync_status: syncStatusFilter || undefined,
+        added_to_report: activeReportTab === 'report' ? 'true' : (activeReportTab === 'unreported' ? 'false' : undefined)
+      };
+      await api.downloadCsvReport(filters);
+      setActionFeedback({ type: 'success', msg: 'CSV report downloaded successfully!' });
+      setTimeout(() => setActionFeedback(null), 3000);
       fetchReport();
       if (onRefreshData) onRefreshData();
-    }, 1000);
+    } catch (err) {
+      setActionFeedback({ type: 'error', msg: `Download failed: ${err.message}` });
+      setTimeout(() => setActionFeedback(null), 4000);
+    } finally {
+      setIsExportingCsv(false);
+    }
   };
 
-  const handleExportPdf = () => {
-    const filters = {
-      start_date: startDate || undefined,
-      end_date: endDate || undefined,
-      employee_id: selectedEmployeeId || undefined,
-      project_id: selectedProjectId || undefined,
-      sync_status: syncStatusFilter || undefined,
-      added_to_report: activeReportTab === 'report' ? 'true' : (activeReportTab === 'unreported' ? 'false' : undefined)
-    };
-    window.open(api.getPdfExportUrl(filters), '_blank');
-    setTimeout(() => {
+  const handleExportPdf = async () => {
+    setIsExportingPdf(true);
+    try {
+      const filters = {
+        start_date: startDate || undefined,
+        end_date: endDate || undefined,
+        employee_id: selectedEmployeeId || undefined,
+        project_id: selectedProjectId || undefined,
+        sync_status: syncStatusFilter || undefined,
+        added_to_report: activeReportTab === 'report' ? 'true' : (activeReportTab === 'unreported' ? 'false' : undefined)
+      };
+      await api.downloadPdfReport(filters);
+      setActionFeedback({ type: 'success', msg: 'Audit PDF downloaded successfully!' });
+      setTimeout(() => setActionFeedback(null), 3000);
       fetchReport();
       if (onRefreshData) onRefreshData();
-    }, 1000);
+    } catch (err) {
+      setActionFeedback({ type: 'error', msg: `Download failed: ${err.message}` });
+      setTimeout(() => setActionFeedback(null), 4000);
+    } finally {
+      setIsExportingPdf(false);
+    }
   };
 
   const handleManualResync = () => {
@@ -256,18 +275,20 @@ export default function ReportsView({
 
           <button
             onClick={handleExportCsv}
-            className="px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 active:scale-95 transition flex items-center space-x-1.5"
+            disabled={isExportingCsv}
+            className="px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 active:scale-95 transition flex items-center space-x-1.5 disabled:opacity-50 cursor-pointer"
           >
-            <Download className="w-3.5 h-3.5" />
-            <span>Export CSV</span>
+            <Download className={`w-3.5 h-3.5 ${isExportingCsv ? 'animate-bounce' : ''}`} />
+            <span>{isExportingCsv ? 'Generating CSV...' : 'Export CSV'}</span>
           </button>
 
           <button
             onClick={handleExportPdf}
-            className="px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 text-white shadow-md shadow-blue-500/20 active:scale-95 transition flex items-center space-x-1.5"
+            disabled={isExportingPdf}
+            className="px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 text-white shadow-md shadow-blue-500/20 active:scale-95 transition flex items-center space-x-1.5 disabled:opacity-50 cursor-pointer"
           >
-            <Printer className="w-3.5 h-3.5" />
-            <span>Download Audit PDF</span>
+            <Printer className={`w-3.5 h-3.5 ${isExportingPdf ? 'animate-spin' : ''}`} />
+            <span>{isExportingPdf ? 'Generating PDF...' : 'Download Audit PDF'}</span>
           </button>
         </div>
       </div>

@@ -490,5 +490,49 @@ export const api = {
       }
     });
     return `${BASE_URL}/reports/export/pdf?${params.toString()}`;
+  },
+
+  async downloadPdfReport(filters = {}) {
+    const url = this.getPdfExportUrl(filters);
+    const res = await fetchWithAuth(url);
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      throw new Error(`Failed to download PDF (HTTP ${res.status}): ${errText || res.statusText}`);
+    }
+    const blob = await res.blob();
+    const blobUrl = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = blobUrl;
+    a.download = `petty_cash_report_${Date.now()}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(blobUrl);
+    }, 2000);
+    return true;
+  },
+
+  async downloadCsvReport(filters = {}) {
+    const url = this.getCsvExportUrl(filters);
+    const res = await fetchWithAuth(url);
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      throw new Error(`Failed to download CSV (HTTP ${res.status}): ${errText || res.statusText}`);
+    }
+    const blob = await res.blob();
+    const blobUrl = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = blobUrl;
+    a.download = `petty_cash_report_${Date.now()}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(blobUrl);
+    }, 2000);
+    return true;
   }
 };
