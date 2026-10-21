@@ -149,15 +149,6 @@ export default function DashboardView({
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-3 flex-1">
-            <div className="flex items-center space-x-2 text-xs font-semibold text-blue-200">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>Dedicated Petty Cash Account</span>
-              <span>•</span>
-              <span className="text-slate-300 font-mono">
-                {currentEmployee?.petty_cash_account_name || 'Zoho Linked Account'}
-              </span>
-            </div>
-
             <div>
               <p className="text-xs uppercase tracking-wider text-slate-400 font-bold">
                 Petty Cash Ending Balance
