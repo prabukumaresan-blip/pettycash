@@ -178,6 +178,8 @@ router.post('/', upload.single('receipt'), async (req, res) => {
       receiptFileName = uploadRes.fileName;
     }
 
+    const isAddedToReport = req.body.added_to_report === true || req.body.added_to_report === 'true';
+
     const newExpense = {
       id: 'exp-' + uuidv4().substring(0, 8),
       employee_id,
@@ -202,8 +204,8 @@ router.post('/', upload.single('receipt'), async (req, res) => {
       sync_status: 'pending',
       sync_error: null,
       last_synced_at: null,
-      added_to_report: false,
-      added_to_report_at: null,
+      added_to_report: isAddedToReport,
+      added_to_report_at: isAddedToReport ? new Date().toISOString() : null,
       created_by: employee.name
     };
 
@@ -276,6 +278,15 @@ router.put('/:id', upload.single('receipt'), async (req, res) => {
 
     if (updates.amount) {
       updates.amount = parseFloat(updates.amount);
+    }
+
+    if (req.body.added_to_report !== undefined) {
+      updates.added_to_report = req.body.added_to_report === true || req.body.added_to_report === 'true';
+      if (updates.added_to_report && !updates.added_to_report_at) {
+        updates.added_to_report_at = new Date().toISOString();
+      } else if (!updates.added_to_report) {
+        updates.added_to_report_at = null;
+      }
     }
 
     // Update in Zoho Books if previously synced or retry

@@ -11,7 +11,8 @@ import {
   Sparkles,
   ArrowUpRight,
   ArrowDownLeft,
-  Hash
+  Hash,
+  FileCheck
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { formatOMR, getSettlementStatus } from '../utils/currency';
@@ -32,6 +33,7 @@ export default function LogExpenseModal({
   const [categoryId, setCategoryId] = useState('');
   const [description, setDescription] = useState('');
   const [projectId, setProjectId] = useState('');
+  const [addToReport, setAddToReport] = useState(true);
   const [zohoProjects, setZohoProjects] = useState(projects || []);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -63,6 +65,7 @@ export default function LogExpenseModal({
       setCategoryId(editExpense.category_id || '');
       setDescription(editExpense.description || '');
       setProjectId(editExpense.project_id || '');
+      setAddToReport(editExpense.added_to_report !== undefined ? Boolean(editExpense.added_to_report) : true);
     } else {
       setAmount('');
       setExpenseDate(new Date().toISOString().split('T')[0]);
@@ -74,6 +77,7 @@ export default function LogExpenseModal({
       setDescription('');
       const defaultProj = currentEmployee?.default_project_id || (zohoProjects.length > 0 ? zohoProjects[0].project_id : '');
       setProjectId(defaultProj);
+      setAddToReport(true);
     }
     setErrorMessage('');
   }, [isOpen, editExpenseId]);
@@ -142,6 +146,7 @@ export default function LogExpenseModal({
       formData.append('paid_through_account_name', paidThroughAccName);
       formData.append('description', description);
       formData.append('invoice_number', invoiceNumber.trim());
+      formData.append('added_to_report', addToReport ? 'true' : 'false');
       if (projectId) {
         formData.append('project_id', projectId);
         if (selectedProj) {
@@ -375,6 +380,42 @@ export default function LogExpenseModal({
             <span className="font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200 truncate max-w-[220px]">
               {currentEmployee?.petty_cash_account_name || `Petty Cash - ${currentEmployee?.name}`}
             </span>
+          </div>
+
+          {/* Add to Official Expense Report Toggle */}
+          <div 
+            onClick={() => setAddToReport(!addToReport)}
+            className={`p-3 sm:p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
+              addToReport 
+                ? 'bg-indigo-50/70 border-indigo-200 shadow-2xs' 
+                : 'bg-slate-50/70 border-slate-200 hover:bg-slate-100/70'
+            }`}
+          >
+            <div className="flex items-center space-x-2.5">
+              <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold transition ${
+                addToReport ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-500'
+              }`}>
+                <FileCheck className="w-4 h-4 stroke-[2.5]" />
+              </div>
+              <div>
+                <span className="text-xs font-bold text-slate-900 block">
+                  Include in Official Expense Report
+                </span>
+                <span className="text-[11px] text-slate-500 block">
+                  {addToReport 
+                    ? 'Immediately visible in Official Expense Report tab' 
+                    : 'Saved to Recent Activity only (can be added to report later)'}
+                </span>
+              </div>
+            </div>
+
+            <div className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${
+              addToReport ? 'bg-indigo-600' : 'bg-slate-300'
+            }`}>
+              <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${
+                addToReport ? 'translate-x-5' : 'translate-x-0'
+              }`} />
+            </div>
           </div>
 
           {/* Submit Action */}
