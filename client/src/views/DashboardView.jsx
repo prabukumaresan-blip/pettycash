@@ -229,14 +229,6 @@ export default function DashboardView({
             </button>
           </div>
         </div>
-
-        {/* Floating Mini Tags */}
-        <div className="mt-6 pt-5 border-t border-white/10 flex items-center gap-4 text-xs text-slate-300 flex-wrap">
-          <div className="flex items-center space-x-1.5">
-            <Briefcase className="w-3.5 h-3.5 text-blue-400" />
-            <span>Default Project: <strong>{currentEmployee?.default_project_name || 'General Operations'}</strong></span>
-          </div>
-        </div>
       </div>
 
       {/* KPI Metric Overview Cards */}
