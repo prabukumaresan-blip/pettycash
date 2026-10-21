@@ -23,17 +23,23 @@ router.get('/', async (req, res) => {
     }
 
     const employees = await db.getEmployees();
-    // Live sync Zoho closing balances for all employees with linked accounts
-    for (const emp of employees) {
-      if (emp.petty_cash_account_id) {
+    // Live sync Zoho closing balances for all employees with linked accounts in parallel
+    const syncTasks = employees
+      .filter(emp => emp.petty_cash_account_id)
+      .map(async emp => {
         try {
           const liveBal = await zohoBooksService.getPettyCashBalance(emp.petty_cash_account_id);
           if (typeof liveBal === 'number') {
             emp.current_balance = liveBal;
             await db.updateEmployeeBalance(emp.id, liveBal);
           }
-        } catch (zErr) {}
-      }
+        } catch (zErr) {
+          // Keep existing cached balance if live check errors
+        }
+      });
+
+    if (syncTasks.length > 0) {
+      await Promise.allSettled(syncTasks);
     }
     const safeEmployees = employees.map(e => {
       const { password, ...safe } = e;

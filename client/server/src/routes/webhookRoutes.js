@@ -24,6 +24,10 @@ router.post('/zoho', async (req, res) => {
     else if (eventType.includes('chartofaccounts') || eventType.includes('account')) {
       syncService.syncChartOfAccounts().catch(err => console.error('COA sync error:', err.message));
     }
+    // Handle expense or payment updates from Zoho Books
+    else if (eventType.includes('expense') || eventType.includes('payment') || eventType.includes('journal')) {
+      syncService.runFullSync().catch(err => console.error('Webhook sync error:', err.message));
+    }
 
     res.json({ success: true, message: 'Webhook received and processed' });
   } catch (err) {

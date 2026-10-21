@@ -10,13 +10,13 @@ class SyncService {
 
   // Initialize node-cron schedule based on config interval
   init() {
-    // Run every 15 minutes by default
-    this.cronJob = cron.schedule('*/15 * * * *', async () => {
+    // Run every 3 minutes for rapid real-time synchronization
+    this.cronJob = cron.schedule('*/3 * * * *', async () => {
       console.log('⏰ [Cron] Running scheduled Zoho Books sync cycle...');
       await this.runFullSync();
     });
 
-    console.log('🚀 Scheduled background sync initialized (runs every 15 minutes)');
+    console.log('🚀 Scheduled background sync initialized (runs every 3 minutes)');
   }
 
   // Sync all pending expenses to Zoho Books journals
@@ -115,8 +115,16 @@ class SyncService {
         summary.errors.push(`Contacts: ${err.message}`);
       }
 
-      // 4. Push Pending Expenses
+      // 4. Push Pending Expenses to Zoho Books
       summary.pending_expenses = await this.syncPendingExpenses();
+
+      // 5. Pull latest live expenses from Zoho Books into local database
+      try {
+        const liveZohoExpenses = await zohoBooksService.syncExpensesFromZoho();
+        summary.zoho_expenses_pulled = liveZohoExpenses.length;
+      } catch (pullErr) {
+        summary.errors.push(`Zoho Expenses Pull: ${pullErr.message}`);
+      }
 
       await db.updateZohoConfig({ last_sync_at: new Date().toISOString() });
       await db.addSyncLog('full_sync', summary.errors.length ? 'warning' : 'success', summary);
