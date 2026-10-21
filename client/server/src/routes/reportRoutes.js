@@ -115,15 +115,15 @@ router.get('/export/csv', async (req, res) => {
 
     const expenses = await getFilteredExpenses(req.query, req.user);
 
-    // Mark all exported expenses as officially exported
-    const now = new Date().toISOString();
-    for (const exp of expenses) {
-      if (!exp.is_exported) {
-        exp.is_exported = true;
-        exp.exported_at = now;
-        exp.added_to_report = true;
-        if (!exp.added_to_report_at) exp.added_to_report_at = now;
-        await db.saveExpense(exp);
+    // Optional: mark is_exported only if mark_exported query param is explicitly true
+    if (req.query.mark_exported === 'true') {
+      const now = new Date().toISOString();
+      for (const exp of expenses) {
+        if (!exp.is_exported) {
+          exp.is_exported = true;
+          exp.exported_at = now;
+          await db.saveExpense(exp);
+        }
       }
     }
 
@@ -163,25 +163,36 @@ router.get('/export/pdf', async (req, res) => {
 
     const expenses = await getFilteredExpenses(req.query, req.user);
 
-    // Mark all exported expenses as officially exported
-    const now = new Date().toISOString();
-    for (const exp of expenses) {
-      if (!exp.is_exported) {
-        exp.is_exported = true;
-        exp.exported_at = now;
-        exp.added_to_report = true;
-        if (!exp.added_to_report_at) exp.added_to_report_at = now;
-        await db.saveExpense(exp);
+    // Optional: mark is_exported only if mark_exported query param is explicitly true
+    if (req.query.mark_exported === 'true') {
+      const now = new Date().toISOString();
+      for (const exp of expenses) {
+        if (!exp.is_exported) {
+          exp.is_exported = true;
+          exp.exported_at = now;
+          await db.saveExpense(exp);
+        }
       }
     }
 
     const totalAmount = expenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
 
     const doc = new PDFDocument({ margin: 40, size: 'A4', bufferPages: true });
-
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename=petty_cash_report_${Date.now()}.pdf`);
-    doc.pipe(res);
+    const chunks = [];
+    doc.on('data', chunk => chunks.push(chunk));
+    doc.on('end', () => {
+      const pdfBuffer = Buffer.concat(chunks);
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Length', pdfBuffer.length);
+      res.setHeader('Content-Disposition', `attachment; filename=petty_cash_report_${Date.now()}.pdf`);
+      res.send(pdfBuffer);
+    });
+    doc.on('error', (err) => {
+      console.error('PDF generation error:', err);
+      if (!res.headersSent) {
+        res.status(500).json({ success: false, error: err.message });
+      }
+    });
 
     // Header Branding
     doc.fillColor('#0f172a').fontSize(18).font('Helvetica-Bold').text('BRIGHT FLOWERS TRADING LLC', 40, 30);

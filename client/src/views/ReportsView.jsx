@@ -141,6 +141,16 @@ export default function ReportsView({
   };
 
   const handleExportPdf = async () => {
+    // If user is exporting from official report tab and there are no expenses
+    if (activeReportTab === 'report' && expenses.length === 0) {
+      setActionFeedback({
+        type: 'error',
+        msg: 'No expenses currently in the Official Expense Report. Select and add expenses first!'
+      });
+      setTimeout(() => setActionFeedback(null), 4000);
+      return;
+    }
+
     setIsExportingPdf(true);
     try {
       const filters = {
@@ -149,16 +159,17 @@ export default function ReportsView({
         employee_id: selectedEmployeeId || undefined,
         project_id: selectedProjectId || undefined,
         sync_status: syncStatusFilter || undefined,
-        added_to_report: activeReportTab === 'report' ? 'true' : (activeReportTab === 'unreported' ? 'false' : undefined)
+        added_to_report: activeReportTab === 'unreported' ? 'false' : 'true'
       };
       await api.downloadPdfReport(filters);
       setActionFeedback({ type: 'success', msg: 'Audit PDF downloaded successfully!' });
-      setTimeout(() => setActionFeedback(null), 3000);
+      setTimeout(() => setActionFeedback(null), 3500);
       fetchReport();
       if (onRefreshData) onRefreshData();
     } catch (err) {
+      console.error('Failed to export PDF:', err);
       setActionFeedback({ type: 'error', msg: `Download failed: ${err.message}` });
-      setTimeout(() => setActionFeedback(null), 4000);
+      setTimeout(() => setActionFeedback(null), 5000);
     } finally {
       setIsExportingPdf(false);
     }
