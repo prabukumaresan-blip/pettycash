@@ -116,6 +116,7 @@ CREATE TABLE IF NOT EXISTS expenses (
     customer_id TEXT,
     customer_name TEXT,
     cost_center TEXT,
+    invoice_number TEXT,
     receipt_url TEXT,
     receipt_file_name TEXT,
     zoho_journal_id TEXT,

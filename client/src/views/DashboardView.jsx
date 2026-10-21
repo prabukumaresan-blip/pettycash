@@ -83,7 +83,8 @@ export default function DashboardView({
       const matchDesc = e.description && e.description.toLowerCase().includes(q);
       const matchCat = e.category_name && e.category_name.toLowerCase().includes(q);
       const matchProj = e.project_name && e.project_name.toLowerCase().includes(q);
-      return matchDesc || matchCat || matchProj;
+      const matchInv = e.invoice_number && e.invoice_number.toLowerCase().includes(q);
+      return matchDesc || matchCat || matchProj || matchInv;
     }
     return true;
   });

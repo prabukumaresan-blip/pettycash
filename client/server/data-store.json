@@ -4,9 +4,9 @@
     "client_id": "1000.BYLDNDDJMF36HIGK6ZJXGMMYILQ12O",
     "client_secret": "834dd49f629f1e095f2858a71217add0571131bd70",
     "redirect_uri": "https://pettycash-pearl.vercel.app/api/zoho/callback",
-    "access_token": "1000.3380c3684cea5a667b23c60de3e481f3.30f1a60020988905c637c9d8792dc805",
+    "access_token": "1000.08886f176903dcde5180bf2e01c94f4e.a5954f8086a3b8547ba9c8d07fa3abb5",
     "refresh_token": "1000.70b3d3f7739447a1b5a16b1d535b0f94.860e4471704192a3fa442619dbd08417",
-    "token_expires_at": "2026-10-05T20:31:45.661Z",
+    "token_expires_at": "2026-10-05T21:35:19.222Z",
     "organization_id": "771750431",
     "organization_name": "Bright Flowers Trading LLC",
     "dc_region": "com",
@@ -16,7 +16,7 @@
     "default_expense_account_id": "acc-exp-petty",
     "default_expense_account_name": "Petty Cash Purchases",
     "last_sync_at": "2026-10-05T19:45:02.798Z",
-    "updated_at": "2026-10-05T19:45:02.799Z"
+    "updated_at": "2026-10-05T20:35:19.226Z"
   },
   "employees": [
     {
@@ -35,7 +35,7 @@
       "petty_cash_account_name": "Nihal Petty Cash",
       "is_active": true,
       "created_at": "2026-09-30T16:40:43.579Z",
-      "updated_at": "2026-10-05T20:06:14.740Z",
+      "updated_at": "2026-10-05T20:35:21.183Z",
       "auto_create_zoho_account": false
     },
     {

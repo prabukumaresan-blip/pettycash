@@ -148,7 +148,8 @@ router.post('/', upload.single('receipt'), async (req, res) => {
       project_id,
       project_name,
       customer_id,
-      customer_name
+      customer_name,
+      invoice_number
     } = req.body;
 
     let employee_id = req.body.employee_id;
@@ -192,6 +193,7 @@ router.post('/', upload.single('receipt'), async (req, res) => {
       project_name: project_name || null,
       customer_id: customer_id || null,
       customer_name: customer_name || null,
+      invoice_number: invoice_number ? String(invoice_number).trim() : null,
       cost_center: null,
       receipt_url: receiptUrl,
       receipt_file_name: receiptFileName,

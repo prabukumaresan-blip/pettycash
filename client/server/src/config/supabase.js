@@ -371,7 +371,8 @@ const db = {
         list = list.filter(e =>
           (e.description && e.description.toLowerCase().includes(s)) ||
           (e.category_name && e.category_name.toLowerCase().includes(s)) ||
-          (e.employee_name && e.employee_name.toLowerCase().includes(s))
+          (e.employee_name && e.employee_name.toLowerCase().includes(s)) ||
+          (e.invoice_number && e.invoice_number.toLowerCase().includes(s))
         );
       }
       list.sort((a, b) => new Date(b.expense_date) - new Date(a.expense_date));
@@ -419,6 +420,9 @@ const db = {
       }
       if (!expense.project_name && existing.project_name) {
         expense.project_name = existing.project_name;
+      }
+      if (!expense.invoice_number && existing.invoice_number) {
+        expense.invoice_number = existing.invoice_number;
       }
     } else {
       if (expense.added_to_report === undefined) {

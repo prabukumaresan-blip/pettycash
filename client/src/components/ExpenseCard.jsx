@@ -115,6 +115,14 @@ export default function ExpenseCard({
                 </span>
               )}
 
+              {/* Invoice Number Badge */}
+              {expense.invoice_number && (
+                <span className="inline-flex items-center space-x-1 text-[11px] font-bold text-sky-800 bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-200" title={`Invoice / Reference: ${expense.invoice_number}`}>
+                  <span className="text-[10px] text-sky-500 font-mono font-bold">INV:</span>
+                  <span className="font-mono">{expense.invoice_number}</span>
+                </span>
+              )}
+
               {isPending && (
                 <span className="inline-flex items-center space-x-1 text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
                   <Clock className="w-3 h-3 text-amber-600 animate-spin" />

@@ -451,17 +451,21 @@ class ZohoBooksService {
           });
           const list = res.expenses || [];
           for (const ze of list) {
-            // STRICT FILTER: Only include expenses logged through this app (tagged with PCA- reference)
+            const allLocalExpenses = await db.getExpenses();
+            // STRICT FILTER: Include expenses logged through this app (tagged with PCA- reference, or matching an existing logged expense ID/invoice/journal)
             const isFromApp = (ze.reference_number && ze.reference_number.startsWith('PCA-')) ||
               ze.expense_id === '3095712000008878001' ||
-              ze.expense_id === '3095712000008868020';
+              ze.expense_id === '3095712000008868020' ||
+              allLocalExpenses.some(e => e.zoho_journal_id === ze.expense_id || (ze.reference_number && (e.invoice_number === ze.reference_number || e.id === ze.reference_number)));
 
             if (!isFromApp) {
               continue; // Exclude all existing historical expenses
             }
 
-            const localId = ze.reference_number ? ze.reference_number.replace('PCA-', '') : ze.expense_id;
-            const existingExp = (await db.getExpenses()).find(e => e.id === localId || e.zoho_journal_id === ze.expense_id);
+            const localId = ze.reference_number && ze.reference_number.startsWith('PCA-') 
+              ? ze.reference_number.replace('PCA-', '') 
+              : (allLocalExpenses.find(e => e.zoho_journal_id === ze.expense_id || (ze.reference_number && e.invoice_number === ze.reference_number))?.id || ze.expense_id);
+            const existingExp = allLocalExpenses.find(e => e.id === localId || e.zoho_journal_id === ze.expense_id);
             let projId = ze.project_id || (existingExp ? existingExp.project_id : null);
             let projName = ze.project_name || (existingExp ? existingExp.project_name : null);
 
@@ -507,6 +511,7 @@ class ZohoBooksService {
               project_name: projName || null,
               customer_id: ze.customer_id || null,
               customer_name: ze.customer_name || null,
+              invoice_number: ze.reference_number || (existingExp ? existingExp.invoice_number : null),
               cost_center: null,
               receipt_url: null,
               receipt_file_name: ze.expense_receipt_name || null,
@@ -577,7 +582,7 @@ class ZohoBooksService {
       description: expense.description || 'Petty cash purchase',
       project_id: expense.project_id || undefined,
       customer_id: expense.customer_id || undefined,
-      reference_number: expense.id ? (expense.id.startsWith('PCA-') ? expense.id : `PCA-${expense.id}`) : `PCA-${Date.now()}`
+      reference_number: expense.invoice_number ? expense.invoice_number : (expense.id ? (expense.id.startsWith('PCA-') ? expense.id : `PCA-${expense.id}`) : `PCA-${Date.now()}`)
     };
 
     try {
@@ -615,7 +620,8 @@ class ZohoBooksService {
       amount: parseFloat(expense.amount),
       description: expense.description,
       project_id: expense.project_id || undefined,
-      customer_id: expense.customer_id || undefined
+      customer_id: expense.customer_id || undefined,
+      reference_number: expense.invoice_number ? expense.invoice_number : (expense.id ? (expense.id.startsWith('PCA-') ? expense.id : `PCA-${expense.id}`) : `PCA-${Date.now()}`)
     };
 
     try {

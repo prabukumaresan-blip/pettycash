@@ -633,6 +633,7 @@ export default function ReportsView({
                   />
                 </th>
                 <th className="py-3 px-3">Date</th>
+                <th className="py-3 px-3">Invoice #</th>
                 <th className="py-3 px-3">Employee</th>
                 <th className="py-3 px-3">Project</th>
                 <th className="py-3 px-3 text-right">Amount (OMR)</th>
@@ -646,7 +647,7 @@ export default function ReportsView({
             <tbody className="divide-y divide-slate-100 text-slate-700 font-medium">
               {expenses.length === 0 ? (
                 <tr>
-                  <td colSpan={10} className="py-12 text-center">
+                  <td colSpan={11} className="py-12 text-center">
                     <div className="max-w-sm mx-auto space-y-3">
                       <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto">
                         <FileSpreadsheet className="w-6 h-6" />
@@ -691,6 +692,15 @@ export default function ReportsView({
                     </td>
                     <td className="py-3 px-3 font-semibold text-slate-900 whitespace-nowrap">
                       {exp.expense_date}
+                    </td>
+                    <td className="py-3 px-3 whitespace-nowrap">
+                      {exp.invoice_number ? (
+                        <span className="font-mono text-sky-800 font-bold text-[11px] bg-sky-50 px-2 py-0.5 rounded border border-sky-200">
+                          {exp.invoice_number}
+                        </span>
+                      ) : (
+                        <span className="text-slate-400 font-mono text-[11px]">—</span>
+                      )}
                     </td>
                     <td className="py-3 px-3 whitespace-nowrap">
                       <span className="font-bold text-slate-800">{exp.employee_name || 'Team Member'}</span>

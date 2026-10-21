@@ -133,6 +133,7 @@ router.get('/export/csv', async (req, res) => {
       { label: 'Paid Through Account', value: row => row.paid_through_account_name || `Petty Cash - ${row.employee_name}` },
       { label: 'Expense Account', value: row => row.category_name || 'Petty Cash Purchases' },
       { label: 'Project', value: row => row.project_name || 'N/A' },
+      { label: 'Invoice Number', value: row => row.invoice_number || 'N/A' },
       { label: 'Amount (OMR)', value: row => parseFloat(row.amount || 0).toFixed(3) },
       { label: 'Description', value: 'description' },
       { label: 'Zoho Books Journal ID', value: row => row.zoho_journal_id || 'Pending Sync' },
@@ -207,14 +208,16 @@ router.get('/export/pdf', async (req, res) => {
     const tableTop = currentY;
     const colX = {
       date: 40,
-      project: 120,
-      notes: 240,
+      invoice: 105,
+      project: 185,
+      notes: 295,
       amount: 470
     };
 
     doc.rect(40, tableTop, 515, 22).fill('#f1f5f9');
     doc.fillColor('#475569').fontSize(8).font('Helvetica-Bold');
     doc.text('DATE', colX.date + 5, tableTop + 6);
+    doc.text('INVOICE NO.', colX.invoice, tableTop + 6);
     doc.text('PROJECT', colX.project, tableTop + 6);
     doc.text('NOTES', colX.notes, tableTop + 6);
     doc.text('AMOUNT (OMR)', colX.amount, tableTop + 6, { width: 85, align: 'right' });
@@ -234,6 +237,7 @@ router.get('/export/pdf', async (req, res) => {
         doc.rect(40, currentY, 515, 20).fill('#f1f5f9');
         doc.fillColor('#475569').fontSize(8).font('Helvetica-Bold');
         doc.text('DATE', colX.date + 5, currentY + 5);
+        doc.text('INVOICE NO.', colX.invoice, currentY + 5);
         doc.text('PROJECT', colX.project, currentY + 5);
         doc.text('NOTES', colX.notes, currentY + 5);
         doc.text('AMOUNT (OMR)', colX.amount, currentY + 5, { width: 85, align: 'right' });
@@ -247,9 +251,10 @@ router.get('/export/pdf', async (req, res) => {
       }
 
       doc.fillColor('#334155').font('Helvetica');
-      doc.text(exp.expense_date, colX.date + 5, currentY + 2, { width: 65 });
-      doc.text(exp.project_name || 'N/A', colX.project, currentY + 2, { width: 110, ellipsis: true });
-      doc.text(exp.description || '', colX.notes, currentY + 2, { width: 220, ellipsis: true });
+      doc.text(exp.expense_date, colX.date + 5, currentY + 2, { width: 55 });
+      doc.text(exp.invoice_number || '—', colX.invoice, currentY + 2, { width: 75, ellipsis: true });
+      doc.text(exp.project_name || 'N/A', colX.project, currentY + 2, { width: 105, ellipsis: true });
+      doc.text(exp.description || '', colX.notes, currentY + 2, { width: 170, ellipsis: true });
 
       doc.fillColor('#0f172a').font('Helvetica-Bold');
       doc.text(`${parseFloat(exp.amount).toFixed(3)}`, colX.amount, currentY + 2, { width: 85, align: 'right' });

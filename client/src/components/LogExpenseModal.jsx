@@ -10,7 +10,8 @@ import {
   AlertCircle,
   Sparkles,
   ArrowUpRight,
-  ArrowDownLeft
+  ArrowDownLeft,
+  Hash
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { formatOMR, getSettlementStatus } from '../utils/currency';
@@ -27,6 +28,7 @@ export default function LogExpenseModal({
 }) {
   const [amount, setAmount] = useState('');
   const [expenseDate, setExpenseDate] = useState(new Date().toISOString().split('T')[0]);
+  const [invoiceNumber, setInvoiceNumber] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [description, setDescription] = useState('');
   const [projectId, setProjectId] = useState('');
@@ -56,12 +58,14 @@ export default function LogExpenseModal({
     if (editExpense) {
       setAmount(editExpense.amount ? String(editExpense.amount) : '');
       setExpenseDate(editExpense.expense_date || new Date().toISOString().split('T')[0]);
+      setInvoiceNumber(editExpense.invoice_number || '');
       setCategoryId(editExpense.category_id || '');
       setDescription(editExpense.description || '');
       setProjectId(editExpense.project_id || '');
     } else {
       setAmount('');
       setExpenseDate(new Date().toISOString().split('T')[0]);
+      setInvoiceNumber('');
       const defaultExp = categories.find(c => c.account_name.toLowerCase() === 'other expenses') || categories[0];
       setCategoryId(defaultExp ? defaultExp.account_id : '3095712000000000460');
       setDescription('');
@@ -134,6 +138,7 @@ export default function LogExpenseModal({
       formData.append('paid_through_account_id', paidThroughAccId);
       formData.append('paid_through_account_name', paidThroughAccName);
       formData.append('description', description);
+      formData.append('invoice_number', invoiceNumber.trim());
       if (projectId) {
         formData.append('project_id', projectId);
         if (selectedProj) {
@@ -317,6 +322,22 @@ export default function LogExpenseModal({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="e.g. Emergency taxi fares for Metro hub inspection"
+              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:bg-white transition"
+            />
+          </div>
+
+          {/* Invoice / Reference Number */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center space-x-1">
+              <Hash className="w-3.5 h-3.5 text-blue-600" />
+              <span>Invoice / Bill Number</span>
+              <span className="text-[10px] text-slate-400 font-normal ml-1">(Synced as Reference # to Zoho Books)</span>
+            </label>
+            <input
+              type="text"
+              value={invoiceNumber}
+              onChange={(e) => setInvoiceNumber(e.target.value)}
+              placeholder="e.g. INV-2026-0891 or Bill #1043"
               className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:bg-white transition"
             />
           </div>
