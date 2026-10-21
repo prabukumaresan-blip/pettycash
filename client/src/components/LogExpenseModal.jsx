@@ -52,6 +52,7 @@ export default function LogExpenseModal({
   }, [projects, isOpen]);
 
   // Initialize or populate form only once when modal opens or editExpense changes
+  const editExpenseId = editExpense ? editExpense.id : null;
   useEffect(() => {
     if (!isOpen) return;
 
@@ -66,14 +67,16 @@ export default function LogExpenseModal({
       setAmount('');
       setExpenseDate(new Date().toISOString().split('T')[0]);
       setInvoiceNumber('');
-      const defaultExp = categories.find(c => c.account_name.toLowerCase() === 'other expenses') || categories[0];
+      const defaultExp = (categories && categories.length > 0)
+        ? (categories.find(c => c.account_name && c.account_name.toLowerCase() === 'other expenses') || categories[0])
+        : null;
       setCategoryId(defaultExp ? defaultExp.account_id : '3095712000000000460');
       setDescription('');
       const defaultProj = currentEmployee?.default_project_id || (zohoProjects.length > 0 ? zohoProjects[0].project_id : '');
       setProjectId(defaultProj);
     }
     setErrorMessage('');
-  }, [isOpen, editExpense, categories]);
+  }, [isOpen, editExpenseId]);
 
   // Set default project if projects finish loading later and projectId is still empty
   useEffect(() => {
