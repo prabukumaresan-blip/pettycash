@@ -357,7 +357,7 @@ const db = {
       if (filters.start_date) query = query.gte('expense_date', filters.start_date);
       if (filters.end_date) query = query.lte('expense_date', filters.end_date);
       const { data, error } = await query;
-      if (!error && data && data.length) return data;
+      if (!error && data) return data;
     }
     const store = loadLocalData();
       list = [...store.expenses];
