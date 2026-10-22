@@ -135,7 +135,13 @@ export default function EmployeesView({
                         ? 'bg-gradient-to-tr from-purple-600 to-indigo-600 shadow-purple-500/20'
                         : 'bg-gradient-to-tr from-blue-600 to-indigo-600 shadow-blue-500/20'
                     }`}>
-                      {emp.name.split(' ').map((n) => n[0]).join('')}
+                      {(emp.name || 'User')
+                        .trim()
+                        .split(/\s+/)
+                        .filter(Boolean)
+                        .slice(0, 2)
+                        .map((n) => n[0].toUpperCase())
+                        .join('') || 'U'}
                     </div>
                     <div>
                       <h3 className="text-sm font-extrabold text-slate-900 flex items-center space-x-1.5 flex-wrap gap-y-1">
@@ -257,16 +263,16 @@ export default function EmployeesView({
                 })()}
 
                 {/* Zoho Account Mapping Tag */}
-                <div className="mt-3.5 space-y-1.5 text-xs">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-500 flex items-center space-x-1">
+                <div className="mt-3.5 space-y-2 text-xs">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-slate-500 flex items-center space-x-1 shrink-0">
                       <BookOpen className="w-3.5 h-3.5 text-blue-600" />
                       <span>Zoho Books Account:</span>
                     </span>
                     {emp.petty_cash_account_id ? (
                       <button
                         onClick={() => onOpenEmployeeModal(emp)}
-                        className="font-semibold text-slate-800 text-[11px] truncate max-w-[140px] hover:text-blue-600 hover:underline text-right"
+                        className="font-semibold text-slate-800 text-[11px] truncate max-w-[190px] sm:max-w-[210px] hover:text-blue-600 hover:underline text-right"
                         title={`${emp.petty_cash_account_name || emp.petty_cash_account_id} (Click to change)`}
                       >
                         {emp.petty_cash_account_name || emp.petty_cash_account_id}
@@ -274,7 +280,7 @@ export default function EmployeesView({
                     ) : (
                       <button
                         onClick={() => onOpenEmployeeModal(emp)}
-                        className="text-[10px] font-bold text-blue-600 hover:underline flex items-center space-x-0.5"
+                        className="text-[10px] font-bold text-blue-600 hover:underline flex items-center space-x-0.5 shrink-0"
                       >
                         <Sparkles className="w-3 h-3" />
                         <span>Link Account</span>
@@ -282,12 +288,12 @@ export default function EmployeesView({
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between text-slate-500">
-                    <span className="flex items-center space-x-1">
+                  <div className="flex items-center justify-between gap-2 text-slate-500">
+                    <span className="flex items-center space-x-1 shrink-0">
                       <Briefcase className="w-3.5 h-3.5 text-slate-400" />
                       <span>Default Project:</span>
                     </span>
-                    <span className="font-medium text-slate-700 text-[11px] truncate max-w-[140px]">
+                    <span className="font-medium text-slate-700 text-[11px] truncate max-w-[190px] sm:max-w-[210px] text-right">
                       {emp.default_project_name || 'General Operations'}
                     </span>
                   </div>

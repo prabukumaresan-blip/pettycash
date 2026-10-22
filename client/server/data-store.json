@@ -73,6 +73,24 @@
       "is_active": true,
       "created_at": "2026-10-22T14:37:08.458Z",
       "updated_at": "2026-10-22T14:37:08.458Z"
+    },
+    {
+      "id": "emp-40f042c0",
+      "name": "Azan",
+      "email": "azan@company.com",
+      "employee_code": "EMP-506",
+      "password": "emp123",
+      "role": "employee",
+      "initial_float": 1000,
+      "current_balance": 0,
+      "department": "Field Operations",
+      "default_project_id": null,
+      "default_project_name": null,
+      "petty_cash_account_id": "3095712000009214002",
+      "petty_cash_account_name": "Petty Cash - Azan",
+      "is_active": true,
+      "created_at": "2026-10-22T17:32:51.787Z",
+      "updated_at": "2026-10-22T17:32:51.787Z"
     }
   ],
   "zoho_accounts": [
