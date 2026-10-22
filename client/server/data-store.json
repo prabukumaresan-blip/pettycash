@@ -4,9 +4,9 @@
     "client_id": "1000.BYLDNDDJMF36HIGK6ZJXGMMYILQ12O",
     "client_secret": "834dd49f629f1e095f2858a71217add0571131bd70",
     "redirect_uri": "https://pettycash-pearl.vercel.app/api/zoho/callback",
-    "access_token": "1000.afcdd87c08380c3aab8001b46100960d.5135bada48777f8c913bca88fe78157e",
+    "access_token": "1000.0a0b3ce996dce328b4f046ed9f4952cb.d875fcf862599a1d7d226fb95e019ae1",
     "refresh_token": "1000.70b3d3f7739447a1b5a16b1d535b0f94.860e4471704192a3fa442619dbd08417",
-    "token_expires_at": "2026-10-22T17:01:01.949Z",
+    "token_expires_at": "2026-10-22T17:23:06.689Z",
     "organization_id": "771750431",
     "organization_name": "Bright Flowers Trading LLC",
     "dc_region": "com",
@@ -16,7 +16,7 @@
     "default_expense_account_id": "acc-exp-petty",
     "default_expense_account_name": "Petty Cash Purchases",
     "last_sync_at": "2026-10-05T19:45:02.798Z",
-    "updated_at": "2026-10-22T16:01:01.952Z"
+    "updated_at": "2026-10-22T16:23:06.859Z"
   },
   "employees": [
     {
@@ -5583,6 +5583,16 @@
   ],
   "sync_logs": [
     {
+      "id": "log-1792686213826",
+      "sync_type": "expenses_sync",
+      "status": "success",
+      "details": {
+        "count": 4
+      },
+      "error_message": null,
+      "created_at": "2026-10-22T16:23:33.826Z"
+    },
+    {
       "id": "log-1792685083529",
       "sync_type": "expenses_sync",
       "status": "success",
@@ -6089,16 +6099,6 @@
       },
       "error_message": null,
       "created_at": "2026-10-05T19:38:55.445Z"
-    },
-    {
-      "id": "log-1791229094278",
-      "sync_type": "expenses_sync",
-      "status": "success",
-      "details": {
-        "count": 1
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:38:14.278Z"
     }
   ]
 }
