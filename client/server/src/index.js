@@ -42,10 +42,12 @@ app.use('/api/uploads', express.static(uploadDir));
 
 // Health check
 app.get(['/api/health', '/health'], (req, res) => {
+  const { db } = require('./config/supabase');
   res.json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
-    service: 'Petty Cash Zoho Books Sync API'
+    service: 'Petty Cash Zoho Books Sync API',
+    database_mode: db.isLive ? 'supabase_postgresql' : 'local_file_fallback'
   });
 });
 
