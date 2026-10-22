@@ -8,27 +8,32 @@ const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABA
 
 let supabase = null;
 let isLiveSupabase = false;
+let checkPromise = null;
 
-if (SUPABASE_URL && SUPABASE_KEY && !SUPABASE_URL.includes('your-supabase')) {
-  try {
-    supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-    // Verify if tables actually exist before enabling Supabase mode
-    supabase
+async function ensureLiveSupabase() {
+  if (isLiveSupabase) return true;
+  if (!supabase) return false;
+  if (!checkPromise) {
+    checkPromise = supabase
       .from('employees')
       .select('id')
       .limit(1)
       .then(({ error }) => {
-        if (!error) {
-          isLiveSupabase = true;
-          console.log('✅ Supabase PostgreSQL tables verified and active');
-        } else {
-          isLiveSupabase = false;
-          console.log('ℹ️ Running in Local Data Store mode (Supabase schema tables not yet migrated).');
-        }
+        isLiveSupabase = !error;
+        return isLiveSupabase;
       })
       .catch(() => {
         isLiveSupabase = false;
+        return false;
       });
+  }
+  return await checkPromise;
+}
+
+if (SUPABASE_URL && SUPABASE_KEY && !SUPABASE_URL.includes('your-supabase')) {
+  try {
+    supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    ensureLiveSupabase();
   } catch (err) {
     console.warn('⚠️ Could not initialize Supabase client:', err.message);
   }
@@ -245,9 +250,10 @@ const db = {
   },
 
   async getEmployees() {
-    if (isLiveSupabase) {
+    const live = await ensureLiveSupabase();
+    if (live) {
       const { data, error } = await supabase.from('employees').select('*').order('name');
-      if (!error && data) return data;
+      if (!error && data && data.length) return data;
     }
     const store = loadLocalData();
     return store.employees;
@@ -343,16 +349,17 @@ const db = {
 
   async getExpenses(filters = {}) {
     let list = [];
-    if (isLiveSupabase) {
+    const live = await ensureLiveSupabase();
+    if (live) {
       let query = supabase.from('expenses').select('*').order('expense_date', { ascending: false });
       if (filters.employee_id) query = query.eq('employee_id', filters.employee_id);
       if (filters.project_id) query = query.eq('project_id', filters.project_id);
       if (filters.start_date) query = query.gte('expense_date', filters.start_date);
       if (filters.end_date) query = query.lte('expense_date', filters.end_date);
       const { data, error } = await query;
-      if (!error && data) list = data;
-    } else {
-      const store = loadLocalData();
+      if (!error && data && data.length) return data;
+    }
+    const store = loadLocalData();
       list = [...store.expenses];
       if (filters.employee_id) list = list.filter(e => e.employee_id === filters.employee_id);
       if (filters.project_id) list = list.filter(e => e.project_id === filters.project_id);
@@ -376,7 +383,6 @@ const db = {
         );
       }
       list.sort((a, b) => new Date(b.expense_date) - new Date(a.expense_date));
-    }
     return list;
   },
 
@@ -472,10 +478,28 @@ const db = {
     }
 
     if (isLiveSupabase) {
-      const { data, error } = await supabase.from('expenses').upsert(expense).select().single();
+      const allowedCols = [
+        'id', 'employee_id', 'employee_name', 'expense_date', 'amount',
+        'category_id', 'category_name', 'description', 'project_id',
+        'project_name', 'customer_id', 'customer_name', 'cost_center',
+        'invoice_number', 'receipt_url', 'receipt_file_name',
+        'zoho_journal_id', 'zoho_journal_number', 'sync_status',
+        'sync_error', 'last_synced_at', 'created_by', 'added_to_report',
+        'added_to_report_at', 'is_exported', 'exported_at', 'recall_status',
+        'recall_reason', 'recall_requested_at', 'recall_requested_by',
+        'recall_reviewed_by', 'recall_reviewed_at'
+      ];
+      const dbExpense = {};
+      allowedCols.forEach(col => {
+        if (expense[col] !== undefined) dbExpense[col] = expense[col];
+      });
+
+      const { data, error } = await supabase.from('expenses').upsert(dbExpense).select().single();
       if (!error && data) {
         await this.recalculateBalance(expense.employee_id);
-        return data;
+        return { ...expense, ...data };
+      } else if (error) {
+        console.warn('⚠️ Supabase expense upsert notice:', error.message);
       }
     }
 
