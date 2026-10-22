@@ -189,6 +189,18 @@ function loadLocalData() {
           parsed.zoho_accounts = bundled.zoho_accounts;
           needsSave = true;
         }
+        if ((!parsed.expenses || parsed.expenses.length === 0) && bundled.expenses?.length) {
+          parsed.expenses = bundled.expenses;
+          needsSave = true;
+        }
+        if (bundled.employees?.length) {
+          bundled.employees.forEach(be => {
+            if (!parsed.employees.some(pe => pe.id === be.id)) {
+              parsed.employees.push(be);
+              needsSave = true;
+            }
+          });
+        }
         if (needsSave) {
           saveLocalData(parsed);
         }
