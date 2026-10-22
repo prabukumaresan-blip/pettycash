@@ -610,6 +610,7 @@ export default function App() {
             }}
             onDeleteEmployee={handleDeleteEmployee}
             onCreateZohoAccount={handleCreateZohoAccountForEmployee}
+            onRefresh={loadAllData}
           />
         )}
 

@@ -15,7 +15,8 @@ import {
   ArrowUpRight,
   ArrowDownLeft,
   Scale,
-  Wallet
+  Wallet,
+  RefreshCw
 } from 'lucide-react';
 import { formatOMR, getSettlementStatus } from '../utils/currency';
 
@@ -23,7 +24,8 @@ export default function EmployeesView({
   employees = [],
   onOpenEmployeeModal,
   onDeleteEmployee,
-  onCreateZohoAccount
+  onCreateZohoAccount,
+  onRefresh
 }) {
   const totalHeOwesCompany = employees.reduce((sum, e) => {
     const bal = parseFloat(e.current_balance || 0);
@@ -56,13 +58,26 @@ export default function EmployeesView({
           </p>
         </div>
 
-        <button
-          onClick={() => onOpenEmployeeModal(null)}
-          className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-95 text-white font-bold text-xs shadow-md shadow-blue-500/20 flex items-center justify-center space-x-2 transition"
-        >
-          <UserPlus className="w-4 h-4 stroke-[2.5]" />
-          <span>Add New User</span>
-        </button>
+        <div className="flex items-center space-x-2">
+          {onRefresh && (
+            <button
+              onClick={onRefresh}
+              className="p-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 font-bold text-xs flex items-center justify-center space-x-1.5 transition"
+              title="Refresh Team List"
+            >
+              <RefreshCw className="w-4 h-4 text-slate-600" />
+              <span className="hidden sm:inline">Refresh</span>
+            </button>
+          )}
+
+          <button
+            onClick={() => onOpenEmployeeModal(null)}
+            className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-95 text-white font-bold text-xs shadow-md shadow-blue-500/20 flex items-center justify-center space-x-2 transition"
+          >
+            <UserPlus className="w-4 h-4 stroke-[2.5]" />
+            <span>Add New User</span>
+          </button>
+        </div>
       </div>
 
       {/* Company Settlement Summary Matrix */}
