@@ -38,31 +38,31 @@ export default function TopupModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden animate-slide-up">
+    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden animate-slide-up">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/80">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50/90">
           <div className="flex items-center space-x-2.5">
-            <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold shadow-md shadow-emerald-500/20">
-              <ArrowUpRight className="w-5 h-5" />
+            <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold">
+              <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
             </div>
             <div>
-              <h3 className="text-base font-extrabold text-slate-900">Replenish Petty Cash Float</h3>
+              <h3 className="text-sm font-bold text-slate-900">Replenish Petty Cash Float</h3>
               <p className="text-xs text-slate-500">{employee.name} ({employee.employee_code})</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {error && (
-            <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs">
+            <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-xs">
               {error}
             </div>
           )}
@@ -77,18 +77,18 @@ export default function TopupModal({
 
             return (
               <div className="space-y-2">
-                <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
+                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between">
                   <div>
-                    <span className="text-xs text-slate-500 font-medium block">Current Ending Balance:</span>
-                    <span className="text-sm font-black text-slate-900 font-mono">
+                    <span className="text-[11px] text-slate-500 font-medium block">Current Balance:</span>
+                    <span className="text-sm font-bold text-slate-900 font-mono">
                       {settlement.formattedAmount} {settlement.accountingSideShort}
                     </span>
                   </div>
-                  <div className={`px-2.5 py-1 rounded-xl text-xs font-bold border ${
+                  <div className={`px-2 py-0.5 rounded text-[11px] font-semibold border ${
                     settlement.isEmployeeOwing
-                      ? 'bg-emerald-100 text-emerald-900 border-emerald-300'
+                      ? 'bg-emerald-100 text-emerald-900 border-emerald-200'
                       : settlement.isCompanyOwing
-                      ? 'bg-amber-100 text-amber-900 border-amber-300'
+                      ? 'bg-amber-100 text-amber-900 border-amber-200'
                       : 'bg-slate-100 text-slate-700 border-slate-200'
                   }`}>
                     {settlement.accountingSide}: {settlement.formattedAmount}
@@ -96,7 +96,7 @@ export default function TopupModal({
                 </div>
 
                 {topupAmt > 0 && (
-                  <div className={`p-2.5 rounded-xl text-xs font-semibold flex items-center justify-between border ${
+                  <div className={`p-2 rounded-lg text-xs font-semibold flex items-center justify-between border ${
                     newSettlement.isEmployeeOwing
                       ? 'bg-emerald-50 text-emerald-900 border-emerald-200'
                       : newSettlement.isCompanyOwing
@@ -104,7 +104,7 @@ export default function TopupModal({
                       : 'bg-slate-50 text-slate-700 border-slate-200'
                   }`}>
                     <span className="text-[11px]">After Top-up: {newSettlement.accountingLabel}</span>
-                    <span className="font-mono font-black">{newSettlement.formattedAmount} {newSettlement.accountingSideShort}</span>
+                    <span className="font-mono font-bold">{newSettlement.formattedAmount} {newSettlement.accountingSideShort}</span>
                   </div>
                 )}
               </div>
@@ -113,11 +113,11 @@ export default function TopupModal({
 
           {/* Amount input */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
               Top-Up Amount (OMR) *
             </label>
             <div className="relative flex items-center">
-              <span className="absolute left-3 text-xs font-black text-slate-400">OMR</span>
+              <span className="absolute left-3 text-xs font-bold text-slate-400 font-mono">OMR</span>
               <input
                 type="number"
                 step="0.001"
@@ -126,7 +126,7 @@ export default function TopupModal({
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="500.000"
-                className="w-full pl-14 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 font-bold focus:ring-2 focus:ring-emerald-500 focus:bg-white transition text-lg"
+                className="w-full pl-14 pr-3 py-2 rounded-lg border border-slate-200 bg-slate-50/50 text-slate-900 font-mono font-bold focus:outline-none focus:ring-1 focus:ring-slate-400 focus:bg-white transition text-base"
                 autoFocus
               />
             </div>
@@ -141,7 +141,7 @@ export default function TopupModal({
             <select
               value={paymentMode}
               onChange={(e) => setPaymentMode(e.target.value)}
-              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 text-sm font-medium focus:ring-2 focus:ring-emerald-500 focus:bg-white transition"
+              className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-slate-50/50 text-slate-900 text-xs font-medium focus:outline-none focus:ring-1 focus:ring-slate-400 focus:bg-white transition"
             >
               <option value="Bank Transfer">Company Bank Transfer</option>
               <option value="Cash Withdrawal">Direct Cash Withdrawal</option>
@@ -161,7 +161,7 @@ export default function TopupModal({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. Monthly replenishment of field engineering float"
-              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 text-sm font-medium focus:ring-2 focus:ring-emerald-500 focus:bg-white transition"
+              className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-slate-50/50 text-slate-900 text-xs font-medium focus:outline-none focus:ring-1 focus:ring-slate-400 focus:bg-white transition"
             />
           </div>
 
@@ -169,9 +169,9 @@ export default function TopupModal({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-bold text-sm shadow-lg shadow-emerald-500/25 flex items-center justify-center space-x-2 transition disabled:opacity-50"
+              className="w-full py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 active:bg-slate-900 text-white font-semibold text-xs border border-slate-800 shadow-xs flex items-center justify-center space-x-2 transition disabled:opacity-50 cursor-pointer"
             >
-              {isSubmitting ? 'Processing Top-up...' : `Confirm Top-Up (OMR ${amount || '0.000'})`}
+              {isSubmitting ? 'Recording Float...' : `Confirm Float Top-Up (${amount ? `OMR ${amount}` : 'OMR 0.000'})`}
             </button>
           </div>
         </form>

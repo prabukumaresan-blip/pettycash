@@ -109,13 +109,13 @@ export default function ZohoSettingsView({
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/90 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
-              <Settings className="w-4 h-4" />
+          <div className="flex items-center space-x-2.5">
+            <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-800 flex items-center justify-center font-bold border border-slate-200">
+              <Settings className="w-4 h-4 text-slate-700" />
             </div>
-            <h2 className="text-xl font-extrabold text-slate-900">Zoho Books Integration & Sync Hub</h2>
+            <h2 className="text-base font-bold text-slate-900">Zoho Books API & Synchronization Gateway</h2>
           </div>
           <p className="text-xs text-slate-500 mt-1">
             Bi-directional journal synchronization, chart of accounts mapping, and project cost tracking
@@ -126,32 +126,32 @@ export default function ZohoSettingsView({
         <button
           onClick={onSyncNow}
           disabled={isSyncing}
-          className="px-4 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-xs shadow-md shadow-blue-500/20 flex items-center justify-center space-x-2 transition disabled:opacity-50"
+          className="px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 active:bg-slate-900 text-white font-semibold text-xs shadow-xs border border-slate-800 flex items-center justify-center space-x-2 transition disabled:opacity-50"
         >
-          <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
-          <span>{isSyncing ? 'Synchronizing with Zoho...' : 'Trigger Full Sync Now'}</span>
+          <RefreshCw className={`w-3.5 h-3.5 text-slate-300 ${isSyncing ? 'animate-spin' : ''}`} />
+          <span>{isSyncing ? 'Synchronizing...' : 'Trigger Sync'}</span>
         </button>
       </div>
 
       {/* Connection Status Card */}
-      <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/90 shadow-xs">
+      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
           <div className="flex items-center space-x-3">
             <div
-              className={`w-10 h-10 rounded-2xl flex items-center justify-center font-bold ${
-                isConnected ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+              className={`w-9 h-9 rounded-lg flex items-center justify-center font-bold border ${
+                isConnected ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'
               }`}
             >
-              {isConnected ? <CheckCircle2 className="w-5 h-5" /> : <AlertTriangle className="w-5 h-5" />}
+              {isConnected ? <CheckCircle2 className="w-4 h-4" /> : <AlertTriangle className="w-4 h-4" />}
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <h3 className="text-sm font-extrabold text-slate-900">
+                <h3 className="text-sm font-bold text-slate-900">
                   {isConnected ? 'Zoho Books Connected' : 'Zoho Books Not Connected'}
                 </h3>
                 {isMock && (
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">
-                    Sandbox / Mock Active
+                  <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                    Sandbox / Mock
                   </span>
                 )}
               </div>
@@ -164,54 +164,54 @@ export default function ZohoSettingsView({
           <div className="flex items-center space-x-2">
             <button
               onClick={handleConnectOAuth}
-              className="px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 text-white shadow-xs transition flex items-center space-x-1.5"
+              className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-800 border border-slate-200 hover:bg-slate-50 shadow-xs transition flex items-center space-x-1.5"
             >
-              <ExternalLink className="w-3.5 h-3.5" />
-              <span>{isConnected ? 'Re-authorize Zoho OAuth 2.0' : 'Connect with Zoho Books'}</span>
+              <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
+              <span>{isConnected ? 'Re-authorize OAuth 2.0' : 'Connect with Zoho Books'}</span>
             </button>
           </div>
         </div>
 
         {/* Sync Summary Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4">
-          <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-            <span className="text-[11px] font-semibold text-slate-500">Synced Accounts</span>
-            <div className="text-lg font-black text-slate-900 mt-0.5">
+          <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Synced Accounts</span>
+            <div className="text-base font-bold text-slate-900 mt-0.5 font-mono">
               {zohoStatus?.counts?.accounts || 0} Accounts
             </div>
           </div>
 
-          <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-            <span className="text-[11px] font-semibold text-slate-500">Synced Projects</span>
-            <div className="text-lg font-black text-slate-900 mt-0.5">
+          <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Synced Projects</span>
+            <div className="text-base font-bold text-slate-900 mt-0.5 font-mono">
               {zohoStatus?.counts?.projects || 0} Projects
             </div>
           </div>
 
-          <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-            <span className="text-[11px] font-semibold text-slate-500">Scheduled Background Sync</span>
-            <div className="text-lg font-black text-emerald-700 mt-0.5 flex items-center space-x-1">
-              <Clock className="w-4 h-4" />
-              <span>Every 15 min</span>
+          <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Background Schedule</span>
+            <div className="text-base font-bold text-slate-800 mt-0.5 flex items-center space-x-1.5">
+              <Clock className="w-3.5 h-3.5 text-slate-500" />
+              <span className="text-xs font-semibold">Every 15 minutes</span>
             </div>
           </div>
         </div>
 
         {/* Action alert if not authorized */}
         {!isConnected && (
-          <div className="mt-4 p-4 rounded-2xl bg-amber-50/80 border border-amber-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="mt-4 p-3.5 rounded-lg bg-amber-50 border border-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-start space-x-2.5">
-              <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
+              <AlertTriangle className="w-4 h-4 text-amber-700 mt-0.5 shrink-0" />
               <div>
                 <p className="text-xs font-bold text-amber-900">OAuth Consent Required for Live Zoho Sync</p>
-                <p className="text-[11px] text-amber-700 mt-0.5">
+                <p className="text-[11px] text-amber-800 mt-0.5">
                   Your Client ID and Secret are configured, but an active Zoho Books authorization token is missing. Click <strong>"Connect with Zoho Books"</strong> to grant permissions.
                 </p>
               </div>
             </div>
             <button
               onClick={handleConnectOAuth}
-              className="px-4 py-2 rounded-xl text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white shadow-xs shrink-0 transition"
+              className="px-3 py-1.5 rounded-md text-xs font-semibold bg-amber-800 hover:bg-amber-900 text-white shadow-xs shrink-0 transition"
             >
               Authorize Now
             </button>
@@ -220,62 +220,54 @@ export default function ZohoSettingsView({
       </div>
 
       {/* Explorer Navigation Tabs */}
-      <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 border-b border-slate-200">
+      <div className="flex items-center space-x-1 overflow-x-auto pb-1 bg-slate-100/70 p-1 rounded-lg border border-slate-200/60">
         <button
           onClick={() => setActiveTab('oauth')}
-          className={`px-4 py-2 rounded-t-xl text-xs font-bold transition flex items-center space-x-1.5 ${
+          className={`px-3.5 py-1.5 rounded-md text-xs font-semibold tracking-wide transition-all ${
             activeTab === 'oauth'
-              ? 'bg-white text-blue-700 border-t-2 border-blue-600 shadow-xs'
-              : 'text-slate-500 hover:text-slate-800'
+              ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 font-bold'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
           }`}
         >
-          <Key className="w-3.5 h-3.5" />
-          <span>OAuth Credentials</span>
+          OAuth 2.0 Credentials
         </button>
-
         <button
           onClick={() => setActiveTab('accounts')}
-          className={`px-4 py-2 rounded-t-xl text-xs font-bold transition flex items-center space-x-1.5 ${
+          className={`px-3.5 py-1.5 rounded-md text-xs font-semibold tracking-wide transition-all ${
             activeTab === 'accounts'
-              ? 'bg-white text-blue-700 border-t-2 border-blue-600 shadow-xs'
-              : 'text-slate-500 hover:text-slate-800'
+              ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 font-bold'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
           }`}
         >
-          <Database className="w-3.5 h-3.5" />
-          <span>Chart of Accounts</span>
+          Chart of Accounts
         </button>
-
         <button
           onClick={() => setActiveTab('projects')}
-          className={`px-4 py-2 rounded-t-xl text-xs font-bold transition flex items-center space-x-1.5 ${
+          className={`px-3.5 py-1.5 rounded-md text-xs font-semibold tracking-wide transition-all ${
             activeTab === 'projects'
-              ? 'bg-white text-blue-700 border-t-2 border-blue-600 shadow-xs'
-              : 'text-slate-500 hover:text-slate-800'
+              ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 font-bold'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
           }`}
         >
-          <Briefcase className="w-3.5 h-3.5" />
-          <span>Zoho Projects</span>
+          Projects
         </button>
-
         <button
           onClick={() => setActiveTab('logs')}
-          className={`px-4 py-2 rounded-t-xl text-xs font-bold transition flex items-center space-x-1.5 ${
+          className={`px-3.5 py-1.5 rounded-md text-xs font-semibold tracking-wide transition-all ${
             activeTab === 'logs'
-              ? 'bg-white text-blue-700 border-t-2 border-blue-600 shadow-xs'
-              : 'text-slate-500 hover:text-slate-800'
+              ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 font-bold'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
           }`}
         >
-          <Layers className="w-3.5 h-3.5" />
-          <span>Audit & Sync Logs</span>
+          Sync Audit Logs
         </button>
       </div>
-
       {/* Tab: OAuth & Credentials Settings */}
       {activeTab === 'oauth' && (
-        <form onSubmit={handleSaveSettings} className="bg-white p-6 rounded-3xl border border-slate-200/90 shadow-xs space-y-4">
+        <form onSubmit={handleSaveSettings} className="bg-white p-6 rounded-xl border border-slate-200 shadow-xs space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div>
-              <h3 className="text-sm font-extrabold text-slate-900">Zoho Books API Credentials</h3>
+              <h3 className="text-sm font-bold text-slate-900">Zoho Books API Credentials</h3>
               <p className="text-xs text-slate-500">Configure your Zoho Developer Console Client ID and Secret</p>
             </div>
 
