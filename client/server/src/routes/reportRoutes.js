@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
+const fs = require('fs');
 const { Parser } = require('json2csv');
 const PDFDocument = require('pdfkit');
 const { db } = require('../config/supabase');
@@ -194,14 +196,24 @@ router.get('/export/pdf', async (req, res) => {
       }
     });
 
-    // Header Branding
-    doc.fillColor('#0f172a').fontSize(18).font('Helvetica-Bold').text('BRIGHT FLOWERS TRADING LLC', 40, 30);
+    // Header Branding with Logo
+    const logoPath = path.join(__dirname, '../assets/logo.png');
+    if (fs.existsSync(logoPath)) {
+      try {
+        doc.image(logoPath, 40, 24, { fit: [55, 55] });
+      } catch (err) {
+        console.warn('Could not render logo in PDF:', err.message);
+      }
+    }
+
+    const textX = fs.existsSync(logoPath) ? 105 : 40;
+    doc.fillColor('#0f172a').fontSize(16).font('Helvetica-Bold').text('BRIGHT FLOWERS TRADING LLC', textX, 28);
     const claimName = expenses.length > 0 ? expenses[0].employee_name : 'Employee';
-    doc.fillColor('#475569').fontSize(10).font('Helvetica').text(`Petty cash claim - ${claimName}`, 40, 56);
+    doc.fillColor('#475569').fontSize(10).font('Helvetica').text(`Petty cash claim - ${claimName}`, textX, 50);
 
     const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-    doc.fillColor('#475569').fontSize(10).text(`Generated: ${dateStr}`, doc.page.width - 200, 35, { align: 'right', width: 160 });
-    doc.text(`Total Records: ${expenses.length}`, doc.page.width - 200, 52, { align: 'right', width: 160 });
+    doc.fillColor('#475569').fontSize(10).text(`Generated: ${dateStr}`, doc.page.width - 200, 32, { align: 'right', width: 160 });
+    doc.text(`Total Records: ${expenses.length}`, doc.page.width - 200, 48, { align: 'right', width: 160 });
 
     doc.moveDown(4);
 

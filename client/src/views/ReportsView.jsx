@@ -260,16 +260,16 @@ export default function ReportsView({
   return (
     <div className="space-y-6">
       {/* Header & Export Actions */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/90 shadow-xs">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
         <div>
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
-              <FileSpreadsheet className="w-4 h-4" />
+          <div className="flex items-center space-x-2.5">
+            <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-800 flex items-center justify-center font-bold border border-slate-200">
+              <FileSpreadsheet className="w-4 h-4 text-slate-700" />
             </div>
-            <h2 className="text-xl font-extrabold text-slate-900">Petty Cash Audit & Reports</h2>
+            <h2 className="text-base font-bold text-slate-900">Financial Reports & Audit Statement</h2>
           </div>
           <p className="text-xs text-slate-500 mt-1">
-            Generate and export synchronized statements mapped directly to Zoho Books accounts
+            Reconciliation vouchers and claims synchronized with Zoho Books journals
           </p>
         </div>
 
@@ -278,28 +278,28 @@ export default function ReportsView({
           <button
             onClick={handleManualResync}
             disabled={isResyncing}
-            className="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 active:scale-95 transition flex items-center space-x-1.5"
+            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 transition flex items-center space-x-1.5"
           >
-            <RefreshCw className={`w-3.5 h-3.5 text-blue-600 ${isResyncing ? 'animate-spin' : ''}`} />
-            <span>{isResyncing ? 'Re-syncing...' : 'Re-sync from Zoho'}</span>
+            <RefreshCw className={`w-3.5 h-3.5 text-slate-500 ${isResyncing ? 'animate-spin' : ''}`} />
+            <span>{isResyncing ? 'Re-syncing...' : 'Sync Zoho'}</span>
           </button>
 
           <button
             onClick={handleExportCsv}
             disabled={isExportingCsv}
-            className="px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 active:scale-95 transition flex items-center space-x-1.5 disabled:opacity-50 cursor-pointer"
+            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition flex items-center space-x-1.5 disabled:opacity-50 cursor-pointer shadow-xs"
           >
-            <Download className={`w-3.5 h-3.5 ${isExportingCsv ? 'animate-bounce' : ''}`} />
-            <span>{isExportingCsv ? 'Generating CSV...' : 'Export CSV'}</span>
+            <Download className={`w-3.5 h-3.5 text-slate-500 ${isExportingCsv ? 'animate-bounce' : ''}`} />
+            <span>{isExportingCsv ? 'Exporting...' : 'Export CSV'}</span>
           </button>
 
           <button
             onClick={handleExportPdf}
             disabled={isExportingPdf}
-            className="px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 text-white shadow-md shadow-blue-500/20 active:scale-95 transition flex items-center space-x-1.5 disabled:opacity-50 cursor-pointer"
+            className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 hover:bg-slate-800 active:bg-slate-900 text-white shadow-xs border border-slate-800 transition flex items-center space-x-1.5 disabled:opacity-50 cursor-pointer"
           >
-            <Printer className={`w-3.5 h-3.5 ${isExportingPdf ? 'animate-spin' : ''}`} />
-            <span>{isExportingPdf ? 'Generating PDF...' : 'Download Audit PDF'}</span>
+            <Printer className={`w-3.5 h-3.5 text-slate-300 ${isExportingPdf ? 'animate-spin' : ''}`} />
+            <span>{isExportingPdf ? 'Preparing...' : 'Download PDF Statement'}</span>
           </button>
         </div>
       </div>

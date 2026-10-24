@@ -5601,6 +5601,22 @@
   ],
   "sync_logs": [
     {
+      "id": "log-1792692829417",
+      "sync_type": "token_refresh",
+      "status": "failure",
+      "details": {},
+      "error_message": "Access Denied",
+      "created_at": "2026-10-22T18:13:49.417Z"
+    },
+    {
+      "id": "log-1792692829059",
+      "sync_type": "token_refresh",
+      "status": "failure",
+      "details": {},
+      "error_message": "Access Denied",
+      "created_at": "2026-10-22T18:13:49.059Z"
+    },
+    {
       "id": "log-1792686213826",
       "sync_type": "expenses_sync",
       "status": "success",
@@ -6097,26 +6113,6 @@
       },
       "error_message": null,
       "created_at": "2026-10-05T19:40:27.706Z"
-    },
-    {
-      "id": "log-1791229186386",
-      "sync_type": "expenses_sync",
-      "status": "success",
-      "details": {
-        "count": 1
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:39:46.386Z"
-    },
-    {
-      "id": "log-1791229135445",
-      "sync_type": "expenses_sync",
-      "status": "success",
-      "details": {
-        "count": 1
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:38:55.445Z"
     }
   ]
 }

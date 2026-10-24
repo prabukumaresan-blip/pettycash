@@ -141,66 +141,71 @@ export default function DashboardView({
 
   return (
     <div className="space-y-6">
-      {/* Hero / Petty Cash Account Card */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 p-6 sm:p-8 text-white shadow-xl">
-        {/* Glow ambient background effects */}
-        <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 rounded-full bg-blue-500/20 blur-3xl pointer-events-none"></div>
-        <div className="absolute bottom-0 left-1/3 -mb-10 w-48 h-48 rounded-full bg-purple-500/15 blur-2xl pointer-events-none"></div>
+      {/* Executive Hero / Account Statement Card */}
+      <div className="relative overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 p-6 sm:p-7 text-white shadow-sm">
+        {/* Subtle executive geometric gradient backdrop */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900 to-slate-800/90 pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-80 h-full bg-gradient-to-l from-blue-900/10 to-transparent pointer-events-none"></div>
 
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-3 flex-1">
-            <div>
-              <p className="text-xs uppercase tracking-wider text-slate-400 font-bold">
-                Petty Cash Ending Balance
-              </p>
-              <div className="flex items-baseline space-x-3 mt-1 flex-wrap gap-y-1">
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white font-mono">
-                  {settlement.formattedAmount}
-                </h1>
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="space-y-4 flex-1">
+            <div className="flex flex-col sm:flex-row sm:items-baseline sm:space-x-4">
+              <div>
+                <span className="text-[11px] font-semibold tracking-wider text-slate-400 uppercase">
+                  Account Standing • {effectiveUser?.name || 'Petty Cash'}
+                </span>
+                <div className="flex items-baseline space-x-3 mt-1">
+                  <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white font-mono">
+                    {settlement.formattedAmount}
+                  </h1>
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                    OMR
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* Explicit Settlement Status Banner */}
-            <div className={`p-4 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+            {/* Structured Corporate Settlement Status Bar */}
+            <div className={`p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
               settlement.isEmployeeOwing
-                ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-100 shadow-lg shadow-emerald-950/30'
+                ? 'bg-emerald-950/40 border-emerald-800/60 text-emerald-100'
                 : settlement.isCompanyOwing
-                ? 'bg-amber-500/25 border-amber-500/50 text-amber-100 shadow-lg shadow-amber-950/30'
-                : 'bg-white/10 border-white/20 text-slate-200'
+                ? 'bg-amber-950/40 border-amber-800/60 text-amber-100'
+                : 'bg-slate-800/60 border-slate-700 text-slate-200'
             }`}>
               <div className="flex items-center space-x-3">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold shrink-0 ${
+                <div className={`w-9 h-9 rounded-lg flex items-center justify-center font-bold shrink-0 ${
                   settlement.isEmployeeOwing
-                    ? 'bg-emerald-500/30 text-emerald-300 border border-emerald-400/40'
+                    ? 'bg-emerald-900/60 text-emerald-300 border border-emerald-700/60'
                     : settlement.isCompanyOwing
-                    ? 'bg-amber-500/30 text-amber-300 border border-amber-400/40'
-                    : 'bg-white/15 text-slate-300'
+                    ? 'bg-amber-900/60 text-amber-300 border border-amber-700/60'
+                    : 'bg-slate-700 text-slate-300 border border-slate-600'
                 }`}>
                   {settlement.isEmployeeOwing ? (
-                    <ArrowUpRight className="w-5 h-5 stroke-[2.5]" />
+                    <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
                   ) : settlement.isCompanyOwing ? (
-                    <ArrowDownLeft className="w-5 h-5 stroke-[2.5]" />
+                    <ArrowDownLeft className="w-4 h-4 stroke-[2.5]" />
                   ) : (
-                    <CheckCircle className="w-5 h-5 stroke-[2.5]" />
+                    <CheckCircle className="w-4 h-4 stroke-[2.5]" />
                   )}
                 </div>
                 <div>
-                  <div className="text-xs sm:text-sm font-black uppercase tracking-wider flex items-center space-x-2">
+                  <div className="text-xs font-bold uppercase tracking-wider flex items-center space-x-2">
                     <span className={settlement.isEmployeeOwing ? 'text-emerald-300' : settlement.isCompanyOwing ? 'text-amber-300' : 'text-slate-200'}>
                       {settlement.accountingLabel}
                     </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-white/15 text-white">
+                    <span className="text-[10px] px-2 py-0.5 rounded font-medium bg-black/20 text-slate-200 border border-white/10">
                       {settlement.badgeText}
                     </span>
                   </div>
-                  <p className="text-[11px] sm:text-xs opacity-90 mt-0.5 font-medium leading-relaxed">
+                  <p className="text-xs text-slate-300/90 mt-0.5 font-normal leading-relaxed">
                     {settlement.explanation}
                   </p>
                 </div>
               </div>
               <div className="sm:text-right pl-12 sm:pl-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-white/10">
-                <span className="text-[10px] uppercase font-bold tracking-wider opacity-75 block">Settlement Due</span>
-                <span className="text-lg sm:text-xl font-black tracking-tight text-white font-mono">
+                <span className="text-[10px] uppercase font-semibold tracking-wider text-slate-400 block">Settlement Balance</span>
+                <span className="text-base sm:text-lg font-bold tracking-tight text-white font-mono">
                   {settlement.formattedAmount} {settlement.accountingSideShort}
                 </span>
               </div>
@@ -208,55 +213,55 @@ export default function DashboardView({
           </div>
 
           {/* Quick Action Buttons */}
-          <div className="flex flex-wrap sm:flex-nowrap gap-3 items-center">
+          <div className="flex flex-wrap sm:flex-nowrap gap-2.5 items-center shrink-0">
             {currentEmployee?.role === 'admin' && onSyncNow && (
               <button
                 onClick={onSyncNow}
                 disabled={isSyncing}
-                className="w-full sm:w-auto px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/20 active:scale-95 text-white font-semibold text-sm border border-white/20 flex items-center justify-center space-x-2 transition disabled:opacity-50"
+                className="w-full sm:w-auto px-4 py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 active:bg-slate-800 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center justify-center space-x-2 transition disabled:opacity-50"
                 title="Sync Zoho Books balance and transactions"
               >
-                <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin text-blue-400' : 'text-slate-300'}`} />
+                <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-blue-400' : 'text-slate-400'}`} />
                 <span>{isSyncing ? 'Syncing...' : 'Sync Zoho'}</span>
               </button>
             )}
             <button
               onClick={onOpenLogModal}
-              className="w-full sm:w-auto px-5 py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 active:scale-95 text-white font-bold text-sm shadow-lg shadow-blue-500/30 flex items-center justify-center space-x-2 transition"
+              className="w-full sm:w-auto px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-xs border border-blue-500 shadow-xs flex items-center justify-center space-x-2 transition"
             >
-              <Plus className="w-4 h-4 stroke-[3]" />
+              <Plus className="w-4 h-4 stroke-[2.5]" />
               <span>Log Expense</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* KPI Metric Overview Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+      {/* Corporate KPI Metric Summary Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Total Spent */}
-        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-xs">
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">Total Spent</span>
-            <TrendingDown className="w-4 h-4 text-blue-600" />
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Spent</span>
+            <TrendingDown className="w-4 h-4 text-slate-400" />
           </div>
-          <div className="text-xl sm:text-2xl font-black text-slate-900 mt-2">
+          <div className="text-xl font-bold text-slate-900 mt-2 font-mono">
             {formatOMR(totalSpent)}
           </div>
-          <div className="text-[11px] text-slate-400 mt-0.5">
+          <div className="text-[11px] text-slate-500 mt-0.5">
             {employeeExpenses.length} transactions
           </div>
         </div>
 
         {/* Settlement Due */}
-        <div className={`p-4 sm:p-5 rounded-2xl border shadow-xs ${
+        <div className={`p-4 rounded-xl border shadow-xs ${
           settlement.isEmployeeOwing
-            ? 'bg-emerald-50/70 border-emerald-200'
+            ? 'bg-emerald-50/50 border-emerald-200'
             : settlement.isCompanyOwing
-            ? 'bg-amber-50/70 border-amber-200'
-            : 'bg-white border-slate-200/90'
+            ? 'bg-amber-50/50 border-amber-200'
+            : 'bg-white border-slate-200'
         }`}>
           <div className="flex items-center justify-between">
-            <span className={`text-xs font-bold ${
+            <span className={`text-xs font-semibold uppercase tracking-wider ${
               settlement.isEmployeeOwing
                 ? 'text-emerald-800'
                 : settlement.isCompanyOwing
@@ -273,7 +278,7 @@ export default function DashboardView({
               <Scale className="w-4 h-4 text-slate-400" />
             )}
           </div>
-          <div className={`text-xl sm:text-2xl font-black mt-2 font-mono ${
+          <div className={`text-xl font-bold mt-2 font-mono ${
             settlement.isEmployeeOwing
               ? 'text-emerald-900'
               : settlement.isCompanyOwing
@@ -287,36 +292,36 @@ export default function DashboardView({
               ? 'text-emerald-700'
               : settlement.isCompanyOwing
               ? 'text-amber-700'
-              : 'text-slate-400'
+              : 'text-slate-500'
           }`}>
             {settlement.badgeText}
           </div>
         </div>
 
         {/* Synced to Zoho */}
-        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-xs">
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">Synced to Zoho</span>
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Synced to Zoho</span>
             <CheckCircle className="w-4 h-4 text-emerald-600" />
           </div>
-          <div className="text-xl sm:text-2xl font-black text-emerald-700 mt-2">
+          <div className="text-xl font-bold text-slate-900 mt-2 font-mono">
             {syncedCount}
           </div>
-          <div className="text-[11px] text-emerald-600/80 mt-0.5 font-medium">
+          <div className="text-[11px] text-emerald-700 mt-0.5 font-medium">
             Active Journal Entries
           </div>
         </div>
 
         {/* Pending Sync */}
-        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-xs">
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">Pending Sync</span>
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Pending Sync</span>
             <Clock className="w-4 h-4 text-amber-600" />
           </div>
-          <div className="text-xl sm:text-2xl font-black text-amber-700 mt-2">
+          <div className="text-xl font-bold text-slate-900 mt-2 font-mono">
             {pendingCount}
           </div>
-          <div className="text-[11px] text-slate-400 mt-0.5">
+          <div className="text-[11px] text-slate-500 mt-0.5">
             Queued for next cycle
           </div>
         </div>
@@ -324,16 +329,16 @@ export default function DashboardView({
 
       {/* Admin Call Back Approval Alert Banner */}
       {effectiveUser.role === 'admin' && pendingRecallCount > 0 && (
-        <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-300 text-amber-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+        <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold shrink-0">
-              <RotateCcw className="w-5 h-5 text-amber-700" />
+            <div className="w-9 h-9 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-bold shrink-0 border border-amber-200">
+              <RotateCcw className="w-4 h-4 text-amber-700" />
             </div>
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-amber-800 block">
                 Report Call Back Requests ({pendingRecallCount})
               </span>
-              <p className="text-xs sm:text-sm font-semibold text-slate-800">
+              <p className="text-xs font-medium text-slate-700">
                 {pendingRecallCount} expense{pendingRecallCount > 1 ? 's have' : ' has'} requested to be called back / unlocked from exported reports.
               </p>
             </div>
@@ -341,7 +346,7 @@ export default function DashboardView({
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setFilterTab('recalls')}
-              className="px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-xs active:scale-95 transition"
+              className="px-3 py-1.5 rounded-lg bg-amber-700 hover:bg-amber-800 text-white font-semibold text-xs shadow-xs active:bg-amber-900 transition"
             >
               Review Requests ({pendingRecallCount})
             </button>
@@ -350,11 +355,11 @@ export default function DashboardView({
       )}
 
       {/* Expense Ledger Header & Search */}
-      <div className="space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="space-y-3 pt-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
           <div>
-            <h2 className="text-lg font-extrabold text-slate-900">Recent Petty Cash Activity</h2>
-            <p className="text-xs text-slate-500">Every logged item automatically balances Zoho Books journals</p>
+            <h2 className="text-base font-bold text-slate-900">Petty Cash Transactions</h2>
+            <p className="text-xs text-slate-500">Official expense ledger synchronized with Zoho Books journals</p>
           </div>
 
           {/* Search bar */}
@@ -364,85 +369,85 @@ export default function DashboardView({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search expenses, projects..."
-              className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 bg-white text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Search description, project, invoice..."
+              className="w-full pl-9 pr-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
             />
           </div>
         </div>
 
-        {/* Filter Pills */}
-        <div className="flex items-center space-x-1.5 overflow-x-auto pb-1">
+        {/* Corporate Filter Tabs */}
+        <div className="flex items-center space-x-1 overflow-x-auto pb-1 bg-slate-100/70 p-1 rounded-lg border border-slate-200/60">
           <button
             onClick={() => setFilterTab('all')}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold transition flex-shrink-0 ${
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition flex-shrink-0 ${
               filterTab === 'all'
-                ? 'bg-slate-900 text-white shadow-xs'
-                : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 font-bold'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
             }`}
           >
             All Activity ({employeeExpenses.length})
           </button>
           <button
             onClick={() => setFilterTab('in_report')}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold transition flex-shrink-0 flex items-center space-x-1 ${
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition flex-shrink-0 flex items-center space-x-1.5 ${
               filterTab === 'in_report'
-                ? 'bg-indigo-600 text-white shadow-xs'
-                : 'bg-white text-indigo-700 border border-indigo-200 hover:bg-indigo-50'
+                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 font-bold'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
             }`}
           >
-            <FileCheck className="w-3.5 h-3.5" />
-            <span>Added to Report ({inReportCount})</span>
+            <FileCheck className="w-3.5 h-3.5 text-slate-500" />
+            <span>In Report ({inReportCount})</span>
           </button>
           <button
             onClick={() => setFilterTab('unreported')}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold transition flex-shrink-0 ${
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition flex-shrink-0 ${
               filterTab === 'unreported'
-                ? 'bg-slate-700 text-white shadow-xs'
-                : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 font-bold'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
             }`}
           >
-            Not in Report ({unreportedCount})
+            Unreported ({unreportedCount})
           </button>
           <button
             onClick={() => setFilterTab('exported')}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold transition flex items-center space-x-1 flex-shrink-0 ${
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition flex items-center space-x-1.5 flex-shrink-0 ${
               filterTab === 'exported'
-                ? 'bg-purple-700 text-white shadow-xs'
-                : 'bg-white text-purple-700 border border-purple-200 hover:bg-purple-50'
+                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 font-bold'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
             }`}
           >
-            <Lock className="w-3 h-3 text-current" />
+            <Lock className="w-3.5 h-3.5 text-slate-500" />
             <span>Exported ({exportedCount})</span>
           </button>
           {pendingRecallCount > 0 && (
             <button
               onClick={() => setFilterTab('recalls')}
-              className={`px-3 py-1.5 rounded-full text-xs font-bold transition flex items-center space-x-1 flex-shrink-0 ${
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition flex items-center space-x-1.5 flex-shrink-0 ${
                 filterTab === 'recalls'
-                  ? 'bg-amber-600 text-white shadow-xs'
-                  : 'bg-white text-amber-700 border border-amber-300 hover:bg-amber-50'
+                  ? 'bg-amber-100 text-amber-900 shadow-xs border border-amber-300 font-bold'
+                  : 'text-amber-800 hover:bg-amber-50'
               }`}
             >
-              <RotateCcw className="w-3 h-3 text-current" />
+              <RotateCcw className="w-3.5 h-3.5 text-amber-700" />
               <span>Call Back Requests ({pendingRecallCount})</span>
             </button>
           )}
           <button
             onClick={() => setFilterTab('synced')}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold transition flex-shrink-0 ${
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition flex-shrink-0 ${
               filterTab === 'synced'
-                ? 'bg-emerald-600 text-white shadow-xs'
-                : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 font-bold'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
             }`}
           >
-            Zoho Synced ({syncedCount})
+            Synced ({syncedCount})
           </button>
           <button
             onClick={() => setFilterTab('pending')}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold transition flex-shrink-0 ${
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition flex-shrink-0 ${
               filterTab === 'pending'
-                ? 'bg-amber-600 text-white shadow-xs'
-                : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 font-bold'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
             }`}
           >
             Pending ({pendingCount})

@@ -41,16 +41,16 @@ export default function ExpenseCard({
   const isLockedFromDelete = isExported && !isAdmin;
 
   return (
-    <div className={`bg-white rounded-2xl p-4 sm:p-5 border transition-all ${
+    <div className={`bg-white rounded-xl p-4 border transition-all ${
       isSelected
-        ? 'border-blue-400 bg-blue-50/20 shadow-sm'
-        : 'border-slate-200/90 shadow-xs hover:shadow-md'
+        ? 'border-blue-400 bg-blue-50/20 shadow-xs'
+        : 'border-slate-200/90 shadow-xs hover:border-slate-300'
     }`}>
       <div className="flex items-start justify-between gap-3">
         {/* Left: Checkbox + Category Icon & Main Info */}
         <div className="flex items-start space-x-3 min-w-0">
           {onToggleSelect && (
-            <div className="pt-2.5 flex-shrink-0">
+            <div className="pt-2 flex-shrink-0">
               <input
                 type="checkbox"
                 checked={Boolean(isSelected)}
@@ -61,55 +61,51 @@ export default function ExpenseCard({
             </div>
           )}
 
-          <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0 font-bold border border-blue-100">
-            <FileText className="w-5 h-5" />
+          <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0 font-bold border border-slate-200">
+            <FileText className="w-4 h-4 text-slate-500" />
           </div>
 
           <div className="min-w-0">
-            <div className="flex items-center space-x-2 flex-wrap gap-y-1">
-              <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-100">
+            <div className="flex items-center space-x-1.5 flex-wrap gap-y-1">
+              <span className="text-[11px] font-semibold text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
                 {expense.category_name || 'Petty Cash Purchases'}
               </span>
 
               {/* Expense Report Status Pill */}
               {isExported ? (
                 expense.recall_status === 'pending' ? (
-                  <span className="inline-flex items-center space-x-1 text-[11px] font-bold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-300 shadow-2xs animate-pulse">
+                  <span className="inline-flex items-center space-x-1 text-[11px] font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
                     <Clock className="w-3 h-3 text-amber-600 animate-spin" />
-                    <span>Call Back Pending Admin Approval</span>
+                    <span>Call Back Pending Admin</span>
                   </span>
                 ) : (
-                  <span className="inline-flex items-center space-x-1 text-[11px] font-bold text-purple-700 bg-purple-50 px-2.5 py-0.5 rounded-full border border-purple-200 shadow-2xs">
-                    <Lock className="w-3 h-3 text-purple-600 stroke-[2.5]" />
-                    <span>Exported in Report</span>
+                  <span className="inline-flex items-center space-x-1 text-[11px] font-semibold text-purple-800 bg-purple-50 px-2 py-0.5 rounded border border-purple-200">
+                    <Lock className="w-3 h-3 text-purple-700" />
+                    <span>Exported</span>
                   </span>
                 )
               ) : isReported ? (
-                <span className="inline-flex items-center space-x-1 text-[11px] font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200 shadow-2xs">
-                  <FileCheck className="w-3 h-3 text-indigo-600 stroke-[2.5]" />
-                  <span>Added to Report</span>
+                <span className="inline-flex items-center space-x-1 text-[11px] font-semibold text-blue-800 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                  <FileCheck className="w-3 h-3 text-blue-700" />
+                  <span>In Report</span>
                 </span>
               ) : (
-                <span className="inline-flex items-center space-x-1 text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
-                  <span>Not in Report</span>
+                <span className="inline-flex items-center space-x-1 text-[11px] font-medium text-slate-500 bg-slate-50 px-2 py-0.5 rounded border border-slate-200">
+                  <span>Unreported</span>
                 </span>
               )}
 
               {/* Call Back Approved Note if recently unlocked */}
               {!isExported && expense.recall_status === 'approved' && (
-                <span className="inline-flex items-center space-x-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                <span className="inline-flex items-center space-x-1 text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
                   <RotateCcw className="w-2.5 h-2.5 text-emerald-600" />
                   <span>Called Back</span>
                 </span>
               )}
 
-              <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                Paid: {expense.paid_through_account_name || `Petty Cash - ${expense.employee_name}`}
-              </span>
-
               {/* Zoho Sync Status Pill */}
               {isSynced && (
-                <span className="inline-flex items-center space-x-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                <span className="inline-flex items-center space-x-1 text-[11px] font-medium text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
                   <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                   <span>{expense.zoho_journal_number || 'Synced to Zoho'}</span>
                 </span>
@@ -177,7 +173,7 @@ export default function ExpenseCard({
                     <button
                       onClick={() => onApproveRecall && onApproveRecall(expense.id)}
                       title="Approve Call Back and unlock expense from report"
-                      className="px-2.5 py-1 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white shadow-xs flex items-center space-x-1 transition"
+                      className="px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-700 hover:bg-emerald-800 text-white shadow-xs flex items-center space-x-1 transition"
                     >
                       <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                       <span>Approve Recall</span>
@@ -185,7 +181,7 @@ export default function ExpenseCard({
                     <button
                       onClick={() => onRejectRecall && onRejectRecall(expense.id)}
                       title="Reject Call Back request"
-                      className="p-1 rounded-xl text-slate-400 hover:text-red-600 hover:bg-red-50 border border-slate-200 transition"
+                      className="p-1 rounded-md text-slate-400 hover:text-red-700 hover:bg-red-50 border border-slate-200 transition"
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
@@ -193,10 +189,10 @@ export default function ExpenseCard({
                 ) : (
                   <span
                     title="Call back requested. Waiting for Administrator approval."
-                    className="px-2.5 py-1 rounded-xl text-xs font-bold border bg-amber-50 text-amber-800 border-amber-300 flex items-center space-x-1 cursor-default select-none"
+                    className="px-2.5 py-1 rounded-md text-xs font-semibold border bg-amber-50 text-amber-900 border-amber-200 flex items-center space-x-1 cursor-default select-none"
                   >
                     <Clock className="w-3.5 h-3.5 text-amber-600 animate-spin" />
-                    <span className="hidden sm:inline">Pending Approval</span>
+                    <span className="hidden sm:inline">Pending Admin</span>
                   </span>
                 )
               ) : (
@@ -207,7 +203,7 @@ export default function ExpenseCard({
                       ? 'Admin: Call back and unlock this expense from the exported report'
                       : 'Request Admin approval to call back / unlock this expense from the exported report'
                   }
-                  className="px-2.5 py-1 rounded-xl text-xs font-bold border border-amber-300 bg-amber-50 text-amber-800 hover:bg-amber-100 active:scale-95 transition flex items-center space-x-1"
+                  className="px-2.5 py-1 rounded-md text-xs font-semibold border border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100 transition flex items-center space-x-1"
                 >
                   <RotateCcw className="w-3.5 h-3.5 text-amber-700" />
                   <span>Call Back</span>
@@ -217,20 +213,20 @@ export default function ExpenseCard({
               <button
                 onClick={() => onToggleReportStatus(expense.id, expense.added_to_report)}
                 title={expense.added_to_report ? 'Remove from Expense Report' : 'Add this item to Expense Report'}
-                className={`px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center space-x-1 border ${
+                className={`px-2.5 py-1 rounded-md text-xs font-semibold transition flex items-center space-x-1 border ${
                   expense.added_to_report
-                    ? 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100 active:scale-95'
-                    : 'bg-white text-slate-700 border-slate-200 hover:bg-indigo-50 hover:text-indigo-700 hover:border-indigo-300 active:scale-95'
+                    ? 'bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200'
+                    : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:text-slate-900'
                 }`}
               >
                 {expense.added_to_report ? (
                   <>
-                    <FileCheck className="w-3.5 h-3.5 text-indigo-600 stroke-[2.5]" />
+                    <FileCheck className="w-3.5 h-3.5 text-slate-700" />
                     <span className="hidden sm:inline">In Report</span>
                   </>
                 ) : (
                   <>
-                    <Plus className="w-3.5 h-3.5 text-slate-500 stroke-[2.5]" />
+                    <Plus className="w-3.5 h-3.5 text-slate-500" />
                     <span>Add to Report</span>
                   </>
                 )}

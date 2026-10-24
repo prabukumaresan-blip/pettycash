@@ -528,8 +528,11 @@ export default function App() {
   if (isAuthChecking) {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white">
-        <div className="w-10 h-10 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin mb-4"></div>
-        <div className="text-sm font-bold text-slate-300">Loading Petty Cash Portal...</div>
+        <div className="w-20 h-20 rounded-3xl bg-white/95 p-3 flex items-center justify-center shadow-2xl shadow-blue-500/20 mb-6">
+          <img src="/logo-192.png" alt="Bright Flowers" className="w-full h-full object-contain animate-pulse" />
+        </div>
+        <div className="w-8 h-8 border-3 border-blue-500/30 border-t-blue-500 rounded-full animate-spin mb-3"></div>
+        <div className="text-sm font-semibold text-slate-300">Loading Bright Flowers Petty Cash...</div>
       </div>
     );
   }
