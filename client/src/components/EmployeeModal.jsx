@@ -19,7 +19,6 @@ export default function EmployeeModal({
   const [department, setDepartment] = useState('Operations');
   const [defaultProjectId, setDefaultProjectId] = useState('');
   const [pettyCashAccountId, setPettyCashAccountId] = useState('');
-  const [autoCreateZohoAccount, setAutoCreateZohoAccount] = useState(false);
   const [isActive, setIsActive] = useState(true);
   const [loadedAccounts, setLoadedAccounts] = useState(zohoAccounts || []);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,7 +54,6 @@ export default function EmployeeModal({
       setDepartment(employee.department || 'Operations');
       setDefaultProjectId(employee.default_project_id || '');
       setPettyCashAccountId(employee.petty_cash_account_id || '');
-      setAutoCreateZohoAccount(false);
       setIsActive(employee.is_active !== false);
     } else {
       setName('');
@@ -67,7 +65,6 @@ export default function EmployeeModal({
       setDepartment('Field Operations');
       setDefaultProjectId(projects.length > 0 ? projects[0].project_id : '');
       setPettyCashAccountId('');
-      setAutoCreateZohoAccount(false);
       setIsActive(true);
     }
     setError('');
@@ -79,6 +76,11 @@ export default function EmployeeModal({
     e.preventDefault();
     if (!name.trim() || !email.trim() || !employeeCode.trim()) {
       setError('Name, email, and employee code are required');
+      return;
+    }
+
+    if (!pettyCashAccountId) {
+      setError('Please select a Zoho Books Petty Cash / Cash account for this user.');
       return;
     }
 
@@ -94,8 +96,7 @@ export default function EmployeeModal({
         initial_float: isNaN(parseFloat(initialFloat)) ? 1000 : parseFloat(initialFloat),
         department,
         default_project_id: defaultProjectId || null,
-        petty_cash_account_id: pettyCashAccountId || null,
-        auto_create_zoho_account: autoCreateZohoAccount,
+        petty_cash_account_id: pettyCashAccountId,
         is_active: isActive
       };
 
@@ -264,58 +265,43 @@ export default function EmployeeModal({
             <div className="flex items-center space-x-2">
               <BookOpen className="w-4 h-4 text-blue-600" />
               <span className="text-xs font-bold text-blue-900 uppercase tracking-wider">
-                Zoho Books Petty Cash Account
+                Zoho Books Petty Cash Account *
               </span>
             </div>
 
-            {!employee && (
-              <label className="flex items-center space-x-2.5 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={autoCreateZohoAccount}
-                  onChange={(e) => setAutoCreateZohoAccount(e.target.checked)}
-                  className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500"
-                />
-                <span className="text-xs text-slate-700 font-medium">
-                  Auto-create dedicated Petty Cash account in Zoho Books (e.g. "Petty Cash - {name || 'Employee'}")
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-semibold text-slate-700">
+                  Select Existing Cash Account in Zoho Books *
+                </label>
+                <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
+                  {cashAccounts.length} Cash Accounts Found
                 </span>
-              </label>
-            )}
-
-            {(!autoCreateZohoAccount || employee) && (
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-semibold text-slate-700">
-                    Link Existing Cash Account in Zoho Books
-                  </label>
-                  <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
-                    {cashAccounts.length} Cash Accounts Found
-                  </span>
-                </div>
-                <select
-                  value={pettyCashAccountId}
-                  onChange={(e) => {
-                    const selectedId = e.target.value;
-                    setPettyCashAccountId(selectedId);
-                    const selectedAcc = cashAccounts.find(a => a.account_id === selectedId);
-                    if (selectedAcc) {
-                      setInitialFloat(String(selectedAcc.current_balance || 0));
-                    }
-                  }}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-xs font-medium focus:ring-2 focus:ring-blue-500 transition"
-                >
-                  <option value="">-- Select Cash / Petty Cash Account ({cashAccounts.length}) --</option>
-                  {cashAccounts.map((a) => (
-                    <option key={a.account_id} value={a.account_id}>
-                      {a.account_name} {a.account_code ? `[${a.account_code}]` : ''} ({a.account_type?.replace(/_/g, ' ')})
-                    </option>
-                  ))}
-                </select>
-                <p className="text-[11px] text-slate-500 mt-1">
-                  Expenses paid by this user will credit this account in Zoho Books journals.
-                </p>
               </div>
-            )}
+              <select
+                required
+                value={pettyCashAccountId}
+                onChange={(e) => {
+                  const selectedId = e.target.value;
+                  setPettyCashAccountId(selectedId);
+                  const selectedAcc = cashAccounts.find(a => a.account_id === selectedId);
+                  if (selectedAcc) {
+                    setInitialFloat(String(selectedAcc.current_balance || 0));
+                  }
+                }}
+                className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-xs font-medium focus:ring-2 focus:ring-blue-500 transition"
+              >
+                <option value="">-- Choose Zoho Petty Cash Account ({cashAccounts.length}) --</option>
+                {cashAccounts.map((a) => (
+                  <option key={a.account_id} value={a.account_id}>
+                    {a.account_name} {a.account_code ? `[${a.account_code}]` : ''} ({a.account_type?.replace(/_/g, ' ')})
+                  </option>
+                ))}
+              </select>
+              <p className="text-[11px] text-slate-500 mt-1">
+                Every employee must be linked to an existing Zoho Books petty cash ledger account.
+              </p>
+            </div>
           </div>
 
           <div className="pt-2">

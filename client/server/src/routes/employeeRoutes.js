@@ -124,29 +124,25 @@ router.post('/', async (req, res) => {
       newEmp.default_project_name = matched ? matched.project_name : null;
     }
 
-    // Auto-create petty cash account in Zoho Books if requested
-    if (auto_create_zoho_account || !petty_cash_account_id) {
-      try {
-        const zohoAcc = await zohoBooksService.createEmployeePettyCashAccount(newEmp);
-        newEmp.petty_cash_account_id = zohoAcc.account_id;
-        newEmp.petty_cash_account_name = zohoAcc.account_name || `Petty Cash - ${name}`;
-      } catch (zErr) {
-        console.warn('⚠️ Zoho account creation fallback:', zErr.message);
-        newEmp.petty_cash_account_id = 'acc-pc-' + Math.floor(100 + Math.random() * 900);
-        newEmp.petty_cash_account_name = `Petty Cash - ${name}`;
-      }
-    } else if (petty_cash_account_id) {
-      const allAccounts = await db.getZohoAccounts();
-      const matchedAcc = allAccounts.find(a => a.account_id === petty_cash_account_id);
-      if (matchedAcc) {
-        newEmp.petty_cash_account_name = matchedAcc.account_name;
-        try {
-          const liveBal = await zohoBooksService.getPettyCashBalance(matchedAcc.account_id);
-          newEmp.initial_float = typeof liveBal === 'number' ? liveBal : (matchedAcc.current_balance || 0);
-        } catch (e) {
-          newEmp.initial_float = matchedAcc.current_balance || 0;
-        }
-      }
+    if (!petty_cash_account_id) {
+      return res.status(400).json({ success: false, error: 'A valid Zoho Books petty cash account must be manually selected.' });
+    }
+
+    const allAccounts = await db.getZohoAccounts();
+    const matchedAcc = allAccounts.find(a => a.account_id === petty_cash_account_id);
+    if (!matchedAcc) {
+      return res.status(400).json({ success: false, error: 'The selected Zoho Books petty cash account could not be found.' });
+    }
+
+    newEmp.petty_cash_account_id = matchedAcc.account_id;
+    newEmp.petty_cash_account_name = matchedAcc.account_name;
+    try {
+      const liveBal = await zohoBooksService.getPettyCashBalance(matchedAcc.account_id);
+      newEmp.initial_float = typeof liveBal === 'number' ? liveBal : (matchedAcc.current_balance || 0);
+      newEmp.current_balance = newEmp.initial_float;
+    } catch (e) {
+      newEmp.initial_float = matchedAcc.current_balance || 0;
+      newEmp.current_balance = newEmp.initial_float;
     }
 
     const saved = await db.saveEmployee(newEmp);
