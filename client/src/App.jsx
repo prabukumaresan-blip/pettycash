@@ -214,12 +214,12 @@ export default function App() {
     };
     window.addEventListener('visibilitychange', handleSyncOnFocus);
     window.addEventListener('focus', handleSyncOnFocus);
-    // Real-time interval refresh (every 20s) for live balance & projects without manual clicks
+    // Periodic interval refresh (every 60s) for live balances & accounts without exceeding API limits
     const interval = setInterval(() => {
-      if (api.getStoredUser()) {
+      if (document.visibilityState === 'visible' && api.getStoredUser()) {
         loadAllData();
       }
-    }, 20000);
+    }, 60000);
 
     return () => {
       window.removeEventListener('visibilitychange', handleSyncOnFocus);

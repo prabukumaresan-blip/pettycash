@@ -134,6 +134,23 @@ const initialSeedData = {
       petty_cash_account_name: 'Azzan Petty Cash',
       is_active: true,
       created_at: '2026-10-22T17:32:51.787Z'
+    },
+    {
+      id: 'emp-shaibani',
+      name: 'Ibrahim Shaibani',
+      email: 'shaibani@company.com',
+      employee_code: 'EMP-507',
+      password: 'emp123',
+      role: 'employee',
+      initial_float: 0,
+      current_balance: 0,
+      department: 'Field Operations',
+      default_project_id: null,
+      default_project_name: null,
+      petty_cash_account_id: '3095712000009241002',
+      petty_cash_account_name: 'Petty Cash - Ibrahim Shaibani',
+      is_active: true,
+      created_at: '2026-10-25T16:06:30.168Z'
     }
   ],
   zoho_accounts: [

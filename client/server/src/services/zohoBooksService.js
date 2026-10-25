@@ -151,6 +151,18 @@ class ZohoBooksService {
       return config.access_token;
     }
 
+    // Deduplicate concurrent token refresh requests
+    if (this._refreshPromise) {
+      return await this._refreshPromise;
+    }
+
+    // Cooldown if rate-limited recently (avoid repeated rapid re-firing)
+    if (this._lastRefreshErrorTime && (Date.now() - this._lastRefreshErrorTime < 30000)) {
+      if (config.access_token) {
+        return config.access_token; // Use current token if available instead of hammering rate limit
+      }
+    }
+
     const refreshToken = (config.refresh_token && !config.refresh_token.includes('demo_'))
       ? config.refresh_token
       : (process.env.ZOHO_REFRESH_TOKEN || '1000.70b3d3f7739447a1b5a16b1d535b0f94.860e4471704192a3fa442619dbd08417');
@@ -162,33 +174,42 @@ class ZohoBooksService {
     }
 
     const { tokenUrl } = this.getEndpoints(config.dc_region);
-    try {
-      const response = await axios.post(tokenUrl, null, {
-        params: {
-          refresh_token: refreshToken,
-          client_id: clientId,
-          client_secret: clientSecret,
-          grant_type: 'refresh_token'
+
+    this._refreshPromise = (async () => {
+      try {
+        const response = await axios.post(tokenUrl, null, {
+          params: {
+            refresh_token: refreshToken,
+            client_id: clientId,
+            client_secret: clientSecret,
+            grant_type: 'refresh_token'
+          }
+        });
+
+        const { access_token, expires_in } = response.data;
+        if (!access_token) {
+          throw new Error(response.data.error || 'Refresh token response missing access_token');
         }
-      });
 
-      const { access_token, expires_in } = response.data;
-      if (!access_token) {
-        throw new Error(response.data.error || 'Refresh token response missing access_token');
+        this._lastRefreshErrorTime = null;
+        await db.updateZohoConfig({
+          access_token,
+          refresh_token: refreshToken,
+          token_expires_at: new Date(Date.now() + (expires_in || 3600) * 1000).toISOString()
+        });
+
+        return access_token;
+      } catch (err) {
+        this._lastRefreshErrorTime = Date.now();
+        const errMsg = err.response?.data?.error_description || err.response?.data?.error || err.message;
+        await db.addSyncLog('token_refresh', 'failure', {}, errMsg);
+        throw new Error(`Failed to refresh Zoho Books token: ${errMsg}`);
+      } finally {
+        this._refreshPromise = null;
       }
+    })();
 
-      await db.updateZohoConfig({
-        access_token,
-        refresh_token: refreshToken,
-        token_expires_at: new Date(Date.now() + (expires_in || 3600) * 1000).toISOString()
-      });
-
-      return access_token;
-    } catch (err) {
-      const errMsg = err.response?.data?.error || err.message;
-      await db.addSyncLog('token_refresh', 'failure', {}, errMsg);
-      throw new Error(`Failed to refresh Zoho Books token: ${errMsg}`);
-    }
+    return await this._refreshPromise;
   }
 
   // Make authenticated API request to Zoho Books with auto-refresh on 401/unauthorized

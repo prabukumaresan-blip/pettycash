@@ -93,16 +93,22 @@
       "updated_at": "2026-10-25T15:21:34.551Z"
     },
     {
-      "id": "test-1792941905028",
-      "name": "Test",
-      "email": "test@company.com",
-      "employee_code": "TEST-1",
+      "id": "emp-shaibani",
+      "name": "Ibrahim Shaibani",
+      "email": "shaibani@company.com",
+      "employee_code": "EMP-507",
+      "password": "emp123",
       "role": "employee",
-      "initial_float": 1000,
-      "current_balance": 1000,
+      "initial_float": 0,
+      "current_balance": 0,
+      "department": "Field Operations",
+      "default_project_id": null,
+      "default_project_name": null,
+      "petty_cash_account_id": "3095712000009241002",
+      "petty_cash_account_name": "Petty Cash - Ibrahim Shaibani",
       "is_active": true,
-      "created_at": "2026-10-25T15:25:05.030Z",
-      "updated_at": "2026-10-25T15:25:05.030Z"
+      "created_at": "2026-10-25T16:06:30.168Z",
+      "updated_at": "2026-10-25T16:06:30.168Z"
     }
   ],
   "zoho_accounts": [
@@ -5631,6 +5637,62 @@
   ],
   "sync_logs": [
     {
+      "id": "log-1792946125994",
+      "sync_type": "token_refresh",
+      "status": "failure",
+      "details": {},
+      "error_message": "You have made too many requests continuously. Please try again after some time.",
+      "created_at": "2026-10-25T16:35:25.994Z"
+    },
+    {
+      "id": "log-1792945999988",
+      "sync_type": "token_refresh",
+      "status": "failure",
+      "details": {},
+      "error_message": "Access Denied",
+      "created_at": "2026-10-25T16:33:19.988Z"
+    },
+    {
+      "id": "log-1792945606956",
+      "sync_type": "token_refresh",
+      "status": "failure",
+      "details": {},
+      "error_message": "Access Denied",
+      "created_at": "2026-10-25T16:26:46.956Z"
+    },
+    {
+      "id": "log-1792945605792",
+      "sync_type": "token_refresh",
+      "status": "failure",
+      "details": {},
+      "error_message": "Access Denied",
+      "created_at": "2026-10-25T16:26:45.792Z"
+    },
+    {
+      "id": "log-1792945604525",
+      "sync_type": "token_refresh",
+      "status": "failure",
+      "details": {},
+      "error_message": "Access Denied",
+      "created_at": "2026-10-25T16:26:44.525Z"
+    },
+    {
+      "id": "log-1792945603388",
+      "sync_type": "token_refresh",
+      "status": "failure",
+      "details": {},
+      "error_message": "Access Denied",
+      "created_at": "2026-10-25T16:26:43.388Z"
+    },
+    {
+      "id": "log-1792945602239",
+      "sync_type": "token_refresh",
+      "status": "failure",
+      "details": {},
+      "error_message": "Access Denied",
+      "created_at": "2026-10-25T16:26:42.239Z"
+    },
+    {
       "id": "log-1792941886210",
       "sync_type": "create_petty_cash_account",
       "status": "failure",
@@ -6071,76 +6133,6 @@
       },
       "error_message": null,
       "created_at": "2026-10-05T19:43:34.070Z"
-    },
-    {
-      "id": "log-1791229414047",
-      "sync_type": "contacts_sync",
-      "status": "success",
-      "details": {
-        "count": 200
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:43:34.047Z"
-    },
-    {
-      "id": "log-1791229413016",
-      "sync_type": "expenses_sync",
-      "status": "success",
-      "details": {
-        "count": 1
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:43:33.016Z"
-    },
-    {
-      "id": "log-1791229412423",
-      "sync_type": "projects_sync",
-      "status": "success",
-      "details": {
-        "count": 78
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:43:32.423Z"
-    },
-    {
-      "id": "log-1791229411731",
-      "sync_type": "coa_sync",
-      "status": "success",
-      "details": {
-        "count": 344
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:43:31.731Z"
-    },
-    {
-      "id": "log-1791229384365",
-      "sync_type": "expenses_sync",
-      "status": "success",
-      "details": {
-        "count": 1
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:43:04.365Z"
-    },
-    {
-      "id": "log-1791229362763",
-      "sync_type": "expenses_sync",
-      "status": "success",
-      "details": {
-        "count": 1
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:42:42.763Z"
-    },
-    {
-      "id": "log-1791229336245",
-      "sync_type": "expenses_sync",
-      "status": "success",
-      "details": {
-        "count": 1
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:42:16.245Z"
     }
   ]
 }
