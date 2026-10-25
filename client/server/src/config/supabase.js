@@ -130,8 +130,8 @@ const initialSeedData = {
       department: 'Field Operations',
       default_project_id: null,
       default_project_name: null,
-      petty_cash_account_id: '3095712000009214002',
-      petty_cash_account_name: 'Petty Cash - Azan',
+      petty_cash_account_id: '3095712000008117458',
+      petty_cash_account_name: 'Azzan Petty Cash',
       is_active: true,
       created_at: '2026-10-22T17:32:51.787Z'
     }
