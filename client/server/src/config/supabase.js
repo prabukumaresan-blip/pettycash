@@ -689,9 +689,10 @@ const db = {
   },
 
   async getZohoAccounts() {
-    if (isLiveSupabase) {
-      const { data } = await supabase.from('zoho_accounts_cache').select('*');
-      if (data && data.length) return data;
+    const live = await ensureLiveSupabase();
+    if (live) {
+      const { data, error } = await supabase.from('zoho_accounts_cache').select('*');
+      if (!error && data && data.length) return data;
     }
     const store = loadLocalData();
     return store.zoho_accounts;
@@ -700,7 +701,17 @@ const db = {
   async setZohoAccounts(accounts) {
     if (isLiveSupabase) {
       try {
-        await supabase.from('zoho_accounts_cache').upsert(accounts);
+        const allowed = accounts.map(a => ({
+          account_id: String(a.account_id),
+          account_name: a.account_name,
+          account_code: a.account_code || '',
+          account_type: a.account_type,
+          is_active: a.is_active !== false,
+          last_synced: a.last_synced || new Date().toISOString()
+        }));
+        for (let i = 0; i < allowed.length; i += 100) {
+          await supabase.from('zoho_accounts_cache').upsert(allowed.slice(i, i + 100));
+        }
       } catch (err) {
         console.warn('Supabase accounts upsert notice:', err.message);
       }
@@ -711,7 +722,8 @@ const db = {
   },
 
   async getZohoProjects() {
-    if (isLiveSupabase) {
+    const live = await ensureLiveSupabase();
+    if (live) {
       try {
         const { data, error } = await supabase.from('zoho_projects_cache').select('*');
         if (!error && data && data.length) return data;
@@ -724,7 +736,8 @@ const db = {
   },
 
   async setZohoProjects(projects) {
-    if (isLiveSupabase) {
+    const live = await ensureLiveSupabase();
+    if (live) {
       try {
         await supabase.from('zoho_projects_cache').upsert(projects);
       } catch (err) {
@@ -737,7 +750,8 @@ const db = {
   },
 
   async getZohoContacts() {
-    if (isLiveSupabase) {
+    const live = await ensureLiveSupabase();
+    if (live) {
       try {
         const { data, error } = await supabase.from('zoho_contacts_cache').select('*');
         if (!error && data && data.length) return data;
