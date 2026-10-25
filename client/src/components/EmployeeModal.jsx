@@ -19,7 +19,7 @@ export default function EmployeeModal({
   const [department, setDepartment] = useState('Operations');
   const [defaultProjectId, setDefaultProjectId] = useState('');
   const [pettyCashAccountId, setPettyCashAccountId] = useState('');
-  const [autoCreateZohoAccount, setAutoCreateZohoAccount] = useState(true);
+  const [autoCreateZohoAccount, setAutoCreateZohoAccount] = useState(false);
   const [isActive, setIsActive] = useState(true);
   const [loadedAccounts, setLoadedAccounts] = useState(zohoAccounts || []);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -67,7 +67,7 @@ export default function EmployeeModal({
       setDepartment('Field Operations');
       setDefaultProjectId(projects.length > 0 ? projects[0].project_id : '');
       setPettyCashAccountId('');
-      setAutoCreateZohoAccount(true);
+      setAutoCreateZohoAccount(false);
       setIsActive(true);
     }
     setError('');
