@@ -399,7 +399,8 @@ const db = {
   },
 
   async getEmployeeById(id) {
-    if (isLiveSupabase) {
+    const live = await ensureLiveSupabase();
+    if (live) {
       const { data, error } = await supabase.from('employees').select('*').eq('id', id).single();
       if (!error && data) return data;
     }
@@ -408,7 +409,8 @@ const db = {
   },
 
   async saveEmployee(employee) {
-    if (isLiveSupabase) {
+    const live = await ensureLiveSupabase();
+    if (live) {
       const { data, error } = await supabase.from('employees').upsert(employee).select().single();
       if (!error && data) return data;
     }
@@ -438,7 +440,8 @@ const db = {
   },
 
   async deleteEmployee(id) {
-    if (isLiveSupabase) {
+    const live = await ensureLiveSupabase();
+    if (live) {
       await supabase.from('employees').delete().eq('id', id);
     }
     const store = loadLocalData();
@@ -465,7 +468,8 @@ const db = {
     emp.current_balance = (parseFloat(emp.initial_float || 0) - totalSpent);
     saveLocalData(store);
 
-    if (isLiveSupabase) {
+    const live = await ensureLiveSupabase();
+    if (live) {
       try {
         await supabase.from('employees').update({ current_balance: emp.current_balance }).eq('id', employeeId);
       } catch {}
@@ -481,7 +485,8 @@ const db = {
       saveLocalData(store);
     }
 
-    if (isLiveSupabase) {
+    const live = await ensureLiveSupabase();
+    if (live) {
       await supabase.from('employees').update({ current_balance: parseFloat(newBalance) }).eq('id', employeeId);
     }
   },
