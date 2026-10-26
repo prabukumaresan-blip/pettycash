@@ -676,6 +676,21 @@ const db = {
 
       const { data, error } = await supabase.from('expenses').upsert(dbExpense).select().single();
       if (!error && data) {
+        // Keep local store in sync with Supabase
+        let idx = store.expenses.findIndex(e => e.id === expense.id);
+        if (idx < 0 && existing) {
+          idx = store.expenses.findIndex(e => e.id === existing.id);
+        }
+        if (idx < 0 && expense.zoho_journal_id) {
+          idx = store.expenses.findIndex(e => e.zoho_journal_id && String(e.zoho_journal_id) === String(expense.zoho_journal_id));
+        }
+        if (idx >= 0) {
+          store.expenses[idx] = { ...store.expenses[idx], ...expense, ...data, updated_at: new Date().toISOString() };
+        } else {
+          store.expenses.unshift({ ...expense, ...data, created_at: new Date().toISOString(), updated_at: new Date().toISOString() });
+        }
+        saveLocalData(store);
+
         await this.recalculateBalance(expense.employee_id);
         return { ...expense, ...data };
       } else if (error) {

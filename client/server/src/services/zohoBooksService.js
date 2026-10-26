@@ -482,33 +482,65 @@ class ZohoBooksService {
           const list = res.expenses || [];
           for (const ze of list) {
             const allLocalExpenses = await db.getExpenses();
-            // STRICT FILTER: Include expenses logged through this app (tagged with PCA- reference, or matching an existing logged expense ID/invoice/journal)
+            // Include expenses that:
+            // 1) Were tagged with PCA- reference from this app
+            // 2) Already exist in local database by zoho_journal_id, invoice_number, or ID
+            // 3) Match specific priority transaction IDs
+            // 4) Are part of the active accounting cycle (date >= '2026-10-20' or created_time >= '2026-10-20')
             const isFromApp = (ze.reference_number && ze.reference_number.startsWith('PCA-')) ||
               ze.expense_id === '3095712000008878001' ||
               ze.expense_id === '3095712000008868020' ||
-              allLocalExpenses.some(e => e.zoho_journal_id === ze.expense_id || (ze.reference_number && (e.invoice_number === ze.reference_number || e.id === ze.reference_number)));
+              ze.expense_id === '3095712000009255001' ||
+              ze.expense_id === '3095712000009256001' ||
+              (ze.date && ze.date >= '2026-10-20') ||
+              (ze.created_time && new Date(ze.created_time) >= new Date('2026-10-20T00:00:00Z')) ||
+              allLocalExpenses.some(e => 
+                (e.zoho_journal_id && String(e.zoho_journal_id) === String(ze.expense_id)) || 
+                (ze.reference_number && (e.invoice_number === ze.reference_number || e.id === ze.reference_number))
+              );
 
             if (!isFromApp) {
-              continue; // Exclude all existing historical expenses
+              continue; // Exclude ancient historical expenses
             }
 
-            const existingExp = allLocalExpenses.find(e => 
-              (ze.reference_number && ze.reference_number.startsWith('PCA-') && (e.id === ze.reference_number.replace('PCA-', '') || e.id === ze.reference_number)) ||
-              e.zoho_journal_id === ze.expense_id || 
-              (ze.reference_number && e.invoice_number && String(e.invoice_number) === String(ze.reference_number))
-            );
+            // Find existing local expense to avoid duplicate entries or ID collision
+            const existingExp = allLocalExpenses.find(e => {
+              if (e.zoho_journal_id && String(e.zoho_journal_id) === String(ze.expense_id)) {
+                return true;
+              }
+              if (ze.reference_number && ze.reference_number.startsWith('PCA-')) {
+                const cleanRef = ze.reference_number.replace('PCA-', '');
+                if (e.id === cleanRef || e.id === ze.reference_number) return true;
+              }
+              // Only match unlinked local expense if invoice_number matches
+              if (!e.zoho_journal_id && ze.reference_number && e.invoice_number && String(e.invoice_number) === String(ze.reference_number)) {
+                return true;
+              }
+              return false;
+            });
 
-            const localId = existingExp ? existingExp.id : (ze.reference_number && ze.reference_number.startsWith('PCA-') ? ze.reference_number.replace('PCA-', '') : ze.expense_id);
+            const localId = existingExp 
+              ? existingExp.id 
+              : (ze.reference_number && ze.reference_number.startsWith('PCA-') 
+                  ? ze.reference_number.replace('PCA-', '') 
+                  : `exp-${ze.expense_id.slice(-7)}`);
+
             let projId = ze.project_id || (existingExp ? existingExp.project_id : null);
             let projName = ze.project_name || (existingExp ? existingExp.project_name : null);
+            let custId = ze.customer_id || (existingExp ? existingExp.customer_id : null);
+            let custName = ze.customer_name || (existingExp ? existingExp.customer_name : null);
+            let singleResDetail = null;
 
             // Fetch detail from Zoho single-expense API if project is missing from list endpoint
             if (!projId || !projName) {
               try {
                 const singleRes = await this.makeApiRequest(`/expenses/${ze.expense_id}`, 'GET');
                 if (singleRes && singleRes.expense) {
-                  projId = singleRes.expense.project_id || projId;
-                  projName = singleRes.expense.project_name || projName;
+                  singleResDetail = singleRes.expense;
+                  projId = singleResDetail.project_id || projId;
+                  projName = singleResDetail.project_name || projName;
+                  custId = singleResDetail.customer_id || custId;
+                  custName = singleResDetail.customer_name || custName;
                 }
               } catch (singleErr) {
                 console.warn(`Could not fetch details for Zoho expense ${ze.expense_id}:`, singleErr.message);
@@ -521,13 +553,21 @@ class ZohoBooksService {
               const matchedProj = cachedProjects.find(p => String(p.project_id) === String(projId));
               if (matchedProj) projName = matchedProj.project_name;
             }
-            if (!projId && ze.customer_id && cachedProjects) {
-              const matchedByCust = cachedProjects.find(p => String(p.customer_id) === String(ze.customer_id));
+            if (!projId && (custId || ze.customer_id) && cachedProjects) {
+              const targetCustId = custId || ze.customer_id;
+              const matchedByCust = cachedProjects.find(p => String(p.customer_id) === String(targetCustId));
               if (matchedByCust) {
                 projId = matchedByCust.project_id;
                 projName = matchedByCust.project_name;
               }
             }
+
+            const expNumber = (ze.custom_field_hash && ze.custom_field_hash.cf_expenses_no) || 
+              ze.cf_expenses_no || 
+              (singleResDetail && singleResDetail.custom_field_hash && singleResDetail.custom_field_hash.cf_expenses_no) ||
+              ze.expense_number || 
+              (existingExp ? existingExp.zoho_journal_number : null) ||
+              'N/A';
 
             zohoExpenses.push({
               id: localId,
@@ -539,27 +579,37 @@ class ZohoBooksService {
               category_name: ze.account_name || 'Other Expenses',
               paid_through_account_id: ze.paid_through_account_id || accountId,
               paid_through_account_name: ze.paid_through_account_name || emp.petty_cash_account_name,
-              description: ze.description || ze.account_name || 'Petty cash purchase',
+              description: ze.description || (singleResDetail && singleResDetail.description) || ze.account_name || 'Petty cash purchase',
               project_id: projId || null,
               project_name: projName || null,
-              customer_id: ze.customer_id || null,
-              customer_name: ze.customer_name || null,
+              customer_id: custId || ze.customer_id || null,
+              customer_name: custName || ze.customer_name || null,
               invoice_number: (existingExp ? existingExp.invoice_number : null) || (ze.reference_number && !ze.reference_number.startsWith('PCA-') ? ze.reference_number : null),
               cost_center: null,
               receipt_url: existingExp?.receipt_url || null,
               receipt_file_name: existingExp?.receipt_file_name || ze.expense_receipt_name || null,
               zoho_journal_id: ze.expense_id,
-              zoho_journal_number: (ze.custom_field_hash && ze.custom_field_hash.cf_expenses_no) || ze.cf_expenses_no || ze.expense_number || 'N/A',
+              zoho_journal_number: expNumber,
               sync_status: 'synced',
               sync_error: null,
               last_synced_at: new Date().toISOString(),
-              added_to_report: existingExp?.added_to_report !== undefined ? existingExp.added_to_report : false,
-              added_to_report_at: existingExp?.added_to_report_at || null,
+              added_to_report: existingExp?.added_to_report !== undefined ? existingExp.added_to_report : true,
+              added_to_report_at: existingExp?.added_to_report_at || new Date().toISOString(),
               is_exported: existingExp?.is_exported !== undefined ? existingExp.is_exported : false,
               exported_at: existingExp?.exported_at || null,
               recall_status: existingExp?.recall_status || null,
               created_by: emp.name
             });
+          }
+
+          // Immediately sync live closing balance for the employee's petty cash account
+          try {
+            const liveBal = await this.getPettyCashBalance(accountId);
+            if (typeof liveBal === 'number') {
+              await db.updateEmployeeBalance(emp.id, liveBal);
+            }
+          } catch (balErr) {
+            console.warn(`Could not sync live balance for account ${accountId}:`, balErr.message);
           }
         } catch (accErr) {
           console.warn(`Could not sync expenses for account ${accountId}:`, accErr.message);
