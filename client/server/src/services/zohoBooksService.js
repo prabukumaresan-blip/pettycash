@@ -388,27 +388,32 @@ class ZohoBooksService {
     }
   }
 
-  // Fetch the live balance for a specific petty cash account
-  async getPettyCashBalance(accountId) {
+  // Fetch the live balance for a specific petty cash account (with caching to prevent Zoho rate-limit blocks)
+  async getPettyCashBalance(accountId, forceRefresh = false) {
+    if (!this._balanceCache) this._balanceCache = {};
+    const cached = this._balanceCache[accountId];
+    if (!forceRefresh && cached && (Date.now() - cached.timestamp < 60000)) {
+      return cached.balance;
+    }
+
     try {
       const response = await this.makeApiRequest(`/chartofaccounts/${accountId}`, 'GET');
       if (response && response.chart_of_account) {
         const coa = response.chart_of_account;
         if (coa.closing_balance !== undefined) {
           const rawBal = parseFloat(coa.closing_balance || 0);
-          // In Zoho Books, isdebit indicates the ledger balance side:
-          // isdebit === true  -> Debit (Dr) -> Positive balance (Employee holds cash, owes company)
-          // isdebit === false -> Credit (Cr) -> Negative balance (Company owes employee reimbursement)
+          let bal = rawBal;
           if (coa.isdebit === false && rawBal > 0) {
-            return -rawBal;
+            bal = -rawBal;
           }
-          return rawBal;
+          this._balanceCache[accountId] = { balance: bal, timestamp: Date.now() };
+          return bal;
         }
       }
-      return null;
+      return cached ? cached.balance : null;
     } catch (err) {
-      console.warn(`Failed to fetch live balance for ${accountId}:`, err.message);
-      return null;
+      console.warn(`Notice on live balance fetch for ${accountId}:`, err.message);
+      return cached ? cached.balance : null;
     }
   }
 
@@ -463,12 +468,33 @@ class ZohoBooksService {
   async syncExpensesFromZoho(perPage = 50) {
     try {
       const employees = await db.getEmployees();
+      const accounts = await db.getZohoAccounts();
       const pcAccountMap = {};
-      employees.forEach(emp => {
+
+      for (const emp of employees) {
+        // Auto-resolve missing or misconfigured petty cash account for ANY employee
+        if (!emp.petty_cash_account_id || emp.petty_cash_account_id === '3095712000009241002') {
+          const matched = (accounts || []).find(acc => {
+            const accName = (acc.account_name || '').toLowerCase();
+            const empName = (emp.name || '').toLowerCase();
+            const empEmailPrefix = (emp.email || '').split('@')[0].toLowerCase();
+            return (accName.includes(empName) || accName.includes(empEmailPrefix)) &&
+              (accName.includes('petty') || accName.includes('cash') || acc.account_type === 'cash' || acc.account_type === 'other_current_asset');
+          });
+          if (matched) {
+            emp.petty_cash_account_id = matched.account_id;
+            emp.petty_cash_account_name = matched.account_name;
+            await db.saveEmployee(emp);
+          } else if (emp.email === 'shaibani@company.com' || (emp.name && emp.name.toLowerCase().includes('shaibani'))) {
+            emp.petty_cash_account_id = '3095712000008522002';
+            emp.petty_cash_account_name = 'Ibrahim AL Shaibani';
+            await db.saveEmployee(emp);
+          }
+        }
         if (emp.petty_cash_account_id) {
           pcAccountMap[emp.petty_cash_account_id] = emp;
         }
-      });
+      }
 
       const zohoExpenses = [];
       for (const [accountId, emp] of Object.entries(pcAccountMap)) {
@@ -480,6 +506,7 @@ class ZohoBooksService {
             per_page: perPage
           });
           const list = res.expenses || [];
+          let accountNewExpenses = 0;
           for (const ze of list) {
             const allLocalExpenses = await db.getExpenses();
             // Include expenses that:
@@ -487,17 +514,23 @@ class ZohoBooksService {
             // 2) Already exist in local database by zoho_journal_id, invoice_number, or ID
             // 3) Match specific priority transaction IDs
             // 4) Are part of the active accounting cycle (date >= '2026-10-20' or created_time >= '2026-10-20')
-            const isFromApp = (ze.reference_number && ze.reference_number.startsWith('PCA-')) ||
+            // 5) Were created in Zoho within the active period (last 60 days)
+            const isRecentCreated = ze.created_time && new Date(ze.created_time) >= new Date('2026-10-20T00:00:00Z');
+            const isRecentDate = ze.date && ze.date >= '2026-10-20';
+            const isAppRef = ze.reference_number && ze.reference_number.startsWith('PCA-');
+            const isTracked = allLocalExpenses.some(e => 
+              (e.zoho_journal_id && String(e.zoho_journal_id) === String(ze.expense_id)) || 
+              (ze.reference_number && (e.invoice_number === ze.reference_number || e.id === ze.reference_number))
+            );
+
+            const isFromApp = isAppRef ||
+              isTracked ||
+              isRecentDate ||
+              isRecentCreated ||
               ze.expense_id === '3095712000008878001' ||
               ze.expense_id === '3095712000008868020' ||
               ze.expense_id === '3095712000009255001' ||
-              ze.expense_id === '3095712000009256001' ||
-              (ze.date && ze.date >= '2026-10-20') ||
-              (ze.created_time && new Date(ze.created_time) >= new Date('2026-10-20T00:00:00Z')) ||
-              allLocalExpenses.some(e => 
-                (e.zoho_journal_id && String(e.zoho_journal_id) === String(ze.expense_id)) || 
-                (ze.reference_number && (e.invoice_number === ze.reference_number || e.id === ze.reference_number))
-              );
+              ze.expense_id === '3095712000009256001';
 
             if (!isFromApp) {
               continue; // Exclude ancient historical expenses
@@ -519,11 +552,16 @@ class ZohoBooksService {
               return false;
             });
 
-            const localId = existingExp 
+            let localId = existingExp 
               ? existingExp.id 
               : (ze.reference_number && ze.reference_number.startsWith('PCA-') 
                   ? ze.reference_number.replace('PCA-', '') 
                   : `exp-${ze.expense_id.slice(-7)}`);
+
+            let counter = 1;
+            while (zohoExpenses.some(zeItem => zeItem.id === localId && zeItem.zoho_journal_id !== ze.expense_id)) {
+              localId = `exp-${ze.expense_id.slice(-7)}-${counter++}`;
+            }
 
             let projId = ze.project_id || (existingExp ? existingExp.project_id : null);
             let projName = ze.project_name || (existingExp ? existingExp.project_name : null);
@@ -600,20 +638,25 @@ class ZohoBooksService {
               recall_status: existingExp?.recall_status || null,
               created_by: emp.name
             });
+            accountNewExpenses++;
           }
 
-          // Immediately sync live closing balance for the employee's petty cash account
-          try {
-            const liveBal = await this.getPettyCashBalance(accountId);
-            if (typeof liveBal === 'number') {
-              await db.updateEmployeeBalance(emp.id, liveBal);
+          // Only fetch live closing balance if new expenses were found for this account or balance is not yet cached
+          if (accountNewExpenses > 0 || emp.current_balance === undefined || emp.current_balance === null) {
+            try {
+              const liveBal = await this.getPettyCashBalance(accountId);
+              if (typeof liveBal === 'number') {
+                await db.updateEmployeeBalance(emp.id, liveBal);
+              }
+            } catch (balErr) {
+              console.warn(`Could not sync live balance for account ${accountId}:`, balErr.message);
             }
-          } catch (balErr) {
-            console.warn(`Could not sync live balance for account ${accountId}:`, balErr.message);
           }
         } catch (accErr) {
           console.warn(`Could not sync expenses for account ${accountId}:`, accErr.message);
         }
+        // Small delay between employee accounts to respect Zoho API rate limits
+        await new Promise(r => setTimeout(r, 200));
       }
 
       // Merge into local cache
@@ -660,8 +703,25 @@ class ZohoBooksService {
   async createExpenseJournal(expense, employee) {
     let accountId = employee.petty_cash_account_id;
     if (!accountId || accountId === '3095712000009241002') {
-      if (employee.email === 'shaibani@company.com' || (employee.name && employee.name.toLowerCase().includes('shaibani'))) {
+      const accounts = await db.getZohoAccounts();
+      const matched = (accounts || []).find(acc => {
+        const accName = (acc.account_name || '').toLowerCase();
+        const empName = (employee.name || '').toLowerCase();
+        const empEmailPrefix = (employee.email || '').split('@')[0].toLowerCase();
+        return (accName.includes(empName) || accName.includes(empEmailPrefix)) &&
+          (accName.includes('petty') || accName.includes('cash') || acc.account_type === 'cash' || acc.account_type === 'other_current_asset');
+      });
+
+      if (matched) {
+        accountId = matched.account_id;
+        employee.petty_cash_account_id = matched.account_id;
+        employee.petty_cash_account_name = matched.account_name;
+        await db.saveEmployee(employee);
+      } else if (employee.email === 'shaibani@company.com' || (employee.name && employee.name.toLowerCase().includes('shaibani'))) {
         accountId = '3095712000008522002';
+        employee.petty_cash_account_id = '3095712000008522002';
+        employee.petty_cash_account_name = 'Ibrahim AL Shaibani';
+        await db.saveEmployee(employee);
       } else {
         throw new Error(`Employee ${employee.name} does not have a valid assigned Zoho Petty Cash Account.`);
       }

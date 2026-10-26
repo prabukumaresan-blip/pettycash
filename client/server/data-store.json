@@ -4,9 +4,9 @@
     "client_id": "1000.BYLDNDDJMF36HIGK6ZJXGMMYILQ12O",
     "client_secret": "834dd49f629f1e095f2858a71217add0571131bd70",
     "redirect_uri": "https://pettycash-pearl.vercel.app/api/zoho/callback",
-    "access_token": "1000.e795e34301c1e0d7120787c2a523a281.33728e7fa2d0e0be50628c489989b15c",
+    "access_token": "1000.c8ad37a6d6fde61688b3ea3d2663516f.6574272667ffc1d0bbf4340123e2a3f6",
     "refresh_token": "1000.70b3d3f7739447a1b5a16b1d535b0f94.860e4471704192a3fa442619dbd08417",
-    "token_expires_at": "2026-10-26T16:05:46.534Z",
+    "token_expires_at": "2026-10-26T17:00:52.109Z",
     "organization_id": "771750431",
     "organization_name": "Bright Flowers Trading LLC",
     "dc_region": "com",
@@ -16,7 +16,7 @@
     "default_expense_account_id": "acc-exp-petty",
     "default_expense_account_name": "Petty Cash Purchases",
     "last_sync_at": "2026-10-05T19:45:02.798Z",
-    "updated_at": "2026-10-26T15:05:46.666Z"
+    "updated_at": "2026-10-26T16:00:52.294Z"
   },
   "employees": [
     {
@@ -5548,7 +5548,7 @@
       "zoho_journal_number": "9654",
       "sync_status": "synced",
       "sync_error": null,
-      "last_synced_at": "2026-10-26T15:53:05.267+00:00",
+      "last_synced_at": "2026-10-26T16:06:07.592+00:00",
       "added_to_report": true,
       "added_to_report_at": "2026-10-26T15:53:05.267+00:00",
       "is_exported": false,
@@ -5561,7 +5561,7 @@
       "recall_reviewed_by": null,
       "recall_reviewed_at": null,
       "created_at": "2026-10-26T15:53:15.982391+00:00",
-      "updated_at": "2026-10-26T15:53:16.680Z"
+      "updated_at": "2026-10-26T16:06:17.561Z"
     },
     {
       "id": "exp-9178587",
@@ -5586,7 +5586,7 @@
       "zoho_journal_number": "9633",
       "sync_status": "synced",
       "sync_error": null,
-      "last_synced_at": "2026-10-26T15:52:26.783+00:00",
+      "last_synced_at": "2026-10-26T16:05:36.793+00:00",
       "added_to_report": true,
       "added_to_report_at": "2026-10-26T15:52:26.783+00:00",
       "is_exported": false,
@@ -5598,8 +5598,8 @@
       "recall_requested_by": null,
       "recall_reviewed_by": null,
       "recall_reviewed_at": null,
-      "created_at": "2026-10-26T15:53:14.816Z",
-      "updated_at": "2026-10-26T15:53:14.816Z"
+      "created_at": "2026-10-26T15:53:14.774431+00:00",
+      "updated_at": "2026-10-26T16:06:17.444Z"
     },
     {
       "id": "exp-9178506",
@@ -5624,7 +5624,7 @@
       "zoho_journal_number": "9632",
       "sync_status": "synced",
       "sync_error": null,
-      "last_synced_at": "2026-10-26T15:52:25.823+00:00",
+      "last_synced_at": "2026-10-26T16:05:36.557+00:00",
       "added_to_report": true,
       "added_to_report_at": "2026-10-26T15:52:25.823+00:00",
       "is_exported": false,
@@ -5636,8 +5636,8 @@
       "recall_requested_by": null,
       "recall_reviewed_by": null,
       "recall_reviewed_at": null,
-      "created_at": "2026-10-26T15:53:14.695Z",
-      "updated_at": "2026-10-26T15:53:14.695Z"
+      "created_at": "2026-10-26T15:53:14.654415+00:00",
+      "updated_at": "2026-10-26T16:06:17.252Z"
     },
     {
       "id": "exp-9178486",
@@ -5662,7 +5662,7 @@
       "zoho_journal_number": "9631",
       "sync_status": "synced",
       "sync_error": null,
-      "last_synced_at": "2026-10-26T15:52:24.685+00:00",
+      "last_synced_at": "2026-10-26T16:05:36.362+00:00",
       "added_to_report": true,
       "added_to_report_at": "2026-10-26T15:52:24.685+00:00",
       "is_exported": false,
@@ -5674,8 +5674,8 @@
       "recall_requested_by": null,
       "recall_reviewed_by": null,
       "recall_reviewed_at": null,
-      "created_at": "2026-10-26T15:53:14.582Z",
-      "updated_at": "2026-10-26T15:53:14.582Z"
+      "created_at": "2026-10-26T15:53:14.465874+00:00",
+      "updated_at": "2026-10-26T16:06:17.066Z"
     },
     {
       "id": "exp-9178449",
@@ -5700,7 +5700,7 @@
       "zoho_journal_number": "9630",
       "sync_status": "synced",
       "sync_error": null,
-      "last_synced_at": "2026-10-26T15:52:23.727+00:00",
+      "last_synced_at": "2026-10-26T16:05:36.138+00:00",
       "added_to_report": true,
       "added_to_report_at": "2026-10-26T15:52:23.727+00:00",
       "is_exported": false,
@@ -5712,8 +5712,8 @@
       "recall_requested_by": null,
       "recall_reviewed_by": null,
       "recall_reviewed_at": null,
-      "created_at": "2026-10-26T15:53:14.392Z",
-      "updated_at": "2026-10-26T15:53:14.392Z"
+      "created_at": "2026-10-26T15:53:14.257009+00:00",
+      "updated_at": "2026-10-26T16:06:16.949Z"
     },
     {
       "id": "exp-9209001",
@@ -5738,12 +5738,12 @@
       "added_to_report_at": "2026-10-22T16:08:17.049+00:00",
       "created_by": "Nihal",
       "created_at": "2026-10-22T16:08:17.653155+00:00",
-      "updated_at": "2026-10-26T15:53:16.920Z",
+      "updated_at": "2026-10-26T16:06:17.687Z",
       "cost_center": null,
       "receipt_url": null,
       "receipt_file_name": null,
       "sync_error": null,
-      "last_synced_at": "2026-10-26T15:53:05.479+00:00",
+      "last_synced_at": "2026-10-26T16:06:07.829+00:00",
       "is_exported": false,
       "exported_at": null,
       "recall_status": null,
@@ -5776,12 +5776,12 @@
       "added_to_report_at": "2026-10-22T16:08:17.05+00:00",
       "created_by": "Nihal",
       "created_at": "2026-10-22T16:08:17.653155+00:00",
-      "updated_at": "2026-10-26T15:53:17.115Z",
+      "updated_at": "2026-10-26T16:06:17.876Z",
       "cost_center": null,
       "receipt_url": null,
       "receipt_file_name": null,
       "sync_error": null,
-      "last_synced_at": "2026-10-26T15:53:07.054+00:00",
+      "last_synced_at": "2026-10-26T16:06:09.921+00:00",
       "is_exported": false,
       "exported_at": null,
       "recall_status": null,
@@ -5814,12 +5814,12 @@
       "added_to_report_at": "2026-10-22T16:08:17.05+00:00",
       "created_by": "Nihal",
       "created_at": "2026-10-22T16:08:17.653155+00:00",
-      "updated_at": "2026-10-26T15:53:17.317Z",
+      "updated_at": "2026-10-26T16:06:17.993Z",
       "cost_center": null,
       "receipt_url": null,
       "receipt_file_name": null,
       "sync_error": null,
-      "last_synced_at": "2026-10-26T15:53:07.333+00:00",
+      "last_synced_at": "2026-10-26T16:06:10.206+00:00",
       "is_exported": false,
       "exported_at": null,
       "recall_status": null,
@@ -5852,12 +5852,12 @@
       "added_to_report_at": "2026-10-22T16:08:17.05+00:00",
       "created_by": "Nihal",
       "created_at": "2026-10-22T16:08:17.653155+00:00",
-      "updated_at": "2026-10-26T15:53:18.139Z",
+      "updated_at": "2026-10-26T16:06:18.208Z",
       "cost_center": null,
       "receipt_url": null,
       "receipt_file_name": null,
       "sync_error": null,
-      "last_synced_at": "2026-10-26T15:53:07.575+00:00",
+      "last_synced_at": "2026-10-26T16:06:10.444+00:00",
       "is_exported": false,
       "exported_at": null,
       "recall_status": null,
@@ -5869,6 +5869,36 @@
     }
   ],
   "sync_logs": [
+    {
+      "id": "log-1793030778226",
+      "sync_type": "expenses_sync",
+      "status": "success",
+      "details": {
+        "count": 9
+      },
+      "error_message": null,
+      "created_at": "2026-10-26T16:06:18.226Z"
+    },
+    {
+      "id": "log-1793030661628",
+      "sync_type": "expenses_sync",
+      "status": "success",
+      "details": {
+        "count": 9
+      },
+      "error_message": null,
+      "created_at": "2026-10-26T16:04:21.628Z"
+    },
+    {
+      "id": "log-1793030481243",
+      "sync_type": "expenses_sync",
+      "status": "success",
+      "details": {
+        "count": 10
+      },
+      "error_message": null,
+      "created_at": "2026-10-26T16:01:21.243Z"
+    },
     {
       "id": "log-1793029998162",
       "sync_type": "expenses_sync",
@@ -6327,36 +6357,6 @@
       },
       "error_message": null,
       "created_at": "2026-10-05T19:45:02.772Z"
-    },
-    {
-      "id": "log-1791229500796",
-      "sync_type": "expenses_sync",
-      "status": "success",
-      "details": {
-        "count": 1
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:45:00.796Z"
-    },
-    {
-      "id": "log-1791229500477",
-      "sync_type": "projects_sync",
-      "status": "success",
-      "details": {
-        "count": 78
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:45:00.477Z"
-    },
-    {
-      "id": "log-1791229499404",
-      "sync_type": "coa_sync",
-      "status": "success",
-      "details": {
-        "count": 344
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:44:59.404Z"
     }
   ]
 }

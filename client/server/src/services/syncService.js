@@ -40,8 +40,21 @@ class SyncService {
           throw new Error(`Employee ID ${exp.employee_id} not found`);
         }
 
-        if (employee.email === 'shaibani@company.com' || (employee.name && employee.name.toLowerCase().includes('shaibani'))) {
-          if (!employee.petty_cash_account_id || employee.petty_cash_account_id === '3095712000009241002') {
+        if (!employee.petty_cash_account_id || employee.petty_cash_account_id === '3095712000009241002') {
+          const accounts = await db.getZohoAccounts();
+          const matched = (accounts || []).find(acc => {
+            const accName = (acc.account_name || '').toLowerCase();
+            const empName = (employee.name || '').toLowerCase();
+            const empEmailPrefix = (employee.email || '').split('@')[0].toLowerCase();
+            return (accName.includes(empName) || accName.includes(empEmailPrefix)) &&
+              (accName.includes('petty') || accName.includes('cash') || acc.account_type === 'cash' || acc.account_type === 'other_current_asset');
+          });
+
+          if (matched) {
+            employee.petty_cash_account_id = matched.account_id;
+            employee.petty_cash_account_name = matched.account_name;
+            await db.saveEmployee(employee);
+          } else if (employee.email === 'shaibani@company.com' || (employee.name && employee.name.toLowerCase().includes('shaibani'))) {
             employee.petty_cash_account_id = '3095712000008522002';
             employee.petty_cash_account_name = 'Ibrahim AL Shaibani';
             await db.saveEmployee(employee);
