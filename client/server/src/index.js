@@ -18,11 +18,24 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
+
+// Strict No-Cache middleware for all dynamic API endpoints to eliminate browser caching issues
+app.use(['/api', '/auth', '/employees', '/expenses', '/zoho', '/reports', '/webhooks'], (req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  res.setHeader('Surrogate-Control', 'no-store');
+  next();
+});
+
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 
 // Populate req.user from auth token/header
 app.use(authenticateUser);
+
+// Ensure background sync is initialized across all environments
+syncService.init();
 
 // Serve static uploads
 const uploadDir = process.env.VERCEL === '1'

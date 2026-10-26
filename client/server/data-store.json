@@ -4,9 +4,9 @@
     "client_id": "1000.BYLDNDDJMF36HIGK6ZJXGMMYILQ12O",
     "client_secret": "834dd49f629f1e095f2858a71217add0571131bd70",
     "redirect_uri": "https://pettycash-pearl.vercel.app/api/zoho/callback",
-    "access_token": "1000.ad978770641a01c231e1876cc9732758.9eb80bba57f67ad47d604e46b7f58a1b",
+    "access_token": "1000.e795e34301c1e0d7120787c2a523a281.33728e7fa2d0e0be50628c489989b15c",
     "refresh_token": "1000.70b3d3f7739447a1b5a16b1d535b0f94.860e4471704192a3fa442619dbd08417",
-    "token_expires_at": "2026-10-25T17:06:29.237Z",
+    "token_expires_at": "2026-10-26T16:05:46.534Z",
     "organization_id": "771750431",
     "organization_name": "Bright Flowers Trading LLC",
     "dc_region": "com",
@@ -16,7 +16,7 @@
     "default_expense_account_id": "acc-exp-petty",
     "default_expense_account_name": "Petty Cash Purchases",
     "last_sync_at": "2026-10-05T19:45:02.798Z",
-    "updated_at": "2026-10-25T16:06:29.369Z"
+    "updated_at": "2026-10-26T15:05:46.666Z"
   },
   "employees": [
     {
@@ -99,16 +99,16 @@
       "employee_code": "EMP-507",
       "password": "emp123",
       "role": "employee",
-      "initial_float": 0,
-      "current_balance": 0,
+      "initial_float": 104.709,
+      "current_balance": 104.709,
       "department": "Field Operations",
       "default_project_id": null,
       "default_project_name": null,
-      "petty_cash_account_id": "3095712000009241002",
-      "petty_cash_account_name": "Petty Cash - Ibrahim Shaibani",
+      "petty_cash_account_id": "3095712000008522002",
+      "petty_cash_account_name": "Ibrahim AL Shaibani",
       "is_active": true,
       "created_at": "2026-10-25T16:06:30.168Z",
-      "updated_at": "2026-10-25T16:06:30.168Z"
+      "updated_at": "2026-10-26T15:09:38.311Z"
     }
   ],
   "zoho_accounts": [
@@ -953,15 +953,6 @@
       "account_id": "3095712000000000361",
       "account_name": "Petty Cash",
       "account_code": "",
-      "account_type": "cash",
-      "is_active": true,
-      "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
-    },
-    {
-      "account_id": "3095712000009241002",
-      "account_name": "Petty Cash - Ibrahim Shaibani",
-      "account_code": "PC-EMP-912",
       "account_type": "cash",
       "is_active": true,
       "current_balance": 0,

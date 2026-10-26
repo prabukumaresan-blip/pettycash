@@ -6,6 +6,7 @@ const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 const { db, supabase, isLiveSupabase } = require('../config/supabase');
 const zohoBooksService = require('../services/zohoBooksService');
+const syncService = require('../services/syncService');
 
 // Setup local uploads storage directory as reliable fallback
 const UPLOAD_DIR = process.env.VERCEL === '1'
@@ -101,6 +102,11 @@ router.get('/', async (req, res) => {
       }
     }
 
+    // Automatically trigger async background sync if any expenses are pending/failed
+    if (expenses.some(e => e.sync_status === 'pending' || e.sync_status === 'failed')) {
+      syncService.syncPendingExpenses().catch(() => {});
+    }
+
     res.json({ success: true, expenses });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
@@ -164,9 +170,18 @@ router.post('/', upload.single('receipt'), async (req, res) => {
       });
     }
 
-    const employee = await db.getEmployeeById(employee_id);
+    let employee = await db.getEmployeeById(employee_id);
     if (!employee) {
       return res.status(404).json({ success: false, error: 'Employee not found' });
+    }
+
+    // Auto-normalize Shaibani petty cash account if unset or set to obsolete ID
+    if (employee.email === 'shaibani@company.com' || (employee.name && employee.name.toLowerCase().includes('shaibani'))) {
+      if (!employee.petty_cash_account_id || employee.petty_cash_account_id === '3095712000009241002') {
+        employee.petty_cash_account_id = '3095712000008522002';
+        employee.petty_cash_account_name = 'Ibrahim AL Shaibani';
+        await db.saveEmployee(employee);
+      }
     }
 
     let receiptUrl = req.body.receipt_url || null;
@@ -235,6 +250,15 @@ router.post('/', upload.single('receipt'), async (req, res) => {
       console.warn('⚠️ Zoho Expense creation deferred to background sync:', zErr.message);
       newExpense.sync_status = 'pending';
       newExpense.sync_error = zErr.message;
+
+      // Immediate scheduled retry in background after 1.5 seconds
+      setTimeout(async () => {
+        try {
+          await syncService.syncPendingExpenses();
+        } catch (retryErr) {
+          console.warn('Background auto-retry pending expense notice:', retryErr.message);
+        }
+      }, 1500);
     }
 
     const savedExpense = await db.saveExpense(newExpense);

@@ -163,11 +163,7 @@ export default function App() {
       const expRes = await api.getExpenses();
       if (!api.getStoredUser()) return;
       if (expRes.success && Array.isArray(expRes.expenses)) {
-        if (expRes.expenses.length > 0) {
-          setExpenses(expRes.expenses);
-        } else {
-          setExpenses(prev => (prev.length > 0 ? prev : []));
-        }
+        setExpenses(expRes.expenses);
       }
 
       // 3. Zoho Status (Admin only)

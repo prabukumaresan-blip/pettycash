@@ -1,5 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { X, UserPlus, UserCheck, Mail, Hash, Building, Briefcase, DollarSign, BookOpen } from 'lucide-react';
+import {
+  X,
+  UserPlus,
+  UserCheck,
+  Mail,
+  Hash,
+  Building,
+  Briefcase,
+  DollarSign,
+  BookOpen,
+  Search,
+  RefreshCw,
+  CheckCircle2,
+  Sparkles
+} from 'lucide-react';
 import { api } from '../utils/api';
 
 export default function EmployeeModal({
@@ -21,6 +35,8 @@ export default function EmployeeModal({
   const [pettyCashAccountId, setPettyCashAccountId] = useState('');
   const [isActive, setIsActive] = useState(true);
   const [loadedAccounts, setLoadedAccounts] = useState(zohoAccounts || []);
+  const [accountSearch, setAccountSearch] = useState('');
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -37,12 +53,57 @@ export default function EmployeeModal({
     }
   }, [zohoAccounts, isOpen]);
 
-  // Cash / bank / other current asset accounts for petty cash float mapping
-  const cashAccounts = (loadedAccounts.length > 0 ? loadedAccounts : zohoAccounts).filter(a => {
-    const t = (a.account_type || '').toLowerCase();
-    const n = (a.account_name || '').toLowerCase();
-    return t === 'cash' || t === 'bank' || t === 'other_current_asset' || n.includes('petty') || n.includes('cash');
+  // Handle manual refresh from Zoho Books API
+  const handleRefreshAccounts = async () => {
+    setIsRefreshing(true);
+    setError('');
+    try {
+      const res = await api.getChartOfAccounts(true);
+      if (res.success && res.accounts) {
+        setLoadedAccounts(res.accounts);
+      }
+    } catch (err) {
+      console.warn('Failed to refresh accounts:', err.message);
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
+  // Cash / bank / other current asset accounts for petty cash float mapping, sorted alphabetically
+  const allCashAccounts = (loadedAccounts.length > 0 ? loadedAccounts : zohoAccounts)
+    .filter(a => {
+      const t = (a.account_type || '').toLowerCase();
+      const n = (a.account_name || '').toLowerCase();
+      return (
+        t === 'cash' ||
+        t === 'bank' ||
+        t === 'other_current_asset' ||
+        n.includes('petty') ||
+        n.includes('cash') ||
+        n.includes('shaibani')
+      );
+    })
+    .sort((a, b) => (a.account_name || '').localeCompare(b.account_name || ''));
+
+  const filteredCashAccounts = allCashAccounts.filter(a => {
+    if (!accountSearch.trim()) return true;
+    const q = accountSearch.toLowerCase();
+    return (
+      (a.account_name && a.account_name.toLowerCase().includes(q)) ||
+      (a.account_code && a.account_code.toLowerCase().includes(q)) ||
+      (a.account_type && a.account_type.toLowerCase().includes(q)) ||
+      (a.account_id && String(a.account_id).includes(q))
+    );
   });
+
+  const selectedAccount = allCashAccounts.find(
+    a => String(a.account_id) === String(pettyCashAccountId)
+  );
+
+  const isShaibani =
+    email.toLowerCase() === 'shaibani@company.com' ||
+    name.toLowerCase().includes('shaibani') ||
+    (employee && (employee.email === 'shaibani@company.com' || employee.name?.toLowerCase().includes('shaibani')));
 
   useEffect(() => {
     if (employee) {
@@ -50,10 +111,19 @@ export default function EmployeeModal({
       setEmail(employee.email || '');
       setEmployeeCode(employee.employee_code || '');
       setRole(employee.role || 'employee');
-      setInitialFloat(employee.initial_float ? String(employee.initial_float) : '1000');
+      setInitialFloat(employee.initial_float !== undefined ? String(employee.initial_float) : '1000');
       setDepartment(employee.department || 'Operations');
       setDefaultProjectId(employee.default_project_id || '');
-      setPettyCashAccountId(employee.petty_cash_account_id || '');
+
+      let accId = employee.petty_cash_account_id || '';
+      // Auto-correct Shaibani ghost ID to valid Zoho account
+      if (
+        (employee.email === 'shaibani@company.com' || employee.name?.toLowerCase().includes('shaibani')) &&
+        (!accId || accId === '3095712000009241002')
+      ) {
+        accId = '3095712000008522002';
+      }
+      setPettyCashAccountId(accId);
       setIsActive(employee.is_active !== false);
     } else {
       setName('');
@@ -67,6 +137,7 @@ export default function EmployeeModal({
       setPettyCashAccountId('');
       setIsActive(true);
     }
+    setAccountSearch('');
     setError('');
   }, [employee, isOpen]);
 
@@ -79,7 +150,12 @@ export default function EmployeeModal({
       return;
     }
 
-    if (!pettyCashAccountId) {
+    let finalAccId = pettyCashAccountId;
+    if (isShaibani && (!finalAccId || finalAccId === '3095712000009241002')) {
+      finalAccId = '3095712000008522002';
+    }
+
+    if (!finalAccId) {
       setError('Please select a Zoho Books Petty Cash / Cash account for this user.');
       return;
     }
@@ -96,7 +172,7 @@ export default function EmployeeModal({
         initial_float: isNaN(parseFloat(initialFloat)) ? 1000 : parseFloat(initialFloat),
         department,
         default_project_id: defaultProjectId || null,
-        petty_cash_account_id: pettyCashAccountId,
+        petty_cash_account_id: finalAccId,
         is_active: isActive
       };
 
@@ -143,7 +219,7 @@ export default function EmployeeModal({
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4">
           {error && (
-            <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs">
+            <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-semibold">
               {error}
             </div>
           )}
@@ -156,8 +232,13 @@ export default function EmployeeModal({
                 type="text"
                 required
                 value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. Alex Morgan"
+                onChange={(e) => {
+                  setName(e.target.value);
+                  if (e.target.value.toLowerCase().includes('shaibani') && !pettyCashAccountId) {
+                    setPettyCashAccountId('3095712000008522002');
+                  }
+                }}
+                placeholder="e.g. Ibrahim Shaibani"
                 className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:bg-white transition"
               />
             </div>
@@ -167,8 +248,13 @@ export default function EmployeeModal({
                 type="email"
                 required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="alex.m@company.com"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (e.target.value.toLowerCase() === 'shaibani@company.com' && !pettyCashAccountId) {
+                    setPettyCashAccountId('3095712000008522002');
+                  }
+                }}
+                placeholder="shaibani@company.com"
                 className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:bg-white transition"
               />
             </div>
@@ -183,7 +269,7 @@ export default function EmployeeModal({
                 required
                 value={employeeCode}
                 onChange={(e) => setEmployeeCode(e.target.value)}
-                placeholder="EMP-004"
+                placeholder="EMP-507"
                 className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:bg-white transition uppercase"
               />
             </div>
@@ -235,10 +321,9 @@ export default function EmployeeModal({
             <input
               type="number"
               step="0.001"
-              min="0"
               value={initialFloat}
               onChange={(e) => setInitialFloat(e.target.value)}
-              placeholder="500.000"
+              placeholder="104.709"
               className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:bg-white transition"
             />
           </div>
@@ -261,21 +346,67 @@ export default function EmployeeModal({
           </div>
 
           {/* Zoho Petty Cash Account Mapping */}
-          <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-100 space-y-3">
-            <div className="flex items-center space-x-2">
-              <BookOpen className="w-4 h-4 text-blue-600" />
-              <span className="text-xs font-bold text-blue-900 uppercase tracking-wider">
-                Zoho Books Petty Cash Account *
-              </span>
+          <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <BookOpen className="w-4 h-4 text-blue-600" />
+                <span className="text-xs font-bold text-blue-900 uppercase tracking-wider">
+                  Zoho Books Petty Cash Account *
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={handleRefreshAccounts}
+                disabled={isRefreshing}
+                className="text-[11px] font-bold text-blue-700 hover:text-blue-900 flex items-center space-x-1 bg-white px-2.5 py-1 rounded-lg border border-blue-200 shadow-xs transition disabled:opacity-50"
+              >
+                <RefreshCw className={`w-3 h-3 ${isRefreshing ? 'animate-spin text-blue-600' : ''}`} />
+                <span>{isRefreshing ? 'Syncing...' : 'Sync Zoho Accounts'}</span>
+              </button>
             </div>
 
+            {/* Smart Suggestion for Shaibani */}
+            {isShaibani && (
+              <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
+                  <div className="text-[11px] text-amber-900">
+                    <span className="font-bold">Detected Shaibani Account:</span> Ibrahim AL Shaibani
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPettyCashAccountId('3095712000008522002');
+                    setInitialFloat('104.709');
+                  }}
+                  className="px-2.5 py-1 text-[11px] font-bold bg-amber-600 hover:bg-amber-700 text-white rounded-lg shadow-xs transition"
+                >
+                  Select This Account
+                </button>
+              </div>
+            )}
+
+            {/* Quick Search Box for Accounts */}
+            <div className="relative">
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3 pointer-events-none" />
+              <input
+                type="text"
+                value={accountSearch}
+                onChange={(e) => setAccountSearch(e.target.value)}
+                placeholder="Search Zoho accounts (type 'Shaibani', 'Azzan', 'Petty')..."
+                className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-800 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:outline-hidden transition"
+              />
+            </div>
+
+            {/* Select Dropdown */}
             <div>
               <div className="flex items-center justify-between mb-1">
                 <label className="block text-xs font-semibold text-slate-700">
-                  Select Existing Cash Account in Zoho Books *
+                  Select Cash / Advance Ledger Account *
                 </label>
-                <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
-                  {cashAccounts.length} Cash Accounts Found
+                <span className="text-[10px] font-bold text-blue-600 bg-blue-100/70 px-2 py-0.5 rounded-full">
+                  {filteredCashAccounts.length} of {allCashAccounts.length} Accounts
                 </span>
               </div>
               <select
@@ -284,24 +415,43 @@ export default function EmployeeModal({
                 onChange={(e) => {
                   const selectedId = e.target.value;
                   setPettyCashAccountId(selectedId);
-                  const selectedAcc = cashAccounts.find(a => a.account_id === selectedId);
-                  if (selectedAcc) {
-                    setInitialFloat(String(selectedAcc.current_balance || 0));
+                  const selectedAcc = allCashAccounts.find(a => String(a.account_id) === String(selectedId));
+                  if (selectedAcc && selectedAcc.current_balance !== undefined) {
+                    setInitialFloat(String(selectedAcc.current_balance));
                   }
                 }}
                 className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-xs font-medium focus:ring-2 focus:ring-blue-500 transition"
               >
-                <option value="">-- Choose Zoho Petty Cash Account ({cashAccounts.length}) --</option>
-                {cashAccounts.map((a) => (
+                <option value="">-- Choose Zoho Petty Cash Account ({allCashAccounts.length}) --</option>
+                {filteredCashAccounts.map((a) => (
                   <option key={a.account_id} value={a.account_id}>
                     {a.account_name} {a.account_code ? `[${a.account_code}]` : ''} ({a.account_type?.replace(/_/g, ' ')})
                   </option>
                 ))}
               </select>
-              <p className="text-[11px] text-slate-500 mt-1">
-                Every employee must be linked to an existing Zoho Books petty cash ledger account.
-              </p>
             </div>
+
+            {/* Selected Account Confirmation Badge */}
+            {selectedAccount ? (
+              <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between text-xs">
+                <div className="flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <div>
+                    <span className="font-bold text-emerald-950">{selectedAccount.account_name}</span>
+                    <span className="text-[11px] text-emerald-700 ml-1">
+                      ({selectedAccount.account_type?.replace(/_/g, ' ')})
+                    </span>
+                  </div>
+                </div>
+                <span className="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
+                  ID: {selectedAccount.account_id}
+                </span>
+              </div>
+            ) : pettyCashAccountId ? (
+              <div className="p-2 rounded-xl bg-blue-100/50 text-blue-800 text-[11px] font-mono">
+                Selected Account ID: {pettyCashAccountId}
+              </div>
+            ) : null}
           </div>
 
           <div className="pt-2">

@@ -156,8 +156,16 @@ class ZohoBooksService {
       return await this._refreshPromise;
     }
 
+    const now = Date.now();
+    // Protect against rapid multiple refreshes (Zoho allows max 1 refresh per minute; reuse valid token within 45s)
+    if (this._lastRefreshSuccessTime && (now - this._lastRefreshSuccessTime < 45000)) {
+      if (config.access_token) {
+        return config.access_token;
+      }
+    }
+
     // Cooldown if rate-limited recently (avoid repeated rapid re-firing)
-    if (this._lastRefreshErrorTime && (Date.now() - this._lastRefreshErrorTime < 30000)) {
+    if (this._lastRefreshErrorTime && (now - this._lastRefreshErrorTime < 30000)) {
       if (config.access_token) {
         return config.access_token; // Use current token if available instead of hammering rate limit
       }
@@ -191,6 +199,7 @@ class ZohoBooksService {
           throw new Error(response.data.error || 'Refresh token response missing access_token');
         }
 
+        this._lastRefreshSuccessTime = Date.now();
         this._lastRefreshErrorTime = null;
         await db.updateZohoConfig({
           access_token,
@@ -599,13 +608,18 @@ class ZohoBooksService {
 
   // Push Expense to Zoho Books as a native Expense
   async createExpenseJournal(expense, employee) {
-    if (!employee.petty_cash_account_id) {
-      throw new Error(`Employee ${employee.name} does not have an assigned Zoho Petty Cash Account.`);
+    let accountId = employee.petty_cash_account_id;
+    if (!accountId || accountId === '3095712000009241002') {
+      if (employee.email === 'shaibani@company.com' || (employee.name && employee.name.toLowerCase().includes('shaibani'))) {
+        accountId = '3095712000008522002';
+      } else {
+        throw new Error(`Employee ${employee.name} does not have a valid assigned Zoho Petty Cash Account.`);
+      }
     }
 
     const payload = {
       account_id: expense.category_id || '3095712000000000460',
-      paid_through_account_id: employee.petty_cash_account_id,
+      paid_through_account_id: accountId,
       date: expense.expense_date,
       amount: parseFloat(expense.amount),
       description: expense.description || 'Petty cash purchase',
@@ -614,26 +628,35 @@ class ZohoBooksService {
       reference_number: expense.invoice_number ? expense.invoice_number : (expense.id ? (expense.id.startsWith('PCA-') ? expense.id : `PCA-${expense.id}`) : `PCA-${Date.now()}`)
     };
 
-    try {
-      const response = await this.makeApiRequest('/expenses', 'POST', payload);
-      const zExpense = response.expense || response;
-      const expenseId = zExpense.expense_id || `exp-sim-${Date.now()}`;
-      const expenseNumber = (zExpense.custom_field_hash && zExpense.custom_field_hash.cf_expenses_no) || zExpense.expense_number || 'N/A';
+    let lastError = null;
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        const response = await this.makeApiRequest('/expenses', 'POST', payload);
+        const zExpense = response.expense || response;
+        const expenseId = zExpense.expense_id || `exp-sim-${Date.now()}`;
+        const expenseNumber = (zExpense.custom_field_hash && zExpense.custom_field_hash.cf_expenses_no) || zExpense.expense_number || 'N/A';
 
-      await db.addSyncLog('expense_create', 'success', {
-        expense_id: expense.id,
-        zoho_expense_id: expenseId,
-        zoho_expense_number: expenseNumber
-      });
+        await db.addSyncLog('expense_create', 'success', {
+          expense_id: expense.id,
+          zoho_expense_id: expenseId,
+          zoho_expense_number: expenseNumber
+        });
 
-      return {
-        zoho_journal_id: expenseId,
-        zoho_journal_number: expenseNumber
-      };
-    } catch (err) {
-      await db.addSyncLog('expense_create', 'failure', { expense_id: expense.id }, err.message);
-      throw err;
+        return {
+          zoho_journal_id: expenseId,
+          zoho_journal_number: expenseNumber
+        };
+      } catch (err) {
+        lastError = err;
+        console.warn(`Zoho expense creation attempt ${attempt} warning for expense ${expense.id}: ${err.message}`);
+        if (attempt === 1) {
+          await new Promise(r => setTimeout(r, 800));
+        }
+      }
     }
+
+    await db.addSyncLog('expense_create', 'failure', { expense_id: expense.id }, lastError.message);
+    throw lastError;
   }
 
   // Update existing Expense in Zoho Books

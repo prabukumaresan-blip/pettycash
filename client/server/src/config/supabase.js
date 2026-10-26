@@ -1,7 +1,22 @@
 const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 const path = require('path');
-require('dotenv').config();
+// Multi-path dotenv loader if environment variables are not pre-injected
+if (!process.env.SUPABASE_URL) {
+  const envPaths = [
+    path.resolve(__dirname, '../../.env'),
+    path.resolve(process.cwd(), '.env'),
+    path.resolve(process.cwd(), 'server/.env'),
+    path.resolve(process.cwd(), 'client/server/.env')
+  ];
+  for (const envPath of envPaths) {
+    try {
+      if (fs.existsSync(/*turbopackIgnore: true*/ envPath)) {
+        require('dotenv').config({ path: envPath });
+      }
+    } catch {}
+  }
+}
 
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || '';
@@ -9,24 +24,28 @@ const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABA
 let supabase = null;
 let isLiveSupabase = false;
 let checkPromise = null;
+let lastCheckTime = 0;
 
 async function ensureLiveSupabase() {
   if (isLiveSupabase) return true;
   if (!supabase) return false;
-  if (!checkPromise) {
-    checkPromise = supabase
-      .from('employees')
-      .select('id')
-      .limit(1)
-      .then(({ error }) => {
-        isLiveSupabase = !error;
-        return isLiveSupabase;
-      })
-      .catch(() => {
-        isLiveSupabase = false;
-        return false;
-      });
+  const now = Date.now();
+  if (checkPromise && (now - lastCheckTime < 10000)) {
+    return await checkPromise;
   }
+  lastCheckTime = now;
+  checkPromise = supabase
+    .from('employees')
+    .select('id')
+    .limit(1)
+    .then(({ error }) => {
+      isLiveSupabase = !error;
+      return isLiveSupabase;
+    })
+    .catch(() => {
+      isLiveSupabase = false;
+      return false;
+    });
   return await checkPromise;
 }
 
@@ -142,13 +161,13 @@ const initialSeedData = {
       employee_code: 'EMP-507',
       password: 'emp123',
       role: 'employee',
-      initial_float: 0,
-      current_balance: 0,
+      initial_float: 104.709,
+      current_balance: 104.709,
       department: 'Field Operations',
       default_project_id: null,
       default_project_name: null,
-      petty_cash_account_id: '3095712000009241002',
-      petty_cash_account_name: 'Petty Cash - Ibrahim Shaibani',
+      petty_cash_account_id: '3095712000008522002',
+      petty_cash_account_name: 'Ibrahim AL Shaibani',
       is_active: true,
       created_at: '2026-10-25T16:06:30.168Z'
     }
@@ -713,11 +732,13 @@ const db = {
   async getZohoAccounts() {
     const live = await ensureLiveSupabase();
     if (live) {
-      const { data, error } = await supabase.from('zoho_accounts_cache').select('*');
+      const { data, error } = await supabase.from('zoho_accounts_cache').select('*').order('account_name', { ascending: true });
       if (!error && data && data.length) return data;
     }
     const store = loadLocalData();
-    return store.zoho_accounts;
+    const accounts = [...(store.zoho_accounts || [])];
+    accounts.sort((a, b) => (a.account_name || '').localeCompare(b.account_name || ''));
+    return accounts;
   },
 
   async setZohoAccounts(accounts) {

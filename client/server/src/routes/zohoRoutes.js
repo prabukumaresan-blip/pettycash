@@ -130,9 +130,23 @@ router.post('/sync', async (req, res) => {
 // GET Synced Chart of Accounts (categorized into expense accounts & petty cash accounts)
 router.get('/chart-of-accounts', async (req, res) => {
   try {
-    const accounts = await db.getZohoAccounts();
-    const expenseAccounts = accounts.filter(a => a.account_type === 'expense');
-    const cashAccounts = accounts.filter(a => a.account_type === 'cash' || a.account_type === 'bank' || a.account_type === 'other_current_asset');
+    let accounts = await db.getZohoAccounts();
+    const shouldRefresh = req.query.refresh === 'true' || !accounts || accounts.length === 0 || (accounts.length <= 8 && accounts[0]?.account_id?.startsWith('acc-exp-'));
+    if (shouldRefresh) {
+      try {
+        accounts = await zohoBooksService.syncChartOfAccounts();
+      } catch (syncErr) {
+        console.warn('Real-time chart of accounts sync notice:', syncErr.message);
+      }
+    }
+    accounts = accounts || [];
+    accounts.sort((a, b) => (a.account_name || '').localeCompare(b.account_name || ''));
+    const expenseAccounts = accounts.filter(a => (a.account_type || '').toLowerCase() === 'expense');
+    const cashAccounts = accounts.filter(a => {
+      const t = (a.account_type || '').toLowerCase();
+      const n = (a.account_name || '').toLowerCase();
+      return t === 'cash' || t === 'bank' || t === 'other_current_asset' || n.includes('petty') || n.includes('cash') || n.includes('shaibani');
+    });
     res.json({
       success: true,
       accounts,

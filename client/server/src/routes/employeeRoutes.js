@@ -9,6 +9,13 @@ router.get('/', async (req, res) => {
   try {
     if (req.user && req.user.role === 'employee') {
       const emp = await db.getEmployeeById(req.user.id);
+      if (emp && (emp.email === 'shaibani@company.com' || emp.id === 'emp-shaibani')) {
+        if (!emp.petty_cash_account_id || emp.petty_cash_account_id === '3095712000009241002') {
+          emp.petty_cash_account_id = '3095712000008522002';
+          emp.petty_cash_account_name = 'Ibrahim AL Shaibani';
+          await db.saveEmployee(emp);
+        }
+      }
       if (emp && emp.petty_cash_account_id) {
         try {
           const liveBal = await zohoBooksService.getPettyCashBalance(emp.petty_cash_account_id);
@@ -23,6 +30,16 @@ router.get('/', async (req, res) => {
     }
 
     const employees = await db.getEmployees();
+    // Auto-normalize Shaibani account in employee list
+    employees.forEach(emp => {
+      if (emp.email === 'shaibani@company.com' || emp.id === 'emp-shaibani') {
+        if (!emp.petty_cash_account_id || emp.petty_cash_account_id === '3095712000009241002') {
+          emp.petty_cash_account_id = '3095712000008522002';
+          emp.petty_cash_account_name = 'Ibrahim AL Shaibani';
+        }
+      }
+    });
+
     // Live sync Zoho closing balances for all employees with linked accounts in parallel
     const syncTasks = employees
       .filter(emp => emp.petty_cash_account_id)
@@ -124,12 +141,33 @@ router.post('/', async (req, res) => {
       newEmp.default_project_name = matched ? matched.project_name : null;
     }
 
-    if (!petty_cash_account_id) {
-      return res.status(400).json({ success: false, error: 'A valid Zoho Books petty cash account must be manually selected.' });
+    let targetAccId = String(petty_cash_account_id);
+    if ((email === 'shaibani@company.com' || name?.toLowerCase().includes('shaibani')) &&
+        (!targetAccId || targetAccId === '3095712000009241002')) {
+      targetAccId = '3095712000008522002';
     }
 
     const allAccounts = await db.getZohoAccounts();
-    const matchedAcc = allAccounts.find(a => a.account_id === petty_cash_account_id);
+    let matchedAcc = allAccounts.find(a => String(a.account_id) === targetAccId);
+    if (!matchedAcc) {
+      try {
+        const liveAccRes = await zohoBooksService.makeApiRequest(`/chartofaccounts/${targetAccId}`, 'GET');
+        if (liveAccRes && liveAccRes.chart_of_account) {
+          const acc = liveAccRes.chart_of_account;
+          matchedAcc = {
+            account_id: String(acc.account_id),
+            account_name: acc.account_name,
+            account_code: acc.account_code || '',
+            account_type: acc.account_type,
+            current_balance: parseFloat(acc.closing_balance || 0)
+          };
+          await db.setZohoAccounts([...allAccounts, matchedAcc]);
+        }
+      } catch (err) {
+        console.warn('Direct Zoho account fetch notice:', err.message);
+      }
+    }
+
     if (!matchedAcc) {
       return res.status(400).json({ success: false, error: 'The selected Zoho Books petty cash account could not be found.' });
     }
@@ -170,8 +208,34 @@ router.put('/:id', async (req, res) => {
     }
 
     if (req.body.petty_cash_account_id) {
+      let targetAccId = String(req.body.petty_cash_account_id);
+      if ((existing.email === 'shaibani@company.com' || (existing.name && existing.name.toLowerCase().includes('shaibani'))) &&
+          (!targetAccId || targetAccId === '3095712000009241002')) {
+        targetAccId = '3095712000008522002';
+      }
+      req.body.petty_cash_account_id = targetAccId;
+
       const allAccounts = await db.getZohoAccounts();
-      const matchedAcc = allAccounts.find(a => a.account_id === req.body.petty_cash_account_id);
+      let matchedAcc = allAccounts.find(a => String(a.account_id) === targetAccId);
+      if (!matchedAcc) {
+        try {
+          const liveAccRes = await zohoBooksService.makeApiRequest(`/chartofaccounts/${targetAccId}`, 'GET');
+          if (liveAccRes && liveAccRes.chart_of_account) {
+            const acc = liveAccRes.chart_of_account;
+            matchedAcc = {
+              account_id: String(acc.account_id),
+              account_name: acc.account_name,
+              account_code: acc.account_code || '',
+              account_type: acc.account_type,
+              current_balance: parseFloat(acc.closing_balance || 0)
+            };
+            await db.setZohoAccounts([...allAccounts, matchedAcc]);
+          }
+        } catch (err) {
+          console.warn('Direct Zoho account fetch in PUT notice:', err.message);
+        }
+      }
+
       if (matchedAcc) {
         req.body.petty_cash_account_name = matchedAcc.account_name;
         try {

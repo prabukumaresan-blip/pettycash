@@ -24,11 +24,23 @@ function getAuthHeaders() {
 async function fetchWithAuth(url, options = {}) {
   const authHeaders = getAuthHeaders();
   const headers = {
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0',
     ...authHeaders,
     ...(options.headers || {})
   };
-  return fetch(url, {
+
+  // Add cache-busting timestamp parameter to GET requests to guarantee fresh server data
+  let fetchUrl = url;
+  if (!options.method || options.method.toUpperCase() === 'GET') {
+    const separator = fetchUrl.includes('?') ? '&' : '?';
+    fetchUrl = `${fetchUrl}${separator}_t=${Date.now()}`;
+  }
+
+  return fetch(fetchUrl, {
     ...options,
+    cache: 'no-store',
     headers
   });
 }
@@ -192,23 +204,10 @@ export const api = {
       if (!res.ok) throw new Error('Network error');
       const data = await safeJson(res);
       if (data && data.success && Array.isArray(data.expenses)) {
-        if (data.expenses.length > 0) {
-          try {
-            localStorage.setItem(cacheKey, JSON.stringify(data.expenses));
-          } catch (e) {
-            console.warn('Storage quota warning', e);
-          }
-        } else {
-          // If server returned empty, fallback to cached items if available
-          const cached = localStorage.getItem(cacheKey);
-          if (cached) {
-            try {
-              const parsed = JSON.parse(cached);
-              if (parsed.length > 0) {
-                data.expenses = parsed;
-              }
-            } catch {}
-          }
+        try {
+          localStorage.setItem(cacheKey, JSON.stringify(data.expenses));
+        } catch (e) {
+          console.warn('Storage quota warning', e);
         }
       }
       return data;
@@ -432,8 +431,9 @@ export const api = {
     return await safeJson(res);
   },
 
-  async getChartOfAccounts() {
-    const res = await fetchWithAuth(`${BASE_URL}/zoho/chart-of-accounts`);
+  async getChartOfAccounts(forceRefresh = false) {
+    const url = forceRefresh ? `${BASE_URL}/zoho/chart-of-accounts?refresh=true` : `${BASE_URL}/zoho/chart-of-accounts`;
+    const res = await fetchWithAuth(url);
     return await safeJson(res);
   },
 

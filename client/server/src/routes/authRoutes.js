@@ -55,6 +55,15 @@ router.post('/login', async (req, res) => {
       });
     }
 
+    // Auto-normalize Shaibani account if unlinked or set to obsolete ID
+    if (emp && (emp.email === 'shaibani@company.com' || emp.id === 'emp-shaibani')) {
+      if (!emp.petty_cash_account_id || emp.petty_cash_account_id === '3095712000009241002') {
+        emp.petty_cash_account_id = '3095712000008522002';
+        emp.petty_cash_account_name = 'Ibrahim AL Shaibani';
+        await db.saveEmployee(emp);
+      }
+    }
+
     // Sync latest balance from Zoho Books if account is linked
     if (emp.petty_cash_account_id) {
       try {
@@ -91,6 +100,15 @@ router.get('/me', requireAuth, async (req, res) => {
     let emp = await db.getEmployeeById(req.user.id);
     if (!emp) {
       return res.status(404).json({ success: false, error: 'User profile not found.' });
+    }
+
+    // Auto-normalize Shaibani account if needed
+    if (emp && (emp.email === 'shaibani@company.com' || emp.id === 'emp-shaibani')) {
+      if (!emp.petty_cash_account_id || emp.petty_cash_account_id === '3095712000009241002') {
+        emp.petty_cash_account_id = '3095712000008522002';
+        emp.petty_cash_account_name = 'Ibrahim AL Shaibani';
+        await db.saveEmployee(emp);
+      }
     }
 
     // Attempt balance refresh from Zoho

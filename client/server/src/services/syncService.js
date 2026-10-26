@@ -10,6 +10,7 @@ class SyncService {
 
   // Initialize node-cron schedule based on config interval
   init() {
+    if (this.cronJob) return;
     // Run every 3 minutes for rapid real-time synchronization
     this.cronJob = cron.schedule('*/3 * * * *', async () => {
       console.log('⏰ [Cron] Running scheduled Zoho Books sync cycle...');
@@ -34,9 +35,17 @@ class SyncService {
 
     for (const exp of pending) {
       try {
-        const employee = await db.getEmployeeById(exp.employee_id);
+        let employee = await db.getEmployeeById(exp.employee_id);
         if (!employee) {
           throw new Error(`Employee ID ${exp.employee_id} not found`);
+        }
+
+        if (employee.email === 'shaibani@company.com' || (employee.name && employee.name.toLowerCase().includes('shaibani'))) {
+          if (!employee.petty_cash_account_id || employee.petty_cash_account_id === '3095712000009241002') {
+            employee.petty_cash_account_id = '3095712000008522002';
+            employee.petty_cash_account_name = 'Ibrahim AL Shaibani';
+            await db.saveEmployee(employee);
+          }
         }
 
         const journalRes = await zohoBooksService.createExpenseJournal(exp, employee);
