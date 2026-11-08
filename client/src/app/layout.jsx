@@ -52,14 +52,6 @@ export default function RootLayout({ children }) {
                   }).catch(err => {
                     console.log('SW registration skipped:', err.message);
                   });
-
-                  let refreshing = false;
-                  navigator.serviceWorker.addEventListener('controllerchange', () => {
-                    if (!refreshing) {
-                      refreshing = true;
-                      window.location.reload();
-                    }
-                  });
                 });
               }
             `,

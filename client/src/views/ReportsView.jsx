@@ -38,7 +38,7 @@ export default function ReportsView({
   onRefreshData
 }) {
   const isAdmin = currentUser?.role === 'admin';
-  const [activeReportTab, setActiveReportTab] = useState('report'); // 'report' (Official Expense Report), 'unreported' (Select & Add), 'all' (All Expenses)
+  const [activeReportTab, setActiveReportTab] = useState('report'); // 'report' (Official Expense Report), 'exported' (Exported Archive), 'unreported' (Select & Add), 'all' (All Expenses)
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(
@@ -59,13 +59,27 @@ export default function ReportsView({
   const fetchReport = async (resync = false) => {
     setIsLoading(true);
     try {
+      let isExportedFilter = undefined;
+      let addedToReportFilter = undefined;
+
+      if (activeReportTab === 'report') {
+        addedToReportFilter = 'true';
+        isExportedFilter = 'false';
+      } else if (activeReportTab === 'exported') {
+        isExportedFilter = 'true';
+      } else if (activeReportTab === 'unreported') {
+        addedToReportFilter = 'false';
+        isExportedFilter = 'false';
+      }
+
       const filters = {
         start_date: startDate || undefined,
         end_date: endDate || undefined,
         employee_id: selectedEmployeeId || undefined,
         project_id: selectedProjectId || undefined,
         sync_status: syncStatusFilter || undefined,
-        added_to_report: activeReportTab === 'report' ? 'true' : (activeReportTab === 'unreported' ? 'false' : undefined),
+        added_to_report: addedToReportFilter,
+        is_exported: isExportedFilter,
         search: search || undefined,
         resync: resync ? 'true' : undefined
       };
@@ -125,7 +139,8 @@ export default function ReportsView({
         employee_id: selectedEmployeeId || undefined,
         project_id: selectedProjectId || undefined,
         sync_status: syncStatusFilter || undefined,
-        added_to_report: activeReportTab === 'report' ? 'true' : (activeReportTab === 'unreported' ? 'false' : undefined)
+        added_to_report: activeReportTab === 'unreported' ? 'false' : (activeReportTab === 'report' ? 'true' : undefined),
+        is_exported: activeReportTab === 'exported' ? 'true' : (activeReportTab === 'report' ? 'false' : undefined)
       };
       await api.downloadCsvReport(filters);
       setActionFeedback({ type: 'success', msg: 'CSV report downloaded successfully!' });
@@ -142,10 +157,12 @@ export default function ReportsView({
 
   const handleExportPdf = async () => {
     // If user is exporting from official report tab and there are no expenses
-    if (activeReportTab === 'report' && expenses.length === 0) {
+    if ((activeReportTab === 'report' || activeReportTab === 'exported') && expenses.length === 0) {
       setActionFeedback({
         type: 'error',
-        msg: 'No expenses currently in the Official Expense Report. Select and add expenses first!'
+        msg: activeReportTab === 'exported'
+          ? 'No exported expenses match the current filter.'
+          : 'No expenses currently in the Official Expense Report. Select and add expenses first!'
       });
       setTimeout(() => setActionFeedback(null), 4000);
       return;
@@ -159,7 +176,8 @@ export default function ReportsView({
         employee_id: selectedEmployeeId || undefined,
         project_id: selectedProjectId || undefined,
         sync_status: syncStatusFilter || undefined,
-        added_to_report: activeReportTab === 'unreported' ? 'false' : 'true'
+        added_to_report: activeReportTab === 'unreported' ? 'false' : 'true',
+        is_exported: activeReportTab === 'exported' ? 'true' : (activeReportTab === 'report' ? 'false' : undefined)
       };
       await api.downloadPdfReport(filters);
       setActionFeedback({ type: 'success', msg: 'Audit PDF downloaded successfully!' });
@@ -172,6 +190,28 @@ export default function ReportsView({
       setTimeout(() => setActionFeedback(null), 5000);
     } finally {
       setIsExportingPdf(false);
+    }
+  };
+
+  const handleMarkSelectedAsExported = async () => {
+    if (selectedRowIds.size === 0) return;
+    setIsUpdatingReport(true);
+    const count = selectedRowIds.size;
+    try {
+      await api.markExpensesAsExported(Array.from(selectedRowIds));
+      setSelectedRowIds(new Set());
+      await fetchReport();
+      if (onRefreshData) onRefreshData();
+      setActionFeedback({
+        type: 'success',
+        msg: `Successfully locked ${count} expense(s) as Exported and moved to Exported Archive!`
+      });
+      setTimeout(() => setActionFeedback(null), 3500);
+    } catch (err) {
+      setActionFeedback({ type: 'error', msg: err.message });
+      setTimeout(() => setActionFeedback(null), 4000);
+    } finally {
+      setIsUpdatingReport(false);
     }
   };
 
@@ -544,6 +584,23 @@ export default function ReportsView({
             </button>
 
             <button
+              onClick={() => { setActiveReportTab('exported'); setSelectedRowIds(new Set()); }}
+              className={`px-4 py-2.5 text-xs font-bold border-b-2 transition flex items-center space-x-2 ${
+                activeReportTab === 'exported'
+                  ? 'border-purple-600 text-purple-700 bg-white shadow-2xs rounded-t-xl'
+                  : 'border-transparent text-purple-700 hover:text-purple-900'
+              }`}
+            >
+              <Lock className="w-4 h-4 text-purple-600" />
+              <span>Exported Expenses</span>
+              {activeReportTab === 'exported' && (
+                <span className="px-1.5 py-0.2 bg-purple-100 text-purple-800 rounded-full text-[10px] font-mono">
+                  {expenses.length}
+                </span>
+              )}
+            </button>
+
+            <button
               onClick={() => { setActiveReportTab('unreported'); setSelectedRowIds(new Set()); }}
               className={`px-4 py-2.5 text-xs font-bold border-b-2 transition flex items-center space-x-2 ${
                 activeReportTab === 'unreported'
@@ -576,7 +633,13 @@ export default function ReportsView({
           <div className="text-[11px] font-semibold text-slate-500 pb-2 flex items-center space-x-1.5">
             {activeReportTab === 'report' && (
               <span className="text-indigo-800 bg-indigo-50 px-2.5 py-1 rounded-lg border border-indigo-200">
-                Only selected and added items appear in this report
+                Active unexported items ready for statement submission
+              </span>
+            )}
+            {activeReportTab === 'exported' && (
+              <span className="text-purple-800 bg-purple-50 px-2.5 py-1 rounded-lg border border-purple-200 flex items-center space-x-1">
+                <Lock className="w-3 h-3 text-purple-600" />
+                <span>Locked official statements & vouchers archived separately</span>
               </span>
             )}
             {activeReportTab === 'unreported' && (
@@ -605,23 +668,39 @@ export default function ReportsView({
             </div>
 
             <div className="flex items-center space-x-2 flex-wrap gap-y-1">
-              <button
-                onClick={() => handleBulkUpdateReportStatus(true)}
-                disabled={isUpdatingReport}
-                className="px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-bold text-xs shadow-sm flex items-center space-x-1.5 transition disabled:opacity-50 cursor-pointer"
-              >
-                <FileCheck className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span>Add Selected to Expense Report</span>
-              </button>
+              {activeReportTab !== 'exported' && (
+                <button
+                  onClick={() => handleBulkUpdateReportStatus(true)}
+                  disabled={isUpdatingReport}
+                  className="px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-bold text-xs shadow-sm flex items-center space-x-1.5 transition disabled:opacity-50 cursor-pointer"
+                >
+                  <FileCheck className="w-3.5 h-3.5 stroke-[2.5]" />
+                  <span>Add Selected to Expense Report</span>
+                </button>
+              )}
 
-              <button
-                onClick={() => handleBulkUpdateReportStatus(false)}
-                disabled={isUpdatingReport}
-                className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-white font-semibold text-xs border border-white/20 flex items-center space-x-1 transition disabled:opacity-50 cursor-pointer"
-              >
-                <X className="w-3.5 h-3.5" />
-                <span>Remove from Report</span>
-              </button>
+              {activeReportTab === 'report' && (
+                <button
+                  onClick={handleMarkSelectedAsExported}
+                  disabled={isUpdatingReport}
+                  className="px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 active:scale-95 text-white font-bold text-xs shadow-sm flex items-center space-x-1.5 transition disabled:opacity-50 cursor-pointer"
+                  title="Lock selected expenses as exported official statement"
+                >
+                  <Lock className="w-3.5 h-3.5" />
+                  <span>Lock as Exported</span>
+                </button>
+              )}
+
+              {activeReportTab !== 'exported' && (
+                <button
+                  onClick={() => handleBulkUpdateReportStatus(false)}
+                  disabled={isUpdatingReport}
+                  className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-white font-semibold text-xs border border-white/20 flex items-center space-x-1 transition disabled:opacity-50 cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                  <span>Remove from Report</span>
+                </button>
+              )}
 
               <button
                 onClick={handleClearSelection}
@@ -637,10 +716,18 @@ export default function ReportsView({
         <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <h3 className="text-sm font-extrabold text-slate-900">
-              {activeReportTab === 'report' ? 'Official Expense Report Items' : activeReportTab === 'unreported' ? 'Available Unreported Expenses' : 'All Expense Line Items'} ({expenses.length})
+              {activeReportTab === 'report'
+                ? 'Official Expense Report Items'
+                : activeReportTab === 'exported'
+                ? 'Exported & Locked Expense History'
+                : activeReportTab === 'unreported'
+                ? 'Available Unreported Expenses'
+                : 'All Expense Line Items'} ({expenses.length})
             </h3>
-            {activeReportTab === 'report' && (
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-800 font-mono">
+            {(activeReportTab === 'report' || activeReportTab === 'exported') && (
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold font-mono ${
+                activeReportTab === 'exported' ? 'bg-purple-100 text-purple-800' : 'bg-indigo-100 text-indigo-800'
+              }`}>
                 {formatOMR(meta.total_amount)}
               </span>
             )}
@@ -686,12 +773,18 @@ export default function ReportsView({
                       </div>
                       <h4 className="text-sm font-bold text-slate-800">
                         {activeReportTab === 'report'
-                          ? 'No items currently in this Expense Report'
+                          ? 'No active items currently in this Expense Report'
+                          : activeReportTab === 'exported'
+                          ? 'No exported expenses found in archive'
+                          : activeReportTab === 'unreported'
+                          ? 'No available unreported expenses'
                           : 'No expenses matching current filters'}
                       </h4>
                       <p className="text-xs text-slate-500">
                         {activeReportTab === 'report'
-                          ? 'Only selected items can be added to the expense report. Switch to "Select & Add Expenses" to choose expenses to include.'
+                          ? 'Only active unexported items appear in this report. Switch to "Select & Add Expenses" to choose expenses to include.'
+                          : activeReportTab === 'exported'
+                          ? 'Expenses that have been locked and submitted in official statements are archived separately here.'
                           : 'Try changing your date filters or project selection.'}
                       </p>
                       {activeReportTab === 'report' && (

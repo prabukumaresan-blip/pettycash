@@ -625,7 +625,7 @@ class ZohoBooksService {
               invoice_number: (existingExp ? existingExp.invoice_number : null) || (ze.reference_number && !ze.reference_number.startsWith('PCA-') ? ze.reference_number : null),
               cost_center: null,
               receipt_url: existingExp?.receipt_url || null,
-              receipt_file_name: existingExp?.receipt_file_name || ze.expense_receipt_name || null,
+              receipt_file_name: existingExp?.receipt_file_name || ze.expense_receipt_name || (singleResDetail && singleResDetail.expense_receipt_name) || null,
               zoho_journal_id: ze.expense_id,
               zoho_journal_number: expNumber,
               sync_status: 'synced',

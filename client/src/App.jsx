@@ -200,29 +200,40 @@ export default function App() {
     }
   }, [currentUser, loadAllData]);
 
-  // Real-time automatic data sync on window focus / re-entry
+  // Real-time automatic data sync on window focus / re-entry (paused when user is actively logging an expense)
   useEffect(() => {
     if (!currentUser) return;
+    let lastSyncTime = Date.now();
+
     const handleSyncOnFocus = () => {
+      // Do not interrupt user if a modal (e.g. logging an expense) is currently open
+      if (isLogModalOpen || isEmployeeModalOpen) return;
+      const now = Date.now();
+      // Throttle window focus sync to avoid refetching on every tab switch or file picker close
+      if (now - lastSyncTime < 120000) return;
       if (document.visibilityState === 'visible' && api.getStoredUser()) {
+        lastSyncTime = now;
         loadAllData();
       }
     };
     window.addEventListener('visibilitychange', handleSyncOnFocus);
     window.addEventListener('focus', handleSyncOnFocus);
-    // Periodic interval refresh (every 60s) for live balances & accounts without exceeding API limits
+
+    // Periodic interval refresh (every 3 minutes) when idle and no modal is open
     const interval = setInterval(() => {
+      if (isLogModalOpen || isEmployeeModalOpen) return;
       if (document.visibilityState === 'visible' && api.getStoredUser()) {
+        lastSyncTime = Date.now();
         loadAllData();
       }
-    }, 60000);
+    }, 180000);
 
     return () => {
       window.removeEventListener('visibilitychange', handleSyncOnFocus);
       window.removeEventListener('focus', handleSyncOnFocus);
       clearInterval(interval);
     };
-  }, [currentUser, loadAllData]);
+  }, [currentUser, loadAllData, isLogModalOpen, isEmployeeModalOpen]);
 
   // Safety: reset restricted tabs if non-admin
   useEffect(() => {

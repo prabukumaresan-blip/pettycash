@@ -64,8 +64,8 @@ export default function DashboardView({
   const totalSpent = employeeExpenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
   const syncedCount = employeeExpenses.filter((e) => e.sync_status === 'synced').length;
   const pendingCount = employeeExpenses.filter((e) => e.sync_status === 'pending').length;
-  const inReportCount = employeeExpenses.filter((e) => e.added_to_report).length;
-  const unreportedCount = employeeExpenses.filter((e) => !e.added_to_report).length;
+  const inReportCount = employeeExpenses.filter((e) => e.added_to_report && !e.is_exported).length;
+  const unreportedCount = employeeExpenses.filter((e) => !e.added_to_report && !e.is_exported).length;
   const exportedCount = employeeExpenses.filter((e) => e.is_exported).length;
   const pendingRecallCount = employeeExpenses.filter((e) => e.recall_status === 'pending').length;
 
@@ -73,8 +73,8 @@ export default function DashboardView({
   const filteredList = employeeExpenses.filter((e) => {
     if (filterTab === 'synced' && e.sync_status !== 'synced') return false;
     if (filterTab === 'pending' && e.sync_status !== 'pending') return false;
-    if (filterTab === 'in_report' && !e.added_to_report) return false;
-    if (filterTab === 'unreported' && e.added_to_report) return false;
+    if (filterTab === 'in_report' && (!e.added_to_report || e.is_exported)) return false;
+    if (filterTab === 'unreported' && (e.added_to_report || e.is_exported)) return false;
     if (filterTab === 'exported' && !e.is_exported) return false;
     if (filterTab === 'recalls' && e.recall_status !== 'pending') return false;
 
@@ -412,11 +412,11 @@ export default function DashboardView({
             onClick={() => setFilterTab('exported')}
             className={`px-3 py-1.5 rounded-md text-xs font-semibold transition flex items-center space-x-1.5 flex-shrink-0 ${
               filterTab === 'exported'
-                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 font-bold'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                ? 'bg-purple-700 text-white shadow-xs font-bold'
+                : 'text-purple-700 hover:bg-purple-100/60 bg-purple-50/70 border border-purple-200/60'
             }`}
           >
-            <Lock className="w-3.5 h-3.5 text-slate-500" />
+            <Lock className={`w-3.5 h-3.5 ${filterTab === 'exported' ? 'text-white' : 'text-purple-600'}`} />
             <span>Exported ({exportedCount})</span>
           </button>
           {pendingRecallCount > 0 && (
@@ -534,6 +534,21 @@ export default function DashboardView({
           {selectedExpenseIds.size > 0 && (
             <span className="text-indigo-600 font-semibold">{selectedExpenseIds.size} of {paginatedList.length} selected</span>
           )}
+        </div>
+      )}
+
+      {/* Exported Separation Notice Banner */}
+      {filterTab === 'exported' && filteredList.length > 0 && (
+        <div className="p-3.5 bg-purple-50/80 rounded-2xl border border-purple-200/80 text-xs text-purple-900 flex items-center justify-between shadow-2xs">
+          <div className="flex items-center space-x-2.5">
+            <div className="w-7 h-7 rounded-lg bg-purple-200/70 text-purple-800 flex items-center justify-center shrink-0">
+              <Lock className="w-4 h-4" />
+            </div>
+            <div>
+              <p className="font-bold text-purple-950">Exported Expenses Archive</p>
+              <p className="text-[11px] text-purple-700">These {filteredList.length} expenses are locked in submitted official statements and kept separate from active cash float.</p>
+            </div>
+          </div>
         </div>
       )}
 

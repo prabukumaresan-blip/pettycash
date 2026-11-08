@@ -85,9 +85,9 @@ router.get('/', async (req, res) => {
 
     let expenses = await db.getExpenses(filters);
 
-    // Sync from Zoho Books if local cache is empty or older than 20 seconds, avoiding duplicate concurrent syncs
+    // Sync from Zoho Books if local cache is empty or older than 5 minutes, avoiding duplicate concurrent syncs
     const now = Date.now();
-    const shouldSync = (expenses.length === 0 || (now - lastZohoSyncTime > 20000) || req.query.refresh === 'true') && !isZohoSyncing;
+    const shouldSync = (expenses.length === 0 || (now - lastZohoSyncTime > 300000) || req.query.refresh === 'true') && !isZohoSyncing;
 
     if (shouldSync) {
       isZohoSyncing = true;
