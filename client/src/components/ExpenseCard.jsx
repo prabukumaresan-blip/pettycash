@@ -20,7 +20,6 @@ export default function ExpenseCard({
   onRetrySync,
   isSelected,
   onToggleSelect,
-  onToggleReportStatus,
   onRequestRecall,
   onApproveRecall,
   onRejectRecall,
@@ -31,7 +30,6 @@ export default function ExpenseCard({
   const isFailed = expense.sync_status === 'failed';
   const isPending = expense.sync_status === 'pending';
   const isExported = Boolean(expense.is_exported);
-  const isReported = Boolean(expense.added_to_report);
   const isAdmin = currentUser?.role === 'admin';
   const hasReceipt = Boolean(expense.receipt_url || expense.receipt_file_name);
 

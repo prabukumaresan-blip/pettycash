@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   X,
   Calendar,
@@ -8,13 +8,9 @@ import {
   FileText,
   AlertCircle,
   Hash,
-  FileCheck,
-  UploadCloud,
-  Paperclip,
-  CheckCircle2,
-  Trash2
+  Lock
 } from 'lucide-react';
-import { formatOMR, getSettlementStatus } from '../utils/currency';
+import { formatOMR } from '../utils/currency';
 import { api } from '../utils/api';
 
 export default function LogExpenseModal({
@@ -29,16 +25,22 @@ export default function LogExpenseModal({
   const [amount, setAmount] = useState('');
   const [expenseDate, setExpenseDate] = useState(new Date().toISOString().split('T')[0]);
   const [invoiceNumber, setInvoiceNumber] = useState('');
-  const [categoryId, setCategoryId] = useState('');
   const [description, setDescription] = useState('');
   const [projectId, setProjectId] = useState('');
-  const [addToReport, setAddToReport] = useState(true);
-  const [receiptFile, setReceiptFile] = useState(null);
-  const [existingReceiptName, setExistingReceiptName] = useState(null);
   const [zohoProjects, setZohoProjects] = useState(projects || []);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const fileInputRef = useRef(null);
+
+  // Fixed default category: Other Expenses (not editable)
+  const defaultCategory =
+    categories.find(
+      (c) => c.account_name && c.account_name.toLowerCase().includes('other expense')
+    ) ||
+    categories.find((c) => c.account_id === '3095712000000000460') ||
+    categories[0] || {
+      account_id: '3095712000000000460',
+      account_name: 'Other Expenses'
+    };
 
   // Sync projects with Zoho Books
   useEffect(() => {
@@ -63,26 +65,15 @@ export default function LogExpenseModal({
       setAmount(editExpense.amount ? String(editExpense.amount) : '');
       setExpenseDate(editExpense.expense_date || new Date().toISOString().split('T')[0]);
       setInvoiceNumber(editExpense.invoice_number || '');
-      setCategoryId(editExpense.category_id || '');
       setDescription(editExpense.description || '');
       setProjectId(editExpense.project_id || '');
-      setAddToReport(editExpense.added_to_report !== undefined ? Boolean(editExpense.added_to_report) : true);
-      setExistingReceiptName(editExpense.receipt_file_name || null);
-      setReceiptFile(null);
     } else {
       setAmount('');
       setExpenseDate(new Date().toISOString().split('T')[0]);
       setInvoiceNumber('');
-      const defaultExp = (categories && categories.length > 0)
-        ? (categories.find(c => c.account_name && c.account_name.toLowerCase() === 'other expenses') || categories[0])
-        : null;
-      setCategoryId(defaultExp ? defaultExp.account_id : '3095712000000000460');
       setDescription('');
       const defaultProj = currentEmployee?.default_project_id || (zohoProjects.length > 0 ? zohoProjects[0].project_id : '');
       setProjectId(defaultProj);
-      setAddToReport(true);
-      setExistingReceiptName(null);
-      setReceiptFile(null);
     }
     setErrorMessage('');
   }, [isOpen, editExpense?.id]);
@@ -99,18 +90,6 @@ export default function LogExpenseModal({
     if (val === '' || /^\d*\.?\d{0,3}$/.test(val)) {
       setAmount(val);
     }
-  };
-
-  const handleFileSelect = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setReceiptFile(e.target.files[0]);
-    }
-  };
-
-  const handleClearFile = (e) => {
-    e.stopPropagation();
-    setReceiptFile(null);
-    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   if (!isOpen) return null;
@@ -139,27 +118,24 @@ export default function LogExpenseModal({
     setIsSubmitting(true);
 
     try {
-      const selectedExp = categories.find(c => c.account_id === categoryId) ||
-        categories.find(c => c.account_name.toLowerCase() === 'other expenses') ||
-        categories[0] || {
-          account_id: '3095712000000000460',
-          account_name: 'Other Expenses'
-        };
-      const selectedProj = zohoProjects.find(p => String(p.project_id) === String(projectId));
+      const selectedProj = zohoProjects.find((p) => String(p.project_id) === String(projectId));
       const paidThroughAccId = currentEmployee?.petty_cash_account_id || '';
-      const paidThroughAccName = currentEmployee?.petty_cash_account_name || `Petty Cash - ${currentEmployee?.name}`;
+      const paidThroughAccName =
+        currentEmployee?.petty_cash_account_name || `Petty Cash - ${currentEmployee?.name}`;
 
       const formData = new FormData();
       formData.append('employee_id', employeeId);
       formData.append('expense_date', expenseDate);
       formData.append('amount', parsedAmount);
-      formData.append('category_id', selectedExp.account_id);
-      formData.append('category_name', selectedExp.account_name);
+      // Fixed non-editable category: Other Expenses
+      formData.append('category_id', defaultCategory.account_id);
+      formData.append('category_name', defaultCategory.account_name);
       formData.append('paid_through_account_id', paidThroughAccId);
       formData.append('paid_through_account_name', paidThroughAccName);
       formData.append('description', description.trim());
       formData.append('invoice_number', invoiceNumber.trim());
-      formData.append('added_to_report', addToReport ? 'true' : 'false');
+      // Always included in official report by default
+      formData.append('added_to_report', 'true');
 
       if (projectId) {
         formData.append('project_id', projectId);
@@ -170,10 +146,6 @@ export default function LogExpenseModal({
             formData.append('customer_name', selectedProj.customer_name || '');
           }
         }
-      }
-
-      if (receiptFile) {
-        formData.append('receipt', receiptFile);
       }
 
       await onExpenseSaved(formData, editExpense ? editExpense.id : null);
@@ -322,7 +294,7 @@ export default function LogExpenseModal({
             />
           </div>
 
-          {/* 2-Column Grid: Project & Category */}
+          {/* 2-Column Grid: Project & Expense Category Account */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {/* Project */}
             <div>
@@ -344,115 +316,24 @@ export default function LogExpenseModal({
               </select>
             </div>
 
-            {/* Category / Account */}
+            {/* Expense Category Account (Default Other Expenses, Non-Editable) */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center space-x-1">
                 <Tag className="w-3.5 h-3.5 text-slate-400" />
                 <span>Expense Category Account</span>
               </label>
-              <select
-                value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-900 text-xs font-medium focus:ring-1 focus:ring-slate-400 focus:border-slate-400 truncate"
-              >
-                {categories.map((c) => (
-                  <option key={c.account_id} value={c.account_id}>
-                    {c.account_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Receipt / Invoice Upload Section */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center space-x-1">
-              <Paperclip className="w-3.5 h-3.5 text-slate-400" />
-              <span>Attach Receipt / Bill Document</span>
-              <span className="text-[11px] text-slate-400 font-normal">(PDF, JPG, PNG)</span>
-            </label>
-
-            <input
-              type="file"
-              ref={fileInputRef}
-              accept=".pdf,image/png,image/jpeg,image/webp"
-              onChange={handleFileSelect}
-              className="hidden"
-              id="expense-receipt-upload"
-            />
-
-            {receiptFile ? (
-              <div className="p-3 rounded-lg border border-blue-200 bg-blue-50/50 flex items-center justify-between text-xs">
-                <div className="flex items-center space-x-2 truncate pr-2">
-                  <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
-                  <span className="font-semibold text-blue-900 truncate">{receiptFile.name}</span>
-                  <span className="text-[10px] text-slate-500 font-mono">
-                    ({(receiptFile.size / 1024).toFixed(0)} KB)
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleClearFile}
-                  className="p-1 text-slate-400 hover:text-rose-600 rounded transition shrink-0"
-                  title="Remove file"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            ) : existingReceiptName ? (
-              <div className="p-3 rounded-lg border border-slate-200 bg-slate-50 flex items-center justify-between text-xs">
-                <div className="flex items-center space-x-2 truncate pr-2">
-                  <Paperclip className="w-4 h-4 text-slate-500 shrink-0" />
-                  <span className="text-slate-700 font-mono truncate">{existingReceiptName}</span>
-                </div>
-                <label
-                  htmlFor="expense-receipt-upload"
-                  className="px-2.5 py-1 text-xs font-semibold bg-white border border-slate-200 rounded hover:bg-slate-100 text-slate-700 cursor-pointer"
-                >
-                  Replace
-                </label>
-              </div>
-            ) : (
-              <label
-                htmlFor="expense-receipt-upload"
-                className="border-2 border-dashed border-slate-200 hover:border-slate-300 rounded-lg p-3 text-center cursor-pointer block bg-slate-50/50 hover:bg-slate-50 transition"
-              >
-                <div className="flex items-center justify-center space-x-2 text-xs text-slate-600 font-medium">
-                  <UploadCloud className="w-4 h-4 text-slate-400" />
-                  <span>Click to attach receipt or invoice (PDF/Image)</span>
-                </div>
-              </label>
-            )}
-          </div>
-
-          {/* Include in Expense Report Toggle */}
-          <div
-            onClick={() => setAddToReport(!addToReport)}
-            className="p-3 rounded-lg border border-slate-200 bg-slate-50/70 hover:bg-slate-50 transition cursor-pointer flex items-center justify-between text-xs"
-          >
-            <div className="flex items-center space-x-2.5">
-              <FileCheck className={`w-4 h-4 ${addToReport ? 'text-slate-900' : 'text-slate-400'}`} />
-              <div>
-                <span className="font-semibold text-slate-800 block">
-                  Include in Official Expense Report
-                </span>
-                <span className="text-[11px] text-slate-500">
-                  {addToReport
-                    ? 'Voucher will be staged for official statement submission'
-                    : 'Saved to transaction history only'}
+              <div className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-slate-100 text-slate-700 text-xs font-semibold flex items-center justify-between">
+                <span>{defaultCategory.account_name || 'Other Expenses'}</span>
+                <span className="inline-flex items-center space-x-1 text-[10px] text-slate-500 font-mono">
+                  <Lock className="w-3 h-3 text-slate-400" />
+                  <span>Default</span>
                 </span>
               </div>
             </div>
-            <input
-              type="checkbox"
-              checked={addToReport}
-              onChange={() => {}}
-              className="w-4 h-4 rounded text-slate-900 border-slate-300 pointer-events-none"
-            />
           </div>
 
           {/* Modal Action Buttons */}
-          <div className="flex items-center justify-end space-x-2 pt-2 border-t border-slate-100">
+          <div className="flex items-center justify-end space-x-2 pt-3 border-t border-slate-100">
             <button
               type="button"
               onClick={onClose}

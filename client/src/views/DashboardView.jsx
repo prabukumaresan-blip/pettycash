@@ -414,7 +414,7 @@ export default function DashboardView({
           </div>
 
           <div className="flex items-center space-x-2 flex-wrap gap-y-1">
-            {/* Mark Selected as Exported (Condition 2) */}
+            {/* Mark Selected as Exported */}
             <button
               onClick={handleBulkMarkExported}
               disabled={isUpdatingReport}
@@ -423,23 +423,6 @@ export default function DashboardView({
             >
               <Lock className="w-3.5 h-3.5 text-slate-700" />
               <span>Mark as Exported</span>
-            </button>
-
-            <button
-              onClick={() => handleBulkReportStatus(true)}
-              disabled={isUpdatingReport}
-              className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center space-x-1 transition disabled:opacity-50"
-            >
-              <FileCheck className="w-3.5 h-3.5" />
-              <span>Add to Report</span>
-            </button>
-
-            <button
-              onClick={() => handleBulkReportStatus(false)}
-              disabled={isUpdatingReport}
-              className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center space-x-1 transition disabled:opacity-50"
-            >
-              <span>Remove from Report</span>
             </button>
 
             {onNavigateToReports && (
