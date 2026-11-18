@@ -54,6 +54,12 @@ async function getFilteredExpenses(query, user) {
     const isBool = is_exported === 'true' || is_exported === true;
     expenses = expenses.filter(e => Boolean(e.is_exported) === isBool);
   }
+  if (query.expense_ids) {
+    const idList = Array.isArray(query.expense_ids)
+      ? query.expense_ids.map(String)
+      : String(query.expense_ids).split(',').map(s => s.trim());
+    expenses = expenses.filter(e => idList.includes(String(e.id)));
+  }
 
   return expenses;
 }

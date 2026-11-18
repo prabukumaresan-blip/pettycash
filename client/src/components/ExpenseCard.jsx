@@ -20,6 +20,7 @@ export default function ExpenseCard({
   onRetrySync,
   isSelected,
   onToggleSelect,
+  onToggleReportStatus,
   onRequestRecall,
   onApproveRecall,
   onRejectRecall,
@@ -82,11 +83,26 @@ export default function ExpenseCard({
                     <span>Exported</span>
                   </span>
                 )
+              ) : expense.added_to_report ? (
+                <button
+                  type="button"
+                  onClick={() => onToggleReportStatus && onToggleReportStatus(expense)}
+                  className="inline-flex items-center space-x-1.5 text-[11px] font-semibold text-blue-800 bg-blue-50 px-2 py-0.5 rounded border border-blue-200 hover:bg-blue-100 transition cursor-pointer"
+                  title="Marked for Export - Tap to unmark"
+                >
+                  <CheckCircle2 className="w-3 h-3 text-blue-600" />
+                  <span>Marked for Export</span>
+                </button>
               ) : (
-                <span className="inline-flex items-center space-x-1.5 text-[11px] font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                <button
+                  type="button"
+                  onClick={() => onToggleReportStatus && onToggleReportStatus(expense)}
+                  className="inline-flex items-center space-x-1.5 text-[11px] font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 hover:bg-amber-100 transition cursor-pointer"
+                  title="Not Exported - Tap to mark for Export"
+                >
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
                   <span>Not Exported</span>
-                </span>
+                </button>
               )}
 
               {/* Zoho Sync Badge */}

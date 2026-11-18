@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import ExpenseCard from '../components/ExpenseCard';
 import { formatOMR, getSettlementStatus } from '../utils/currency';
+import { api } from '../utils/api';
 
 export default function DashboardView({
   currentEmployee,
@@ -42,14 +43,17 @@ export default function DashboardView({
   onApproveRecall,
   onRejectRecall,
   onViewReceipt,
-  onMarkSelectedExported
+  onMarkSelectedExported,
+  onRefreshData
 }) {
   const effectiveUser = currentUser || currentEmployee;
-  const [filterTab, setFilterTab] = useState('all'); // 'all', 'not_exported', 'exported', 'recalls'
+  const [filterTab, setFilterTab] = useState('all'); // 'all', 'marked', 'not_exported', 'exported', 'recalls'
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedExpenseIds, setSelectedExpenseIds] = useState(new Set());
   const [isUpdatingReport, setIsUpdatingReport] = useState(false);
+  const [isExportingPdf, setIsExportingPdf] = useState(false);
+  const [isExportingCsv, setIsExportingCsv] = useState(false);
   const itemsPerPage = 25;
 
   // Filter expenses for current employee (or show all if admin is viewing whole company)
@@ -67,6 +71,7 @@ export default function DashboardView({
   const settlement = getSettlementStatus(currentBal, currentEmployee?.name || 'Petty Cash');
 
   const totalSpent = employeeExpenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
+  const markedExpenses = employeeExpenses.filter((e) => e.added_to_report && !e.is_exported);
   const notExportedExpenses = employeeExpenses.filter((e) => !e.is_exported);
   const notExportedAmount = notExportedExpenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
   const exportedExpenses = employeeExpenses.filter((e) => e.is_exported);
@@ -75,6 +80,7 @@ export default function DashboardView({
 
   // Filter list
   const filteredList = employeeExpenses.filter((e) => {
+    if (filterTab === 'marked' && (!e.added_to_report || e.is_exported)) return false;
     if (filterTab === 'not_exported' && e.is_exported) return false;
     if (filterTab === 'exported' && !e.is_exported) return false;
     if (filterTab === 'recalls' && e.recall_status !== 'pending') return false;
@@ -140,6 +146,51 @@ export default function DashboardView({
       setSelectedExpenseIds(new Set());
     } finally {
       setIsUpdatingReport(false);
+    }
+  };
+
+  const handleToggleSingleReport = async (exp) => {
+    if (!onUpdateReportStatus) return;
+    const newStatus = !exp.added_to_report;
+    await onUpdateReportStatus([exp.id], newStatus);
+  };
+
+  const handleExportTransactions = async (format) => {
+    try {
+      if (format === 'pdf') setIsExportingPdf(true);
+      else setIsExportingCsv(true);
+
+      const filters = {
+        mark_exported: 'true'
+      };
+      if (currentEmployee?.id && currentEmployee.role !== 'admin') {
+        filters.employee_id = currentEmployee.id;
+      }
+      if (selectedExpenseIds.size > 0) {
+        filters.expense_ids = Array.from(selectedExpenseIds).join(',');
+      } else if (filterTab === 'marked') {
+        filters.added_to_report = 'true';
+        filters.is_exported = 'false';
+      } else if (filterTab === 'not_exported') {
+        filters.is_exported = 'false';
+      } else if (filterTab === 'exported') {
+        filters.is_exported = 'true';
+      }
+
+      if (format === 'pdf') {
+        await api.downloadPdfReport(filters);
+      } else {
+        await api.downloadCsvReport(filters);
+      }
+
+      setSelectedExpenseIds(new Set());
+      if (onRefreshData) onRefreshData();
+    } catch (err) {
+      console.error('Failed to export transactions:', err);
+      alert('Failed to export: ' + err.message);
+    } finally {
+      setIsExportingPdf(false);
+      setIsExportingCsv(false);
     }
   };
 
@@ -330,20 +381,56 @@ export default function DashboardView({
             <p className="text-xs text-slate-500">Official expense ledger synchronized with Zoho Books vouchers</p>
           </div>
 
-          {/* Search Input */}
-          <div className="relative w-full sm:w-72">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search description, invoice, project..."
-              className="w-full pl-9 pr-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
-            />
+          {/* Right Header Controls: Search & Direct Export Options */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+            {/* Search Input */}
+            <div className="relative w-full sm:w-60">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search description, invoice..."
+                className="w-full pl-9 pr-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
+              />
+            </div>
+
+            {/* Direct Export Buttons for Petty Cash Transactions (Condition 1) */}
+            <div className="flex items-center space-x-1.5 shrink-0">
+              <button
+                type="button"
+                onClick={() => handleExportTransactions('pdf')}
+                disabled={isExportingPdf || isExportingCsv}
+                className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 text-xs font-semibold flex items-center space-x-1.5 shadow-2xs transition disabled:opacity-50 cursor-pointer"
+                title={selectedExpenseIds.size > 0 ? `Export ${selectedExpenseIds.size} selected transaction(s) to PDF` : 'Export transactions to PDF'}
+              >
+                {isExportingPdf ? (
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin text-slate-600" />
+                ) : (
+                  <Printer className="w-3.5 h-3.5 text-slate-600" />
+                )}
+                <span>{selectedExpenseIds.size > 0 ? `PDF (${selectedExpenseIds.size})` : 'Export PDF'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleExportTransactions('csv')}
+                disabled={isExportingPdf || isExportingCsv}
+                className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 text-xs font-semibold flex items-center space-x-1.5 shadow-2xs transition disabled:opacity-50 cursor-pointer"
+                title={selectedExpenseIds.size > 0 ? `Export ${selectedExpenseIds.size} selected transaction(s) to CSV` : 'Export transactions to CSV'}
+              >
+                {isExportingCsv ? (
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin text-slate-600" />
+                ) : (
+                  <Download className="w-3.5 h-3.5 text-slate-600" />
+                )}
+                <span>{selectedExpenseIds.size > 0 ? `CSV (${selectedExpenseIds.size})` : 'Export CSV'}</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Corporate Segmented Filter Tabs: Only All Activity with Exported / Not Exported */}
+        {/* Corporate Segmented Filter Tabs */}
         <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 bg-slate-100 p-1 rounded-lg border border-slate-200/80 text-xs">
           <button
             onClick={() => setFilterTab('all')}
@@ -354,6 +441,18 @@ export default function DashboardView({
             }`}
           >
             All Activity ({employeeExpenses.length})
+          </button>
+
+          <button
+            onClick={() => setFilterTab('marked')}
+            className={`px-3.5 py-1.5 rounded-md font-semibold transition shrink-0 flex items-center space-x-1.5 ${
+              filterTab === 'marked'
+                ? 'bg-white text-slate-900 shadow-2xs font-bold'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+            }`}
+          >
+            <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
+            <span>Marked for Export ({markedExpenses.length})</span>
           </button>
 
           <button
@@ -414,24 +513,67 @@ export default function DashboardView({
           </div>
 
           <div className="flex items-center space-x-2 flex-wrap gap-y-1">
+            {/* Mark for Export (Condition 2) */}
+            <button
+              onClick={() => handleBulkReportStatus(true)}
+              disabled={isUpdatingReport}
+              className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs flex items-center space-x-1.5 transition disabled:opacity-50 shadow-xs cursor-pointer"
+              title="Mark selected expenses to display in Export section"
+            >
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              <span>Mark for Export</span>
+            </button>
+
+            <button
+              onClick={() => handleBulkReportStatus(false)}
+              disabled={isUpdatingReport}
+              className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs border border-slate-700 flex items-center space-x-1 transition disabled:opacity-50 cursor-pointer"
+              title="Remove from Export staging"
+            >
+              <X className="w-3.5 h-3.5 text-slate-400" />
+              <span>Unmark</span>
+            </button>
+
+            {/* Direct Export Selected Options (Condition 1) */}
+            <button
+              onClick={() => handleExportTransactions('pdf')}
+              disabled={isExportingPdf || isExportingCsv}
+              className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-900 font-semibold text-xs flex items-center space-x-1.5 transition disabled:opacity-50 cursor-pointer"
+              title="Download PDF statement of selected items and mark as exported"
+            >
+              <Printer className="w-3.5 h-3.5 text-slate-700" />
+              <span>Export PDF</span>
+            </button>
+
+            <button
+              onClick={() => handleExportTransactions('csv')}
+              disabled={isExportingPdf || isExportingCsv}
+              className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-900 font-semibold text-xs flex items-center space-x-1.5 transition disabled:opacity-50 cursor-pointer"
+              title="Download CSV spreadsheet of selected items"
+            >
+              <Download className="w-3.5 h-3.5 text-slate-700" />
+              <span>Export CSV</span>
+            </button>
+
             {/* Mark Selected as Exported */}
             <button
               onClick={handleBulkMarkExported}
               disabled={isUpdatingReport}
-              className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-900 font-semibold text-xs flex items-center space-x-1.5 transition disabled:opacity-50"
-              title="Mark selected expenses as exported and lock them"
+              className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs border border-slate-700 flex items-center space-x-1.5 transition disabled:opacity-50 cursor-pointer"
+              title="Directly mark selected expenses as exported without download"
             >
-              <Lock className="w-3.5 h-3.5 text-slate-700" />
+              <Lock className="w-3.5 h-3.5 text-slate-400" />
               <span>Mark as Exported</span>
             </button>
 
             {onNavigateToReports && (
               <button
                 onClick={onNavigateToReports}
-                className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs flex items-center space-x-1 transition"
+                className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs border border-slate-700 flex items-center space-x-1 transition cursor-pointer"
+                title="View in Export / Reports section"
               >
-                <FileSpreadsheet className="w-3.5 h-3.5" />
-                <span>Open Reports View</span>
+                <FileSpreadsheet className="w-3.5 h-3.5 text-blue-400" />
+                <span>Go to Export Section</span>
               </button>
             )}
 
@@ -594,7 +736,7 @@ export default function DashboardView({
                         {formatOMR(exp.amount)}
                       </td>
 
-                      {/* Status: Exported / Not Exported */}
+                      {/* Status: Exported / Marked for Export / Not Exported */}
                       <td className="py-3 px-3 text-center whitespace-nowrap">
                         {isExported ? (
                           <span
@@ -603,6 +745,14 @@ export default function DashboardView({
                           >
                             <Lock className="w-3 h-3 text-emerald-600" />
                             <span>Exported</span>
+                          </span>
+                        ) : exp.added_to_report ? (
+                          <span
+                            className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-800 border border-blue-200"
+                            title="Marked for Export - displayed in Export section"
+                          >
+                            <CheckCircle2 className="w-3 h-3 text-blue-600" />
+                            <span>Marked for Export</span>
                           </span>
                         ) : (
                           <span className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">
@@ -625,6 +775,22 @@ export default function DashboardView({
                             </button>
                           ) : (
                             <>
+                              <button
+                                type="button"
+                                onClick={() => handleToggleSingleReport(exp)}
+                                className={`p-1 rounded transition ${
+                                  exp.added_to_report
+                                    ? 'text-blue-600 hover:text-rose-600 hover:bg-rose-50'
+                                    : 'text-slate-400 hover:text-blue-600 hover:bg-blue-50'
+                                }`}
+                                title={
+                                  exp.added_to_report
+                                    ? 'Marked for Export (click to unmark)'
+                                    : 'Click to mark for Export section'
+                                }
+                              >
+                                <FileCheck className="w-3.5 h-3.5" />
+                              </button>
                               {onEditExpense && (
                                 <button
                                   onClick={() => onEditExpense(exp)}
@@ -665,11 +831,12 @@ export default function DashboardView({
                 onRetrySync={onRetrySync}
                 isSelected={selectedExpenseIds.has(exp.id)}
                 onToggleSelect={handleToggleSelect}
-                currentUser={effectiveUser}
+                onToggleReportStatus={handleToggleSingleReport}
                 onRequestRecall={onRequestRecall}
                 onApproveRecall={onApproveRecall}
                 onRejectRecall={onRejectRecall}
                 onViewReceipt={onViewReceipt}
+                currentUser={currentUser}
               />
             ))}
           </div>

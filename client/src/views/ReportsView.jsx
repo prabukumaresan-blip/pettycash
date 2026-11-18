@@ -143,9 +143,14 @@ export default function ReportsView({
         mark_exported: 'true'
       };
 
+      if (selectedRowIds.size > 0) {
+        filters.expense_ids = Array.from(selectedRowIds).join(',');
+      }
+
       await api.downloadCsvReport(filters);
       
-      const exportedCount = reportData?.expenses?.length || 0;
+      const exportedCount = selectedRowIds.size > 0 ? selectedRowIds.size : (reportData?.expenses?.length || 0);
+      setSelectedRowIds(new Set());
       setActionFeedback({
         type: 'success',
         msg: activeReportTab === 'exported'
@@ -172,7 +177,7 @@ export default function ReportsView({
         type: 'error',
         msg: activeReportTab === 'exported'
           ? 'No exported expenses match the current filter.'
-          : 'No expenses currently staged in the Official Expense Report.'
+          : 'No expenses currently marked for export in this view.'
       });
       setTimeout(() => setActionFeedback(null), 4000);
       return;
@@ -191,9 +196,14 @@ export default function ReportsView({
         mark_exported: 'true'
       };
 
+      if (selectedRowIds.size > 0) {
+        filters.expense_ids = Array.from(selectedRowIds).join(',');
+      }
+
       await api.downloadPdfReport(filters);
 
-      const count = reportData?.expenses?.length || 0;
+      const count = selectedRowIds.size > 0 ? selectedRowIds.size : (reportData?.expenses?.length || 0);
+      setSelectedRowIds(new Set());
       setActionFeedback({
         type: 'success',
         msg: activeReportTab === 'exported'
@@ -504,10 +514,10 @@ export default function ReportsView({
                   : 'border-transparent text-slate-500 hover:text-slate-800'
               }`}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-              <span>Not Exported</span>
+              <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
+              <span>Ready to Export (Marked)</span>
               {activeReportTab === 'report' && (
-                <span className="px-1.5 py-0.2 bg-amber-100 text-amber-800 rounded font-mono text-[10px]">
+                <span className="px-1.5 py-0.2 bg-blue-100 text-blue-800 rounded font-mono text-[10px]">
                   {expenses.length}
                 </span>
               )}
@@ -525,7 +535,7 @@ export default function ReportsView({
               }`}
             >
               <Lock className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Exported</span>
+              <span>Exported Statements</span>
               {activeReportTab === 'exported' && (
                 <span className="px-1.5 py-0.2 bg-emerald-100 text-emerald-800 rounded font-mono text-[10px]">
                   {expenses.length}
@@ -552,7 +562,7 @@ export default function ReportsView({
           <div className="text-[11px] text-slate-500 pb-2">
             {activeReportTab === 'report' && (
               <span className="bg-blue-50 text-blue-800 px-2.5 py-0.5 rounded border border-blue-200 font-medium">
-                Active expenses staged for official statement submission
+                Only marked expenses from Petty Cash Transactions are displayed here and can be exported
               </span>
             )}
             {activeReportTab === 'exported' && (
@@ -580,43 +590,54 @@ export default function ReportsView({
             </div>
 
             <div className="flex items-center space-x-2 flex-wrap gap-y-1">
+              {/* Direct Export Selected */}
+              <button
+                onClick={handleExportPdf}
+                disabled={isExportingPdf}
+                className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-900 font-semibold transition disabled:opacity-50 cursor-pointer"
+                title="Download PDF statement of selected items and mark exported"
+              >
+                <Printer className="w-3.5 h-3.5 text-slate-700 inline mr-1" />
+                <span>Export Selected (PDF)</span>
+              </button>
+
+              <button
+                onClick={handleExportCsv}
+                disabled={isExportingCsv}
+                className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-900 font-semibold transition disabled:opacity-50 cursor-pointer"
+                title="Download CSV spreadsheet of selected items"
+              >
+                <Download className="w-3.5 h-3.5 text-slate-700 inline mr-1" />
+                <span>Export Selected (CSV)</span>
+              </button>
+
               {activeReportTab === 'report' && (
                 <button
                   onClick={handleMarkSelectedAsExported}
                   disabled={isUpdatingReport}
-                  className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-900 font-semibold transition disabled:opacity-50"
-                  title="Lock selected expenses as exported official statement"
+                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 transition disabled:opacity-50 cursor-pointer"
+                  title="Lock selected expenses as exported without download"
                 >
-                  <Lock className="w-3.5 h-3.5 text-slate-700 inline mr-1" />
+                  <Lock className="w-3.5 h-3.5 text-slate-400 inline mr-1" />
                   <span>Mark as Exported</span>
                 </button>
               )}
 
-              {activeReportTab !== 'exported' && (
-                <button
-                  onClick={() => handleBulkUpdateReportStatus(true)}
-                  disabled={isUpdatingReport}
-                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 transition disabled:opacity-50"
-                >
-                  <FileCheck className="w-3.5 h-3.5 inline mr-1" />
-                  <span>Add to Report</span>
-                </button>
-              )}
-
-              {activeReportTab !== 'exported' && (
+              {activeReportTab === 'report' && (
                 <button
                   onClick={() => handleBulkUpdateReportStatus(false)}
                   disabled={isUpdatingReport}
-                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 transition disabled:opacity-50"
+                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold border border-slate-700 transition disabled:opacity-50 cursor-pointer"
+                  title="Remove from export staging back to unexported ledger"
                 >
-                  <X className="w-3.5 h-3.5 inline mr-1" />
-                  <span>Remove from Report</span>
+                  <X className="w-3.5 h-3.5 text-slate-400 inline mr-1" />
+                  <span>Remove from Export</span>
                 </button>
               )}
 
               <button
                 onClick={handleClearSelection}
-                className="p-1.5 text-slate-400 hover:text-white rounded transition"
+                className="p-1.5 text-slate-400 hover:text-white rounded transition cursor-pointer"
                 title="Clear selection"
               >
                 <X className="w-4 h-4" />
@@ -652,12 +673,17 @@ export default function ReportsView({
               {expenses.length === 0 ? (
                 <tr>
                   <td colSpan={9} className="py-12 text-center text-slate-500">
-                    <p className="font-semibold text-slate-700 text-sm">No expenses found</p>
-                    <p className="text-xs text-slate-400 mt-1">
-                      {activeReportTab === 'report'
-                        ? 'No active expenses are currently in the report. Switch to "Unreported Expenses" to add items.'
-                        : 'No expenses match the selected filters.'}
-                    </p>
+                    <div className="max-w-md mx-auto text-center py-4">
+                      <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center mx-auto mb-3">
+                        <FileCheck className="w-5 h-5 text-slate-400" />
+                      </div>
+                      <p className="font-bold text-slate-900 text-sm">No expenses marked for export</p>
+                      <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                        {activeReportTab === 'report'
+                          ? 'Only expenses marked from Petty Cash Transactions appear here. Go to Petty Cash Transactions, select the expenses you wish to export, and click "Mark for Export".'
+                          : 'No expenses match the selected filters.'}
+                      </p>
+                    </div>
                   </td>
                 </tr>
               ) : (

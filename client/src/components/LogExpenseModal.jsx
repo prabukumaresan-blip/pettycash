@@ -134,8 +134,9 @@ export default function LogExpenseModal({
       formData.append('paid_through_account_name', paidThroughAccName);
       formData.append('description', description.trim());
       formData.append('invoice_number', invoiceNumber.trim());
-      // Always included in official report by default
-      formData.append('added_to_report', 'true');
+      // When newly logged, it is recorded in Petty Cash Transactions (unmarked for export until user marks it)
+      const isMarked = editExpense ? String(Boolean(editExpense.added_to_report)) : 'false';
+      formData.append('added_to_report', isMarked);
 
       if (projectId) {
         formData.append('project_id', projectId);

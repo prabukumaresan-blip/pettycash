@@ -617,6 +617,7 @@ export default function App() {
             onRejectRecall={handleRejectExpenseRecall}
             onViewReceipt={(url, fileName) => setActiveReceipt({ url, fileName })}
             onMarkSelectedExported={handleMarkExpensesExported}
+            onRefreshData={loadAllData}
           />
         )}
 

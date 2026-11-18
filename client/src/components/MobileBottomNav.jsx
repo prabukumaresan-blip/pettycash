@@ -51,7 +51,7 @@ export default function MobileBottomNav({
             }`}
           >
             <FileSpreadsheet className="w-5 h-5" />
-            <span className="text-[10px] mt-0.5">Reports</span>
+            <span className="text-[10px] mt-0.5">Export</span>
           </button>
 
           {/* Sign Out */}
@@ -91,7 +91,7 @@ export default function MobileBottomNav({
           }`}
         >
           <FileSpreadsheet className="w-4 h-4" />
-          <span className="text-[9px] mt-0.5">Reports</span>
+          <span className="text-[9px] mt-0.5">Export</span>
         </button>
 
         {/* Center Floating Plus Button */}

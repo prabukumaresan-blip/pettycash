@@ -97,7 +97,7 @@ export default function Navbar({
                   : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
               }`}
             >
-              {isAdmin ? 'All Reports' : 'Expense Reports'}
+              Reports & Export
             </button>
 
             {isAdmin && (
