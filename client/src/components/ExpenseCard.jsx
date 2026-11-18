@@ -68,7 +68,7 @@ export default function ExpenseCard({
                 {expense.category_name || 'Petty Cash Purchases'}
               </span>
 
-              {/* Export Status Badge (Condition 2) */}
+              {/* Export Status Badge: Exported / Not Exported */}
               {isExported ? (
                 expense.recall_status === 'pending' ? (
                   <span className="inline-flex items-center space-x-1 text-[11px] font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
@@ -77,20 +77,17 @@ export default function ExpenseCard({
                   </span>
                 ) : (
                   <span
-                    className="inline-flex items-center space-x-1 text-[11px] font-semibold text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-300"
+                    className="inline-flex items-center space-x-1.5 text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200"
                     title={expense.exported_at ? `Exported on ${new Date(expense.exported_at).toLocaleString()}` : 'Exported'}
                   >
-                    <Lock className="w-3 h-3 text-slate-700" />
+                    <Lock className="w-3 h-3 text-emerald-600" />
                     <span>Exported</span>
                   </span>
                 )
-              ) : isReported ? (
-                <span className="inline-flex items-center space-x-1 text-[11px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
-                  <span>Active (In Report)</span>
-                </span>
               ) : (
-                <span className="inline-flex items-center space-x-1 text-[11px] font-medium text-slate-500 bg-slate-50 px-2 py-0.5 rounded border border-slate-200">
-                  <span>Unreported</span>
+                <span className="inline-flex items-center space-x-1.5 text-[11px] font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                  <span>Not Exported</span>
                 </span>
               )}
 

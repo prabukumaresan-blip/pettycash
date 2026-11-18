@@ -504,10 +504,10 @@ export default function ReportsView({
                   : 'border-transparent text-slate-500 hover:text-slate-800'
               }`}
             >
-              <FileCheck className="w-3.5 h-3.5 text-blue-600" />
-              <span>Official Report (To Export)</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+              <span>Not Exported</span>
               {activeReportTab === 'report' && (
-                <span className="px-1.5 py-0.2 bg-blue-100 text-blue-800 rounded font-mono text-[10px]">
+                <span className="px-1.5 py-0.2 bg-amber-100 text-amber-800 rounded font-mono text-[10px]">
                   {expenses.length}
                 </span>
               )}
@@ -524,30 +524,10 @@ export default function ReportsView({
                   : 'border-transparent text-slate-500 hover:text-slate-800'
               }`}
             >
-              <Lock className="w-3.5 h-3.5 text-slate-700" />
-              <span>Exported Statements Archive</span>
+              <Lock className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Exported</span>
               {activeReportTab === 'exported' && (
-                <span className="px-1.5 py-0.2 bg-slate-200 text-slate-800 rounded font-mono text-[10px]">
-                  {expenses.length}
-                </span>
-              )}
-            </button>
-
-            <button
-              onClick={() => {
-                setActiveReportTab('unreported');
-                setSelectedRowIds(new Set());
-              }}
-              className={`px-3.5 py-2 font-semibold border-b-2 transition flex items-center space-x-2 ${
-                activeReportTab === 'unreported'
-                  ? 'border-slate-900 text-slate-900 bg-white font-bold rounded-t-lg'
-                  : 'border-transparent text-slate-500 hover:text-slate-800'
-              }`}
-            >
-              <Plus className="w-3.5 h-3.5 text-slate-600" />
-              <span>Unreported Expenses</span>
-              {activeReportTab === 'unreported' && (
-                <span className="px-1.5 py-0.2 bg-slate-100 text-slate-700 rounded font-mono text-[10px]">
+                <span className="px-1.5 py-0.2 bg-emerald-100 text-emerald-800 rounded font-mono text-[10px]">
                   {expenses.length}
                 </span>
               )}
@@ -565,7 +545,7 @@ export default function ReportsView({
               }`}
             >
               <FileSpreadsheet className="w-3.5 h-3.5 text-slate-600" />
-              <span>All Company Audit</span>
+              <span>All Activity Log</span>
             </button>
           </div>
 
@@ -743,19 +723,20 @@ export default function ReportsView({
                         {formatOMR(exp.amount)}
                       </td>
 
-                      {/* Export Status Badge (Condition 2) */}
+                      {/* Status: Exported / Not Exported */}
                       <td className="py-3 px-3 text-center whitespace-nowrap">
                         {isExported ? (
                           <span
-                            className="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-800 border border-slate-300"
+                            className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200"
                             title={exp.exported_at ? `Exported: ${new Date(exp.exported_at).toLocaleDateString()}` : 'Exported'}
                           >
-                            <Lock className="w-3 h-3 text-slate-600" />
+                            <Lock className="w-3 h-3 text-emerald-600" />
                             <span>Exported</span>
                           </span>
                         ) : (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-blue-50 text-blue-700 border border-blue-200">
-                            Active
+                          <span className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                            <span>Not Exported</span>
                           </span>
                         )}
                       </td>

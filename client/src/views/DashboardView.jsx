@@ -45,7 +45,7 @@ export default function DashboardView({
   onMarkSelectedExported
 }) {
   const effectiveUser = currentUser || currentEmployee;
-  const [filterTab, setFilterTab] = useState('all'); // 'all', 'unexported', 'exported', 'synced', 'pending'
+  const [filterTab, setFilterTab] = useState('all'); // 'all', 'not_exported', 'exported', 'recalls'
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedExpenseIds, setSelectedExpenseIds] = useState(new Set());
@@ -67,20 +67,16 @@ export default function DashboardView({
   const settlement = getSettlementStatus(currentBal, currentEmployee?.name || 'Petty Cash');
 
   const totalSpent = employeeExpenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
-  const syncedCount = employeeExpenses.filter((e) => e.sync_status === 'synced').length;
-  const pendingCount = employeeExpenses.filter((e) => e.sync_status === 'pending').length;
-  const activeUnexported = employeeExpenses.filter((e) => !e.is_exported);
-  const activeUnexportedAmount = activeUnexported.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
+  const notExportedExpenses = employeeExpenses.filter((e) => !e.is_exported);
+  const notExportedAmount = notExportedExpenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
   const exportedExpenses = employeeExpenses.filter((e) => e.is_exported);
   const exportedAmount = exportedExpenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
   const pendingRecallCount = employeeExpenses.filter((e) => e.recall_status === 'pending').length;
 
   // Filter list
   const filteredList = employeeExpenses.filter((e) => {
-    if (filterTab === 'unexported' && e.is_exported) return false;
+    if (filterTab === 'not_exported' && e.is_exported) return false;
     if (filterTab === 'exported' && !e.is_exported) return false;
-    if (filterTab === 'synced' && e.sync_status !== 'synced') return false;
-    if (filterTab === 'pending' && e.sync_status !== 'pending') return false;
     if (filterTab === 'recalls' && e.recall_status !== 'pending') return false;
 
     if (searchQuery.trim()) {
@@ -246,54 +242,57 @@ export default function DashboardView({
           </div>
         </div>
 
-        {/* Active Unexported (Ready to Export) */}
+        {/* Not Exported */}
         <div
-          onClick={() => setFilterTab('unexported')}
+          onClick={() => setFilterTab('not_exported')}
           className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs cursor-pointer hover:border-slate-300 transition"
         >
           <div className="flex items-center justify-between text-xs text-slate-500 font-semibold uppercase tracking-wider">
-            <span>Active (To Export)</span>
-            <FileCheck className="w-4 h-4 text-blue-600" />
+            <span>Not Exported</span>
+            <span className="w-2 h-2 rounded-full bg-amber-500"></span>
           </div>
           <div className="text-xl font-bold text-slate-900 mt-2 font-mono">
-            {formatOMR(activeUnexportedAmount)}
+            {formatOMR(notExportedAmount)}
           </div>
-          <div className="text-[11px] text-blue-700 mt-0.5 font-medium">
-            {activeUnexported.length} expense{activeUnexported.length === 1 ? '' : 's'} awaiting export
+          <div className="text-[11px] text-amber-700 mt-0.5 font-medium">
+            {notExportedExpenses.length} expense{notExportedExpenses.length === 1 ? '' : 's'} awaiting export
           </div>
         </div>
 
-        {/* Exported Archive */}
+        {/* Exported */}
         <div
           onClick={() => setFilterTab('exported')}
           className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs cursor-pointer hover:border-slate-300 transition"
         >
           <div className="flex items-center justify-between text-xs text-slate-500 font-semibold uppercase tracking-wider">
-            <span>Exported Archive</span>
-            <Lock className="w-4 h-4 text-slate-700" />
+            <span>Exported</span>
+            <Lock className="w-4 h-4 text-emerald-600" />
           </div>
           <div className="text-xl font-bold text-slate-900 mt-2 font-mono">
             {formatOMR(exportedAmount)}
           </div>
-          <div className="text-[11px] text-slate-600 mt-0.5 font-medium">
+          <div className="text-[11px] text-emerald-700 mt-0.5 font-medium">
             {exportedExpenses.length} locked in official reports
           </div>
         </div>
 
-        {/* Zoho Synced */}
-        <div
-          onClick={() => setFilterTab('synced')}
-          className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs cursor-pointer hover:border-slate-300 transition"
-        >
+        {/* Account Standing */}
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
           <div className="flex items-center justify-between text-xs text-slate-500 font-semibold uppercase tracking-wider">
-            <span>Zoho Books</span>
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <span>Account Standing</span>
+            {settlement.isEmployeeOwing ? (
+              <ArrowUpRight className="w-4 h-4 text-emerald-600 stroke-[2.5]" />
+            ) : settlement.isCompanyOwing ? (
+              <ArrowDownLeft className="w-4 h-4 text-amber-600 stroke-[2.5]" />
+            ) : (
+              <CheckCircle2 className="w-4 h-4 text-slate-400" />
+            )}
           </div>
           <div className="text-xl font-bold text-slate-900 mt-2 font-mono">
-            {syncedCount}
+            {settlement.formattedAmount}
           </div>
-          <div className="text-[11px] text-emerald-700 mt-0.5 font-medium">
-            Synchronized journal vouchers
+          <div className="text-[11px] text-slate-500 mt-0.5 font-medium truncate">
+            {settlement.accountingLabel}
           </div>
         </div>
       </div>
@@ -344,11 +343,11 @@ export default function DashboardView({
           </div>
         </div>
 
-        {/* Corporate Segmented Filter Tabs */}
-        <div className="flex items-center space-x-1 overflow-x-auto pb-1 bg-slate-100 p-1 rounded-lg border border-slate-200/80 text-xs">
+        {/* Corporate Segmented Filter Tabs: Only All Activity with Exported / Not Exported */}
+        <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 bg-slate-100 p-1 rounded-lg border border-slate-200/80 text-xs">
           <button
             onClick={() => setFilterTab('all')}
-            className={`px-3 py-1.5 rounded-md font-semibold transition shrink-0 ${
+            className={`px-3.5 py-1.5 rounded-md font-semibold transition shrink-0 ${
               filterTab === 'all'
                 ? 'bg-white text-slate-900 shadow-2xs font-bold'
                 : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
@@ -358,20 +357,20 @@ export default function DashboardView({
           </button>
 
           <button
-            onClick={() => setFilterTab('unexported')}
-            className={`px-3 py-1.5 rounded-md font-semibold transition shrink-0 flex items-center space-x-1.5 ${
-              filterTab === 'unexported'
+            onClick={() => setFilterTab('not_exported')}
+            className={`px-3.5 py-1.5 rounded-md font-semibold transition shrink-0 flex items-center space-x-1.5 ${
+              filterTab === 'not_exported'
                 ? 'bg-white text-slate-900 shadow-2xs font-bold'
                 : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
             }`}
           >
-            <FileCheck className="w-3.5 h-3.5 text-blue-600" />
-            <span>Active / To Export ({activeUnexported.length})</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+            <span>Not Exported ({notExportedExpenses.length})</span>
           </button>
 
           <button
             onClick={() => setFilterTab('exported')}
-            className={`px-3 py-1.5 rounded-md font-semibold transition shrink-0 flex items-center space-x-1.5 ${
+            className={`px-3.5 py-1.5 rounded-md font-semibold transition shrink-0 flex items-center space-x-1.5 ${
               filterTab === 'exported'
                 ? 'bg-white text-slate-900 shadow-2xs font-bold'
                 : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
@@ -381,27 +380,19 @@ export default function DashboardView({
             <span>Exported ({exportedExpenses.length})</span>
           </button>
 
-          <button
-            onClick={() => setFilterTab('synced')}
-            className={`px-3 py-1.5 rounded-md font-semibold transition shrink-0 ${
-              filterTab === 'synced'
-                ? 'bg-white text-slate-900 shadow-2xs font-bold'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
-            }`}
-          >
-            Synced ({syncedCount})
-          </button>
-
-          <button
-            onClick={() => setFilterTab('pending')}
-            className={`px-3 py-1.5 rounded-md font-semibold transition shrink-0 ${
-              filterTab === 'pending'
-                ? 'bg-white text-slate-900 shadow-2xs font-bold'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
-            }`}
-          >
-            Pending ({pendingCount})
-          </button>
+          {pendingRecallCount > 0 && (
+            <button
+              onClick={() => setFilterTab('recalls')}
+              className={`px-3.5 py-1.5 rounded-md font-semibold transition shrink-0 flex items-center space-x-1.5 ${
+                filterTab === 'recalls'
+                  ? 'bg-white text-slate-900 shadow-2xs font-bold'
+                  : 'text-amber-800 hover:bg-white/60'
+              }`}
+            >
+              <RotateCcw className="w-3.5 h-3.5 text-amber-700" />
+              <span>Review Requests ({pendingRecallCount})</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -507,7 +498,7 @@ export default function DashboardView({
           </div>
           <h3 className="text-sm font-bold text-slate-900">No transactions found</h3>
           <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-            {filterTab === 'unexported'
+            {filterTab === 'not_exported'
               ? 'All current expenses have been exported into official statements.'
               : filterTab === 'exported'
               ? 'No exported expenses found under current filter.'
@@ -540,8 +531,7 @@ export default function DashboardView({
                   <th className="py-3 px-3">Description & Category</th>
                   <th className="py-3 px-3 w-40">Project</th>
                   <th className="py-3 px-3 w-28 text-right">Amount</th>
-                  <th className="py-3 px-3 w-28 text-center">Status</th>
-                  <th className="py-3 px-3 w-24 text-center">Zoho</th>
+                  <th className="py-3 px-3 w-32 text-center">Status</th>
                   <th className="py-3 px-3 w-20 text-right">Actions</th>
                 </tr>
               </thead>
@@ -621,34 +611,20 @@ export default function DashboardView({
                         {formatOMR(exp.amount)}
                       </td>
 
-                      {/* Export Status Badge (Condition 2) */}
+                      {/* Status: Exported / Not Exported */}
                       <td className="py-3 px-3 text-center whitespace-nowrap">
                         {isExported ? (
                           <span
-                            className="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-800 border border-slate-300"
+                            className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200"
                             title={exp.exported_at ? `Exported: ${new Date(exp.exported_at).toLocaleDateString()}` : 'Exported'}
                           >
-                            <Lock className="w-3 h-3 text-slate-600" />
+                            <Lock className="w-3 h-3 text-emerald-600" />
                             <span>Exported</span>
                           </span>
                         ) : (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-blue-50 text-blue-700 border border-blue-200">
-                            Active
-                          </span>
-                        )}
-                      </td>
-
-                      {/* Zoho Sync Status */}
-                      <td className="py-3 px-3 text-center whitespace-nowrap">
-                        {exp.sync_status === 'synced' ? (
-                          <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
-                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                            <span>Synced</span>
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[11px] font-semibold text-amber-800 bg-amber-50 border border-amber-200">
-                            <Clock className="w-3 h-3 text-amber-600" />
-                            <span>Pending</span>
+                          <span className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                            <span>Not Exported</span>
                           </span>
                         )}
                       </td>
