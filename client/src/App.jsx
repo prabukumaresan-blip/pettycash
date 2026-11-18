@@ -4,6 +4,7 @@ import MobileBottomNav from './components/MobileBottomNav';
 import OfflineBanner from './components/OfflineBanner';
 import LogExpenseModal from './components/LogExpenseModal';
 import EmployeeModal from './components/EmployeeModal';
+import ReceiptViewerModal from './components/ReceiptViewerModal';
 import DashboardView from './views/DashboardView';
 import ReportsView from './views/ReportsView';
 import EmployeesView from './views/EmployeesView';
@@ -46,6 +47,7 @@ export default function App() {
   const [editingExpense, setEditingExpense] = useState(null);
   const [isEmployeeModalOpen, setIsEmployeeModalOpen] = useState(false);
   const [editingEmployee, setEditingEmployee] = useState(null);
+  const [activeReceipt, setActiveReceipt] = useState(null); // { url, fileName }
 
   // Notification Toast
   const [toastMessage, setToastMessage] = useState(null);
@@ -484,6 +486,24 @@ export default function App() {
     }
   };
 
+  // Handle Explicitly Marking Expenses as Exported (Condition 2)
+  const handleMarkExpensesExported = async (expenseIds) => {
+    try {
+      const res = await api.markExpensesAsExported(expenseIds);
+      if (res.success) {
+        showToast(`Successfully marked ${expenseIds.length} expense log(s) as Exported.`);
+        await loadAllData();
+        return true;
+      } else {
+        showToast(res.error || 'Failed to mark expenses as exported', 'error');
+        return false;
+      }
+    } catch (err) {
+      showToast('Export error: ' + err.message, 'error');
+      return false;
+    }
+  };
+
   // Handle Saving Employee (Admin only)
   const handleSaveEmployee = async (employeeData) => {
     try {
@@ -595,6 +615,8 @@ export default function App() {
             onRequestRecall={handleRequestExpenseRecall}
             onApproveRecall={handleApproveExpenseRecall}
             onRejectRecall={handleRejectExpenseRecall}
+            onViewReceipt={(url, fileName) => setActiveReceipt({ url, fileName })}
+            onMarkSelectedExported={handleMarkExpensesExported}
           />
         )}
 
@@ -608,6 +630,7 @@ export default function App() {
             onApproveRecall={handleApproveExpenseRecall}
             onRejectRecall={handleRejectExpenseRecall}
             onRefreshData={loadAllData}
+            onViewReceipt={(url, fileName) => setActiveReceipt({ url, fileName })}
           />
         )}
 
@@ -677,13 +700,22 @@ export default function App() {
         />
       )}
 
-      {/* Toast Notification Alert */}
+      {/* Receipt Attachment Viewer Modal */}
+      {activeReceipt && (
+        <ReceiptViewerModal
+          receiptUrl={activeReceipt.url}
+          fileName={activeReceipt.fileName}
+          onClose={() => setActiveReceipt(null)}
+        />
+      )}
+
+      {/* Toast Notification Alert (Clean Corporate Design) */}
       {toastMessage && (
         <div className="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-50 animate-slide-up">
           <div
-            className={`px-4 py-3 rounded-2xl shadow-xl border text-xs font-bold flex items-center space-x-2 ${
+            className={`px-4 py-2.5 rounded-lg shadow-lg border text-xs font-semibold flex items-center space-x-2 ${
               toastMessage.type === 'error'
-                ? 'bg-red-900 text-white border-red-800'
+                ? 'bg-rose-900 text-white border-rose-800'
                 : toastMessage.type === 'warning'
                 ? 'bg-amber-900 text-white border-amber-800'
                 : 'bg-slate-900 text-white border-slate-800'

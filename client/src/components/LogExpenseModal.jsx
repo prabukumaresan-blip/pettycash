@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   X,
   Calendar,
@@ -6,15 +6,14 @@ import {
   Tag,
   Briefcase,
   FileText,
-  CheckCircle,
   AlertCircle,
-  Sparkles,
-  ArrowUpRight,
-  ArrowDownLeft,
   Hash,
-  FileCheck
+  FileCheck,
+  UploadCloud,
+  Paperclip,
+  CheckCircle2,
+  Trash2
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 import { formatOMR, getSettlementStatus } from '../utils/currency';
 import { api } from '../utils/api';
 
@@ -34,9 +33,12 @@ export default function LogExpenseModal({
   const [description, setDescription] = useState('');
   const [projectId, setProjectId] = useState('');
   const [addToReport, setAddToReport] = useState(true);
+  const [receiptFile, setReceiptFile] = useState(null);
+  const [existingReceiptName, setExistingReceiptName] = useState(null);
   const [zohoProjects, setZohoProjects] = useState(projects || []);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const fileInputRef = useRef(null);
 
   // Sync projects with Zoho Books
   useEffect(() => {
@@ -53,8 +55,7 @@ export default function LogExpenseModal({
     }
   }, [projects, isOpen]);
 
-  // Initialize or populate form only once when modal opens or editExpense changes
-  const editExpenseId = editExpense ? editExpense.id : null;
+  // Populate form on open
   useEffect(() => {
     if (!isOpen) return;
 
@@ -66,6 +67,8 @@ export default function LogExpenseModal({
       setDescription(editExpense.description || '');
       setProjectId(editExpense.project_id || '');
       setAddToReport(editExpense.added_to_report !== undefined ? Boolean(editExpense.added_to_report) : true);
+      setExistingReceiptName(editExpense.receipt_file_name || null);
+      setReceiptFile(null);
     } else {
       setAmount('');
       setExpenseDate(new Date().toISOString().split('T')[0]);
@@ -78,24 +81,36 @@ export default function LogExpenseModal({
       const defaultProj = currentEmployee?.default_project_id || (zohoProjects.length > 0 ? zohoProjects[0].project_id : '');
       setProjectId(defaultProj);
       setAddToReport(true);
+      setExistingReceiptName(null);
+      setReceiptFile(null);
     }
     setErrorMessage('');
-  }, [isOpen, editExpenseId]);
+  }, [isOpen, editExpense?.id]);
 
-  // Set default project if projects finish loading later and projectId is still empty
   useEffect(() => {
     if (!projectId && zohoProjects.length > 0) {
       setProjectId(currentEmployee?.default_project_id || zohoProjects[0].project_id);
     }
   }, [zohoProjects, currentEmployee, projectId]);
 
-  // Handle amount typing safely (supports OMR 3-decimal Baisa)
+  // Handle amount formatting (supports up to 3 decimals for OMR)
   const handleAmountChange = (e) => {
     const val = e.target.value;
-    // Allow empty, or positive number with max 3 decimal places
     if (val === '' || /^\d*\.?\d{0,3}$/.test(val)) {
       setAmount(val);
     }
+  };
+
+  const handleFileSelect = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setReceiptFile(e.target.files[0]);
+    }
+  };
+
+  const handleClearFile = (e) => {
+    e.stopPropagation();
+    setReceiptFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   if (!isOpen) return null;
@@ -115,17 +130,15 @@ export default function LogExpenseModal({
       return;
     }
 
-    setIsSubmitting(true);
-
     const employeeId = currentEmployee?.id;
     if (!employeeId) {
       setErrorMessage('Employee account not identified. Please try logging in again.');
-      setIsSubmitting(false);
       return;
     }
 
+    setIsSubmitting(true);
+
     try {
-      // Determine selected expense account
       const selectedExp = categories.find(c => c.account_id === categoryId) ||
         categories.find(c => c.account_name.toLowerCase() === 'other expenses') ||
         categories[0] || {
@@ -144,9 +157,10 @@ export default function LogExpenseModal({
       formData.append('category_name', selectedExp.account_name);
       formData.append('paid_through_account_id', paidThroughAccId);
       formData.append('paid_through_account_name', paidThroughAccName);
-      formData.append('description', description);
+      formData.append('description', description.trim());
       formData.append('invoice_number', invoiceNumber.trim());
       formData.append('added_to_report', addToReport ? 'true' : 'false');
+
       if (projectId) {
         formData.append('project_id', projectId);
         if (selectedProj) {
@@ -158,24 +172,14 @@ export default function LogExpenseModal({
         }
       }
 
-      await onExpenseSaved(formData, editExpense ? editExpense.id : null);
-
-      // Trigger celebratory confetti on new expense creation
-      if (!editExpense) {
-        try {
-          confetti({
-            particleCount: 60,
-            spread: 55,
-            origin: { y: 0.7 }
-          });
-        } catch {
-          // ignore if canvas blocked
-        }
+      if (receiptFile) {
+        formData.append('receipt', receiptFile);
       }
 
+      await onExpenseSaved(formData, editExpense ? editExpense.id : null);
       onClose();
     } catch (err) {
-      setErrorMessage(err.message || 'Failed to save expense');
+      setErrorMessage(err.message || 'Failed to record expense voucher');
     } finally {
       setIsSubmitting(false);
     }
@@ -186,26 +190,26 @@ export default function LogExpenseModal({
   const remainingBal = currentBal - enteredAmt;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <div className="w-full sm:max-w-lg bg-white rounded-t-2xl sm:rounded-2xl shadow-xl border border-slate-200 flex flex-col max-h-[92vh] sm:max-h-[88vh] overflow-hidden animate-slide-up">
-        {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50/90">
-          <div className="flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-lg bg-slate-800 text-white flex items-center justify-center font-bold">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+      <div className="w-full max-w-xl bg-white rounded-xl shadow-2xl border border-slate-200 flex flex-col max-h-[92vh] overflow-hidden animate-slide-up">
+        {/* Corporate Modal Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold">
               <DollarSign className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-slate-900">
+              <h2 className="text-sm font-bold text-slate-900 tracking-tight">
                 {editExpense ? 'Edit Petty Cash Transaction' : 'Record Petty Cash Expense'}
               </h2>
-              <p className="text-xs text-slate-500 font-normal">
-                Zoho Books journal voucher under {currentEmployee?.name}
+              <p className="text-xs text-slate-500 font-medium">
+                Petty Cash Account: {currentEmployee?.name}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition"
           >
             <X className="w-4 h-4" />
           </button>
@@ -220,16 +224,17 @@ export default function LogExpenseModal({
             </div>
           )}
 
-          {/* Amount Field (Clean Corporate Financial Display) */}
-          <div
-            onClick={() => document.getElementById('expense-amount-input')?.focus()}
-            className="bg-slate-50 p-4 rounded-xl border border-slate-200 cursor-text"
-          >
-            <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1">
-              Expense Amount (OMR)
-            </label>
-            <div className="relative flex items-center">
-              <span className="text-xl font-bold text-slate-500 mr-2 font-mono">OMR</span>
+          {/* Amount Card (Corporate Financial Input) */}
+          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-slate-600">
+                Expense Amount (OMR) *
+              </label>
+              <span className="text-[11px] text-slate-400 font-medium">3 decimal precision</span>
+            </div>
+
+            <div className="flex items-baseline space-x-2">
+              <span className="text-2xl font-bold text-slate-400 font-mono">OMR</span>
               <input
                 id="expense-amount-input"
                 type="text"
@@ -239,201 +244,236 @@ export default function LogExpenseModal({
                 value={amount}
                 onChange={handleAmountChange}
                 placeholder="0.000"
-                className="w-full text-2xl font-bold bg-transparent text-slate-900 focus:outline-none placeholder-slate-300 font-mono"
+                className="w-full text-2xl sm:text-3xl font-bold bg-transparent text-slate-900 focus:outline-none placeholder-slate-300 font-mono"
                 autoFocus
               />
             </div>
 
-            {/* Quick preset amount chips */}
-            <div className="flex items-center space-x-1.5 mt-2.5 pt-2 border-t border-slate-200">
-              <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mr-1">Quick:</span>
+            {/* Quick preset chips */}
+            <div className="flex items-center space-x-1.5 mt-3 pt-2.5 border-t border-slate-200/80">
+              <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mr-1">Presets:</span>
               {[5, 10, 20, 50].map((preset) => (
                 <button
                   key={preset}
                   type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setAmount(preset.toFixed(3));
-                  }}
-                  className="px-2.5 py-1 rounded-lg bg-white hover:bg-blue-50 active:scale-95 text-blue-700 text-xs font-bold border border-blue-200/90 shadow-2xs transition"
+                  onClick={() => setAmount(preset.toFixed(3))}
+                  className="px-2.5 py-1 rounded-md bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold border border-slate-200 shadow-2xs transition"
                 >
                   +{preset} OMR
                 </button>
               ))}
             </div>
 
-            {/* Live Balance Impact */}
-            <div className="mt-2.5 pt-2.5 border-t border-blue-200/60 space-y-1.5 text-xs">
-              {(() => {
-                const curSet = getSettlementStatus(currentBal, currentEmployee?.name || 'He');
-                const remSet = getSettlementStatus(remainingBal, currentEmployee?.name || 'He');
-                return (
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-600 font-medium">Account Ending Balance Impact:</span>
-                    <span className={`font-bold font-mono ${remainingBal < 0 ? 'text-amber-600' : 'text-slate-800'}`}>
-                      {curSet.formattedAmount} {curSet.accountingSideShort} → {remSet.formattedAmount} {remSet.accountingSideShort}
-                    </span>
-                  </div>
-                );
-              })()}
-              {amount && !isNaN(parseFloat(amount)) && parseFloat(amount) > 0 && (() => {
-                const impactSettlement = getSettlementStatus(remainingBal, currentEmployee?.name || 'He');
-                return (
-                  <div className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold flex items-center justify-between border ${
-                    impactSettlement.isEmployeeOwing
-                      ? 'bg-emerald-50 text-emerald-900 border-emerald-200'
-                      : impactSettlement.isCompanyOwing
-                      ? 'bg-amber-50 text-amber-900 border-amber-200'
-                      : 'bg-slate-50 text-slate-700 border-slate-200'
-                  }`}>
-                    <div className="flex items-center space-x-1.5 min-w-0 pr-1">
-                      {impactSettlement.isEmployeeOwing ? (
-                        <ArrowUpRight className="w-3.5 h-3.5 text-emerald-600 stroke-[2.5] shrink-0" />
-                      ) : impactSettlement.isCompanyOwing ? (
-                        <ArrowDownLeft className="w-3.5 h-3.5 text-amber-600 stroke-[2.5] shrink-0" />
-                      ) : (
-                        <CheckCircle className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                      )}
-                      <span className="truncate">After this: {impactSettlement.accountingLabel}</span>
-                    </div>
-                    <span className="font-mono font-black shrink-0">{impactSettlement.formattedAmount} {impactSettlement.accountingSideShort}</span>
-                  </div>
-                );
-              })()}
+            {/* Remaining Balance Impact */}
+            <div className="mt-2.5 pt-2 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-600">
+              <span>Account Balance Impact:</span>
+              <span className="font-mono font-bold text-slate-900">
+                {formatOMR(currentBal)} → {formatOMR(remainingBal)}
+              </span>
             </div>
           </div>
 
-          {/* Expense Date */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center space-x-1">
-              <Calendar className="w-3.5 h-3.5 text-slate-400" />
-              <span>Expense Date</span>
-            </label>
-            <input
-              type="date"
-              required
-              value={expenseDate}
-              onChange={(e) => setExpenseDate(e.target.value)}
-              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:bg-white transition"
-            />
+          {/* 2-Column Grid: Date & Invoice Number */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Expense Date */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center space-x-1">
+                <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                <span>Date of Expense *</span>
+              </label>
+              <input
+                type="date"
+                required
+                value={expenseDate}
+                onChange={(e) => setExpenseDate(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-900 text-xs font-medium focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
+              />
+            </div>
+
+            {/* Invoice / Reference Number */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center space-x-1">
+                <Hash className="w-3.5 h-3.5 text-slate-400" />
+                <span>Invoice / Bill Reference</span>
+              </label>
+              <input
+                type="text"
+                value={invoiceNumber}
+                onChange={(e) => setInvoiceNumber(e.target.value)}
+                placeholder="e.g. INV-1048 or Bill #830"
+                className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-900 text-xs font-medium focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
+              />
+            </div>
           </div>
 
           {/* Description */}
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center space-x-1">
               <FileText className="w-3.5 h-3.5 text-slate-400" />
-              <span>Description / Purpose *</span>
+              <span>Description / Business Purpose *</span>
             </label>
             <input
               type="text"
               required
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="e.g. Emergency taxi fares for Metro hub inspection"
-              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:bg-white transition"
+              placeholder="e.g. Fuel for company delivery van / hardware fittings"
+              className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-900 text-xs font-medium focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
             />
           </div>
 
-          {/* Invoice / Reference Number */}
+          {/* 2-Column Grid: Project & Category */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Project */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center space-x-1">
+                <Briefcase className="w-3.5 h-3.5 text-slate-400" />
+                <span>Zoho Books Project</span>
+              </label>
+              <select
+                value={projectId}
+                onChange={(e) => setProjectId(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-900 text-xs font-medium focus:ring-1 focus:ring-slate-400 focus:border-slate-400 truncate"
+              >
+                <option value="">None / General Company Overheads</option>
+                {zohoProjects.map((p) => (
+                  <option key={p.project_id} value={p.project_id}>
+                    {p.project_name} {p.project_code ? `(${p.project_code})` : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Category / Account */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center space-x-1">
+                <Tag className="w-3.5 h-3.5 text-slate-400" />
+                <span>Expense Category Account</span>
+              </label>
+              <select
+                value={categoryId}
+                onChange={(e) => setCategoryId(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-900 text-xs font-medium focus:ring-1 focus:ring-slate-400 focus:border-slate-400 truncate"
+              >
+                {categories.map((c) => (
+                  <option key={c.account_id} value={c.account_id}>
+                    {c.account_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Receipt / Invoice Upload Section */}
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center space-x-1">
-              <Hash className="w-3.5 h-3.5 text-blue-600" />
-              <span>Invoice / Bill Number</span>
-              <span className="text-[10px] text-slate-400 font-normal ml-1">(Synced as Reference # to Zoho Books)</span>
+              <Paperclip className="w-3.5 h-3.5 text-slate-400" />
+              <span>Attach Receipt / Bill Document</span>
+              <span className="text-[11px] text-slate-400 font-normal">(PDF, JPG, PNG)</span>
             </label>
+
             <input
-              type="text"
-              value={invoiceNumber}
-              onChange={(e) => setInvoiceNumber(e.target.value)}
-              placeholder="e.g. INV-2026-0891 or Bill #1043"
-              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:bg-white transition"
+              type="file"
+              ref={fileInputRef}
+              accept=".pdf,image/png,image/jpeg,image/webp"
+              onChange={handleFileSelect}
+              className="hidden"
+              id="expense-receipt-upload"
             />
+
+            {receiptFile ? (
+              <div className="p-3 rounded-lg border border-blue-200 bg-blue-50/50 flex items-center justify-between text-xs">
+                <div className="flex items-center space-x-2 truncate pr-2">
+                  <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span className="font-semibold text-blue-900 truncate">{receiptFile.name}</span>
+                  <span className="text-[10px] text-slate-500 font-mono">
+                    ({(receiptFile.size / 1024).toFixed(0)} KB)
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleClearFile}
+                  className="p-1 text-slate-400 hover:text-rose-600 rounded transition shrink-0"
+                  title="Remove file"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            ) : existingReceiptName ? (
+              <div className="p-3 rounded-lg border border-slate-200 bg-slate-50 flex items-center justify-between text-xs">
+                <div className="flex items-center space-x-2 truncate pr-2">
+                  <Paperclip className="w-4 h-4 text-slate-500 shrink-0" />
+                  <span className="text-slate-700 font-mono truncate">{existingReceiptName}</span>
+                </div>
+                <label
+                  htmlFor="expense-receipt-upload"
+                  className="px-2.5 py-1 text-xs font-semibold bg-white border border-slate-200 rounded hover:bg-slate-100 text-slate-700 cursor-pointer"
+                >
+                  Replace
+                </label>
+              </div>
+            ) : (
+              <label
+                htmlFor="expense-receipt-upload"
+                className="border-2 border-dashed border-slate-200 hover:border-slate-300 rounded-lg p-3 text-center cursor-pointer block bg-slate-50/50 hover:bg-slate-50 transition"
+              >
+                <div className="flex items-center justify-center space-x-2 text-xs text-slate-600 font-medium">
+                  <UploadCloud className="w-4 h-4 text-slate-400" />
+                  <span>Click to attach receipt or invoice (PDF/Image)</span>
+                </div>
+              </label>
+            )}
           </div>
 
-          {/* Project (from Zoho Books) */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center space-x-1">
-              <Briefcase className="w-3.5 h-3.5 text-blue-600" />
-              <span>Project (from Zoho Books)</span>
-            </label>
-            <select
-              value={projectId}
-              onChange={(e) => setProjectId(e.target.value)}
-              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:bg-white transition truncate"
-            >
-              <option value="">None / General Operations</option>
-              {zohoProjects.map((p) => (
-                <option key={p.project_id} value={p.project_id}>
-                  {p.project_name} {p.project_code ? `(${p.project_code})` : ''}
-                </option>
-              ))}
-            </select>
-          </div>
-
-
-          {/* Paid Through Account Card */}
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/50 border border-slate-200/90 text-xs flex items-center justify-between">
-            <span className="text-slate-500 font-semibold flex items-center space-x-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
-              <span>Paid Through Account:</span>
-            </span>
-            <span className="font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200 truncate max-w-[220px]">
-              {currentEmployee?.petty_cash_account_name || `Petty Cash - ${currentEmployee?.name}`}
-            </span>
-          </div>
-
-          {/* Add to Official Expense Report Toggle */}
-          <div 
+          {/* Include in Expense Report Toggle */}
+          <div
             onClick={() => setAddToReport(!addToReport)}
-            className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
-              addToReport 
-                ? 'bg-slate-50 border-slate-300' 
-                : 'bg-white border-slate-200 hover:bg-slate-50'
-            }`}
+            className="p-3 rounded-lg border border-slate-200 bg-slate-50/70 hover:bg-slate-50 transition cursor-pointer flex items-center justify-between text-xs"
           >
             <div className="flex items-center space-x-2.5">
-              <div className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold transition ${
-                addToReport ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-500 border border-slate-200'
-              }`}>
-                <FileCheck className="w-3.5 h-3.5" />
-              </div>
+              <FileCheck className={`w-4 h-4 ${addToReport ? 'text-slate-900' : 'text-slate-400'}`} />
               <div>
-                <span className="text-xs font-semibold text-slate-900 block">
+                <span className="font-semibold text-slate-800 block">
                   Include in Official Expense Report
                 </span>
-                <span className="text-[11px] text-slate-500 block">
-                  {addToReport 
-                    ? 'Immediately visible in Official Expense Report claims' 
-                    : 'Saved to Recent Activity only (can be added later)'}
+                <span className="text-[11px] text-slate-500">
+                  {addToReport
+                    ? 'Voucher will be staged for official statement submission'
+                    : 'Saved to transaction history only'}
                 </span>
               </div>
             </div>
-
-            <div className={`w-10 h-5 flex items-center rounded-full p-0.5 transition-colors duration-200 ${
-              addToReport ? 'bg-slate-800' : 'bg-slate-300'
-            }`}>
-              <div className={`bg-white w-4 h-4 rounded-full shadow-xs transform transition-transform duration-200 ${
-                addToReport ? 'translate-x-5' : 'translate-x-0'
-              }`} />
-            </div>
+            <input
+              type="checkbox"
+              checked={addToReport}
+              onChange={() => {}}
+              className="w-4 h-4 rounded text-slate-900 border-slate-300 pointer-events-none"
+            />
           </div>
 
-          {/* Submit Action */}
-          <div className="pt-2">
+          {/* Modal Action Buttons */}
+          <div className="flex items-center justify-end space-x-2 pt-2 border-t border-slate-100">
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={isSubmitting}
+              className="px-4 py-2 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition"
+            >
+              Cancel
+            </button>
+
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-2.5 px-4 rounded-lg bg-slate-900 hover:bg-slate-800 active:bg-slate-900 text-white font-semibold text-xs border border-slate-800 shadow-xs flex items-center justify-center space-x-2 transition disabled:opacity-50 cursor-pointer"
+              className="px-5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 active:bg-slate-900 text-white font-semibold text-xs border border-slate-800 shadow-xs flex items-center space-x-2 transition disabled:opacity-50"
             >
               {isSubmitting ? (
-                <div className="flex items-center space-x-2">
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  <span>Syncing with Zoho Books...</span>
-                </div>
-              ) : (
                 <>
-                  <span>{editExpense ? 'Update Transaction' : 'Record Transaction & Sync'}</span>
+                  <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  <span>Saving & Syncing...</span>
                 </>
+              ) : (
+                <span>{editExpense ? 'Update Transaction' : 'Record Expense & Sync'}</span>
               )}
             </button>
           </div>

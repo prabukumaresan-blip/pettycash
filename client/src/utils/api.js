@@ -470,9 +470,13 @@ export const api = {
     if (user && user.id) {
       params.append('auth_user_id', user.id);
     }
-    Object.keys(filters).forEach(k => {
-      if (filters[k] !== undefined && filters[k] !== null && filters[k] !== '') {
-        params.append(k, filters[k]);
+    const finalFilters = {
+      mark_exported: 'true',
+      ...filters
+    };
+    Object.keys(finalFilters).forEach(k => {
+      if (finalFilters[k] !== undefined && finalFilters[k] !== null && finalFilters[k] !== '') {
+        params.append(k, finalFilters[k]);
       }
     });
     return `${BASE_URL}/reports/export/csv?${params.toString()}`;
@@ -484,9 +488,13 @@ export const api = {
     if (user && user.id) {
       params.append('auth_user_id', user.id);
     }
-    Object.keys(filters).forEach(k => {
-      if (filters[k] !== undefined && filters[k] !== null && filters[k] !== '') {
-        params.append(k, filters[k]);
+    const finalFilters = {
+      mark_exported: 'true',
+      ...filters
+    };
+    Object.keys(finalFilters).forEach(k => {
+      if (finalFilters[k] !== undefined && finalFilters[k] !== null && finalFilters[k] !== '') {
+        params.append(k, finalFilters[k]);
       }
     });
     return `${BASE_URL}/reports/export/pdf?${params.toString()}`;

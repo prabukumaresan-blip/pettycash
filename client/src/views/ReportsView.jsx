@@ -8,12 +8,7 @@ import {
   Search,
   CheckCircle2,
   Clock,
-  User,
-  ExternalLink,
   Printer,
-  ChevronDown,
-  ArrowUpRight,
-  ArrowDownLeft,
   FileCheck,
   CheckSquare,
   Square,
@@ -22,7 +17,9 @@ import {
   AlertCircle,
   Lock,
   RotateCcw,
-  Check
+  Paperclip,
+  ArrowUpRight,
+  ArrowDownLeft
 } from 'lucide-react';
 import { api } from '../utils/api';
 import { formatOMR, getSettlementStatus } from '../utils/currency';
@@ -35,10 +32,11 @@ export default function ReportsView({
   onRequestRecall,
   onApproveRecall,
   onRejectRecall,
-  onRefreshData
+  onRefreshData,
+  onViewReceipt
 }) {
   const isAdmin = currentUser?.role === 'admin';
-  const [activeReportTab, setActiveReportTab] = useState('report'); // 'report' (Official Expense Report), 'exported' (Exported Archive), 'unreported' (Select & Add), 'all' (All Expenses)
+  const [activeReportTab, setActiveReportTab] = useState('report'); // 'report' (Official to export), 'exported' (Archive), 'unreported' (Add items), 'all' (All Audit)
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(
@@ -54,6 +52,9 @@ export default function ReportsView({
   const [selectedRowIds, setSelectedRowIds] = useState(new Set());
   const [isUpdatingReport, setIsUpdatingReport] = useState(false);
   const [actionFeedback, setActionFeedback] = useState(null);
+
+  const [isExportingPdf, setIsExportingPdf] = useState(false);
+  const [isExportingCsv, setIsExportingCsv] = useState(false);
 
   // Fetch report
   const fetchReport = async (resync = false) => {
@@ -127,9 +128,7 @@ export default function ReportsView({
     }
   };
 
-  const [isExportingPdf, setIsExportingPdf] = useState(false);
-  const [isExportingCsv, setIsExportingCsv] = useState(false);
-
+  // Export to CSV & automatically mark exported (Condition 2)
   const handleExportCsv = async () => {
     setIsExportingCsv(true);
     try {
@@ -140,12 +139,23 @@ export default function ReportsView({
         project_id: selectedProjectId || undefined,
         sync_status: syncStatusFilter || undefined,
         added_to_report: activeReportTab === 'unreported' ? 'false' : (activeReportTab === 'report' ? 'true' : undefined),
-        is_exported: activeReportTab === 'exported' ? 'true' : (activeReportTab === 'report' ? 'false' : undefined)
+        is_exported: activeReportTab === 'exported' ? 'true' : (activeReportTab === 'report' ? 'false' : undefined),
+        mark_exported: 'true'
       };
+
       await api.downloadCsvReport(filters);
-      setActionFeedback({ type: 'success', msg: 'CSV report downloaded successfully!' });
-      setTimeout(() => setActionFeedback(null), 3000);
-      fetchReport();
+      
+      const exportedCount = reportData?.expenses?.length || 0;
+      setActionFeedback({
+        type: 'success',
+        msg: activeReportTab === 'exported'
+          ? 'Exported statement CSV downloaded successfully.'
+          : `Expense report exported! ${exportedCount} expense log(s) marked as Exported.`
+      });
+      setTimeout(() => setActionFeedback(null), 4000);
+
+      // Immediately refresh data to reflect exported state
+      await fetchReport();
       if (onRefreshData) onRefreshData();
     } catch (err) {
       setActionFeedback({ type: 'error', msg: `Download failed: ${err.message}` });
@@ -155,14 +165,14 @@ export default function ReportsView({
     }
   };
 
+  // Export to PDF & automatically mark exported (Condition 2)
   const handleExportPdf = async () => {
-    // If user is exporting from official report tab and there are no expenses
-    if ((activeReportTab === 'report' || activeReportTab === 'exported') && expenses.length === 0) {
+    if ((activeReportTab === 'report' || activeReportTab === 'exported') && (!reportData?.expenses || reportData.expenses.length === 0)) {
       setActionFeedback({
         type: 'error',
         msg: activeReportTab === 'exported'
           ? 'No exported expenses match the current filter.'
-          : 'No expenses currently in the Official Expense Report. Select and add expenses first!'
+          : 'No expenses currently staged in the Official Expense Report.'
       });
       setTimeout(() => setActionFeedback(null), 4000);
       return;
@@ -177,12 +187,23 @@ export default function ReportsView({
         project_id: selectedProjectId || undefined,
         sync_status: syncStatusFilter || undefined,
         added_to_report: activeReportTab === 'unreported' ? 'false' : 'true',
-        is_exported: activeReportTab === 'exported' ? 'true' : (activeReportTab === 'report' ? 'false' : undefined)
+        is_exported: activeReportTab === 'exported' ? 'true' : (activeReportTab === 'report' ? 'false' : undefined),
+        mark_exported: 'true'
       };
+
       await api.downloadPdfReport(filters);
-      setActionFeedback({ type: 'success', msg: 'Audit PDF downloaded successfully!' });
-      setTimeout(() => setActionFeedback(null), 3500);
-      fetchReport();
+
+      const count = reportData?.expenses?.length || 0;
+      setActionFeedback({
+        type: 'success',
+        msg: activeReportTab === 'exported'
+          ? 'Audit PDF downloaded successfully.'
+          : `Official Statement exported! ${count} expense log(s) marked as Exported.`
+      });
+      setTimeout(() => setActionFeedback(null), 4500);
+
+      // Immediately refresh data so newly exported items move to Exported Archive
+      await fetchReport();
       if (onRefreshData) onRefreshData();
     } catch (err) {
       console.error('Failed to export PDF:', err);
@@ -193,6 +214,7 @@ export default function ReportsView({
     }
   };
 
+  // Mark Selected Expenses as Exported explicitly
   const handleMarkSelectedAsExported = async () => {
     if (selectedRowIds.size === 0) return;
     setIsUpdatingReport(true);
@@ -204,9 +226,9 @@ export default function ReportsView({
       if (onRefreshData) onRefreshData();
       setActionFeedback({
         type: 'success',
-        msg: `Successfully locked ${count} expense(s) as Exported and moved to Exported Archive!`
+        msg: `Successfully marked and locked ${count} expense log(s) as Exported!`
       });
-      setTimeout(() => setActionFeedback(null), 3500);
+      setTimeout(() => setActionFeedback(null), 4000);
     } catch (err) {
       setActionFeedback({ type: 'error', msg: err.message });
       setTimeout(() => setActionFeedback(null), 4000);
@@ -235,42 +257,20 @@ export default function ReportsView({
       setActionFeedback({
         type: 'success',
         msg: addedToReport
-          ? `Successfully added ${count} expense(s) to the Expense Report!`
-          : `Removed ${count} expense(s) from the Expense Report.`
+          ? `Added ${count} expense(s) to the Official Expense Report.`
+          : `Removed ${count} expense(s) from the Official Expense Report.`
       });
       setTimeout(() => setActionFeedback(null), 4000);
     } catch (err) {
       setActionFeedback({ type: 'error', msg: err.message });
       setTimeout(() => setActionFeedback(null), 4000);
-    } finally {
-      setIsUpdatingReport(false);
-    }
-  };
-
-  const handleSingleRowReportStatus = async (expId, addedToReport) => {
-    setIsUpdatingReport(true);
-    try {
-      if (onUpdateReportStatus) {
-        await onUpdateReportStatus([expId], addedToReport);
-      } else {
-        await api.updateExpensesReportStatus([expId], addedToReport);
-      }
-      await fetchReport();
-      setActionFeedback({
-        type: 'success',
-        msg: addedToReport ? 'Expense added to Expense Report!' : 'Expense removed from Expense Report.'
-      });
-      setTimeout(() => setActionFeedback(null), 3000);
-    } catch (err) {
-      setActionFeedback({ type: 'error', msg: err.message });
-      setTimeout(() => setActionFeedback(null), 3000);
     } finally {
       setIsUpdatingReport(false);
     }
   };
 
   const handleToggleRow = (id) => {
-    setSelectedRowIds(prev => {
+    setSelectedRowIds((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
@@ -285,7 +285,7 @@ export default function ReportsView({
     if (selectedRowIds.size === expenses.length && expenses.length > 0) {
       setSelectedRowIds(new Set());
     } else {
-      setSelectedRowIds(new Set(expenses.map(e => e.id)));
+      setSelectedRowIds(new Set(expenses.map((e) => e.id)));
     }
   };
 
@@ -294,121 +294,108 @@ export default function ReportsView({
   };
 
   const selectedTotal = expenses
-    .filter(e => selectedRowIds.has(e.id))
+    .filter((e) => selectedRowIds.has(e.id))
     .reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
 
   return (
-    <div className="space-y-6">
-      {/* Header & Export Actions */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+    <div className="space-y-5">
+      {/* 1. Header & Primary Export Actions */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-2xs">
         <div>
           <div className="flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-800 flex items-center justify-center font-bold border border-slate-200">
-              <FileSpreadsheet className="w-4 h-4 text-slate-700" />
+            <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold">
+              <FileSpreadsheet className="w-4 h-4" />
             </div>
-            <h2 className="text-base font-bold text-slate-900">Financial Reports & Audit Statement</h2>
+            <h2 className="text-base font-bold text-slate-900 tracking-tight">
+              Expense Reports & Audit Statements
+            </h2>
           </div>
           <p className="text-xs text-slate-500 mt-1">
-            Reconciliation vouchers and claims synchronized with Zoho Books journals
+            Generate and export official petty cash expense claims synchronized with Zoho Books vouchers
           </p>
         </div>
 
-        {/* Action Buttons */}
+        {/* Corporate Export Action Buttons */}
         <div className="flex items-center space-x-2 flex-wrap gap-y-2">
           <button
             onClick={handleManualResync}
             disabled={isResyncing}
-            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 transition flex items-center space-x-1.5"
+            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 transition flex items-center space-x-1.5 shadow-2xs"
+            title="Refresh transactions from Zoho Books"
           >
-            <RefreshCw className={`w-3.5 h-3.5 text-slate-500 ${isResyncing ? 'animate-spin' : ''}`} />
-            <span>{isResyncing ? 'Re-syncing...' : 'Sync Zoho'}</span>
+            <RefreshCw className={`w-3.5 h-3.5 text-slate-400 ${isResyncing ? 'animate-spin' : ''}`} />
+            <span>{isResyncing ? 'Syncing...' : 'Sync Zoho'}</span>
           </button>
 
           <button
             onClick={handleExportCsv}
             disabled={isExportingCsv}
-            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition flex items-center space-x-1.5 disabled:opacity-50 cursor-pointer shadow-xs"
+            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition flex items-center space-x-1.5 disabled:opacity-50 shadow-2xs cursor-pointer"
+            title="Download CSV spreadsheet and mark active expenses as exported"
           >
             <Download className={`w-3.5 h-3.5 text-slate-500 ${isExportingCsv ? 'animate-bounce' : ''}`} />
-            <span>{isExportingCsv ? 'Exporting...' : 'Export CSV'}</span>
+            <span>{isExportingCsv ? 'Exporting...' : 'Export to CSV'}</span>
           </button>
 
           <button
             onClick={handleExportPdf}
             disabled={isExportingPdf}
             className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 hover:bg-slate-800 active:bg-slate-900 text-white shadow-xs border border-slate-800 transition flex items-center space-x-1.5 disabled:opacity-50 cursor-pointer"
+            title="Download audit PDF statement and mark active expenses as exported"
           >
             <Printer className={`w-3.5 h-3.5 text-slate-300 ${isExportingPdf ? 'animate-spin' : ''}`} />
-            <span>{isExportingPdf ? 'Preparing...' : 'Download PDF Statement'}</span>
+            <span>{isExportingPdf ? 'Generating...' : 'Download PDF Statement'}</span>
           </button>
         </div>
       </div>
 
-      {/* Filter Matrix Card */}
-      <div className="bg-white p-5 rounded-3xl border border-slate-200/90 shadow-xs space-y-4">
-        {/* Quick Date Presets */}
-        <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 text-xs font-bold">
-          <span className="text-slate-400 mr-1 text-[11px] uppercase tracking-wider">Presets:</span>
-          <button
-            onClick={() => setPresetRange('month')}
-            className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 transition"
-          >
-            This Month
-          </button>
-          <button
-            onClick={() => setPresetRange('30days')}
-            className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 transition"
-          >
-            Last 30 Days
-          </button>
-          <button
-            onClick={() => setPresetRange('ytd')}
-            className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 transition"
-          >
-            Year to Date
-          </button>
-          <button
-            onClick={() => setPresetRange('all')}
-            className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 transition"
-          >
-            All Dates
-          </button>
+      {/* 2. Corporate Filter Matrix */}
+      <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-2xs space-y-3">
+        {/* Date Presets */}
+        <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 text-xs font-semibold">
+          <span className="text-slate-400 text-[11px] uppercase tracking-wider mr-1">Presets:</span>
+          {['month', '30days', 'ytd', 'all'].map((preset) => (
+            <button
+              key={preset}
+              onClick={() => setPresetRange(preset)}
+              className="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 transition"
+            >
+              {preset === 'month' ? 'This Month' : preset === '30days' ? 'Last 30 Days' : preset === 'ytd' ? 'Year to Date' : 'All Dates'}
+            </button>
+          ))}
         </div>
 
-        {/* Dynamic Filters Form */}
+        {/* Dynamic Form Filters */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2 border-t border-slate-100 text-xs">
-          {/* Start Date */}
           <div>
             <label className="block text-slate-500 font-semibold mb-1">Start Date</label>
             <input
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 font-medium focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-900 font-medium focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
             />
           </div>
 
-          {/* End Date */}
           <div>
             <label className="block text-slate-500 font-semibold mb-1">End Date</label>
             <input
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 font-medium focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-900 font-medium focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
             />
           </div>
 
-          {/* Employee Filter */}
           <div>
             <label className="block text-slate-500 font-semibold mb-1">
-              {isAdmin ? 'Filter Employee' : 'Employee Account'}
+              {isAdmin ? 'Employee Filter' : 'Account Holder'}
             </label>
             {isAdmin ? (
               <select
                 value={selectedEmployeeId}
                 onChange={(e) => setSelectedEmployeeId(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 font-medium focus:ring-2 focus:ring-blue-500 truncate"
+                className="w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-900 font-medium focus:ring-1 focus:ring-slate-400 focus:border-slate-400 truncate"
               >
                 <option value="">All Team Members</option>
                 {employees.map((emp) => (
@@ -418,22 +405,21 @@ export default function ReportsView({
                 ))}
               </select>
             ) : (
-              <div className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-100/90 text-slate-800 font-bold truncate flex items-center justify-between text-xs">
+              <div className="w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-800 font-semibold truncate flex items-center justify-between text-xs">
                 <span>{currentUser?.name || 'My Profile'}</span>
-                <span className="text-blue-600 font-mono text-[11px]">{currentUser?.employee_code}</span>
+                <span className="text-slate-500 font-mono text-[11px]">{currentUser?.employee_code}</span>
               </div>
             )}
           </div>
 
-          {/* Zoho Project Filter */}
           <div>
             <label className="block text-slate-500 font-semibold mb-1">Zoho Books Project</label>
             <select
               value={selectedProjectId}
               onChange={(e) => setSelectedProjectId(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 font-medium focus:ring-2 focus:ring-blue-500 truncate"
+              className="w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-900 font-medium focus:ring-1 focus:ring-slate-400 focus:border-slate-400 truncate"
             >
-              <option value="">All Zoho Projects</option>
+              <option value="">All Projects</option>
               {projects.map((proj) => (
                 <option key={proj.project_id} value={proj.project_id}>
                   {proj.project_name} {proj.project_code ? `(${proj.project_code})` : ''}
@@ -441,118 +427,59 @@ export default function ReportsView({
               ))}
             </select>
           </div>
-
-          {/* Sync Status */}
-          <div>
-            <label className="block text-slate-500 font-semibold mb-1">Zoho Sync Status</label>
-            <select
-              value={syncStatusFilter}
-              onChange={(e) => setSyncStatusFilter(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 font-medium focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">All Statuses</option>
-              <option value="synced">Synced Only</option>
-              <option value="pending">Pending Sync</option>
-              <option value="failed">Failed Sync</option>
-            </select>
-          </div>
         </div>
       </div>
 
-      {/* Employee Specific Settlement Card if an employee is filtered */}
-      {(() => {
-        const emp = employees.find((e) => e.id === selectedEmployeeId);
-        if (!emp) return null;
-        const bal = parseFloat(emp.current_balance || 0);
-        const settlement = getSettlementStatus(bal, emp.name || 'He');
-        return (
-          <div className={`p-4 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-            settlement.isEmployeeOwing
-              ? 'bg-emerald-50/80 border-emerald-200 text-emerald-950'
-              : settlement.isCompanyOwing
-              ? 'bg-amber-50/80 border-amber-200 text-amber-950'
-              : 'bg-slate-50 border-slate-200 text-slate-800'
-          }`}>
-            <div className="flex items-center space-x-3">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold shrink-0 ${
-                settlement.isEmployeeOwing
-                  ? 'bg-emerald-200 text-emerald-800'
-                  : settlement.isCompanyOwing
-                  ? 'bg-amber-200 text-amber-800'
-                  : 'bg-slate-200 text-slate-700'
-              }`}>
-                {settlement.isEmployeeOwing ? (
-                  <ArrowUpRight className="w-5 h-5 stroke-[2.5]" />
-                ) : settlement.isCompanyOwing ? (
-                  <ArrowDownLeft className="w-5 h-5 stroke-[2.5]" />
-                ) : (
-                  <CheckCircle2 className="w-5 h-5 stroke-[2.5]" />
-                )}
-              </div>
-              <div>
-                <div className="text-xs font-black uppercase tracking-wider flex items-center space-x-2">
-                  <span>{emp.name} — {settlement.accountingLabel}</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-white border border-current">
-                    {settlement.badgeText}
-                  </span>
-                </div>
-                <p className="text-[11px] opacity-80 mt-0.5">
-                  {settlement.explanation}
-                </p>
-              </div>
-            </div>
-            <div className="text-left sm:text-right shrink-0">
-              <span className="text-[10px] uppercase font-bold tracking-wider opacity-75 block">Settlement Balance</span>
-              <span className="text-lg font-black font-mono">
-                {settlement.formattedAmount} {settlement.accountingSideShort}
-              </span>
-            </div>
-          </div>
-        );
-      })()}
-
-      {/* Live Financial Metrics Banner */}
+      {/* 3. Live Statement Totals Banner */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Spend</span>
-          <div className="text-xl sm:text-2xl font-black text-slate-900 mt-1">
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+            Total Claim Amount
+          </span>
+          <div className="text-xl font-bold font-mono text-slate-900 mt-1">
             {formatOMR(meta.total_amount)}
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Records</span>
-          <div className="text-xl sm:text-2xl font-black text-slate-900 mt-1">
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+            Records Count
+          </span>
+          <div className="text-xl font-bold font-mono text-slate-900 mt-1">
             {meta.total_records || 0}
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-600">Zoho Synced</span>
-          <div className="text-xl sm:text-2xl font-black text-emerald-700 mt-1">
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+            Zoho Synced
+          </span>
+          <div className="text-xl font-bold font-mono text-emerald-700 mt-1">
             {meta.synced_count || 0}
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-amber-600">Pending Sync</span>
-          <div className="text-xl sm:text-2xl font-black text-amber-700 mt-1">
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+            Pending Sync
+          </span>
+          <div className="text-xl font-bold font-mono text-amber-700 mt-1">
             {meta.pending_count || 0}
           </div>
         </div>
       </div>
 
-
-
-      {/* Action Feedback Banner */}
+      {/* Feedback Toast Banner */}
       {actionFeedback && (
-        <div className={`p-4 rounded-2xl border text-xs font-bold flex items-center justify-between animate-fade-in ${
-          actionFeedback.type === 'success'
-            ? 'bg-emerald-50 text-emerald-900 border-emerald-300'
-            : 'bg-red-50 text-red-900 border-red-300'
-        }`}>
+        <div
+          className={`p-3.5 rounded-xl border text-xs font-semibold flex items-center justify-between animate-fade-in ${
+            actionFeedback.type === 'success'
+              ? 'bg-emerald-50 text-emerald-900 border-emerald-300'
+              : 'bg-rose-50 text-rose-900 border-rose-300'
+          }`}
+        >
           <div className="flex items-center space-x-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>{actionFeedback.msg}</span>
           </div>
           <button onClick={() => setActionFeedback(null)} className="text-slate-400 hover:text-slate-700">
@@ -561,133 +488,138 @@ export default function ReportsView({
         </div>
       )}
 
-      {/* Main Expense Report Data Table Container */}
-      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs overflow-hidden">
-        {/* Report Mode Sub-Tabs */}
-        <div className="flex items-center justify-between border-b border-slate-200 px-4 sm:px-6 pt-3 bg-slate-50/60 flex-wrap gap-2">
-          <div className="flex items-center space-x-1 sm:space-x-2 overflow-x-auto">
+      {/* 4. Report Mode Sub-Tabs & Data Table */}
+      <div className="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
+        {/* Navigation Sub-Tabs */}
+        <div className="flex items-center justify-between border-b border-slate-200 px-4 sm:px-5 pt-2.5 bg-slate-50 flex-wrap gap-2">
+          <div className="flex items-center space-x-1 sm:space-x-2 overflow-x-auto text-xs">
             <button
-              onClick={() => { setActiveReportTab('report'); setSelectedRowIds(new Set()); }}
-              className={`px-4 py-2.5 text-xs font-bold border-b-2 transition flex items-center space-x-2 ${
+              onClick={() => {
+                setActiveReportTab('report');
+                setSelectedRowIds(new Set());
+              }}
+              className={`px-3.5 py-2 font-semibold border-b-2 transition flex items-center space-x-2 ${
                 activeReportTab === 'report'
-                  ? 'border-indigo-600 text-indigo-700 bg-white shadow-2xs rounded-t-xl'
+                  ? 'border-slate-900 text-slate-900 bg-white font-bold rounded-t-lg'
                   : 'border-transparent text-slate-500 hover:text-slate-800'
               }`}
             >
-              <FileCheck className="w-4 h-4 text-indigo-600" />
-              <span>Official Expense Report</span>
+              <FileCheck className="w-3.5 h-3.5 text-blue-600" />
+              <span>Official Report (To Export)</span>
               {activeReportTab === 'report' && (
-                <span className="px-1.5 py-0.2 bg-indigo-100 text-indigo-800 rounded-full text-[10px] font-mono">
+                <span className="px-1.5 py-0.2 bg-blue-100 text-blue-800 rounded font-mono text-[10px]">
                   {expenses.length}
                 </span>
               )}
             </button>
 
             <button
-              onClick={() => { setActiveReportTab('exported'); setSelectedRowIds(new Set()); }}
-              className={`px-4 py-2.5 text-xs font-bold border-b-2 transition flex items-center space-x-2 ${
+              onClick={() => {
+                setActiveReportTab('exported');
+                setSelectedRowIds(new Set());
+              }}
+              className={`px-3.5 py-2 font-semibold border-b-2 transition flex items-center space-x-2 ${
                 activeReportTab === 'exported'
-                  ? 'border-purple-600 text-purple-700 bg-white shadow-2xs rounded-t-xl'
-                  : 'border-transparent text-purple-700 hover:text-purple-900'
+                  ? 'border-slate-900 text-slate-900 bg-white font-bold rounded-t-lg'
+                  : 'border-transparent text-slate-500 hover:text-slate-800'
               }`}
             >
-              <Lock className="w-4 h-4 text-purple-600" />
-              <span>Exported Expenses</span>
+              <Lock className="w-3.5 h-3.5 text-slate-700" />
+              <span>Exported Statements Archive</span>
               {activeReportTab === 'exported' && (
-                <span className="px-1.5 py-0.2 bg-purple-100 text-purple-800 rounded-full text-[10px] font-mono">
+                <span className="px-1.5 py-0.2 bg-slate-200 text-slate-800 rounded font-mono text-[10px]">
                   {expenses.length}
                 </span>
               )}
             </button>
 
             <button
-              onClick={() => { setActiveReportTab('unreported'); setSelectedRowIds(new Set()); }}
-              className={`px-4 py-2.5 text-xs font-bold border-b-2 transition flex items-center space-x-2 ${
+              onClick={() => {
+                setActiveReportTab('unreported');
+                setSelectedRowIds(new Set());
+              }}
+              className={`px-3.5 py-2 font-semibold border-b-2 transition flex items-center space-x-2 ${
                 activeReportTab === 'unreported'
-                  ? 'border-blue-600 text-blue-700 bg-white shadow-2xs rounded-t-xl'
+                  ? 'border-slate-900 text-slate-900 bg-white font-bold rounded-t-lg'
                   : 'border-transparent text-slate-500 hover:text-slate-800'
               }`}
             >
-              <Plus className="w-4 h-4 text-blue-600" />
-              <span>Select & Add Expenses</span>
+              <Plus className="w-3.5 h-3.5 text-slate-600" />
+              <span>Unreported Expenses</span>
               {activeReportTab === 'unreported' && (
-                <span className="px-1.5 py-0.2 bg-blue-100 text-blue-800 rounded-full text-[10px] font-mono">
+                <span className="px-1.5 py-0.2 bg-slate-100 text-slate-700 rounded font-mono text-[10px]">
                   {expenses.length}
                 </span>
               )}
             </button>
 
             <button
-              onClick={() => { setActiveReportTab('all'); setSelectedRowIds(new Set()); }}
-              className={`px-4 py-2.5 text-xs font-bold border-b-2 transition flex items-center space-x-2 ${
+              onClick={() => {
+                setActiveReportTab('all');
+                setSelectedRowIds(new Set());
+              }}
+              className={`px-3.5 py-2 font-semibold border-b-2 transition flex items-center space-x-2 ${
                 activeReportTab === 'all'
-                  ? 'border-slate-800 text-slate-900 bg-white shadow-2xs rounded-t-xl'
+                  ? 'border-slate-900 text-slate-900 bg-white font-bold rounded-t-lg'
                   : 'border-transparent text-slate-500 hover:text-slate-800'
               }`}
             >
-              <FileSpreadsheet className="w-4 h-4 text-slate-600" />
-              <span>All Expenses Audit</span>
+              <FileSpreadsheet className="w-3.5 h-3.5 text-slate-600" />
+              <span>All Company Audit</span>
             </button>
           </div>
 
-          <div className="text-[11px] font-semibold text-slate-500 pb-2 flex items-center space-x-1.5">
+          <div className="text-[11px] text-slate-500 pb-2">
             {activeReportTab === 'report' && (
-              <span className="text-indigo-800 bg-indigo-50 px-2.5 py-1 rounded-lg border border-indigo-200">
-                Active unexported items ready for statement submission
+              <span className="bg-blue-50 text-blue-800 px-2.5 py-0.5 rounded border border-blue-200 font-medium">
+                Active expenses staged for official statement submission
               </span>
             )}
             {activeReportTab === 'exported' && (
-              <span className="text-purple-800 bg-purple-50 px-2.5 py-1 rounded-lg border border-purple-200 flex items-center space-x-1">
-                <Lock className="w-3 h-3 text-purple-600" />
-                <span>Locked official statements & vouchers archived separately</span>
-              </span>
-            )}
-            {activeReportTab === 'unreported' && (
-              <span className="text-blue-800 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200">
-                Check items below and click &quot;Add Selected to Report&quot;
+              <span className="bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded border border-slate-200 font-medium flex items-center space-x-1">
+                <Lock className="w-3 h-3 text-slate-600" />
+                <span>Exported & locked official statements archive</span>
               </span>
             )}
           </div>
         </div>
 
-        {/* Bulk Action Bar for Selected Rows */}
+        {/* Bulk Action Toolbar for Checked Items */}
         {selectedRowIds.size > 0 && (
-          <div className="p-3 sm:p-4 bg-indigo-950 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-indigo-800 animate-fade-in">
+          <div className="p-3 bg-slate-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 animate-fade-in text-xs">
             <div className="flex items-center space-x-3">
-              <div className="w-7 h-7 rounded-lg bg-indigo-500/30 text-indigo-300 flex items-center justify-center font-bold">
-                <CheckSquare className="w-4 h-4" />
-              </div>
+              <CheckSquare className="w-4 h-4 text-slate-400" />
               <div>
-                <span className="text-xs font-bold text-white block">
-                  {selectedRowIds.size} expense{selectedRowIds.size > 1 ? 's' : ''} selected
+                <span className="font-bold text-white">
+                  {selectedRowIds.size} expense log{selectedRowIds.size > 1 ? 's' : ''} selected
                 </span>
-                <span className="text-[11px] text-indigo-200 font-mono">
-                  Total Selected: {formatOMR(selectedTotal)}
+                <span className="text-slate-300 font-mono ml-2">
+                  Total: {formatOMR(selectedTotal)}
                 </span>
               </div>
             </div>
 
             <div className="flex items-center space-x-2 flex-wrap gap-y-1">
-              {activeReportTab !== 'exported' && (
-                <button
-                  onClick={() => handleBulkUpdateReportStatus(true)}
-                  disabled={isUpdatingReport}
-                  className="px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-bold text-xs shadow-sm flex items-center space-x-1.5 transition disabled:opacity-50 cursor-pointer"
-                >
-                  <FileCheck className="w-3.5 h-3.5 stroke-[2.5]" />
-                  <span>Add Selected to Expense Report</span>
-                </button>
-              )}
-
               {activeReportTab === 'report' && (
                 <button
                   onClick={handleMarkSelectedAsExported}
                   disabled={isUpdatingReport}
-                  className="px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 active:scale-95 text-white font-bold text-xs shadow-sm flex items-center space-x-1.5 transition disabled:opacity-50 cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-900 font-semibold transition disabled:opacity-50"
                   title="Lock selected expenses as exported official statement"
                 >
-                  <Lock className="w-3.5 h-3.5" />
-                  <span>Lock as Exported</span>
+                  <Lock className="w-3.5 h-3.5 text-slate-700 inline mr-1" />
+                  <span>Mark as Exported</span>
+                </button>
+              )}
+
+              {activeReportTab !== 'exported' && (
+                <button
+                  onClick={() => handleBulkUpdateReportStatus(true)}
+                  disabled={isUpdatingReport}
+                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 transition disabled:opacity-50"
+                >
+                  <FileCheck className="w-3.5 h-3.5 inline mr-1" />
+                  <span>Add to Report</span>
                 </button>
               )}
 
@@ -695,16 +627,16 @@ export default function ReportsView({
                 <button
                   onClick={() => handleBulkUpdateReportStatus(false)}
                   disabled={isUpdatingReport}
-                  className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-white font-semibold text-xs border border-white/20 flex items-center space-x-1 transition disabled:opacity-50 cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 transition disabled:opacity-50"
                 >
-                  <X className="w-3.5 h-3.5" />
+                  <X className="w-3.5 h-3.5 inline mr-1" />
                   <span>Remove from Report</span>
                 </button>
               )}
 
               <button
                 onClick={handleClearSelection}
-                className="p-1.5 rounded-lg text-indigo-300 hover:text-white hover:bg-white/10 transition cursor-pointer"
+                className="p-1.5 text-slate-400 hover:text-white rounded transition"
                 title="Clear selection"
               >
                 <X className="w-4 h-4" />
@@ -713,264 +645,142 @@ export default function ReportsView({
           </div>
         )}
 
-        <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <h3 className="text-sm font-extrabold text-slate-900">
-              {activeReportTab === 'report'
-                ? 'Official Expense Report Items'
-                : activeReportTab === 'exported'
-                ? 'Exported & Locked Expense History'
-                : activeReportTab === 'unreported'
-                ? 'Available Unreported Expenses'
-                : 'All Expense Line Items'} ({expenses.length})
-            </h3>
-            {(activeReportTab === 'report' || activeReportTab === 'exported') && (
-              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold font-mono ${
-                activeReportTab === 'exported' ? 'bg-purple-100 text-purple-800' : 'bg-indigo-100 text-indigo-800'
-              }`}>
-                {formatOMR(meta.total_amount)}
-              </span>
-            )}
-          </div>
-          <span className="text-xs text-slate-400">
-            Zoho Books Chart of Accounts & Projects Tagged
-          </span>
-        </div>
-
+        {/* 5. Corporate Data Table */}
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-200/60">
+          <table className="w-full text-left text-xs text-slate-700">
+            <thead className="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
               <tr>
-                <th className="py-3 px-3 w-8">
+                <th className="py-3 px-3.5 w-10">
                   <input
                     type="checkbox"
                     checked={selectedRowIds.size === expenses.length && expenses.length > 0}
                     onChange={handleSelectAllRows}
-                    disabled={expenses.length === 0}
-                    className="w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500 cursor-pointer"
-                    title={selectedRowIds.size === expenses.length ? 'Deselect all' : 'Select all'}
+                    className="w-4 h-4 rounded text-slate-900 border-slate-300 focus:ring-slate-400 cursor-pointer"
                   />
                 </th>
-                <th className="py-3 px-3">Date</th>
-                <th className="py-3 px-3">Invoice #</th>
-                <th className="py-3 px-3">Employee</th>
-                <th className="py-3 px-3">Project</th>
-                <th className="py-3 px-3 text-right">Amount (OMR)</th>
-                <th className="py-3 px-3">Notes</th>
-                <th className="py-3 px-3">Report Status</th>
-                <th className="py-3 px-3">Zoho ID</th>
-                <th className="py-3 px-3">Sync</th>
-                <th className="py-3 px-3 text-right">Actions</th>
+                <th className="py-3 px-3 w-24">Date</th>
+                <th className="py-3 px-3 w-28">Ref / Inv #</th>
+                <th className="py-3 px-3">Description & Category</th>
+                <th className="py-3 px-3 w-40">Project</th>
+                <th className="py-3 px-3 w-32">Employee</th>
+                <th className="py-3 px-3 w-28 text-right">Amount</th>
+                <th className="py-3 px-3 w-28 text-center">Status</th>
+                <th className="py-3 px-3 w-20 text-center">Receipt</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 text-slate-700 font-medium">
+            <tbody className="divide-y divide-slate-100 font-normal">
               {expenses.length === 0 ? (
                 <tr>
-                  <td colSpan={11} className="py-12 text-center">
-                    <div className="max-w-sm mx-auto space-y-3">
-                      <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto">
-                        <FileSpreadsheet className="w-6 h-6" />
-                      </div>
-                      <h4 className="text-sm font-bold text-slate-800">
-                        {activeReportTab === 'report'
-                          ? 'No active items currently in this Expense Report'
-                          : activeReportTab === 'exported'
-                          ? 'No exported expenses found in archive'
-                          : activeReportTab === 'unreported'
-                          ? 'No available unreported expenses'
-                          : 'No expenses matching current filters'}
-                      </h4>
-                      <p className="text-xs text-slate-500">
-                        {activeReportTab === 'report'
-                          ? 'Only active unexported items appear in this report. Switch to "Select & Add Expenses" to choose expenses to include.'
-                          : activeReportTab === 'exported'
-                          ? 'Expenses that have been locked and submitted in official statements are archived separately here.'
-                          : 'Try changing your date filters or project selection.'}
-                      </p>
-                      {activeReportTab === 'report' && (
-                        <button
-                          onClick={() => { setActiveReportTab('unreported'); setSelectedRowIds(new Set()); }}
-                          className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold text-xs shadow-md transition"
-                        >
-                          + Select & Add Expenses
-                        </button>
-                      )}
-                    </div>
+                  <td colSpan={9} className="py-12 text-center text-slate-500">
+                    <p className="font-semibold text-slate-700 text-sm">No expenses found</p>
+                    <p className="text-xs text-slate-400 mt-1">
+                      {activeReportTab === 'report'
+                        ? 'No active expenses are currently in the report. Switch to "Unreported Expenses" to add items.'
+                        : 'No expenses match the selected filters.'}
+                    </p>
                   </td>
                 </tr>
               ) : (
-                expenses.map((exp) => (
-                  <tr
-                    key={exp.id}
-                    className={`hover:bg-slate-50/70 transition ${
-                      selectedRowIds.has(exp.id) ? 'bg-blue-50/30' : ''
-                    }`}
-                  >
-                    <td className="py-3 px-3">
-                      <input
-                        type="checkbox"
-                        checked={selectedRowIds.has(exp.id)}
-                        onChange={() => handleToggleRow(exp.id)}
-                        className="w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500 cursor-pointer"
-                        aria-label={`Select expense ${exp.description}`}
-                      />
-                    </td>
-                    <td className="py-3 px-3 font-semibold text-slate-900 whitespace-nowrap">
-                      {exp.expense_date}
-                    </td>
-                    <td className="py-3 px-3 whitespace-nowrap">
-                      {exp.invoice_number ? (
-                        <span className="font-mono text-sky-800 font-bold text-[11px] bg-sky-50 px-2 py-0.5 rounded border border-sky-200">
-                          {exp.invoice_number}
-                        </span>
-                      ) : (
-                        <span className="text-slate-400 font-mono text-[11px]">—</span>
-                      )}
-                    </td>
-                    <td className="py-3 px-3 whitespace-nowrap">
-                      <span className="font-bold text-slate-800">{exp.employee_name || 'Team Member'}</span>
-                    </td>
-                    <td className="py-3 px-3 whitespace-nowrap">
-                      <span className="text-slate-600">
-                        {exp.project_name || projects.find(p => String(p.project_id) === String(exp.project_id) || (exp.customer_id && String(p.customer_id) === String(exp.customer_id)))?.project_name || 'N/A'}
-                      </span>
-                    </td>
-                    <td className="py-3 px-3 text-right font-black text-slate-900 whitespace-nowrap font-mono">
-                      {formatOMR(exp.amount)}
-                    </td>
-                    <td className="py-3 px-3 max-w-xs truncate" title={exp.description}>
-                      {exp.description}
-                    </td>
-                    <td className="py-3 px-3 whitespace-nowrap">
-                      {exp.is_exported ? (
-                        exp.recall_status === 'pending' ? (
-                          <span className="inline-flex items-center space-x-1 text-[11px] font-bold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-300 shadow-2xs animate-pulse">
-                            <Clock className="w-3 h-3 text-amber-600 animate-spin" />
-                            <span>Call Back Pending</span>
+                expenses.map((exp) => {
+                  const isSelected = selectedRowIds.has(exp.id);
+                  const isExported = Boolean(exp.is_exported);
+                  const hasReceipt = Boolean(exp.receipt_url || exp.receipt_file_name);
+                  const receiptUrl =
+                    exp.receipt_url ||
+                    (exp.receipt_file_name ? `/uploads/${exp.receipt_file_name}` : null);
+                  const receiptName = exp.receipt_file_name || 'Receipt Document';
+
+                  return (
+                    <tr
+                      key={exp.id}
+                      className={`hover:bg-slate-50/80 transition ${
+                        isSelected ? 'bg-slate-50/60' : ''
+                      }`}
+                    >
+                      <td className="py-3 px-3.5">
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => handleToggleRow(exp.id)}
+                          className="w-4 h-4 rounded text-slate-900 border-slate-300 focus:ring-slate-400 cursor-pointer"
+                        />
+                      </td>
+
+                      <td className="py-3 px-3 font-mono text-slate-600 whitespace-nowrap">
+                        {exp.expense_date}
+                      </td>
+
+                      <td className="py-3 px-3">
+                        {exp.invoice_number ? (
+                          <span className="font-mono text-[11px] text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
+                            {exp.invoice_number}
                           </span>
                         ) : (
-                          <span className="inline-flex items-center space-x-1 text-[11px] font-bold text-purple-700 bg-purple-50 px-2.5 py-0.5 rounded-full border border-purple-200 shadow-2xs">
-                            <Lock className="w-3 h-3 text-purple-600 stroke-[2.5]" />
-                            <span>Exported in Report</span>
-                          </span>
-                        )
-                      ) : exp.added_to_report ? (
-                        <span className="inline-flex items-center space-x-1 text-[11px] font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200 shadow-2xs">
-                          <FileCheck className="w-3 h-3 text-indigo-600 stroke-[2.5]" />
-                          <span>Added to Report</span>
+                          <span className="text-slate-400 text-[11px]">—</span>
+                        )}
+                      </td>
+
+                      <td className="py-3 px-3">
+                        <div className="font-semibold text-slate-900 line-clamp-1">
+                          {exp.description}
+                        </div>
+                        <div className="text-[11px] text-slate-500 mt-0.5">
+                          {exp.category_name || 'Petty Cash Purchases'}
+                        </div>
+                      </td>
+
+                      <td className="py-3 px-3 text-slate-600">
+                        <span className="line-clamp-1" title={exp.project_name || 'General Operations'}>
+                          {exp.project_name || 'General Operations'}
                         </span>
-                      ) : (
-                        <span className="inline-flex items-center space-x-1 text-[11px] font-medium text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
-                          <span>Not in Report</span>
-                        </span>
-                      )}
-                    </td>
-                    <td className="py-3 px-3 whitespace-nowrap">
-                      {exp.zoho_journal_number ? (
-                        <span className="font-mono text-sky-700 font-bold text-[11px]">
-                          {exp.zoho_journal_number}
-                        </span>
-                      ) : (
-                        <span className="text-slate-400 font-mono text-[11px]">Pending</span>
-                      )}
-                    </td>
-                    <td className="py-3 px-3 whitespace-nowrap">
-                      {exp.sync_status === 'synced' ? (
-                        <span className="inline-flex items-center space-x-1 text-emerald-700 font-bold text-[11px]">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                          <span>Synced</span>
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center space-x-1 text-amber-700 font-bold text-[11px]">
-                          <Clock className="w-3.5 h-3.5 text-amber-500" />
-                          <span>Pending</span>
-                        </span>
-                      )}
-                    </td>
-                    <td className="py-3 px-3 text-right whitespace-nowrap">
-                      {exp.is_exported ? (
-                        exp.recall_status === 'pending' ? (
-                          isAdmin ? (
-                            <div className="flex items-center justify-end space-x-1">
-                              <button
-                                onClick={async () => {
-                                  if (onApproveRecall) await onApproveRecall(exp.id);
-                                  fetchReport();
-                                }}
-                                className="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xs flex items-center space-x-1 transition active:scale-95"
-                                title="Approve Call Back and unlock expense from report"
-                              >
-                                <Check className="w-3 h-3 stroke-[2.5]" />
-                                <span>Approve Recall</span>
-                              </button>
-                              <button
-                                onClick={async () => {
-                                  if (onRejectRecall) await onRejectRecall(exp.id);
-                                  fetchReport();
-                                }}
-                                className="p-1 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 border border-slate-200 transition"
-                                title="Reject Call Back request"
-                              >
-                                <X className="w-3.5 h-3.5" />
-                              </button>
-                            </div>
-                          ) : (
-                            <span className="text-xs text-amber-700 font-semibold px-2 py-0.5 bg-amber-50 rounded-lg border border-amber-200">
-                              Pending Approval
-                            </span>
-                          )
-                        ) : (
-                          <button
-                            onClick={async () => {
-                              if (onRequestRecall) await onRequestRecall(exp);
-                              fetchReport();
-                            }}
-                            className="px-2.5 py-1 rounded-lg text-xs font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-300 shadow-2xs transition active:scale-95 flex items-center space-x-1 ml-auto"
-                            title={isAdmin ? "Admin: Call back and unlock expense from exported report" : "Request Admin approval to call back expense from exported report"}
+                      </td>
+
+                      <td className="py-3 px-3 text-slate-600 whitespace-nowrap">
+                        {exp.employee_name || 'N/A'}
+                      </td>
+
+                      <td className="py-3 px-3 text-right font-mono font-bold text-slate-900 whitespace-nowrap">
+                        {formatOMR(exp.amount)}
+                      </td>
+
+                      {/* Export Status Badge (Condition 2) */}
+                      <td className="py-3 px-3 text-center whitespace-nowrap">
+                        {isExported ? (
+                          <span
+                            className="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-800 border border-slate-300"
+                            title={exp.exported_at ? `Exported: ${new Date(exp.exported_at).toLocaleDateString()}` : 'Exported'}
                           >
-                            <RotateCcw className="w-3 h-3 text-amber-700" />
-                            <span>Call Back</span>
+                            <Lock className="w-3 h-3 text-slate-600" />
+                            <span>Exported</span>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                            Active
+                          </span>
+                        )}
+                      </td>
+
+                      <td className="py-3 px-3 text-center whitespace-nowrap">
+                        {hasReceipt ? (
+                          <button
+                            type="button"
+                            onClick={() => onViewReceipt && onViewReceipt(receiptUrl, receiptName)}
+                            className="p-1 rounded text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition inline-flex items-center"
+                            title="View receipt"
+                          >
+                            <Paperclip className="w-3.5 h-3.5" />
                           </button>
-                        )
-                      ) : exp.added_to_report ? (
-                        <button
-                          onClick={() => handleSingleRowReportStatus(exp.id, false)}
-                          disabled={isUpdatingReport}
-                          className="px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-500 hover:text-red-700 hover:bg-red-50 border border-slate-200 hover:border-red-200 transition"
-                          title="Remove from Expense Report"
-                        >
-                          Remove
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => handleSingleRowReportStatus(exp.id, true)}
-                          disabled={isUpdatingReport}
-                          className="px-2.5 py-1 rounded-lg text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 shadow-2xs transition active:scale-95"
-                          title="Add this expense to the official report"
-                        >
-                          + Add to Report
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))
+                        ) : (
+                          <span className="text-slate-300">—</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>
         </div>
-
-        {/* Print Only Signature Block */}
-        <div className="hidden print:flex mt-16 px-8 justify-between items-end pb-8">
-          <div className="flex flex-col items-center">
-            <div className="w-48 border-b-2 border-slate-900 mb-2"></div>
-            <span className="text-sm font-bold text-slate-800">Employee Signature</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <div className="w-48 border-b-2 border-slate-900 mb-2"></div>
-            <span className="text-sm font-bold text-slate-800">Authorised By Signature</span>
-          </div>
-        </div>
-
       </div>
     </div>
   );

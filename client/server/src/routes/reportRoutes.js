@@ -117,13 +117,16 @@ router.get('/export/csv', async (req, res) => {
 
     const expenses = await getFilteredExpenses(req.query, req.user);
 
-    // Optional: mark is_exported only if mark_exported query param is explicitly true
-    if (req.query.mark_exported === 'true') {
+    // Automatically mark expenses as exported when report is exported (unless explicitly mark_exported=false)
+    const shouldMarkExported = req.query.mark_exported === 'true' || req.query.mark_exported !== 'false';
+    if (shouldMarkExported) {
       const now = new Date().toISOString();
       for (const exp of expenses) {
         if (!exp.is_exported) {
           exp.is_exported = true;
           exp.exported_at = now;
+          exp.added_to_report = true;
+          if (!exp.added_to_report_at) exp.added_to_report_at = now;
           await db.saveExpense(exp);
         }
       }
@@ -165,13 +168,16 @@ router.get('/export/pdf', async (req, res) => {
 
     const expenses = await getFilteredExpenses(req.query, req.user);
 
-    // Optional: mark is_exported only if mark_exported query param is explicitly true
-    if (req.query.mark_exported === 'true') {
+    // Automatically mark expenses as exported when report is exported (unless explicitly mark_exported=false)
+    const shouldMarkExported = req.query.mark_exported === 'true' || req.query.mark_exported !== 'false';
+    if (shouldMarkExported) {
       const now = new Date().toISOString();
       for (const exp of expenses) {
         if (!exp.is_exported) {
           exp.is_exported = true;
           exp.exported_at = now;
+          exp.added_to_report = true;
+          if (!exp.added_to_report_at) exp.added_to_report_at = now;
           await db.saveExpense(exp);
         }
       }

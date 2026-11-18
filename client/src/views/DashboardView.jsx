@@ -4,24 +4,24 @@ import {
   Plus,
   ArrowUpRight,
   ArrowDownLeft,
-  TrendingDown,
   Clock,
-  CheckCircle,
+  CheckCircle2,
   Search,
   Filter,
-  Sparkles,
-  BookOpen,
-  Briefcase,
-  AlertCircle,
   RefreshCw,
-  Scale,
   FileCheck,
   FileSpreadsheet,
   CheckSquare,
   Square,
   X,
   Lock,
-  RotateCcw
+  RotateCcw,
+  Paperclip,
+  Printer,
+  Download,
+  AlertTriangle,
+  Edit2,
+  Trash2
 } from 'lucide-react';
 import ExpenseCard from '../components/ExpenseCard';
 import { formatOMR, getSettlementStatus } from '../utils/currency';
@@ -40,10 +40,12 @@ export default function DashboardView({
   onNavigateToReports,
   onRequestRecall,
   onApproveRecall,
-  onRejectRecall
+  onRejectRecall,
+  onViewReceipt,
+  onMarkSelectedExported
 }) {
   const effectiveUser = currentUser || currentEmployee;
-  const [filterTab, setFilterTab] = useState('all'); // 'all', 'in_report', 'unreported', 'synced', 'pending'
+  const [filterTab, setFilterTab] = useState('all'); // 'all', 'unexported', 'exported', 'synced', 'pending'
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedExpenseIds, setSelectedExpenseIds] = useState(new Set());
@@ -52,30 +54,33 @@ export default function DashboardView({
 
   // Filter expenses for current employee (or show all if admin is viewing whole company)
   const employeeExpenses = expenses.filter(
-    (e) => !currentEmployee ||
+    (e) =>
+      !currentEmployee ||
       currentEmployee.role === 'admin' ||
       e.employee_id === currentEmployee.id ||
-      (e.employee_name && currentEmployee.name && e.employee_name.toLowerCase().trim() === currentEmployee.name.toLowerCase().trim())
+      (e.employee_name &&
+        currentEmployee.name &&
+        e.employee_name.toLowerCase().trim() === currentEmployee.name.toLowerCase().trim())
   );
 
   const currentBal = parseFloat(currentEmployee?.current_balance || 0);
-  const settlement = getSettlementStatus(currentBal, currentEmployee?.name || 'You');
+  const settlement = getSettlementStatus(currentBal, currentEmployee?.name || 'Petty Cash');
 
   const totalSpent = employeeExpenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
   const syncedCount = employeeExpenses.filter((e) => e.sync_status === 'synced').length;
   const pendingCount = employeeExpenses.filter((e) => e.sync_status === 'pending').length;
-  const inReportCount = employeeExpenses.filter((e) => e.added_to_report && !e.is_exported).length;
-  const unreportedCount = employeeExpenses.filter((e) => !e.added_to_report && !e.is_exported).length;
-  const exportedCount = employeeExpenses.filter((e) => e.is_exported).length;
+  const activeUnexported = employeeExpenses.filter((e) => !e.is_exported);
+  const activeUnexportedAmount = activeUnexported.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
+  const exportedExpenses = employeeExpenses.filter((e) => e.is_exported);
+  const exportedAmount = exportedExpenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
   const pendingRecallCount = employeeExpenses.filter((e) => e.recall_status === 'pending').length;
 
   // Filter list
   const filteredList = employeeExpenses.filter((e) => {
+    if (filterTab === 'unexported' && e.is_exported) return false;
+    if (filterTab === 'exported' && !e.is_exported) return false;
     if (filterTab === 'synced' && e.sync_status !== 'synced') return false;
     if (filterTab === 'pending' && e.sync_status !== 'pending') return false;
-    if (filterTab === 'in_report' && (!e.added_to_report || e.is_exported)) return false;
-    if (filterTab === 'unreported' && (e.added_to_report || e.is_exported)) return false;
-    if (filterTab === 'exported' && !e.is_exported) return false;
     if (filterTab === 'recalls' && e.recall_status !== 'pending') return false;
 
     if (searchQuery.trim()) {
@@ -88,7 +93,7 @@ export default function DashboardView({
     }
     return true;
   });
-  // Reset page when filters change
+
   React.useEffect(() => {
     setCurrentPage(1);
     setSelectedExpenseIds(new Set());
@@ -97,9 +102,8 @@ export default function DashboardView({
   const totalPages = Math.ceil(filteredList.length / itemsPerPage);
   const paginatedList = filteredList.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  // Selection handlers
   const handleToggleSelect = (id) => {
-    setSelectedExpenseIds(prev => {
+    setSelectedExpenseIds((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
@@ -111,12 +115,25 @@ export default function DashboardView({
     if (selectedExpenseIds.size === paginatedList.length && paginatedList.length > 0) {
       setSelectedExpenseIds(new Set());
     } else {
-      setSelectedExpenseIds(new Set(paginatedList.map(e => e.id)));
+      setSelectedExpenseIds(new Set(paginatedList.map((e) => e.id)));
     }
   };
 
   const handleClearSelection = () => {
     setSelectedExpenseIds(new Set());
+  };
+
+  const handleBulkMarkExported = async () => {
+    if (selectedExpenseIds.size === 0) return;
+    setIsUpdatingReport(true);
+    try {
+      if (onMarkSelectedExported) {
+        await onMarkSelectedExported(Array.from(selectedExpenseIds));
+      }
+      setSelectedExpenseIds(new Set());
+    } finally {
+      setIsUpdatingReport(false);
+    }
   };
 
   const handleBulkReportStatus = async (addedToReport) => {
@@ -130,104 +147,81 @@ export default function DashboardView({
     }
   };
 
-  const handleSingleReportStatus = async (id, currentStatus) => {
-    if (!onUpdateReportStatus) return;
-    await onUpdateReportStatus([id], !currentStatus);
-  };
-
   const selectedTotal = employeeExpenses
-    .filter(e => selectedExpenseIds.has(e.id))
+    .filter((e) => selectedExpenseIds.has(e.id))
     .reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
 
   return (
-    <div className="space-y-6">
-      {/* Executive Hero / Account Statement Card */}
-      <div className="relative overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 p-6 sm:p-7 text-white shadow-sm">
-        {/* Subtle executive geometric gradient backdrop */}
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900 to-slate-800/90 pointer-events-none"></div>
-        <div className="absolute top-0 right-0 w-80 h-full bg-gradient-to-l from-blue-900/10 to-transparent pointer-events-none"></div>
-
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          <div className="space-y-4 flex-1">
-            <div className="flex flex-col sm:flex-row sm:items-baseline sm:space-x-4">
-              <div>
-                <span className="text-[11px] font-semibold tracking-wider text-slate-400 uppercase">
-                  Account Standing • {effectiveUser?.name || 'Petty Cash'}
+    <div className="space-y-5">
+      {/* 1. Corporate Executive Account Standing Card */}
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-6 text-white shadow-xs">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+          {/* Account Details & Balance */}
+          <div className="space-y-3 flex-1">
+            <div className="flex items-center space-x-2">
+              <span className="text-[11px] font-semibold tracking-wider text-slate-400 uppercase">
+                Petty Cash Account • {effectiveUser?.name || 'Bright Flowers'}
+              </span>
+              {currentEmployee?.petty_cash_account_name && (
+                <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono border border-slate-700">
+                  {currentEmployee.petty_cash_account_name}
                 </span>
-                <div className="flex items-baseline space-x-3 mt-1">
-                  <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white font-mono">
-                    {settlement.formattedAmount}
-                  </h1>
-                  <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                    OMR
-                  </span>
-                </div>
-              </div>
+              )}
             </div>
 
-            {/* Structured Corporate Settlement Status Bar */}
-            <div className={`p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-              settlement.isEmployeeOwing
-                ? 'bg-emerald-950/40 border-emerald-800/60 text-emerald-100'
-                : settlement.isCompanyOwing
-                ? 'bg-amber-950/40 border-amber-800/60 text-amber-100'
-                : 'bg-slate-800/60 border-slate-700 text-slate-200'
-            }`}>
-              <div className="flex items-center space-x-3">
-                <div className={`w-9 h-9 rounded-lg flex items-center justify-center font-bold shrink-0 ${
+            <div className="flex items-baseline space-x-3">
+              <span className="text-3xl sm:text-4xl font-bold tracking-tight text-white font-mono">
+                {settlement.formattedAmount}
+              </span>
+              <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                OMR
+              </span>
+              <span
+                className={`text-xs font-semibold px-2.5 py-0.5 rounded border ${
                   settlement.isEmployeeOwing
-                    ? 'bg-emerald-900/60 text-emerald-300 border border-emerald-700/60'
+                    ? 'bg-emerald-950/80 text-emerald-300 border-emerald-800'
                     : settlement.isCompanyOwing
-                    ? 'bg-amber-900/60 text-amber-300 border border-amber-700/60'
-                    : 'bg-slate-700 text-slate-300 border border-slate-600'
-                }`}>
-                  {settlement.isEmployeeOwing ? (
-                    <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
-                  ) : settlement.isCompanyOwing ? (
-                    <ArrowDownLeft className="w-4 h-4 stroke-[2.5]" />
-                  ) : (
-                    <CheckCircle className="w-4 h-4 stroke-[2.5]" />
-                  )}
-                </div>
-                <div>
-                  <div className="text-xs font-bold uppercase tracking-wider flex items-center space-x-2">
-                    <span className={settlement.isEmployeeOwing ? 'text-emerald-300' : settlement.isCompanyOwing ? 'text-amber-300' : 'text-slate-200'}>
-                      {settlement.accountingLabel}
-                    </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded font-medium bg-black/20 text-slate-200 border border-white/10">
-                      {settlement.badgeText}
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-300/90 mt-0.5 font-normal leading-relaxed">
-                    {settlement.explanation}
-                  </p>
-                </div>
-              </div>
-              <div className="sm:text-right pl-12 sm:pl-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-white/10">
-                <span className="text-[10px] uppercase font-semibold tracking-wider text-slate-400 block">Settlement Balance</span>
-                <span className="text-base sm:text-lg font-bold tracking-tight text-white font-mono">
-                  {settlement.formattedAmount} {settlement.accountingSideShort}
-                </span>
-              </div>
+                    ? 'bg-amber-950/80 text-amber-300 border-amber-800'
+                    : 'bg-slate-800 text-slate-300 border-slate-700'
+                }`}
+              >
+                {settlement.accountingLabel}
+              </span>
             </div>
+
+            {/* Explanatory Standing Note */}
+            <p className="text-xs text-slate-300 font-normal leading-relaxed max-w-2xl">
+              {settlement.explanation}
+            </p>
           </div>
 
-          {/* Quick Action Buttons */}
-          <div className="flex flex-wrap sm:flex-nowrap gap-2.5 items-center shrink-0">
+          {/* Corporate Action Buttons */}
+          <div className="flex flex-wrap sm:flex-nowrap gap-2 items-center shrink-0">
             {currentEmployee?.role === 'admin' && onSyncNow && (
               <button
                 onClick={onSyncNow}
                 disabled={isSyncing}
-                className="w-full sm:w-auto px-4 py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 active:bg-slate-800 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center justify-center space-x-2 transition disabled:opacity-50"
-                title="Sync Zoho Books balance and transactions"
+                className="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 active:bg-slate-800 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center justify-center space-x-1.5 transition disabled:opacity-50"
+                title="Synchronize live balances with Zoho Books"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-blue-400' : 'text-slate-400'}`} />
                 <span>{isSyncing ? 'Syncing...' : 'Sync Zoho'}</span>
               </button>
             )}
+
+            {onNavigateToReports && (
+              <button
+                onClick={onNavigateToReports}
+                className="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 active:bg-slate-800 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center justify-center space-x-1.5 transition"
+              >
+                <FileSpreadsheet className="w-3.5 h-3.5 text-slate-400" />
+                <span>Reports</span>
+              </button>
+            )}
+
             <button
               onClick={onOpenLogModal}
-              className="w-full sm:w-auto px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-xs border border-blue-500 shadow-xs flex items-center justify-center space-x-2 transition"
+              className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-xs border border-blue-500 shadow-xs flex items-center justify-center space-x-1.5 transition"
             >
               <Plus className="w-4 h-4 stroke-[2.5]" />
               <span>Log Expense</span>
@@ -236,218 +230,174 @@ export default function DashboardView({
         </div>
       </div>
 
-      {/* Corporate KPI Metric Summary Cards */}
+      {/* 2. Corporate KPI Metric Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Total Spent */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Spent</span>
-            <TrendingDown className="w-4 h-4 text-slate-400" />
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <div className="flex items-center justify-between text-xs text-slate-500 font-semibold uppercase tracking-wider">
+            <span>Total Spent</span>
+            <Wallet className="w-4 h-4 text-slate-400" />
           </div>
           <div className="text-xl font-bold text-slate-900 mt-2 font-mono">
             {formatOMR(totalSpent)}
           </div>
           <div className="text-[11px] text-slate-500 mt-0.5">
-            {employeeExpenses.length} transactions
+            {employeeExpenses.length} total transaction{employeeExpenses.length === 1 ? '' : 's'}
           </div>
         </div>
 
-        {/* Settlement Due */}
-        <div className={`p-4 rounded-xl border shadow-xs ${
-          settlement.isEmployeeOwing
-            ? 'bg-emerald-50/50 border-emerald-200'
-            : settlement.isCompanyOwing
-            ? 'bg-amber-50/50 border-amber-200'
-            : 'bg-white border-slate-200'
-        }`}>
-          <div className="flex items-center justify-between">
-            <span className={`text-xs font-semibold uppercase tracking-wider ${
-              settlement.isEmployeeOwing
-                ? 'text-emerald-800'
-                : settlement.isCompanyOwing
-                ? 'text-amber-800'
-                : 'text-slate-500'
-            }`}>
-              {settlement.shortLabel}
-            </span>
-            {settlement.isEmployeeOwing ? (
-              <ArrowUpRight className="w-4 h-4 text-emerald-600 stroke-[2.5]" />
-            ) : settlement.isCompanyOwing ? (
-              <ArrowDownLeft className="w-4 h-4 text-amber-600 stroke-[2.5]" />
-            ) : (
-              <Scale className="w-4 h-4 text-slate-400" />
-            )}
+        {/* Active Unexported (Ready to Export) */}
+        <div
+          onClick={() => setFilterTab('unexported')}
+          className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs cursor-pointer hover:border-slate-300 transition"
+        >
+          <div className="flex items-center justify-between text-xs text-slate-500 font-semibold uppercase tracking-wider">
+            <span>Active (To Export)</span>
+            <FileCheck className="w-4 h-4 text-blue-600" />
           </div>
-          <div className={`text-xl font-bold mt-2 font-mono ${
-            settlement.isEmployeeOwing
-              ? 'text-emerald-900'
-              : settlement.isCompanyOwing
-              ? 'text-amber-900'
-              : 'text-slate-900'
-          }`}>
-            {settlement.formattedAmount}
+          <div className="text-xl font-bold text-slate-900 mt-2 font-mono">
+            {formatOMR(activeUnexportedAmount)}
           </div>
-          <div className={`text-[11px] mt-0.5 font-medium truncate ${
-            settlement.isEmployeeOwing
-              ? 'text-emerald-700'
-              : settlement.isCompanyOwing
-              ? 'text-amber-700'
-              : 'text-slate-500'
-          }`}>
-            {settlement.badgeText}
+          <div className="text-[11px] text-blue-700 mt-0.5 font-medium">
+            {activeUnexported.length} expense{activeUnexported.length === 1 ? '' : 's'} awaiting export
           </div>
         </div>
 
-        {/* Synced to Zoho */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Synced to Zoho</span>
-            <CheckCircle className="w-4 h-4 text-emerald-600" />
+        {/* Exported Archive */}
+        <div
+          onClick={() => setFilterTab('exported')}
+          className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs cursor-pointer hover:border-slate-300 transition"
+        >
+          <div className="flex items-center justify-between text-xs text-slate-500 font-semibold uppercase tracking-wider">
+            <span>Exported Archive</span>
+            <Lock className="w-4 h-4 text-slate-700" />
+          </div>
+          <div className="text-xl font-bold text-slate-900 mt-2 font-mono">
+            {formatOMR(exportedAmount)}
+          </div>
+          <div className="text-[11px] text-slate-600 mt-0.5 font-medium">
+            {exportedExpenses.length} locked in official reports
+          </div>
+        </div>
+
+        {/* Zoho Synced */}
+        <div
+          onClick={() => setFilterTab('synced')}
+          className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs cursor-pointer hover:border-slate-300 transition"
+        >
+          <div className="flex items-center justify-between text-xs text-slate-500 font-semibold uppercase tracking-wider">
+            <span>Zoho Books</span>
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
           </div>
           <div className="text-xl font-bold text-slate-900 mt-2 font-mono">
             {syncedCount}
           </div>
           <div className="text-[11px] text-emerald-700 mt-0.5 font-medium">
-            Active Journal Entries
-          </div>
-        </div>
-
-        {/* Pending Sync */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Pending Sync</span>
-            <Clock className="w-4 h-4 text-amber-600" />
-          </div>
-          <div className="text-xl font-bold text-slate-900 mt-2 font-mono">
-            {pendingCount}
-          </div>
-          <div className="text-[11px] text-slate-500 mt-0.5">
-            Queued for next cycle
+            Synchronized journal vouchers
           </div>
         </div>
       </div>
 
-      {/* Admin Call Back Approval Alert Banner */}
+      {/* Admin Call Back Review Banner */}
       {effectiveUser.role === 'admin' && pendingRecallCount > 0 && (
-        <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+        <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
           <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-bold shrink-0 border border-amber-200">
+            <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-bold shrink-0 border border-amber-200">
               <RotateCcw className="w-4 h-4 text-amber-700" />
             </div>
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-amber-800 block">
-                Report Call Back Requests ({pendingRecallCount})
+                Exported Report Unlock Requests ({pendingRecallCount})
               </span>
               <p className="text-xs font-medium text-slate-700">
-                {pendingRecallCount} expense{pendingRecallCount > 1 ? 's have' : ' has'} requested to be called back / unlocked from exported reports.
+                Staff member has requested to unlock {pendingRecallCount} exported expense voucher(s) for correction.
               </p>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => setFilterTab('recalls')}
-              className="px-3 py-1.5 rounded-lg bg-amber-700 hover:bg-amber-800 text-white font-semibold text-xs shadow-xs active:bg-amber-900 transition"
-            >
-              Review Requests ({pendingRecallCount})
-            </button>
-          </div>
+          <button
+            onClick={() => setFilterTab('recalls')}
+            className="px-3.5 py-1.5 rounded-lg bg-amber-800 hover:bg-amber-900 text-white font-semibold text-xs shadow-xs transition"
+          >
+            Review Requests ({pendingRecallCount})
+          </button>
         </div>
       )}
 
-      {/* Expense Ledger Header & Search */}
-      <div className="space-y-3 pt-2">
+      {/* 3. Transaction Ledger Controls & Filter Tabs */}
+      <div className="space-y-3 pt-1">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
           <div>
-            <h2 className="text-base font-bold text-slate-900">Petty Cash Transactions</h2>
-            <p className="text-xs text-slate-500">Official expense ledger synchronized with Zoho Books journals</p>
+            <h2 className="text-base font-bold text-slate-900 tracking-tight">Petty Cash Transactions</h2>
+            <p className="text-xs text-slate-500">Official expense ledger synchronized with Zoho Books vouchers</p>
           </div>
 
-          {/* Search bar */}
-          <div className="relative w-full sm:w-64">
+          {/* Search Input */}
+          <div className="relative w-full sm:w-72">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search description, project, invoice..."
+              placeholder="Search description, invoice, project..."
               className="w-full pl-9 pr-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
             />
           </div>
         </div>
 
-        {/* Corporate Filter Tabs */}
-        <div className="flex items-center space-x-1 overflow-x-auto pb-1 bg-slate-100/70 p-1 rounded-lg border border-slate-200/60">
+        {/* Corporate Segmented Filter Tabs */}
+        <div className="flex items-center space-x-1 overflow-x-auto pb-1 bg-slate-100 p-1 rounded-lg border border-slate-200/80 text-xs">
           <button
             onClick={() => setFilterTab('all')}
-            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition flex-shrink-0 ${
+            className={`px-3 py-1.5 rounded-md font-semibold transition shrink-0 ${
               filterTab === 'all'
-                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 font-bold'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                ? 'bg-white text-slate-900 shadow-2xs font-bold'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
             }`}
           >
             All Activity ({employeeExpenses.length})
           </button>
+
           <button
-            onClick={() => setFilterTab('in_report')}
-            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition flex-shrink-0 flex items-center space-x-1.5 ${
-              filterTab === 'in_report'
-                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 font-bold'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+            onClick={() => setFilterTab('unexported')}
+            className={`px-3 py-1.5 rounded-md font-semibold transition shrink-0 flex items-center space-x-1.5 ${
+              filterTab === 'unexported'
+                ? 'bg-white text-slate-900 shadow-2xs font-bold'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
             }`}
           >
-            <FileCheck className="w-3.5 h-3.5 text-slate-500" />
-            <span>In Report ({inReportCount})</span>
+            <FileCheck className="w-3.5 h-3.5 text-blue-600" />
+            <span>Active / To Export ({activeUnexported.length})</span>
           </button>
-          <button
-            onClick={() => setFilterTab('unreported')}
-            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition flex-shrink-0 ${
-              filterTab === 'unreported'
-                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 font-bold'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
-            }`}
-          >
-            Unreported ({unreportedCount})
-          </button>
+
           <button
             onClick={() => setFilterTab('exported')}
-            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition flex items-center space-x-1.5 flex-shrink-0 ${
+            className={`px-3 py-1.5 rounded-md font-semibold transition shrink-0 flex items-center space-x-1.5 ${
               filterTab === 'exported'
-                ? 'bg-purple-700 text-white shadow-xs font-bold'
-                : 'text-purple-700 hover:bg-purple-100/60 bg-purple-50/70 border border-purple-200/60'
+                ? 'bg-white text-slate-900 shadow-2xs font-bold'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
             }`}
           >
-            <Lock className={`w-3.5 h-3.5 ${filterTab === 'exported' ? 'text-white' : 'text-purple-600'}`} />
-            <span>Exported ({exportedCount})</span>
+            <Lock className="w-3.5 h-3.5 text-slate-700" />
+            <span>Exported ({exportedExpenses.length})</span>
           </button>
-          {pendingRecallCount > 0 && (
-            <button
-              onClick={() => setFilterTab('recalls')}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition flex items-center space-x-1.5 flex-shrink-0 ${
-                filterTab === 'recalls'
-                  ? 'bg-amber-100 text-amber-900 shadow-xs border border-amber-300 font-bold'
-                  : 'text-amber-800 hover:bg-amber-50'
-              }`}
-            >
-              <RotateCcw className="w-3.5 h-3.5 text-amber-700" />
-              <span>Call Back Requests ({pendingRecallCount})</span>
-            </button>
-          )}
+
           <button
             onClick={() => setFilterTab('synced')}
-            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition flex-shrink-0 ${
+            className={`px-3 py-1.5 rounded-md font-semibold transition shrink-0 ${
               filterTab === 'synced'
-                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 font-bold'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                ? 'bg-white text-slate-900 shadow-2xs font-bold'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
             }`}
           >
             Synced ({syncedCount})
           </button>
+
           <button
             onClick={() => setFilterTab('pending')}
-            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition flex-shrink-0 ${
+            className={`px-3 py-1.5 rounded-md font-semibold transition shrink-0 ${
               filterTab === 'pending'
-                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 font-bold'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                ? 'bg-white text-slate-900 shadow-2xs font-bold'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
             }`}
           >
             Pending ({pendingCount})
@@ -455,55 +405,65 @@ export default function DashboardView({
         </div>
       </div>
 
-      {/* Bulk Action Bar for Selected Expenses */}
+      {/* 4. Bulk Action Bar for Selected Rows */}
       {selectedExpenseIds.size > 0 && (
-        <div className="sticky top-20 z-20 p-3.5 sm:p-4 rounded-2xl bg-indigo-950 text-white shadow-xl border border-indigo-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fade-in">
+        <div className="p-3 sm:p-4 rounded-xl bg-slate-900 text-white shadow-lg border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fade-in">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 rounded-xl bg-indigo-500/30 text-indigo-300 flex items-center justify-center font-bold shrink-0">
+            <div className="w-7 h-7 rounded-lg bg-slate-800 text-slate-300 flex items-center justify-center font-bold shrink-0">
               <CheckSquare className="w-4 h-4" />
             </div>
             <div>
               <span className="text-xs font-bold text-white block">
                 {selectedExpenseIds.size} expense{selectedExpenseIds.size > 1 ? 's' : ''} selected
               </span>
-              <span className="text-[11px] text-indigo-200 font-mono">
+              <span className="text-[11px] text-slate-300 font-mono">
                 Total: {formatOMR(selectedTotal)}
               </span>
             </div>
           </div>
 
           <div className="flex items-center space-x-2 flex-wrap gap-y-1">
+            {/* Mark Selected as Exported (Condition 2) */}
+            <button
+              onClick={handleBulkMarkExported}
+              disabled={isUpdatingReport}
+              className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-900 font-semibold text-xs flex items-center space-x-1.5 transition disabled:opacity-50"
+              title="Mark selected expenses as exported and lock them"
+            >
+              <Lock className="w-3.5 h-3.5 text-slate-700" />
+              <span>Mark as Exported</span>
+            </button>
+
             <button
               onClick={() => handleBulkReportStatus(true)}
               disabled={isUpdatingReport}
-              className="px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-bold text-xs shadow-sm flex items-center space-x-1.5 transition disabled:opacity-50 cursor-pointer"
+              className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center space-x-1 transition disabled:opacity-50"
             >
-              <FileCheck className="w-3.5 h-3.5 stroke-[2.5]" />
-              <span>Add Selected to Report</span>
+              <FileCheck className="w-3.5 h-3.5" />
+              <span>Add to Report</span>
             </button>
 
             <button
               onClick={() => handleBulkReportStatus(false)}
               disabled={isUpdatingReport}
-              className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-white font-semibold text-xs border border-white/20 flex items-center space-x-1 transition disabled:opacity-50 cursor-pointer"
+              className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center space-x-1 transition disabled:opacity-50"
             >
-              <X className="w-3.5 h-3.5" />
               <span>Remove from Report</span>
             </button>
 
             {onNavigateToReports && (
               <button
                 onClick={onNavigateToReports}
-                className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-xs flex items-center space-x-1.5 transition cursor-pointer"
+                className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs flex items-center space-x-1 transition"
               >
                 <FileSpreadsheet className="w-3.5 h-3.5" />
-                <span>Open Report</span>
+                <span>Open Reports View</span>
               </button>
             )}
 
             <button
               onClick={handleClearSelection}
-              className="p-1.5 rounded-lg text-indigo-300 hover:text-white hover:bg-white/10 transition cursor-pointer"
+              className="p-1.5 text-slate-400 hover:text-white rounded-lg transition"
               title="Clear selection"
             >
               <X className="w-4 h-4" />
@@ -512,16 +472,16 @@ export default function DashboardView({
         </div>
       )}
 
-      {/* Select All Visible Quick Control */}
+      {/* Select All Visible Control */}
       {paginatedList.length > 0 && (
-        <div className="flex items-center justify-between text-xs px-2 text-slate-500 font-medium">
+        <div className="flex items-center justify-between text-xs px-1 text-slate-500 font-medium">
           <button
             onClick={handleSelectAllVisible}
-            className="flex items-center space-x-1.5 hover:text-blue-600 font-bold transition cursor-pointer"
+            className="flex items-center space-x-1.5 hover:text-slate-900 font-semibold transition cursor-pointer"
           >
             {selectedExpenseIds.size === paginatedList.length && paginatedList.length > 0 ? (
               <>
-                <CheckSquare className="w-4 h-4 text-blue-600" />
+                <CheckSquare className="w-4 h-4 text-slate-900" />
                 <span>Deselect All on Page</span>
               </>
             ) : (
@@ -532,94 +492,252 @@ export default function DashboardView({
             )}
           </button>
           {selectedExpenseIds.size > 0 && (
-            <span className="text-indigo-600 font-semibold">{selectedExpenseIds.size} of {paginatedList.length} selected</span>
+            <span className="text-slate-700 font-semibold">
+              {selectedExpenseIds.size} of {paginatedList.length} selected
+            </span>
           )}
         </div>
       )}
 
-      {/* Exported Separation Notice Banner */}
-      {filterTab === 'exported' && filteredList.length > 0 && (
-        <div className="p-3.5 bg-purple-50/80 rounded-2xl border border-purple-200/80 text-xs text-purple-900 flex items-center justify-between shadow-2xs">
-          <div className="flex items-center space-x-2.5">
-            <div className="w-7 h-7 rounded-lg bg-purple-200/70 text-purple-800 flex items-center justify-center shrink-0">
-              <Lock className="w-4 h-4" />
-            </div>
-            <div>
-              <p className="font-bold text-purple-950">Exported Expenses Archive</p>
-              <p className="text-[11px] text-purple-700">These {filteredList.length} expenses are locked in submitted official statements and kept separate from active cash float.</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Expenses List */}
+      {/* 5. Corporate Expense Ledger View */}
       {filteredList.length === 0 ? (
-        <div className="p-12 text-center bg-white rounded-3xl border border-slate-200">
-          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-3">
-            <Wallet className="w-6 h-6" />
+        <div className="p-12 text-center bg-white rounded-xl border border-slate-200 shadow-2xs">
+          <div className="w-10 h-10 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center mx-auto mb-3">
+            <Wallet className="w-5 h-5" />
           </div>
-          <h3 className="text-sm font-bold text-slate-800">No expenses found</h3>
+          <h3 className="text-sm font-bold text-slate-900">No transactions found</h3>
           <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-            {filterTab === 'in_report'
-              ? 'No expenses have been added to the report yet. Switch to "Not in Report" to select and add expenses.'
-              : 'Log an expense to automatically create balanced journal entries in Zoho Books.'}
+            {filterTab === 'unexported'
+              ? 'All current expenses have been exported into official statements.'
+              : filterTab === 'exported'
+              ? 'No exported expenses found under current filter.'
+              : 'Log an expense to record transactions against your petty cash float.'}
           </p>
-          {filterTab === 'in_report' ? (
-            <button
-              onClick={() => setFilterTab('unreported')}
-              className="mt-4 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold shadow-md hover:bg-indigo-700 transition"
-            >
-              Browse Unreported Expenses
-            </button>
-          ) : (
-            <button
-              onClick={onOpenLogModal}
-              className="mt-4 px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold shadow-md hover:bg-blue-700 transition"
-            >
-              + Log First Expense
-            </button>
-          )}
+          <button
+            onClick={onOpenLogModal}
+            className="mt-4 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition"
+          >
+            + Log First Expense
+          </button>
         </div>
       ) : (
-        <div className="space-y-3">
-          {paginatedList.map((exp) => (
-            <ExpenseCard
-              key={exp.id}
-              expense={exp}
-              onEdit={onEditExpense}
-              onDelete={onDeleteExpense}
-              onRetrySync={onRetrySync}
-              isSelected={selectedExpenseIds.has(exp.id)}
-              onToggleSelect={handleToggleSelect}
-              onToggleReportStatus={handleSingleReportStatus}
-              currentUser={effectiveUser}
-              onRequestRecall={onRequestRecall}
-              onApproveRecall={onApproveRecall}
-              onRejectRecall={onRejectRecall}
-            />
-          ))}
+        <div className="space-y-4">
+          {/* Desktop Corporate Data Table (visible sm and up) */}
+          <div className="hidden md:block bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
+            <table className="w-full text-left text-xs text-slate-700">
+              <thead className="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                <tr>
+                  <th className="py-3 px-3.5 w-10">
+                    <input
+                      type="checkbox"
+                      checked={selectedExpenseIds.size === paginatedList.length && paginatedList.length > 0}
+                      onChange={handleSelectAllVisible}
+                      className="w-4 h-4 rounded text-slate-900 border-slate-300 focus:ring-slate-400 cursor-pointer"
+                    />
+                  </th>
+                  <th className="py-3 px-3 w-24">Date</th>
+                  <th className="py-3 px-3 w-28">Ref / Inv #</th>
+                  <th className="py-3 px-3">Description & Category</th>
+                  <th className="py-3 px-3 w-40">Project</th>
+                  <th className="py-3 px-3 w-28 text-right">Amount</th>
+                  <th className="py-3 px-3 w-28 text-center">Status</th>
+                  <th className="py-3 px-3 w-24 text-center">Zoho</th>
+                  <th className="py-3 px-3 w-20 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 font-normal">
+                {paginatedList.map((exp) => {
+                  const isExpSelected = selectedExpenseIds.has(exp.id);
+                  const isExported = Boolean(exp.is_exported);
+                  const hasReceipt = Boolean(exp.receipt_url || exp.receipt_file_name);
+                  const receiptUrl =
+                    exp.receipt_url ||
+                    (exp.receipt_file_name ? `/uploads/${exp.receipt_file_name}` : null);
+                  const receiptName = exp.receipt_file_name || 'Receipt Document';
+
+                  return (
+                    <tr
+                      key={exp.id}
+                      className={`hover:bg-slate-50/80 transition ${
+                        isExpSelected ? 'bg-slate-50/60' : ''
+                      }`}
+                    >
+                      {/* Checkbox */}
+                      <td className="py-3 px-3.5">
+                        <input
+                          type="checkbox"
+                          checked={isExpSelected}
+                          onChange={() => handleToggleSelect(exp.id)}
+                          className="w-4 h-4 rounded text-slate-900 border-slate-300 focus:ring-slate-400 cursor-pointer"
+                        />
+                      </td>
+
+                      {/* Date */}
+                      <td className="py-3 px-3 font-mono text-slate-600 whitespace-nowrap">
+                        {exp.expense_date}
+                      </td>
+
+                      {/* Invoice / Reference */}
+                      <td className="py-3 px-3">
+                        {exp.invoice_number ? (
+                          <span className="font-mono text-[11px] text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
+                            {exp.invoice_number}
+                          </span>
+                        ) : (
+                          <span className="text-slate-400 text-[11px]">—</span>
+                        )}
+                      </td>
+
+                      {/* Description & Category */}
+                      <td className="py-3 px-3">
+                        <div className="font-semibold text-slate-900 leading-snug line-clamp-1">
+                          {exp.description}
+                        </div>
+                        <div className="text-[11px] text-slate-500 mt-0.5 flex items-center space-x-1.5">
+                          <span>{exp.category_name || 'Petty Cash Purchases'}</span>
+                          {hasReceipt && (
+                            <button
+                              type="button"
+                              onClick={() => onViewReceipt && onViewReceipt(receiptUrl, receiptName)}
+                              className="text-slate-500 hover:text-slate-800 inline-flex items-center space-x-0.5"
+                              title="View receipt attachment"
+                            >
+                              <Paperclip className="w-3 h-3 text-slate-400" />
+                              <span className="underline text-[10px]">Doc</span>
+                            </button>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Project */}
+                      <td className="py-3 px-3 text-slate-600 text-xs">
+                        <span className="line-clamp-1" title={exp.project_name || 'Company Operations'}>
+                          {exp.project_name || 'General Operations'}
+                        </span>
+                      </td>
+
+                      {/* Amount */}
+                      <td className="py-3 px-3 text-right font-mono font-bold text-slate-900 whitespace-nowrap">
+                        {formatOMR(exp.amount)}
+                      </td>
+
+                      {/* Export Status Badge (Condition 2) */}
+                      <td className="py-3 px-3 text-center whitespace-nowrap">
+                        {isExported ? (
+                          <span
+                            className="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-800 border border-slate-300"
+                            title={exp.exported_at ? `Exported: ${new Date(exp.exported_at).toLocaleDateString()}` : 'Exported'}
+                          >
+                            <Lock className="w-3 h-3 text-slate-600" />
+                            <span>Exported</span>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                            Active
+                          </span>
+                        )}
+                      </td>
+
+                      {/* Zoho Sync Status */}
+                      <td className="py-3 px-3 text-center whitespace-nowrap">
+                        {exp.sync_status === 'synced' ? (
+                          <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                            <span>Synced</span>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[11px] font-semibold text-amber-800 bg-amber-50 border border-amber-200">
+                            <Clock className="w-3 h-3 text-amber-600" />
+                            <span>Pending</span>
+                          </span>
+                        )}
+                      </td>
+
+                      {/* Row Actions */}
+                      <td className="py-3 px-3 text-right whitespace-nowrap">
+                        <div className="flex items-center justify-end space-x-1">
+                          {isExported ? (
+                            <button
+                              onClick={() => onRequestRecall && onRequestRecall(exp)}
+                              className="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
+                              title={currentUser?.role === 'admin' ? 'Admin Direct Unlock' : 'Request Unlock'}
+                            >
+                              <RotateCcw className="w-3.5 h-3.5" />
+                            </button>
+                          ) : (
+                            <>
+                              {onEditExpense && (
+                                <button
+                                  onClick={() => onEditExpense(exp)}
+                                  className="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
+                                  title="Edit Expense"
+                                >
+                                  <Edit2 className="w-3.5 h-3.5" />
+                                </button>
+                              )}
+                              {onDeleteExpense && (
+                                <button
+                                  onClick={() => onDeleteExpense(exp.id)}
+                                  className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition"
+                                  title="Delete Expense"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile Card View (visible under md) */}
+          <div className="md:hidden space-y-2.5">
+            {paginatedList.map((exp) => (
+              <ExpenseCard
+                key={exp.id}
+                expense={exp}
+                onEdit={onEditExpense}
+                onDelete={onDeleteExpense}
+                onRetrySync={onRetrySync}
+                isSelected={selectedExpenseIds.has(exp.id)}
+                onToggleSelect={handleToggleSelect}
+                currentUser={effectiveUser}
+                onRequestRecall={onRequestRecall}
+                onApproveRecall={onApproveRecall}
+                onRejectRecall={onRejectRecall}
+                onViewReceipt={onViewReceipt}
+              />
+            ))}
+          </div>
 
           {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between pt-4 pb-2">
-              <span className="text-xs text-slate-500 font-medium">
-                Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredList.length)} of {filteredList.length} expenses
+            <div className="flex items-center justify-between pt-2 px-1 text-xs text-slate-500 font-medium">
+              <span>
+                Showing {(currentPage - 1) * itemsPerPage + 1} to{' '}
+                {Math.min(currentPage * itemsPerPage, filteredList.length)} of {filteredList.length}{' '}
+                transactions
               </span>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1.5">
                 <button
-                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
-                  className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 transition"
+                  className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition"
                 >
                   Previous
                 </button>
-                <div className="text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg">
-                  Page {currentPage} of {totalPages}
-                </div>
+                <span className="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-800 font-bold">
+                  {currentPage} / {totalPages}
+                </span>
                 <button
-                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
-                  className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 transition"
+                  className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition"
                 >
                   Next
                 </button>
