@@ -324,18 +324,20 @@ export default function App() {
   const handleSaveExpense = async (formData, expenseId = null) => {
     if (expenseId) {
       const res = await api.updateExpense(expenseId, formData);
-      if (res.success) {
+      if (res && res.success) {
         showToast('Expense updated & synced with Zoho Books!');
         if (res.expense) {
           setExpenses((prev) => prev.map((e) => (e.id === expenseId ? res.expense : e)));
         }
+      } else {
+        throw new Error(res?.error || 'Failed to update expense voucher');
       }
     } else {
       const res = await api.saveExpense(formData);
-      if (res.offline) {
+      if (res && res.offline) {
         showToast('Saved offline. Will sync with Zoho when connected.', 'warning');
         setOfflineQueue(api.getOfflineQueue());
-      } else if (res.success) {
+      } else if (res && res.success) {
         showToast(
           res.synced
             ? 'Expense saved & posted to Zoho Books!'
@@ -345,9 +347,12 @@ export default function App() {
         if (res.expense) {
           setExpenses((prev) => [res.expense, ...prev.filter((e) => e.id !== res.expense.id)]);
         }
+      } else {
+        throw new Error(res?.error || 'Failed to record expense voucher');
       }
     }
-    await loadAllData();
+    // Trigger fresh data load in background without blocking modal close
+    loadAllData().catch(() => {});
   };
 
   // Handle Deleting Expense

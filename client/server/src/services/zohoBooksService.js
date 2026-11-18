@@ -191,7 +191,8 @@ class ZohoBooksService {
             client_id: clientId,
             client_secret: clientSecret,
             grant_type: 'refresh_token'
-          }
+          },
+          timeout: 6000
         });
 
         const { access_token, expires_in } = response.data;
@@ -248,7 +249,8 @@ class ZohoBooksService {
         method,
         headers,
         params,
-        data
+        data,
+        timeout: 6000
       });
       return response.data;
     } catch (err) {
@@ -738,35 +740,27 @@ class ZohoBooksService {
       reference_number: expense.invoice_number ? expense.invoice_number : (expense.id ? (expense.id.startsWith('PCA-') ? expense.id : `PCA-${expense.id}`) : `PCA-${Date.now()}`)
     };
 
-    let lastError = null;
-    for (let attempt = 1; attempt <= 2; attempt++) {
-      try {
-        const response = await this.makeApiRequest('/expenses', 'POST', payload);
-        const zExpense = response.expense || response;
-        const expenseId = zExpense.expense_id || `exp-sim-${Date.now()}`;
-        const expenseNumber = (zExpense.custom_field_hash && zExpense.custom_field_hash.cf_expenses_no) || zExpense.expense_number || 'N/A';
+    try {
+      const response = await this.makeApiRequest('/expenses', 'POST', payload);
+      const zExpense = response.expense || response;
+      const expenseId = zExpense.expense_id || `exp-sim-${Date.now()}`;
+      const expenseNumber = (zExpense.custom_field_hash && zExpense.custom_field_hash.cf_expenses_no) || zExpense.expense_number || 'N/A';
 
-        await db.addSyncLog('expense_create', 'success', {
-          expense_id: expense.id,
-          zoho_expense_id: expenseId,
-          zoho_expense_number: expenseNumber
-        });
+      await db.addSyncLog('expense_create', 'success', {
+        expense_id: expense.id,
+        zoho_expense_id: expenseId,
+        zoho_expense_number: expenseNumber
+      });
 
-        return {
-          zoho_journal_id: expenseId,
-          zoho_journal_number: expenseNumber
-        };
-      } catch (err) {
-        lastError = err;
-        console.warn(`Zoho expense creation attempt ${attempt} warning for expense ${expense.id}: ${err.message}`);
-        if (attempt === 1) {
-          await new Promise(r => setTimeout(r, 800));
-        }
-      }
+      return {
+        zoho_journal_id: expenseId,
+        zoho_journal_number: expenseNumber
+      };
+    } catch (err) {
+      console.warn(`Zoho expense creation warning for expense ${expense.id}: ${err.message}`);
+      await db.addSyncLog('expense_create', 'failure', { expense_id: expense.id }, err.message);
+      throw err;
     }
-
-    await db.addSyncLog('expense_create', 'failure', { expense_id: expense.id }, lastError.message);
-    throw lastError;
   }
 
   // Update existing Expense in Zoho Books

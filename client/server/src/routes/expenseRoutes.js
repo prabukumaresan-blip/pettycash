@@ -224,50 +224,52 @@ router.post('/', upload.single('receipt'), async (req, res) => {
       created_by: employee.name
     };
 
-    // Attempt immediate Zoho Books Expense creation
+    // 1. Save locally first to guarantee zero data loss
+    let savedExpense = await db.saveExpense(newExpense);
+
+    // 2. Update employee balance immediately
     try {
-      const journalRes = await zohoBooksService.createExpenseJournal(newExpense, employee);
-      newExpense.zoho_journal_id = journalRes.zoho_journal_id;
-      newExpense.zoho_journal_number = journalRes.zoho_journal_number;
-      newExpense.sync_status = 'synced';
-      newExpense.last_synced_at = new Date().toISOString();
-      newExpense.sync_error = null;
-
-      // Immediately synchronize live closing balance from Zoho Books
-      if (employee.petty_cash_account_id) {
-        try {
-          const liveBal = await zohoBooksService.getPettyCashBalance(employee.petty_cash_account_id);
-          if (typeof liveBal === 'number') {
-            await db.updateEmployeeBalance(employee_id, liveBal);
-          } else {
-            await db.updateEmployeeBalance(employee_id, (parseFloat(employee.current_balance || 0) - parseFloat(amount)));
-          }
-        } catch {
-          await db.updateEmployeeBalance(employee_id, (parseFloat(employee.current_balance || 0) - parseFloat(amount)));
-        }
-      }
-    } catch (zErr) {
-      console.warn('⚠️ Zoho Expense creation deferred to background sync:', zErr.message);
-      newExpense.sync_status = 'pending';
-      newExpense.sync_error = zErr.message;
-
-      // Immediate scheduled retry in background after 1.5 seconds
-      setTimeout(async () => {
-        try {
-          await syncService.syncPendingExpenses();
-        } catch (retryErr) {
-          console.warn('Background auto-retry pending expense notice:', retryErr.message);
-        }
-      }, 1500);
+      const currentBal = parseFloat(employee.current_balance || 0);
+      const newBal = currentBal - parseFloat(amount);
+      await db.updateEmployeeBalance(employee_id, newBal);
+    } catch (balErr) {
+      console.warn('Balance deduction notice:', balErr.message);
     }
 
-    const savedExpense = await db.saveExpense(newExpense);
+    // 3. Attempt immediate Zoho Books Expense creation with a 3.5-second safety race
+    try {
+      const syncPromise = zohoBooksService.createExpenseJournal(newExpense, employee);
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Zoho API response deferred to background')), 3500)
+      );
+
+      const journalRes = await Promise.race([syncPromise, timeoutPromise]);
+      savedExpense.zoho_journal_id = journalRes.zoho_journal_id;
+      savedExpense.zoho_journal_number = journalRes.zoho_journal_number;
+      savedExpense.sync_status = 'synced';
+      savedExpense.last_synced_at = new Date().toISOString();
+      savedExpense.sync_error = null;
+      savedExpense = await db.saveExpense(savedExpense);
+    } catch (zErr) {
+      console.warn('⚠️ Zoho Expense creation deferred to background sync:', zErr.message);
+      savedExpense.sync_status = 'pending';
+      savedExpense.sync_error = zErr.message;
+      savedExpense = await db.saveExpense(savedExpense);
+
+      // Trigger background sync worker asynchronously
+      setTimeout(() => {
+        syncService.syncPendingExpenses().catch((retryErr) => {
+          console.warn('Background sync notice:', retryErr.message);
+        });
+      }, 1000);
+    }
+
     const updatedEmployee = await db.getEmployeeById(employee_id);
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       expense: savedExpense,
-      employee_balance: updatedEmployee.current_balance,
+      employee_balance: updatedEmployee ? updatedEmployee.current_balance : (parseFloat(employee.current_balance || 0) - parseFloat(amount)),
       synced: savedExpense.sync_status === 'synced'
     });
   } catch (err) {

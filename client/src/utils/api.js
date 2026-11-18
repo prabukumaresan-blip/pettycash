@@ -227,12 +227,18 @@ export const api = {
     }
 
     try {
+      const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      const timeoutId = controller ? setTimeout(() => controller.abort(), 12000) : null;
+
       const res = await fetchWithAuth(`${BASE_URL}/expenses`, {
         method: 'POST',
-        body: formData
+        body: formData,
+        signal: controller ? controller.signal : undefined
       });
+      if (timeoutId) clearTimeout(timeoutId);
+
       const data = await safeJson(res);
-      if (data.success && data.expense) {
+      if (data && data.success && data.expense) {
         const user = getStoredUser();
         const cacheKey = user && user.id ? `cached_expenses_${user.id}` : 'cached_expenses';
         try {
@@ -241,17 +247,32 @@ export const api = {
         } catch {}
       }
       return data;
-    } catch {
+    } catch (err) {
+      if (err.name === 'AbortError') {
+        return { success: false, error: 'Request timed out after 12 seconds. Please check network connection and retry.' };
+      }
       return this.queueOfflineExpense(formData);
     }
   },
 
   async updateExpense(id, formData) {
-    const res = await fetchWithAuth(`${BASE_URL}/expenses/${id}`, {
-      method: 'PUT',
-      body: formData
-    });
-    return await safeJson(res);
+    try {
+      const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      const timeoutId = controller ? setTimeout(() => controller.abort(), 12000) : null;
+
+      const res = await fetchWithAuth(`${BASE_URL}/expenses/${id}`, {
+        method: 'PUT',
+        body: formData,
+        signal: controller ? controller.signal : undefined
+      });
+      if (timeoutId) clearTimeout(timeoutId);
+      return await safeJson(res);
+    } catch (err) {
+      if (err.name === 'AbortError') {
+        return { success: false, error: 'Request timed out after 12 seconds. Please check network connection and retry.' };
+      }
+      throw err;
+    }
   },
 
   async deleteExpense(id) {
