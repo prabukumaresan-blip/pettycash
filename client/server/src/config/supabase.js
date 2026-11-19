@@ -76,10 +76,23 @@ if (SUPABASE_URL && SUPABASE_KEY && !SUPABASE_URL.includes('your-supabase')) {
 }
 
 // Local data storage path with fallback to bundled data-store
-const BUNDLED_DB_FILE = path.resolve(__dirname, '../../data-store.json');
+let defaultBundledJson = null;
+try {
+  defaultBundledJson = require('../../data-store.json');
+} catch {}
+
+const candidateBundledPaths = [
+  path.resolve(__dirname, '../../data-store.json'),
+  path.resolve(__dirname, '../../../data-store.json'),
+  path.resolve(process.cwd(), 'server/data-store.json'),
+  path.resolve(process.cwd(), 'client/server/data-store.json'),
+  path.resolve(process.cwd(), 'data-store.json')
+];
+const BUNDLED_DB_FILE = candidateBundledPaths.find(p => fs.existsSync(/*turbopackIgnore: true*/ p)) || candidateBundledPaths[0];
+
 const DB_FILE = process.env.VERCEL === '1'
   ? path.join('/tmp', 'data-store.json')
-  : (fs.existsSync(BUNDLED_DB_FILE) ? BUNDLED_DB_FILE : path.join(process.cwd(), 'server', 'data-store.json'));
+  : (fs.existsSync(/*turbopackIgnore: true*/ BUNDLED_DB_FILE) ? BUNDLED_DB_FILE : path.join('/tmp', 'data-store.json'));
 
 const initialSeedData = {
   zoho_config: {
@@ -844,10 +857,16 @@ const initialSeedData = {
 // Initialize file if not existing
 function loadLocalData() {
   try {
-    if (!fs.existsSync(DB_FILE)) {
-      if (fs.existsSync(BUNDLED_DB_FILE)) {
+    if (!fs.existsSync(/*turbopackIgnore: true*/ DB_FILE)) {
+      if (defaultBundledJson) {
         try {
-          const bundledRaw = fs.readFileSync(BUNDLED_DB_FILE, 'utf-8');
+          fs.writeFileSync(DB_FILE, JSON.stringify(defaultBundledJson, null, 2), 'utf-8');
+          return defaultBundledJson;
+        } catch {}
+      }
+      if (fs.existsSync(/*turbopackIgnore: true*/ BUNDLED_DB_FILE)) {
+        try {
+          const bundledRaw = fs.readFileSync(/*turbopackIgnore: true*/ BUNDLED_DB_FILE, 'utf-8');
           fs.writeFileSync(DB_FILE, bundledRaw, 'utf-8');
           return JSON.parse(bundledRaw);
         } catch (copyErr) {
@@ -861,13 +880,16 @@ function loadLocalData() {
       }
       return initialSeedData;
     }
-    const raw = fs.readFileSync(DB_FILE, 'utf-8');
+    const raw = fs.readFileSync(/*turbopackIgnore: true*/ DB_FILE, 'utf-8');
     const parsed = JSON.parse(raw);
 
     // Merge bundled real tokens and projects if parsed lacks them
-    if (fs.existsSync(BUNDLED_DB_FILE)) {
+    const bundled = defaultBundledJson || (fs.existsSync(/*turbopackIgnore: true*/ BUNDLED_DB_FILE)
+      ? (() => { try { return JSON.parse(fs.readFileSync(/*turbopackIgnore: true*/ BUNDLED_DB_FILE, 'utf-8')); } catch { return null; } })()
+      : null);
+
+    if (bundled) {
       try {
-        const bundled = JSON.parse(fs.readFileSync(BUNDLED_DB_FILE, 'utf-8'));
         let needsSave = false;
         if (!parsed.zoho_config?.refresh_token && bundled.zoho_config?.refresh_token) {
           parsed.zoho_config.refresh_token = bundled.zoho_config.refresh_token;
@@ -883,9 +905,28 @@ function loadLocalData() {
           parsed.zoho_accounts = bundled.zoho_accounts;
           needsSave = true;
         }
-        if ((!parsed.expenses || parsed.expenses.length === 0) && bundled.expenses?.length) {
-          parsed.expenses = bundled.expenses;
-          needsSave = true;
+        if (bundled.expenses?.length) {
+          if (!parsed.expenses || parsed.expenses.length === 0) {
+            parsed.expenses = bundled.expenses;
+            needsSave = true;
+          } else {
+            const parsedIds = new Set(parsed.expenses.map(e => e.id));
+            const parsedZohoIds = new Set(
+              parsed.expenses.filter(e => e.zoho_journal_id).map(e => String(e.zoho_journal_id))
+            );
+            let addedCount = 0;
+            for (const be of bundled.expenses) {
+              const hasId = be.id && parsedIds.has(be.id);
+              const hasZohoId = be.zoho_journal_id && parsedZohoIds.has(String(be.zoho_journal_id));
+              if (!hasId && !hasZohoId) {
+                parsed.expenses.push(be);
+                addedCount++;
+              }
+            }
+            if (addedCount > 0) {
+              needsSave = true;
+            }
+          }
         }
         if (bundled.employees?.length) {
           bundled.employees.forEach(be => {
@@ -911,6 +952,12 @@ function loadLocalData() {
 function saveLocalData(data) {
   try {
     fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
+    // Mirror to BUNDLED_DB_FILE when distinct and accessible (e.g. In local development or node runtime)
+    if (BUNDLED_DB_FILE && BUNDLED_DB_FILE !== DB_FILE && fs.existsSync(path.dirname(BUNDLED_DB_FILE))) {
+      try {
+        fs.writeFileSync(BUNDLED_DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
+      } catch {}
+    }
   } catch (err) {
     console.error('Error saving local data store:', err.message);
   }

@@ -8,7 +8,8 @@ import {
   FileText,
   AlertCircle,
   Hash,
-  Lock
+  Lock,
+  User
 } from 'lucide-react';
 import { formatOMR } from '../utils/currency';
 import { api } from '../utils/api';
@@ -17,11 +18,16 @@ export default function LogExpenseModal({
   isOpen,
   onClose,
   currentEmployee,
+  currentUser = null,
+  employees = [],
   categories = [],
   projects = [],
   onExpenseSaved,
   editExpense = null
 }) {
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(
+    editExpense?.employee_id || currentEmployee?.id || currentUser?.id || ''
+  );
   const [amount, setAmount] = useState('');
   const [expenseDate, setExpenseDate] = useState(new Date().toISOString().split('T')[0]);
   const [invoiceNumber, setInvoiceNumber] = useState('');
@@ -30,6 +36,10 @@ export default function LogExpenseModal({
   const [zohoProjects, setZohoProjects] = useState(projects || []);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const isAdmin = currentUser?.role === 'admin' || currentEmployee?.role === 'admin';
+  const activeEmployee =
+    employees.find((e) => e.id === selectedEmployeeId) || currentEmployee || currentUser;
 
   // Fixed default category: Other Expenses (not editable)
   const defaultCategory =
@@ -62,27 +72,31 @@ export default function LogExpenseModal({
     if (!isOpen) return;
 
     if (editExpense) {
+      if (editExpense.employee_id) setSelectedEmployeeId(editExpense.employee_id);
       setAmount(editExpense.amount ? String(editExpense.amount) : '');
       setExpenseDate(editExpense.expense_date || new Date().toISOString().split('T')[0]);
       setInvoiceNumber(editExpense.invoice_number || '');
       setDescription(editExpense.description || '');
       setProjectId(editExpense.project_id || '');
     } else {
+      const defaultEmpId = currentEmployee?.id || currentUser?.id || (employees.length > 0 ? employees[0].id : '');
+      setSelectedEmployeeId(defaultEmpId);
       setAmount('');
       setExpenseDate(new Date().toISOString().split('T')[0]);
       setInvoiceNumber('');
       setDescription('');
-      const defaultProj = currentEmployee?.default_project_id || (zohoProjects.length > 0 ? zohoProjects[0].project_id : '');
+      const matchedEmp = employees.find(e => e.id === defaultEmpId) || currentEmployee;
+      const defaultProj = matchedEmp?.default_project_id || (zohoProjects.length > 0 ? zohoProjects[0].project_id : '');
       setProjectId(defaultProj);
     }
     setErrorMessage('');
-  }, [isOpen, editExpense?.id]);
+  }, [isOpen, editExpense?.id, currentEmployee?.id, currentUser?.id]);
 
   useEffect(() => {
     if (!projectId && zohoProjects.length > 0) {
-      setProjectId(currentEmployee?.default_project_id || zohoProjects[0].project_id);
+      setProjectId(activeEmployee?.default_project_id || zohoProjects[0].project_id);
     }
-  }, [zohoProjects, currentEmployee, projectId]);
+  }, [zohoProjects, activeEmployee, projectId]);
 
   // Handle amount formatting (supports up to 3 decimals for OMR)
   const handleAmountChange = (e) => {
@@ -109,7 +123,7 @@ export default function LogExpenseModal({
       return;
     }
 
-    const employeeId = currentEmployee?.id;
+    const employeeId = activeEmployee?.id;
     if (!employeeId) {
       setErrorMessage('Employee account not identified. Please try logging in again.');
       return;
@@ -119,12 +133,13 @@ export default function LogExpenseModal({
 
     try {
       const selectedProj = zohoProjects.find((p) => String(p.project_id) === String(projectId));
-      const paidThroughAccId = currentEmployee?.petty_cash_account_id || '';
+      const paidThroughAccId = activeEmployee?.petty_cash_account_id || '';
       const paidThroughAccName =
-        currentEmployee?.petty_cash_account_name || `Petty Cash - ${currentEmployee?.name}`;
+        activeEmployee?.petty_cash_account_name || `Petty Cash - ${activeEmployee?.name}`;
 
       const formData = new FormData();
       formData.append('employee_id', employeeId);
+      formData.append('employee_name', activeEmployee?.name || '');
       formData.append('expense_date', expenseDate);
       formData.append('amount', parsedAmount);
       // Fixed non-editable category: Other Expenses
@@ -158,7 +173,7 @@ export default function LogExpenseModal({
     }
   };
 
-  const currentBal = parseFloat(currentEmployee?.current_balance || 0);
+  const currentBal = parseFloat(activeEmployee?.current_balance || 0);
   const enteredAmt = parseFloat(amount || 0);
   const remainingBal = currentBal - enteredAmt;
 
@@ -176,7 +191,7 @@ export default function LogExpenseModal({
                 {editExpense ? 'Edit Petty Cash Transaction' : 'Record Petty Cash Expense'}
               </h2>
               <p className="text-xs text-slate-500 font-medium">
-                Petty Cash Account: {currentEmployee?.name}
+                Petty Cash Account: {activeEmployee?.name || 'Staff'} {activeEmployee?.petty_cash_account_name ? `(${activeEmployee.petty_cash_account_name})` : ''}
               </p>
             </div>
           </div>
@@ -194,6 +209,35 @@ export default function LogExpenseModal({
             <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center space-x-2">
               <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-600" />
               <span>{errorMessage}</span>
+            </div>
+          )}
+
+          {/* Employee Selector (Admin Only) */}
+          {isAdmin && employees && employees.length > 0 && (
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center space-x-1">
+                <User className="w-3.5 h-3.5 text-slate-400" />
+                <span>Employee Account *</span>
+              </label>
+              <select
+                value={selectedEmployeeId || ''}
+                onChange={(e) => {
+                  const newId = e.target.value;
+                  setSelectedEmployeeId(newId);
+                  const emp = employees.find((x) => x.id === newId);
+                  if (emp?.default_project_id) {
+                    setProjectId(emp.default_project_id);
+                  }
+                }}
+                disabled={Boolean(editExpense)}
+                className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-900 text-xs font-medium focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
+              >
+                {employees.map((emp) => (
+                  <option key={emp.id} value={emp.id}>
+                    {emp.name} ({emp.email}) • Current Balance: {formatOMR(emp.current_balance || 0)} OMR
+                  </option>
+                ))}
+              </select>
             </div>
           )}
 

@@ -212,7 +212,18 @@ export const api = {
       const data = await safeJson(res);
       if (data && data.success && Array.isArray(data.expenses)) {
         try {
-          localStorage.setItem(cacheKey, JSON.stringify(data.expenses));
+          const cached = JSON.parse(localStorage.getItem(cacheKey) || '[]');
+          const serverIds = new Set(data.expenses.map((e) => e.id));
+          const serverZohoIds = new Set(
+            data.expenses.filter((e) => e.zoho_journal_id).map((e) => String(e.zoho_journal_id))
+          );
+          // Preserve any newly recorded local expenses that may not yet be in server response
+          const localOnly = cached.filter(
+            (e) => !serverIds.has(e.id) && (!e.zoho_journal_id || !serverZohoIds.has(String(e.zoho_journal_id)))
+          );
+          const merged = [...localOnly, ...data.expenses];
+          localStorage.setItem(cacheKey, JSON.stringify(merged));
+          data.expenses = merged;
         } catch (e) {
           console.warn('Storage quota warning', e);
         }

@@ -30,6 +30,7 @@ import { api } from '../utils/api';
 export default function DashboardView({
   currentEmployee,
   currentUser,
+  employees = [],
   expenses = [],
   onOpenLogModal,
   onEditExpense,
@@ -47,6 +48,8 @@ export default function DashboardView({
   onRefreshData
 }) {
   const effectiveUser = currentUser || currentEmployee;
+  const isAdmin = effectiveUser?.role === 'admin';
+  const [selectedEmployeeFilter, setSelectedEmployeeFilter] = useState('');
   const [filterTab, setFilterTab] = useState('all'); // 'all', 'marked', 'not_exported', 'exported', 'recalls'
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -56,19 +59,26 @@ export default function DashboardView({
   const [isExportingCsv, setIsExportingCsv] = useState(false);
   const itemsPerPage = 25;
 
-  // Filter expenses for current employee (or show all if admin is viewing whole company)
-  const employeeExpenses = expenses.filter(
-    (e) =>
-      !currentEmployee ||
-      currentEmployee.role === 'admin' ||
-      e.employee_id === currentEmployee.id ||
-      (e.employee_name &&
-        currentEmployee.name &&
-        e.employee_name.toLowerCase().trim() === currentEmployee.name.toLowerCase().trim())
-  );
+  const targetEmployee = (isAdmin && selectedEmployeeFilter)
+    ? employees.find((e) => e.id === selectedEmployeeFilter)
+    : currentEmployee;
+  const activeAccountOwner = targetEmployee || effectiveUser;
 
-  const currentBal = parseFloat(currentEmployee?.current_balance || 0);
-  const settlement = getSettlementStatus(currentBal, currentEmployee?.name || 'Petty Cash');
+  // Filter expenses for current employee (or specific employee filter for admin, or all if viewing whole company)
+  const employeeExpenses = expenses.filter((e) => {
+    if (isAdmin && !selectedEmployeeFilter) return true;
+    const emp = targetEmployee || currentEmployee;
+    if (!emp) return true;
+    return (
+      e.employee_id === emp.id ||
+      (e.employee_name &&
+        emp.name &&
+        e.employee_name.toLowerCase().trim() === emp.name.toLowerCase().trim())
+    );
+  });
+
+  const currentBal = parseFloat(activeAccountOwner?.current_balance || 0);
+  const settlement = getSettlementStatus(currentBal, activeAccountOwner?.name || 'Petty Cash');
 
   const totalSpent = employeeExpenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
   const markedExpenses = employeeExpenses.filter((e) => e.added_to_report && !e.is_exported);
@@ -102,13 +112,28 @@ export default function DashboardView({
     return true;
   });
 
+  // Strict chronological sort: latest expense date & creation timestamp always appears at the very top
+  const sortedList = [...filteredList].sort((a, b) => {
+    const dateA = a.expense_date || (a.created_at ? a.created_at.split('T')[0] : '');
+    const dateB = b.expense_date || (b.created_at ? b.created_at.split('T')[0] : '');
+    if (dateA !== dateB) {
+      return dateB.localeCompare(dateA);
+    }
+    const timeA = a.created_at ? new Date(a.created_at).getTime() : 0;
+    const timeB = b.created_at ? new Date(b.created_at).getTime() : 0;
+    if (timeA !== timeB) {
+      return timeB - timeA;
+    }
+    return (b.id || '').localeCompare(a.id || '');
+  });
+
   React.useEffect(() => {
     setCurrentPage(1);
     setSelectedExpenseIds(new Set());
-  }, [filterTab, searchQuery]);
+  }, [filterTab, searchQuery, selectedEmployeeFilter]);
 
-  const totalPages = Math.ceil(filteredList.length / itemsPerPage);
-  const paginatedList = filteredList.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const totalPages = Math.ceil(sortedList.length / itemsPerPage);
+  const paginatedList = sortedList.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleToggleSelect = (id) => {
     setSelectedExpenseIds((prev) => {
@@ -169,7 +194,9 @@ export default function DashboardView({
       const filters = {
         mark_exported: 'true'
       };
-      if (currentEmployee?.id && currentEmployee.role !== 'admin') {
+      if (selectedEmployeeFilter) {
+        filters.employee_id = selectedEmployeeFilter;
+      } else if (currentEmployee?.id && currentEmployee.role !== 'admin') {
         filters.employee_id = currentEmployee.id;
       }
       if (selectedExpenseIds.size > 0) {
@@ -213,11 +240,11 @@ export default function DashboardView({
           <div className="space-y-3 flex-1">
             <div className="flex items-center space-x-2">
               <span className="text-[11px] font-semibold tracking-wider text-slate-400 uppercase">
-                Petty Cash Account • {effectiveUser?.name || 'Bright Flowers'}
+                Petty Cash Account • {activeAccountOwner?.name || effectiveUser?.name || 'Bright Flowers'}
               </span>
-              {currentEmployee?.petty_cash_account_name && (
+              {activeAccountOwner?.petty_cash_account_name && (
                 <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono border border-slate-700">
-                  {currentEmployee.petty_cash_account_name}
+                  {activeAccountOwner.petty_cash_account_name}
                 </span>
               )}
             </div>
@@ -273,7 +300,7 @@ export default function DashboardView({
             )}
 
             <button
-              onClick={onOpenLogModal}
+              onClick={() => onOpenLogModal(targetEmployee)}
               className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-xs border border-blue-500 shadow-xs flex items-center justify-center space-x-1.5 transition"
             >
               <Plus className="w-4 h-4 stroke-[2.5]" />
@@ -416,8 +443,35 @@ export default function DashboardView({
             <p className="text-xs text-slate-500">Official expense ledger synchronized with Zoho Books vouchers</p>
           </div>
 
-          {/* Right Header Controls: Search & Direct Export Options */}
+          {/* Right Header Controls: Employee Filter (Admin), Search & Direct Export Options */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+            {/* Admin Employee Switcher */}
+            {isAdmin && employees && employees.length > 0 && (
+              <div className="relative w-full sm:w-56 shrink-0">
+                <select
+                  value={selectedEmployeeFilter}
+                  onChange={(e) => setSelectedEmployeeFilter(e.target.value)}
+                  className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
+                >
+                  <option value="">All Staff Accounts ({expenses.length})</option>
+                  {employees.map((emp) => {
+                    const count = expenses.filter(
+                      (e) =>
+                        e.employee_id === emp.id ||
+                        (e.employee_name &&
+                          emp.name &&
+                          e.employee_name.toLowerCase().trim() === emp.name.toLowerCase().trim())
+                    ).length;
+                    return (
+                      <option key={emp.id} value={emp.id}>
+                        {emp.name} ({count})
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            )}
+
             {/* Search Input */}
             <div className="relative w-full sm:w-60">
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />

@@ -44,6 +44,7 @@ export default function App() {
 
   // Modals
   const [isLogModalOpen, setIsLogModalOpen] = useState(false);
+  const [modalTargetEmployee, setModalTargetEmployee] = useState(null);
   const [editingExpense, setEditingExpense] = useState(null);
   const [isEmployeeModalOpen, setIsEmployeeModalOpen] = useState(false);
   const [editingEmployee, setEditingEmployee] = useState(null);
@@ -167,7 +168,18 @@ export default function App() {
       }
 
       if (expRes.status === 'fulfilled' && expRes.value?.success && Array.isArray(expRes.value.expenses)) {
-        setExpenses(expRes.value.expenses);
+        setExpenses((prevExpenses) => {
+          const serverExpenses = expRes.value.expenses;
+          const serverIds = new Set(serverExpenses.map((e) => e.id));
+          const serverZohoIds = new Set(
+            serverExpenses.filter((e) => e.zoho_journal_id).map((e) => String(e.zoho_journal_id))
+          );
+          // Retain newly recorded local expenses that may not yet be reflected in server response
+          const localOnly = prevExpenses.filter(
+            (e) => !serverIds.has(e.id) && (!e.zoho_journal_id || !serverZohoIds.has(String(e.zoho_journal_id)))
+          );
+          return [...localOnly, ...serverExpenses];
+        });
       }
 
       if (zRes.status === 'fulfilled' && zRes.value?.success) {
@@ -348,6 +360,11 @@ export default function App() {
         // Immediately add newly saved expense to the Recent Activity list!
         if (res.expense) {
           setExpenses((prev) => [res.expense, ...prev.filter((e) => e.id !== res.expense.id)]);
+        }
+        if (res.employee_balance !== undefined) {
+          const targetEmpId = res.expense?.employee_id || currentEmployee?.id;
+          setCurrentEmployee((prev) => (prev && prev.id === targetEmpId ? { ...prev, current_balance: res.employee_balance } : prev));
+          setEmployees((prev) => prev.map((emp) => emp.id === targetEmpId ? { ...emp, current_balance: res.employee_balance } : emp));
         }
       } else {
         throw new Error(res?.error || 'Failed to record expense voucher');
@@ -609,8 +626,10 @@ export default function App() {
           <DashboardView
             currentEmployee={currentEmployee || currentUser}
             currentUser={currentUser}
+            employees={employees}
             expenses={expenses}
-            onOpenLogModal={() => {
+            onOpenLogModal={(targetEmp = null) => {
+              setModalTargetEmployee(targetEmp);
               setEditingExpense(null);
               setIsLogModalOpen(true);
             }}
@@ -674,7 +693,8 @@ export default function App() {
       <MobileBottomNav
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        onOpenLogModal={() => {
+        onOpenLogModal={(targetEmp = null) => {
+          setModalTargetEmployee(targetEmp);
           setEditingExpense(null);
           setIsLogModalOpen(true);
         }}
@@ -684,14 +704,17 @@ export default function App() {
         isSyncing={isFullSyncing}
       />
 
-      {/* Log / Edit Expense Modal (Locked to the logged-in employee) */}
+      {/* Log / Edit Expense Modal (With admin employee selection & balance lock) */}
       <LogExpenseModal
         isOpen={isLogModalOpen}
         onClose={() => {
           setIsLogModalOpen(false);
+          setModalTargetEmployee(null);
           setEditingExpense(null);
         }}
-        currentEmployee={currentEmployee || currentUser}
+        currentEmployee={modalTargetEmployee || currentEmployee || currentUser}
+        currentUser={currentUser}
+        employees={employees}
         categories={categories}
         projects={projects}
         onExpenseSaved={handleSaveExpense}
