@@ -187,6 +187,25 @@ export const api = {
     return await safeJson(res);
   },
 
+  getDeletedIds() {
+    if (typeof window === 'undefined') return new Set();
+    try {
+      const raw = localStorage.getItem('recently_deleted_expenses');
+      return new Set(raw ? JSON.parse(raw) : []);
+    } catch {
+      return new Set();
+    }
+  },
+
+  addDeletedId(id) {
+    if (typeof window === 'undefined' || !id) return;
+    try {
+      const current = this.getDeletedIds();
+      current.add(String(id));
+      localStorage.setItem('recently_deleted_expenses', JSON.stringify(Array.from(current)));
+    } catch {}
+  },
+
   // Expenses
   async getExpenses(filters = {}) {
     const params = new URLSearchParams();
@@ -212,6 +231,11 @@ export const api = {
       const data = await safeJson(res);
       if (data && data.success && Array.isArray(data.expenses)) {
         try {
+          const deletedSet = this.getDeletedIds();
+          data.expenses = data.expenses.filter(
+            (e) => !deletedSet.has(String(e.id)) && (!e.zoho_journal_id || !deletedSet.has(String(e.zoho_journal_id)))
+          );
+
           const cached = JSON.parse(localStorage.getItem(cacheKey) || '[]');
           const serverIds = new Set(data.expenses.map((e) => e.id));
           const serverZohoIds = new Set(
@@ -219,7 +243,10 @@ export const api = {
           );
           // Preserve any newly recorded local expenses that may not yet be in server response
           const localOnly = cached.filter(
-            (e) => !serverIds.has(e.id) && (!e.zoho_journal_id || !serverZohoIds.has(String(e.zoho_journal_id)))
+            (e) => !deletedSet.has(String(e.id)) &&
+                   (!e.zoho_journal_id || !deletedSet.has(String(e.zoho_journal_id))) &&
+                   !serverIds.has(e.id) &&
+                   (!e.zoho_journal_id || !serverZohoIds.has(String(e.zoho_journal_id)))
           );
           const merged = [...localOnly, ...data.expenses];
           localStorage.setItem(cacheKey, JSON.stringify(merged));
@@ -231,9 +258,11 @@ export const api = {
       return data;
     } catch {
       const cached = localStorage.getItem(cacheKey);
+      const deletedSet = this.getDeletedIds();
+      const list = cached ? JSON.parse(cached) : [];
       return {
         success: true,
-        expenses: cached ? JSON.parse(cached) : [],
+        expenses: list.filter((e) => !deletedSet.has(String(e.id)) && (!e.zoho_journal_id || !deletedSet.has(String(e.zoho_journal_id)))),
         offline: true
       };
     }
@@ -294,18 +323,26 @@ export const api = {
   },
 
   async deleteExpense(id) {
+    this.addDeletedId(id);
+
+    // Clean up all localStorage expense caches immediately
+    try {
+      const user = getStoredUser();
+      const keys = ['cached_expenses'];
+      if (user && user.id) keys.push(`cached_expenses_${user.id}`);
+      for (const k of keys) {
+        const cur = JSON.parse(localStorage.getItem(k) || '[]');
+        localStorage.setItem(k, JSON.stringify(cur.filter(e => String(e.id) !== String(id) && (!e.zoho_journal_id || String(e.zoho_journal_id) !== String(id)))));
+      }
+    } catch {}
+
     const res = await fetchWithAuth(`${BASE_URL}/expenses/${id}`, {
       method: 'DELETE'
     });
     const data = await safeJson(res);
-    if (data.success) {
-      const user = getStoredUser();
-      const cacheKey = user && user.id ? `cached_expenses_${user.id}` : 'cached_expenses';
-      try {
-        const current = JSON.parse(localStorage.getItem(cacheKey) || '[]');
-        localStorage.setItem(cacheKey, JSON.stringify(current.filter(e => e.id !== id)));
-      } catch {}
-    }
+    if (data.deleted_id) this.addDeletedId(data.deleted_id);
+    if (data.zoho_journal_id) this.addDeletedId(data.zoho_journal_id);
+
     return data;
   },
 

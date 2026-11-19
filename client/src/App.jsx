@@ -169,14 +169,20 @@ export default function App() {
 
       if (expRes.status === 'fulfilled' && expRes.value?.success && Array.isArray(expRes.value.expenses)) {
         setExpenses((prevExpenses) => {
-          const serverExpenses = expRes.value.expenses;
+          const deletedSet = api.getDeletedIds ? api.getDeletedIds() : new Set();
+          const serverExpenses = expRes.value.expenses.filter(
+            (e) => !deletedSet.has(String(e.id)) && (!e.zoho_journal_id || !deletedSet.has(String(e.zoho_journal_id)))
+          );
           const serverIds = new Set(serverExpenses.map((e) => e.id));
           const serverZohoIds = new Set(
             serverExpenses.filter((e) => e.zoho_journal_id).map((e) => String(e.zoho_journal_id))
           );
           // Retain newly recorded local expenses that may not yet be reflected in server response
           const localOnly = prevExpenses.filter(
-            (e) => !serverIds.has(e.id) && (!e.zoho_journal_id || !serverZohoIds.has(String(e.zoho_journal_id)))
+            (e) => !deletedSet.has(String(e.id)) &&
+                   (!e.zoho_journal_id || !deletedSet.has(String(e.zoho_journal_id))) &&
+                   !serverIds.has(e.id) &&
+                   (!e.zoho_journal_id || !serverZohoIds.has(String(e.zoho_journal_id)))
           );
           return [...localOnly, ...serverExpenses];
         });
@@ -379,17 +385,27 @@ export default function App() {
     if (!window.confirm('Are you sure you want to delete this expense? This will reverse the expense entry in Zoho Books.')) {
       return;
     }
+    // Optimistically remove from state immediately
+    setExpenses((prev) => prev.filter((e) => String(e.id) !== String(id) && (!e.zoho_journal_id || String(e.zoho_journal_id) !== String(id))));
     try {
       const res = await api.deleteExpense(id);
       if (res.success) {
         showToast('Expense deleted and cash balance restored', 'success');
-        setExpenses((prev) => prev.filter((e) => e.id !== id));
+        const targetId = res.deleted_id || id;
+        const targetZohoId = res.zoho_journal_id;
+        setExpenses((prev) => prev.filter((e) => String(e.id) !== String(targetId) && (!targetZohoId || String(e.zoho_journal_id) !== String(targetZohoId))));
+        if (res.employee_balance !== undefined && res.employee_balance !== null) {
+          setCurrentEmployee((prev) => prev ? { ...prev, current_balance: res.employee_balance } : prev);
+          setEmployees((prev) => prev.map((emp) => emp.id === currentEmployee?.id ? { ...emp, current_balance: res.employee_balance } : emp));
+        }
         await loadAllData();
       } else {
         showToast(res.error || 'Failed to delete expense', 'error');
+        await loadAllData();
       }
     } catch (err) {
       showToast('Delete error: ' + err.message, 'error');
+      await loadAllData();
     }
   };
 

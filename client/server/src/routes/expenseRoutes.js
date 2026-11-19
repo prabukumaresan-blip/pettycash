@@ -372,7 +372,12 @@ router.delete('/:id', async (req, res) => {
   try {
     const expense = await db.getExpenseById(req.params.id);
     if (!expense) {
-      return res.status(404).json({ success: false, error: 'Expense not found' });
+      await db.deleteExpense(req.params.id);
+      return res.json({
+        success: true,
+        message: 'Expense removed from local records',
+        deleted_id: req.params.id
+      });
     }
 
     // Permission Check: Once exported as report, ONLY admin user can delete the expense.
@@ -402,11 +407,14 @@ router.delete('/:id', async (req, res) => {
       }
     }
 
-    await db.deleteExpense(req.params.id);
+    await db.deleteExpense(expense.id);
+    if (expense.zoho_journal_id && String(expense.zoho_journal_id) !== String(expense.id)) {
+      await db.deleteExpense(expense.zoho_journal_id);
+    }
 
     if (employee && employee.petty_cash_account_id) {
       try {
-        const liveBal = await zohoBooksService.getPettyCashBalance(employee.petty_cash_account_id);
+        const liveBal = await zohoBooksService.getPettyCashBalance(employee.petty_cash_account_id, true);
         if (typeof liveBal === 'number') {
           await db.updateEmployeeBalance(employee.id, liveBal);
         }
@@ -418,6 +426,8 @@ router.delete('/:id', async (req, res) => {
     res.json({
       success: true,
       message: 'Expense deleted and employee balance restored',
+      deleted_id: expense.id,
+      zoho_journal_id: expense.zoho_journal_id,
       employee_balance: updatedEmployee ? updatedEmployee.current_balance : null
     });
   } catch (err) {

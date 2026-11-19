@@ -883,6 +883,21 @@ function loadLocalData() {
     const raw = fs.readFileSync(/*turbopackIgnore: true*/ DB_FILE, 'utf-8');
     const parsed = JSON.parse(raw);
 
+    if (!Array.isArray(parsed.deleted_expense_ids)) {
+      parsed.deleted_expense_ids = [];
+    }
+    const deletedSet = new Set(parsed.deleted_expense_ids.map(String));
+
+    if (deletedSet.size > 0 && Array.isArray(parsed.expenses)) {
+      const beforeCount = parsed.expenses.length;
+      parsed.expenses = parsed.expenses.filter(
+        e => !deletedSet.has(String(e.id)) && (!e.zoho_journal_id || !deletedSet.has(String(e.zoho_journal_id)))
+      );
+      if (parsed.expenses.length !== beforeCount) {
+        saveLocalData(parsed);
+      }
+    }
+
     // Merge bundled real tokens and projects if parsed lacks them
     const bundled = defaultBundledJson || (fs.existsSync(/*turbopackIgnore: true*/ BUNDLED_DB_FILE)
       ? (() => { try { return JSON.parse(fs.readFileSync(/*turbopackIgnore: true*/ BUNDLED_DB_FILE, 'utf-8')); } catch { return null; } })()
@@ -905,28 +920,9 @@ function loadLocalData() {
           parsed.zoho_accounts = bundled.zoho_accounts;
           needsSave = true;
         }
-        if (bundled.expenses?.length) {
-          if (!parsed.expenses || parsed.expenses.length === 0) {
-            parsed.expenses = bundled.expenses;
-            needsSave = true;
-          } else {
-            const parsedIds = new Set(parsed.expenses.map(e => e.id));
-            const parsedZohoIds = new Set(
-              parsed.expenses.filter(e => e.zoho_journal_id).map(e => String(e.zoho_journal_id))
-            );
-            let addedCount = 0;
-            for (const be of bundled.expenses) {
-              const hasId = be.id && parsedIds.has(be.id);
-              const hasZohoId = be.zoho_journal_id && parsedZohoIds.has(String(be.zoho_journal_id));
-              if (!hasId && !hasZohoId) {
-                parsed.expenses.push(be);
-                addedCount++;
-              }
-            }
-            if (addedCount > 0) {
-              needsSave = true;
-            }
-          }
+        if (bundled.expenses?.length && (!parsed.expenses || parsed.expenses.length === 0)) {
+          parsed.expenses = bundled.expenses;
+          needsSave = true;
         }
         if (bundled.employees?.length) {
           bundled.employees.forEach(be => {
@@ -1447,16 +1443,47 @@ const db = {
     return processedList;
   },
 
+  isDeletedExpense(id, zohoId) {
+    const store = loadLocalData();
+    const deletedSet = new Set((store.deleted_expense_ids || []).map(String));
+    if (id && deletedSet.has(String(id))) return true;
+    if (zohoId && deletedSet.has(String(zohoId))) return true;
+    return false;
+  },
+
   async deleteExpense(id) {
     const store = loadLocalData();
-    const exp = store.expenses.find(e => e.id === id);
+    const strId = String(id);
+    const exp = (store.expenses || []).find(
+      e => String(e.id) === strId || (e.zoho_journal_id && String(e.zoho_journal_id) === strId)
+    );
     const empId = exp ? exp.employee_id : null;
 
-    if (isLiveSupabase) {
-      await supabase.from('expenses').delete().eq('id', id);
+    if (!Array.isArray(store.deleted_expense_ids)) {
+      store.deleted_expense_ids = [];
+    }
+    if (!store.deleted_expense_ids.includes(strId)) {
+      store.deleted_expense_ids.push(strId);
+    }
+    if (exp?.id && !store.deleted_expense_ids.includes(String(exp.id))) {
+      store.deleted_expense_ids.push(String(exp.id));
+    }
+    if (exp?.zoho_journal_id && !store.deleted_expense_ids.includes(String(exp.zoho_journal_id))) {
+      store.deleted_expense_ids.push(String(exp.zoho_journal_id));
     }
 
-    store.expenses = store.expenses.filter(e => e.id !== id);
+    if (isLiveSupabase) {
+      try {
+        await supabase.from('expenses').delete().or(`id.eq.${id},zoho_journal_id.eq.${id}`);
+      } catch {}
+    }
+
+    store.expenses = (store.expenses || []).filter(
+      e => String(e.id) !== strId &&
+           (!exp?.id || String(e.id) !== String(exp.id)) &&
+           (!e.zoho_journal_id || String(e.zoho_journal_id) !== strId) &&
+           (!exp?.zoho_journal_id || !e.zoho_journal_id || String(e.zoho_journal_id) !== String(exp.zoho_journal_id))
+    );
     saveLocalData(store);
 
     if (empId) {

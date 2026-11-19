@@ -542,6 +542,10 @@ class ZohoBooksService {
           let accountNewExpenses = 0;
 
           for (const ze of list) {
+            // Skip any expense that was deleted by the user
+            if (db.isDeletedExpense && db.isDeletedExpense(null, ze.expense_id)) {
+              continue;
+            }
             const isRecentCreated = ze.created_time && new Date(ze.created_time) >= new Date('2026-10-20T00:00:00Z');
             const isRecentDate = ze.date && ze.date >= '2026-10-20';
             const isAppRef = ze.reference_number && ze.reference_number.startsWith('PCA-');
@@ -804,12 +808,19 @@ class ZohoBooksService {
 
   // Delete Expense in Zoho Books
   async deleteExpenseJournal(journalId) {
-    if (!journalId) return;
+    if (!journalId) return true;
     try {
       await this.makeApiRequest(`/expenses/${journalId}`, 'DELETE');
       await db.addSyncLog('expense_delete', 'success', { zoho_expense_id: journalId });
       return true;
     } catch (err) {
+      const errMsg = (err.message || '').toLowerCase();
+      // If the expense already does not exist in Zoho Books, treat as success
+      if (errMsg.includes('does not exist') || errMsg.includes('not found') || errMsg.includes('404')) {
+        console.log(`ℹ️ Expense ${journalId} already does not exist in Zoho Books`);
+        await db.addSyncLog('expense_delete', 'success', { zoho_expense_id: journalId, note: 'already deleted' });
+        return true;
+      }
       await db.addSyncLog('expense_delete', 'failure', { zoho_expense_id: journalId }, err.message);
       throw err;
     }
