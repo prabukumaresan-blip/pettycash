@@ -372,9 +372,18 @@ class ZohoBooksService {
         const employees = await db.getEmployees();
         for (const emp of employees) {
           if (emp.petty_cash_account_id) {
-            const liveBal = await this.getPettyCashBalance(emp.petty_cash_account_id);
-            if (typeof liveBal === 'number') {
-              await db.updateEmployeeBalance(emp.id, liveBal);
+            const accMatch = rawAccounts.find(a => String(a.account_id) === String(emp.petty_cash_account_id));
+            if (accMatch && (accMatch.closing_balance !== undefined || accMatch.bcy_closing_balance !== undefined || accMatch.current_balance !== undefined)) {
+              const rawBal = parseFloat(accMatch.closing_balance ?? accMatch.bcy_closing_balance ?? accMatch.current_balance ?? 0);
+              const bal = (accMatch.isdebit === false && rawBal > 0) ? -rawBal : rawBal;
+              if (!this._balanceCache) this._balanceCache = {};
+              this._balanceCache[emp.petty_cash_account_id] = { balance: bal, timestamp: Date.now() };
+              await db.updateEmployeeBalance(emp.id, bal);
+            } else {
+              const liveBal = await this.getPettyCashBalance(emp.petty_cash_account_id);
+              if (typeof liveBal === 'number') {
+                await db.updateEmployeeBalance(emp.id, liveBal);
+              }
             }
           }
         }
@@ -394,7 +403,7 @@ class ZohoBooksService {
   async getPettyCashBalance(accountId, forceRefresh = false) {
     if (!this._balanceCache) this._balanceCache = {};
     const cached = this._balanceCache[accountId];
-    if (!forceRefresh && cached && (Date.now() - cached.timestamp < 60000)) {
+    if (!forceRefresh && cached && (Date.now() - cached.timestamp < 120000)) {
       return cached.balance;
     }
 
@@ -402,8 +411,8 @@ class ZohoBooksService {
       const response = await this.makeApiRequest(`/chartofaccounts/${accountId}`, 'GET');
       if (response && response.chart_of_account) {
         const coa = response.chart_of_account;
-        if (coa.closing_balance !== undefined) {
-          const rawBal = parseFloat(coa.closing_balance || 0);
+        if (coa.closing_balance !== undefined || coa.bcy_closing_balance !== undefined) {
+          const rawBal = parseFloat(coa.closing_balance ?? coa.bcy_closing_balance ?? 0);
           let bal = rawBal;
           if (coa.isdebit === false && rawBal > 0) {
             bal = -rawBal;
@@ -471,6 +480,26 @@ class ZohoBooksService {
     try {
       const employees = await db.getEmployees();
       const accounts = await db.getZohoAccounts();
+      const allLocalExpenses = await db.getExpenses();
+      const cachedProjects = (await db.getZohoProjects()) || [];
+
+      // Pre-index local expenses for fast O(1) matching
+      const existingByJournalId = new Map();
+      const existingByRef = new Map();
+      const existingByInvoice = new Map();
+
+      for (const e of allLocalExpenses) {
+        if (e.zoho_journal_id) existingByJournalId.set(String(e.zoho_journal_id), e);
+        if (e.id) existingByRef.set(String(e.id), e);
+        if (e.invoice_number) existingByInvoice.set(String(e.invoice_number), e);
+      }
+
+      // Pre-index cached projects for fast O(1) lookup
+      const projectById = new Map(cachedProjects.map(p => [String(p.project_id), p]));
+      const projectByCustomer = new Map(
+        cachedProjects.filter(p => p.customer_id).map(p => [String(p.customer_id), p])
+      );
+
       const pcAccountMap = {};
 
       for (const emp of employees) {
@@ -499,7 +528,9 @@ class ZohoBooksService {
       }
 
       const zohoExpenses = [];
-      for (const [accountId, emp] of Object.entries(pcAccountMap)) {
+      const accountsList = Object.entries(pcAccountMap);
+
+      for (const [accountId, emp] of accountsList) {
         try {
           const res = await this.makeApiRequest('/expenses', 'GET', null, {
             paid_through_account_id: accountId,
@@ -509,22 +540,18 @@ class ZohoBooksService {
           });
           const list = res.expenses || [];
           let accountNewExpenses = 0;
+
           for (const ze of list) {
-            const allLocalExpenses = await db.getExpenses();
-            // Include expenses that:
-            // 1) Were tagged with PCA- reference from this app
-            // 2) Already exist in local database by zoho_journal_id, invoice_number, or ID
-            // 3) Match specific priority transaction IDs
-            // 4) Are part of the active accounting cycle (date >= '2026-10-20' or created_time >= '2026-10-20')
-            // 5) Were created in Zoho within the active period (last 60 days)
             const isRecentCreated = ze.created_time && new Date(ze.created_time) >= new Date('2026-10-20T00:00:00Z');
             const isRecentDate = ze.date && ze.date >= '2026-10-20';
             const isAppRef = ze.reference_number && ze.reference_number.startsWith('PCA-');
-            const isTracked = allLocalExpenses.some(e => 
-              (e.zoho_journal_id && String(e.zoho_journal_id) === String(ze.expense_id)) || 
-              (ze.reference_number && (e.invoice_number === ze.reference_number || e.id === ze.reference_number))
-            );
 
+            // Fast in-memory lookup
+            const existingExp = existingByJournalId.get(String(ze.expense_id)) ||
+              (ze.reference_number && ze.reference_number.startsWith('PCA-') ? existingByRef.get(ze.reference_number.replace('PCA-', '')) : null) ||
+              (ze.reference_number ? existingByInvoice.get(String(ze.reference_number)) : null);
+
+            const isTracked = Boolean(existingExp);
             const isFromApp = isAppRef ||
               isTracked ||
               isRecentDate ||
@@ -538,21 +565,9 @@ class ZohoBooksService {
               continue; // Exclude ancient historical expenses
             }
 
-            // Find existing local expense to avoid duplicate entries or ID collision
-            const existingExp = allLocalExpenses.find(e => {
-              if (e.zoho_journal_id && String(e.zoho_journal_id) === String(ze.expense_id)) {
-                return true;
-              }
-              if (ze.reference_number && ze.reference_number.startsWith('PCA-')) {
-                const cleanRef = ze.reference_number.replace('PCA-', '');
-                if (e.id === cleanRef || e.id === ze.reference_number) return true;
-              }
-              // Only match unlinked local expense if invoice_number matches
-              if (!e.zoho_journal_id && ze.reference_number && e.invoice_number && String(e.invoice_number) === String(ze.reference_number)) {
-                return true;
-              }
-              return false;
-            });
+            if (!existingExp) {
+              accountNewExpenses++;
+            }
 
             let localId = existingExp 
               ? existingExp.id 
@@ -571,8 +586,21 @@ class ZohoBooksService {
             let custName = ze.customer_name || (existingExp ? existingExp.customer_name : null);
             let singleResDetail = null;
 
-            // Fetch detail from Zoho single-expense API if project is missing from list endpoint
-            if (!projId || !projName) {
+            // Prioritize cached project lookup by ID or customer ID
+            if (projId && !projName && projectById.has(String(projId))) {
+              projName = projectById.get(String(projId)).project_name;
+            }
+            if (!projId && (custId || ze.customer_id)) {
+              const targetCustId = custId || ze.customer_id;
+              if (projectByCustomer.has(String(targetCustId))) {
+                const matched = projectByCustomer.get(String(targetCustId));
+                projId = matched.project_id;
+                projName = matched.project_name;
+              }
+            }
+
+            // Only fetch detail from Zoho single-expense API if completely NEW expense, missing project, and within rate-limit budget
+            if (!existingExp && (!projId || !projName) && accountNewExpenses <= 3) {
               try {
                 const singleRes = await this.makeApiRequest(`/expenses/${ze.expense_id}`, 'GET');
                 if (singleRes && singleRes.expense) {
@@ -583,22 +611,7 @@ class ZohoBooksService {
                   custName = singleResDetail.customer_name || custName;
                 }
               } catch (singleErr) {
-                console.warn(`Could not fetch details for Zoho expense ${ze.expense_id}:`, singleErr.message);
-              }
-            }
-
-            // Fallback match project by ID or customer ID from cached Zoho projects
-            const cachedProjects = await db.getZohoProjects();
-            if (projId && !projName && cachedProjects) {
-              const matchedProj = cachedProjects.find(p => String(p.project_id) === String(projId));
-              if (matchedProj) projName = matchedProj.project_name;
-            }
-            if (!projId && (custId || ze.customer_id) && cachedProjects) {
-              const targetCustId = custId || ze.customer_id;
-              const matchedByCust = cachedProjects.find(p => String(p.customer_id) === String(targetCustId));
-              if (matchedByCust) {
-                projId = matchedByCust.project_id;
-                projName = matchedByCust.project_name;
+                // Silently skip to protect sync flow
               }
             }
 
@@ -640,10 +653,9 @@ class ZohoBooksService {
               recall_status: existingExp?.recall_status || null,
               created_by: emp.name
             });
-            accountNewExpenses++;
           }
 
-          // Only fetch live closing balance if new expenses were found for this account or balance is not yet cached
+          // Only fetch live closing balance if genuine new expenses were found or balance is not yet cached
           if (accountNewExpenses > 0 || emp.current_balance === undefined || emp.current_balance === null) {
             try {
               const liveBal = await this.getPettyCashBalance(accountId);
@@ -658,12 +670,12 @@ class ZohoBooksService {
           console.warn(`Could not sync expenses for account ${accountId}:`, accErr.message);
         }
         // Small delay between employee accounts to respect Zoho API rate limits
-        await new Promise(r => setTimeout(r, 200));
+        await new Promise(r => setTimeout(r, 100));
       }
 
-      // Merge into local cache
-      for (const ze of zohoExpenses) {
-        await db.saveExpense(ze);
+      // Merge into local cache using fast batch save
+      if (zohoExpenses.length > 0) {
+        await db.saveExpensesBatch(zohoExpenses);
       }
 
       await db.addSyncLog('expenses_sync', 'success', { count: zohoExpenses.length });

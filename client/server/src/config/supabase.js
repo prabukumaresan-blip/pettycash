@@ -25,27 +25,42 @@ let supabase = null;
 let isLiveSupabase = false;
 let checkPromise = null;
 let lastCheckTime = 0;
+let lastFailTime = 0;
+const FAIL_COOLDOWN = 10 * 60 * 1000; // 10 minutes backoff if Supabase is unreachable
 
 async function ensureLiveSupabase() {
   if (isLiveSupabase) return true;
   if (!supabase) return false;
   const now = Date.now();
+  if (lastFailTime && (now - lastFailTime < FAIL_COOLDOWN)) {
+    return false; // Fast return without blocking on unreachable host
+  }
   if (checkPromise && (now - lastCheckTime < 10000)) {
     return await checkPromise;
   }
   lastCheckTime = now;
-  checkPromise = supabase
-    .from('employees')
-    .select('id')
-    .limit(1)
-    .then(({ error }) => {
-      isLiveSupabase = !error;
+
+  checkPromise = (async () => {
+    try {
+      // Strict 1200ms timeout on ping to prevent hanging DNS/network resolution
+      const pingPromise = supabase.from('employees').select('id').limit(1);
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Supabase ping timeout')), 1200)
+      );
+
+      const res = await Promise.race([pingPromise, timeoutPromise]);
+      isLiveSupabase = !res.error;
+      if (!isLiveSupabase) lastFailTime = Date.now();
       return isLiveSupabase;
-    })
-    .catch(() => {
+    } catch {
       isLiveSupabase = false;
+      lastFailTime = Date.now();
       return false;
-    });
+    } finally {
+      checkPromise = null;
+    }
+  })();
+
   return await checkPromise;
 }
 
@@ -1240,6 +1255,149 @@ const db = {
     saveLocalData(store);
     await this.recalculateBalance(expense.employee_id);
     return idx >= 0 ? store.expenses[idx] : store.expenses[0];
+  },
+
+  async saveExpensesBatch(expensesList = []) {
+    if (!Array.isArray(expensesList) || expensesList.length === 0) return [];
+    const store = loadLocalData();
+    const empMap = new Map((store.employees || []).map(e => [e.id, e.name]));
+    const affectedEmployeeIds = new Set();
+    const processedList = [];
+
+    // Map existing expenses for fast O(1) lookup
+    const existingById = new Map();
+    const existingByZohoId = new Map();
+    const existingByInvoice = new Map();
+
+    store.expenses.forEach((e, idx) => {
+      if (e.id) existingById.set(e.id, idx);
+      if (e.zoho_journal_id) existingByZohoId.set(String(e.zoho_journal_id), idx);
+      if (e.invoice_number) existingByInvoice.set(String(e.invoice_number), idx);
+    });
+
+    for (const exp of expensesList) {
+      const expense = { ...exp };
+      if (empMap.has(expense.employee_id)) {
+        expense.employee_name = empMap.get(expense.employee_id);
+      }
+
+      // Find existing
+      let existingIdx = -1;
+      if (expense.id && existingById.has(expense.id)) {
+        existingIdx = existingById.get(expense.id);
+      } else if (expense.zoho_journal_id && existingByZohoId.has(String(expense.zoho_journal_id))) {
+        existingIdx = existingByZohoId.get(String(expense.zoho_journal_id));
+      } else if (expense.invoice_number && existingByInvoice.has(String(expense.invoice_number))) {
+        existingIdx = existingByInvoice.get(String(expense.invoice_number));
+      }
+
+      const existing = existingIdx >= 0 ? store.expenses[existingIdx] : null;
+
+      if (existing) {
+        if (!expense.id) expense.id = existing.id;
+        if (expense.added_to_report === undefined && existing.added_to_report !== undefined) {
+          expense.added_to_report = existing.added_to_report;
+          expense.added_to_report_at = existing.added_to_report_at;
+        }
+        if (expense.is_exported === undefined && existing.is_exported !== undefined) {
+          expense.is_exported = existing.is_exported;
+          expense.exported_at = existing.exported_at;
+        }
+        if (expense.recall_status === undefined && existing.recall_status !== undefined) {
+          expense.recall_status = existing.recall_status;
+          expense.recall_reason = existing.recall_reason;
+          expense.recall_requested_at = existing.recall_requested_at;
+          expense.recall_requested_by = existing.recall_requested_by;
+          expense.recall_reviewed_by = existing.recall_reviewed_by;
+          expense.recall_reviewed_at = existing.recall_reviewed_at;
+        }
+        if (!expense.project_id && existing.project_id) expense.project_id = existing.project_id;
+        if (!expense.project_name && existing.project_name) expense.project_name = existing.project_name;
+        if (!expense.invoice_number && existing.invoice_number) expense.invoice_number = existing.invoice_number;
+        if (!expense.receipt_url && existing.receipt_url) expense.receipt_url = existing.receipt_url;
+        if (!expense.receipt_file_name && existing.receipt_file_name) expense.receipt_file_name = existing.receipt_file_name;
+
+        store.expenses[existingIdx] = {
+          ...existing,
+          ...expense,
+          id: existing.id || expense.id,
+          updated_at: new Date().toISOString()
+        };
+        processedList.push(store.expenses[existingIdx]);
+      } else {
+        if (expense.added_to_report === undefined) {
+          expense.added_to_report = false;
+          expense.added_to_report_at = null;
+        }
+        if (expense.is_exported === undefined) {
+          expense.is_exported = false;
+          expense.exported_at = null;
+        }
+        if (expense.recall_status === undefined) {
+          expense.recall_status = null;
+        }
+
+        // Resolve project_name if missing
+        if (store.zoho_projects && (!expense.project_name || !expense.project_id)) {
+          if (expense.project_id && !expense.project_name) {
+            const p = store.zoho_projects.find(proj => String(proj.project_id) === String(expense.project_id));
+            if (p) expense.project_name = p.project_name;
+          } else if (!expense.project_id && expense.customer_id) {
+            const p = store.zoho_projects.find(proj => String(proj.customer_id) === String(expense.customer_id));
+            if (p) {
+              expense.project_id = p.project_id;
+              expense.project_name = p.project_name;
+            }
+          }
+        }
+
+        const newExp = {
+          ...expense,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        };
+        store.expenses.unshift(newExp);
+        processedList.push(newExp);
+      }
+
+      if (expense.employee_id) {
+        affectedEmployeeIds.add(expense.employee_id);
+      }
+    }
+
+    saveLocalData(store);
+
+    if (isLiveSupabase) {
+      const allowedCols = [
+        'id', 'employee_id', 'employee_name', 'expense_date', 'amount',
+        'category_id', 'category_name', 'description', 'project_id',
+        'project_name', 'customer_id', 'customer_name', 'cost_center',
+        'invoice_number', 'receipt_url', 'receipt_file_name',
+        'zoho_journal_id', 'zoho_journal_number', 'sync_status',
+        'sync_error', 'last_synced_at', 'created_by', 'added_to_report',
+        'added_to_report_at', 'is_exported', 'exported_at', 'recall_status',
+        'recall_reason', 'recall_requested_at', 'recall_requested_by',
+        'recall_reviewed_by', 'recall_reviewed_at'
+      ];
+      try {
+        const dbBatch = processedList.map(exp => {
+          const item = {};
+          allowedCols.forEach(col => {
+            if (exp[col] !== undefined) item[col] = exp[col];
+          });
+          return item;
+        });
+        await supabase.from('expenses').upsert(dbBatch);
+      } catch (err) {
+        console.warn('Supabase batch upsert notice:', err.message);
+      }
+    }
+
+    for (const empId of affectedEmployeeIds) {
+      await this.recalculateBalance(empId);
+    }
+
+    return processedList;
   },
 
   async deleteExpense(id) {

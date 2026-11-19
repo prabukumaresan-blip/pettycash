@@ -85,14 +85,15 @@ router.get('/', async (req, res) => {
 
     let expenses = await db.getExpenses(filters);
 
-    // Sync from Zoho Books if local cache is empty or older than 5 minutes, avoiding duplicate concurrent syncs
     const now = Date.now();
-    const shouldSync = (expenses.length === 0 || (now - lastZohoSyncTime > 300000) || req.query.refresh === 'true') && !isZohoSyncing;
-
-    if (shouldSync) {
+    // Explicit manual refresh: bounded with 2.5s safety race so it never blocks or hangs
+    if (req.query.refresh === 'true' && !isZohoSyncing) {
       isZohoSyncing = true;
       try {
-        await zohoBooksService.syncExpensesFromZoho();
+        await Promise.race([
+          zohoBooksService.syncExpensesFromZoho(),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Sync timeout')), 2500))
+        ]);
         lastZohoSyncTime = Date.now();
         expenses = await db.getExpenses(filters);
       } catch (zErr) {
@@ -100,11 +101,26 @@ router.get('/', async (req, res) => {
       } finally {
         isZohoSyncing = false;
       }
+    } else if (((now - lastZohoSyncTime > 180000) || expenses.length === 0) && !isZohoSyncing) {
+      // Non-blocking background sync: serve current cached expenses immediately in milliseconds
+      isZohoSyncing = true;
+      lastZohoSyncTime = now;
+      setImmediate(async () => {
+        try {
+          await zohoBooksService.syncExpensesFromZoho();
+        } catch (zErr) {
+          console.warn('Background expenses sync notice:', zErr.message);
+        } finally {
+          isZohoSyncing = false;
+        }
+      });
     }
 
     // Automatically trigger async background sync if any expenses are pending/failed
     if (expenses.some(e => e.sync_status === 'pending' || e.sync_status === 'failed')) {
-      syncService.syncPendingExpenses().catch(() => {});
+      setImmediate(() => {
+        syncService.syncPendingExpenses().catch(() => {});
+      });
     }
 
     res.json({ success: true, expenses });

@@ -200,7 +200,14 @@ export const api = {
     const cacheKey = user && user.id ? `cached_expenses_${user.id}` : 'cached_expenses';
 
     try {
-      const res = await fetchWithAuth(`${BASE_URL}/expenses?${params.toString()}`);
+      const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      const timeoutId = controller ? setTimeout(() => controller.abort(), 7000) : null;
+
+      const res = await fetchWithAuth(`${BASE_URL}/expenses?${params.toString()}`, {
+        signal: controller ? controller.signal : undefined
+      });
+      if (timeoutId) clearTimeout(timeoutId);
+
       if (!res.ok) throw new Error('Network error');
       const data = await safeJson(res);
       if (data && data.success && Array.isArray(data.expenses)) {

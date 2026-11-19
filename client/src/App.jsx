@@ -137,19 +137,26 @@ export default function App() {
     };
   }, []);
 
-  // Load All Core Data scoped to logged-in user
+  // Load All Core Data scoped to logged-in user in parallel
   const loadAllData = useCallback(async (userOverride = null) => {
     const stored = api.getStoredUser();
     const user = userOverride || currentUser || stored;
     if (!user || !stored) return;
 
     try {
-      // 1. Employees (strictly resolve active employee to the logged in user)
-      const empRes = await api.getEmployees();
+      const [empRes, expRes, zRes, coaRes, projRes] = await Promise.allSettled([
+        api.getEmployees(),
+        api.getExpenses(),
+        user.role === 'admin' ? api.getZohoStatus() : Promise.resolve(null),
+        api.getChartOfAccounts(),
+        api.getZohoProjects()
+      ]);
+
       if (!api.getStoredUser()) return; // Abort if user logged out while request was in-flight
-      if (empRes.success && empRes.employees) {
-        setEmployees(empRes.employees);
-        const self = empRes.employees.find((e) => e.id === user.id || (e.email && e.email.toLowerCase() === user.email?.toLowerCase())) || user;
+
+      if (empRes.status === 'fulfilled' && empRes.value?.success && empRes.value.employees) {
+        setEmployees(empRes.value.employees);
+        const self = empRes.value.employees.find((e) => e.id === user.id || (e.email && e.email.toLowerCase() === user.email?.toLowerCase())) || user;
         setCurrentEmployee(self);
         try {
           const currentStored = api.getStoredUser();
@@ -159,40 +166,24 @@ export default function App() {
         } catch { }
       }
 
-      if (!api.getStoredUser()) return;
-
-      // 2. Expenses (backend enforces employee_id scoping for regular employees)
-      const expRes = await api.getExpenses();
-      if (!api.getStoredUser()) return;
-      if (expRes.success && Array.isArray(expRes.expenses)) {
-        setExpenses(expRes.expenses);
+      if (expRes.status === 'fulfilled' && expRes.value?.success && Array.isArray(expRes.value.expenses)) {
+        setExpenses(expRes.value.expenses);
       }
 
-      // 3. Zoho Status (Admin only)
-      if (user.role === 'admin') {
-        const zRes = await api.getZohoStatus();
-        if (!api.getStoredUser()) return;
-        if (zRes.success) {
-          setZohoStatus(zRes);
-        }
+      if (zRes.status === 'fulfilled' && zRes.value?.success) {
+        setZohoStatus(zRes.value);
       }
 
-      // 4. Zoho Chart of Accounts
-      const coaRes = await api.getChartOfAccounts();
-      if (!api.getStoredUser()) return;
-      if (coaRes.success) {
-        if (coaRes.accounts) setZohoAccounts(coaRes.accounts);
-        if (coaRes.expense_accounts) setCategories(coaRes.expense_accounts);
+      if (coaRes.status === 'fulfilled' && coaRes.value?.success) {
+        if (coaRes.value.accounts) setZohoAccounts(coaRes.value.accounts);
+        if (coaRes.value.expense_accounts) setCategories(coaRes.value.expense_accounts);
       }
 
-      // 5. Zoho Projects (synced with Zoho Books)
-      const projRes = await api.getZohoProjects();
-      if (!api.getStoredUser()) return;
-      if (projRes.success && projRes.projects) {
-        setProjects(projRes.projects);
+      if (projRes.status === 'fulfilled' && projRes.value?.success && projRes.value.projects) {
+        setProjects(projRes.value.projects);
       }
     } catch (err) {
-      console.warn('Initial data load warning:', err.message);
+      console.warn('Data load warning:', err.message);
     }
   }, [currentUser]);
 
@@ -248,8 +239,18 @@ export default function App() {
 
   // Handle Login Success (Clear prior state, switch user, load fresh data & trigger auto-sync)
   const handleLoginSuccess = async (user) => {
+    const userCacheKey = `cached_expenses_${user.id}`;
+    try {
+      const cached = localStorage.getItem(userCacheKey);
+      if (cached) {
+        setExpenses(JSON.parse(cached));
+      } else {
+        setExpenses([]);
+      }
+    } catch {
+      setExpenses([]);
+    }
     setEmployees([]);
-    setExpenses([]);
     setZohoAccounts([]);
     setCategories([]);
     setProjects([]);
@@ -259,10 +260,10 @@ export default function App() {
     setActiveTab('dashboard');
     showToast(`Welcome back, ${user.name}!`);
 
-    // Load initial user data
-    await loadAllData(user);
+    // Fetch latest user data concurrently
+    loadAllData(user);
 
-    // Auto-trigger Zoho sync after login to fetch live balances & accounts
+    // Auto-trigger background Zoho sync after login to fetch live balances & accounts
     api.triggerZohoSync()
       .then((res) => {
         if (res && res.success && api.getStoredUser()) {
