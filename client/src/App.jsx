@@ -156,7 +156,7 @@ export default function App() {
           if (currentStored && currentStored.id === self.id) {
             localStorage.setItem('petty_cash_user', JSON.stringify({ ...currentStored, ...self }));
           }
-        } catch {}
+        } catch { }
       }
 
       if (!api.getStoredUser()) return;
@@ -286,7 +286,7 @@ export default function App() {
           localStorage.removeItem(k);
         }
       }
-    } catch {}
+    } catch { }
 
     // 2. Immediately reset all React states so UI instantly switches to LoginView
     setCurrentUser(null);
@@ -300,7 +300,7 @@ export default function App() {
     setActiveTab('dashboard');
 
     // 3. Fire server logout in the background
-    api.logout().catch(() => {});
+    api.logout().catch(() => { });
     showToast('Signed out successfully.');
   };
 
@@ -352,7 +352,7 @@ export default function App() {
       }
     }
     // Trigger fresh data load in background without blocking modal close
-    loadAllData().catch(() => {});
+    loadAllData().catch(() => { });
   };
 
   // Handle Deleting Expense
@@ -465,10 +465,10 @@ export default function App() {
           prev.map((e) =>
             idSet.has(String(e.id)) || (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id)))
               ? {
-                  ...e,
-                  added_to_report: addedToReport,
-                  added_to_report_at: addedToReport ? new Date().toISOString() : null
-                }
+                ...e,
+                added_to_report: addedToReport,
+                added_to_report_at: addedToReport ? new Date().toISOString() : null
+              }
               : e
           )
         );
@@ -528,7 +528,7 @@ export default function App() {
 
   // Handle Deleting Employee (Admin only)
   const handleDeleteEmployee = async (id, isHardDelete = false) => {
-    const msg = isHardDelete 
+    const msg = isHardDelete
       ? 'Are you sure you want to permanently delete this team member? This action cannot be undone.'
       : 'Are you sure you want to deactivate this team member?';
     if (!window.confirm(msg)) return;
@@ -719,13 +719,12 @@ export default function App() {
       {toastMessage && (
         <div className="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-50 animate-slide-up">
           <div
-            className={`px-4 py-2.5 rounded-lg shadow-lg border text-xs font-semibold flex items-center space-x-2 ${
-              toastMessage.type === 'error'
+            className={`px-4 py-2.5 rounded-lg shadow-lg border text-xs font-semibold flex items-center space-x-2 ${toastMessage.type === 'error'
                 ? 'bg-rose-900 text-white border-rose-800'
                 : toastMessage.type === 'warning'
-                ? 'bg-amber-900 text-white border-amber-800'
-                : 'bg-slate-900 text-white border-slate-800'
-            }`}
+                  ? 'bg-amber-900 text-white border-amber-800'
+                  : 'bg-slate-900 text-white border-slate-800'
+              }`}
           >
             <span>{toastMessage.msg}</span>
           </div>
