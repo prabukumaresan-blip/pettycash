@@ -339,10 +339,11 @@ export default function App() {
         showToast('Saved offline. Will sync with Zoho when connected.', 'warning');
         setOfflineQueue(api.getOfflineQueue());
       } else if (res && res.success) {
+        const vNum = res.expense?.zoho_journal_number || res.expense?.zoho_journal_id;
         showToast(
           res.synced
-            ? 'Expense saved & posted to Zoho Books!'
-            : 'Expense saved! Zoho Books sync queued in background.'
+            ? `Expense saved & synced to Zoho Books! (Voucher #${vNum || 'Posted'})`
+            : 'Expense saved! Zoho Books sync in background...'
         );
         // Immediately add newly saved expense to the Recent Activity list!
         if (res.expense) {
@@ -447,9 +448,12 @@ export default function App() {
   const handleRetrySync = async (id) => {
     try {
       const res = await api.retryExpenseSync(id);
-      if (res.success) {
-        showToast('Journal entry created in Zoho Books!');
+      if (res && res.success) {
+        const vNum = res.expense?.zoho_journal_number || res.zoho_journal_number;
+        showToast(`Synced to Zoho Books! Voucher #${vNum || 'Posted'}`);
         await loadAllData();
+      } else {
+        showToast(res?.error || 'Sync retry failed', 'error');
       }
     } catch (err) {
       showToast('Sync retry failed: ' + err.message, 'error');
@@ -595,6 +599,8 @@ export default function App() {
         offlineCount={offlineQueue.length}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        onSyncNow={handleTriggerFullSync}
+        isSyncing={isFullSyncing}
       />
 
       {/* Main Content Area */}

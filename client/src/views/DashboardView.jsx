@@ -72,10 +72,13 @@ export default function DashboardView({
 
   const totalSpent = employeeExpenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
   const markedExpenses = employeeExpenses.filter((e) => e.added_to_report && !e.is_exported);
+  const markedAmount = markedExpenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
   const notExportedExpenses = employeeExpenses.filter((e) => !e.is_exported);
   const notExportedAmount = notExportedExpenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
   const exportedExpenses = employeeExpenses.filter((e) => e.is_exported);
   const exportedAmount = exportedExpenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
+  const syncedExpenses = employeeExpenses.filter((e) => e.sync_status === 'synced');
+  const pendingSyncExpenses = employeeExpenses.filter((e) => e.sync_status === 'pending' || e.sync_status === 'failed');
   const pendingRecallCount = employeeExpenses.filter((e) => e.recall_status === 'pending').length;
 
   // Filter list
@@ -83,6 +86,8 @@ export default function DashboardView({
     if (filterTab === 'marked' && (!e.added_to_report || e.is_exported)) return false;
     if (filterTab === 'not_exported' && e.is_exported) return false;
     if (filterTab === 'exported' && !e.is_exported) return false;
+    if (filterTab === 'synced' && e.sync_status !== 'synced') return false;
+    if (filterTab === 'pending_sync' && e.sync_status === 'synced') return false;
     if (filterTab === 'recalls' && e.recall_status !== 'pending') return false;
 
     if (searchQuery.trim()) {
@@ -91,7 +96,8 @@ export default function DashboardView({
       const matchCat = e.category_name && e.category_name.toLowerCase().includes(q);
       const matchProj = e.project_name && e.project_name.toLowerCase().includes(q);
       const matchInv = e.invoice_number && e.invoice_number.toLowerCase().includes(q);
-      return matchDesc || matchCat || matchProj || matchInv;
+      const matchZohoNum = (e.zoho_journal_number && e.zoho_journal_number.toLowerCase().includes(q)) || (e.zoho_journal_id && String(e.zoho_journal_id).includes(q));
+      return matchDesc || matchCat || matchProj || matchInv || matchZohoNum;
     }
     return true;
   });
@@ -278,7 +284,7 @@ export default function DashboardView({
       </div>
 
       {/* 2. Corporate KPI Metric Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
         {/* Total Spent */}
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
           <div className="flex items-center justify-between text-xs text-slate-500 font-semibold uppercase tracking-wider">
@@ -296,7 +302,9 @@ export default function DashboardView({
         {/* Not Exported */}
         <div
           onClick={() => setFilterTab('not_exported')}
-          className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs cursor-pointer hover:border-slate-300 transition"
+          className={`bg-white p-4 rounded-xl border transition cursor-pointer shadow-2xs ${
+            filterTab === 'not_exported' ? 'border-amber-400 ring-1 ring-amber-400/30' : 'border-slate-200 hover:border-slate-300'
+          }`}
         >
           <div className="flex items-center justify-between text-xs text-slate-500 font-semibold uppercase tracking-wider">
             <span>Not Exported</span>
@@ -306,29 +314,56 @@ export default function DashboardView({
             {formatOMR(notExportedAmount)}
           </div>
           <div className="text-[11px] text-amber-700 mt-0.5 font-medium">
-            {notExportedExpenses.length} expense{notExportedExpenses.length === 1 ? '' : 's'} awaiting export
+            {notExportedExpenses.length} awaiting export
           </div>
         </div>
 
-        {/* Exported */}
+        {/* Marked for Export */}
         <div
-          onClick={() => setFilterTab('exported')}
-          className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs cursor-pointer hover:border-slate-300 transition"
+          onClick={() => setFilterTab('marked')}
+          className={`bg-white p-4 rounded-xl border transition cursor-pointer shadow-2xs ${
+            filterTab === 'marked' ? 'border-blue-400 ring-1 ring-blue-400/30' : 'border-slate-200 hover:border-slate-300'
+          }`}
         >
           <div className="flex items-center justify-between text-xs text-slate-500 font-semibold uppercase tracking-wider">
-            <span>Exported</span>
-            <Lock className="w-4 h-4 text-emerald-600" />
+            <span>Marked For Export</span>
+            <CheckCircle2 className="w-4 h-4 text-blue-600" />
           </div>
           <div className="text-xl font-bold text-slate-900 mt-2 font-mono">
-            {formatOMR(exportedAmount)}
+            {formatOMR(markedAmount)}
           </div>
-          <div className="text-[11px] text-emerald-700 mt-0.5 font-medium">
-            {exportedExpenses.length} locked in official reports
+          <div className="text-[11px] text-blue-700 mt-0.5 font-medium">
+            {markedExpenses.length} staged for statement
+          </div>
+        </div>
+
+        {/* Zoho Synced */}
+        <div
+          onClick={() => setFilterTab('synced')}
+          className={`bg-white p-4 rounded-xl border transition cursor-pointer shadow-2xs ${
+            filterTab === 'synced' ? 'border-emerald-400 ring-1 ring-emerald-400/30' : 'border-slate-200 hover:border-slate-300'
+          }`}
+        >
+          <div className="flex items-center justify-between text-xs text-slate-500 font-semibold uppercase tracking-wider">
+            <span>Zoho Synced</span>
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+          </div>
+          <div className="text-xl font-bold text-slate-900 mt-2 font-mono">
+            {syncedExpenses.length}{' '}
+            <span className="text-xs font-normal text-slate-400">/ {employeeExpenses.length}</span>
+          </div>
+          <div className="text-[11px] text-emerald-700 mt-0.5 font-medium flex items-center space-x-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            <span>
+              {pendingSyncExpenses.length === 0
+                ? 'All posted to Zoho Books'
+                : `${pendingSyncExpenses.length} pending sync`}
+            </span>
           </div>
         </div>
 
         {/* Account Standing */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs col-span-2 sm:col-span-1">
           <div className="flex items-center justify-between text-xs text-slate-500 font-semibold uppercase tracking-wider">
             <span>Account Standing</span>
             {settlement.isEmployeeOwing ? (
@@ -444,18 +479,6 @@ export default function DashboardView({
           </button>
 
           <button
-            onClick={() => setFilterTab('marked')}
-            className={`px-3.5 py-1.5 rounded-md font-semibold transition shrink-0 flex items-center space-x-1.5 ${
-              filterTab === 'marked'
-                ? 'bg-white text-slate-900 shadow-2xs font-bold'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
-            }`}
-          >
-            <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
-            <span>Marked for Export ({markedExpenses.length})</span>
-          </button>
-
-          <button
             onClick={() => setFilterTab('not_exported')}
             className={`px-3.5 py-1.5 rounded-md font-semibold transition shrink-0 flex items-center space-x-1.5 ${
               filterTab === 'not_exported'
@@ -465,6 +488,18 @@ export default function DashboardView({
           >
             <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
             <span>Not Exported ({notExportedExpenses.length})</span>
+          </button>
+
+          <button
+            onClick={() => setFilterTab('marked')}
+            className={`px-3.5 py-1.5 rounded-md font-semibold transition shrink-0 flex items-center space-x-1.5 ${
+              filterTab === 'marked'
+                ? 'bg-white text-slate-900 shadow-2xs font-bold'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+            }`}
+          >
+            <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
+            <span>Marked for Export ({markedExpenses.length})</span>
           </button>
 
           <button
@@ -478,6 +513,32 @@ export default function DashboardView({
             <Lock className="w-3.5 h-3.5 text-slate-700" />
             <span>Exported ({exportedExpenses.length})</span>
           </button>
+
+          <button
+            onClick={() => setFilterTab('synced')}
+            className={`px-3.5 py-1.5 rounded-md font-semibold transition shrink-0 flex items-center space-x-1.5 ${
+              filterTab === 'synced'
+                ? 'bg-white text-slate-900 shadow-2xs font-bold'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+            }`}
+          >
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Zoho Synced ({syncedExpenses.length})</span>
+          </button>
+
+          {pendingSyncExpenses.length > 0 && (
+            <button
+              onClick={() => setFilterTab('pending_sync')}
+              className={`px-3.5 py-1.5 rounded-md font-semibold transition shrink-0 flex items-center space-x-1.5 ${
+                filterTab === 'pending_sync'
+                  ? 'bg-white text-slate-900 shadow-2xs font-bold'
+                  : 'text-amber-700 hover:bg-white/60'
+              }`}
+            >
+              <Clock className="w-3.5 h-3.5 text-amber-600" />
+              <span>Pending Sync ({pendingSyncExpenses.length})</span>
+            </button>
+          )}
 
           {pendingRecallCount > 0 && (
             <button
@@ -656,7 +717,8 @@ export default function DashboardView({
                   <th className="py-3 px-3">Description & Category</th>
                   <th className="py-3 px-3 w-40">Project</th>
                   <th className="py-3 px-3 w-28 text-right">Amount</th>
-                  <th className="py-3 px-3 w-32 text-center">Status</th>
+                  <th className="py-3 px-3 w-32 text-center">Zoho Sync</th>
+                  <th className="py-3 px-3 w-32 text-center">Export Status</th>
                   <th className="py-3 px-3 w-20 text-right">Actions</th>
                 </tr>
               </thead>
@@ -734,6 +796,43 @@ export default function DashboardView({
                       {/* Amount */}
                       <td className="py-3 px-3 text-right font-mono font-bold text-slate-900 whitespace-nowrap">
                         {formatOMR(exp.amount)}
+                      </td>
+
+                      {/* Zoho Sync Status */}
+                      <td className="py-3 px-3 text-center whitespace-nowrap">
+                        {exp.sync_status === 'synced' ? (
+                          <span
+                            className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-2xs"
+                            title={`Zoho Books Synced${exp.zoho_journal_number && exp.zoho_journal_number !== 'N/A' ? ` • Voucher #${exp.zoho_journal_number}` : (exp.zoho_journal_id ? ` • ID: ${exp.zoho_journal_id}` : '')}${exp.last_synced_at ? ` • ${new Date(exp.last_synced_at).toLocaleString()}` : ''}`}
+                          >
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                            <span>{exp.zoho_journal_number && exp.zoho_journal_number !== 'N/A' ? `#${exp.zoho_journal_number}` : 'Zoho Synced'}</span>
+                          </span>
+                        ) : exp.sync_status === 'pending' ? (
+                          <button
+                            type="button"
+                            onClick={() => onRetrySync && onRetrySync(exp.id)}
+                            className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition cursor-pointer"
+                            title="Pending Zoho Sync • Click to sync now"
+                          >
+                            <Clock className="w-3.5 h-3.5 text-amber-600 animate-pulse shrink-0" />
+                            <span>Pending Sync</span>
+                          </button>
+                        ) : exp.sync_status === 'failed' ? (
+                          <button
+                            type="button"
+                            onClick={() => onRetrySync && onRetrySync(exp.id)}
+                            className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-800 border border-rose-200 hover:bg-rose-100 transition cursor-pointer"
+                            title={`Sync Failed: ${exp.sync_error || 'Unknown error'} • Click to retry`}
+                          >
+                            <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                            <span>Sync Failed</span>
+                          </button>
+                        ) : (
+                          <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full text-[11px] font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                            <span>Not Synced</span>
+                          </span>
+                        )}
                       </td>
 
                       {/* Status: Exported / Marked for Export / Not Exported */}

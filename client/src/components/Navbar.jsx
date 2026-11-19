@@ -7,7 +7,9 @@ import {
   LogOut,
   User,
   ShieldCheck,
-  Building2
+  Building2,
+  RefreshCw,
+  CheckCircle2
 } from 'lucide-react';
 
 export default function Navbar({
@@ -17,7 +19,9 @@ export default function Navbar({
   isOnline,
   offlineCount,
   activeTab,
-  setActiveTab
+  setActiveTab,
+  onSyncNow,
+  isSyncing
 }) {
   const [installPrompt, setInstallPrompt] = useState(null);
 
@@ -128,6 +132,23 @@ export default function Navbar({
 
           {/* Right Section: Status, User Chip & Sign Out */}
           <div className="flex items-center space-x-2.5">
+            {/* Live Zoho Sync Pill & Manual Trigger */}
+            {onSyncNow && (
+              <button
+                type="button"
+                onClick={onSyncNow}
+                disabled={isSyncing}
+                className="hidden sm:inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition shadow-2xs disabled:opacity-50 cursor-pointer"
+                title="Zoho Books Status • Click to synchronize live records"
+              >
+                <RefreshCw className={`w-3 h-3 ${isSyncing ? 'animate-spin text-blue-600' : 'text-slate-400'}`} />
+                <span className={`w-1.5 h-1.5 rounded-full ${isSyncing ? 'bg-amber-500 animate-pulse' : (zohoStatus?.config?.is_connected ? 'bg-emerald-500' : 'bg-slate-400')}`}></span>
+                <span className="text-[11px] text-slate-700 font-medium">
+                  {isSyncing ? 'Syncing...' : (zohoStatus?.config?.is_connected ? 'Zoho Synced' : 'Sync Zoho')}
+                </span>
+              </button>
+            )}
+
             {/* Install PWA Prompt */}
             {installPrompt && (
               <button

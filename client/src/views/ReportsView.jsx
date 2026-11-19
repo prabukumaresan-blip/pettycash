@@ -665,6 +665,7 @@ export default function ReportsView({
                 <th className="py-3 px-3 w-40">Project</th>
                 <th className="py-3 px-3 w-32">Employee</th>
                 <th className="py-3 px-3 w-28 text-right">Amount</th>
+                <th className="py-3 px-3 w-28 text-center">Zoho Sync</th>
                 <th className="py-3 px-3 w-28 text-center">Status</th>
                 <th className="py-3 px-3 w-20 text-center">Receipt</th>
               </tr>
@@ -672,7 +673,7 @@ export default function ReportsView({
             <tbody className="divide-y divide-slate-100 font-normal">
               {expenses.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="py-12 text-center text-slate-500">
+                  <td colSpan={10} className="py-12 text-center text-slate-500">
                     <div className="max-w-md mx-auto text-center py-4">
                       <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center mx-auto mb-3">
                         <FileCheck className="w-5 h-5 text-slate-400" />
@@ -747,6 +748,29 @@ export default function ReportsView({
 
                       <td className="py-3 px-3 text-right font-mono font-bold text-slate-900 whitespace-nowrap">
                         {formatOMR(exp.amount)}
+                      </td>
+
+                      {/* Zoho Sync */}
+                      <td className="py-3 px-3 text-center whitespace-nowrap">
+                        {exp.sync_status === 'synced' ? (
+                          <span
+                            className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-2xs"
+                            title={`Zoho Books Synced${exp.zoho_journal_number && exp.zoho_journal_number !== 'N/A' ? ` • Voucher #${exp.zoho_journal_number}` : (exp.zoho_journal_id ? ` • ID: ${exp.zoho_journal_id}` : '')}`}
+                          >
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                            <span>{exp.zoho_journal_number && exp.zoho_journal_number !== 'N/A' ? `#${exp.zoho_journal_number}` : 'Zoho Synced'}</span>
+                          </span>
+                        ) : exp.sync_status === 'pending' ? (
+                          <span className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+                            <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                            <span>Pending Sync</span>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-800 border border-rose-200">
+                            <AlertCircle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                            <span>Sync Failed</span>
+                          </span>
+                        )}
                       </td>
 
                       {/* Status: Exported / Not Exported */}
