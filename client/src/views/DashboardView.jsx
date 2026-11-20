@@ -956,6 +956,16 @@ export default function DashboardView({
                               >
                                 <RotateCcw className="w-3.5 h-3.5" />
                               </button>
+                              {onDeleteExpense && (
+                                <button
+                                  type="button"
+                                  onClick={() => onDeleteExpense(exp.id)}
+                                  className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition cursor-pointer"
+                                  title="Delete Expense (reverses in Zoho Books)"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              )}
                             </>
                           ) : (
                             <>

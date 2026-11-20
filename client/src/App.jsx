@@ -190,12 +190,11 @@ export default function App() {
           const serverZohoIds = new Set(
             serverExpenses.filter((e) => e.zoho_journal_id).map((e) => String(e.zoho_journal_id))
           );
-          // Retain newly recorded local expenses that may not yet be reflected in server response
+          // Retain ONLY newly recorded local offline expenses that have not yet reached server
           const localOnly = prevExpenses.filter(
-            (e) => !deletedSet.has(String(e.id)) &&
-              (!e.zoho_journal_id || !deletedSet.has(String(e.zoho_journal_id))) &&
-              !serverIds.has(e.id) &&
-              (!e.zoho_journal_id || !serverZohoIds.has(String(e.zoho_journal_id)))
+            (e) => e.sync_status === 'pending' && !e.zoho_journal_id &&
+              !deletedSet.has(String(e.id)) &&
+              !serverIds.has(e.id)
           );
           return [...localOnly, ...serverExpenses];
         });
@@ -755,6 +754,7 @@ export default function App() {
             currentUser={currentUser}
             onUpdateReportStatus={handleUpdateExpenseReportStatus}
             onMarkSelectedExported={handleMarkExpensesExported}
+            onDeleteExpense={handleDeleteExpense}
             onRequestRecall={handleRequestExpenseRecall}
             onApproveRecall={handleApproveExpenseRecall}
             onRejectRecall={handleRejectExpenseRecall}

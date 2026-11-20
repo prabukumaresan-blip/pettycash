@@ -282,13 +282,25 @@ export const api = {
           const serverZohoIds = new Set(
             data.expenses.filter((e) => e.zoho_journal_id).map((e) => String(e.zoho_journal_id))
           );
-          // Preserve any newly recorded local expenses that may not yet be in server response
+          // Preserve ONLY genuinely pending un-synced offline expenses that have not reached server
           const localOnly = cached.filter(
-            (e) => !deletedSet.has(String(e.id)) &&
-                   (!e.zoho_journal_id || !deletedSet.has(String(e.zoho_journal_id))) &&
-                   !serverIds.has(e.id) &&
-                   (!e.zoho_journal_id || !serverZohoIds.has(String(e.zoho_journal_id)))
+            (e) => e.sync_status === 'pending' && !e.zoho_journal_id &&
+                   !deletedSet.has(String(e.id)) &&
+                   !serverIds.has(e.id)
           );
+          // Auto-purge any deleted server expenses from local exportedSet
+          if (!filters.search && !filters.start_date && !filters.end_date && !filters.project_id) {
+            for (const oldExp of cached) {
+              if (oldExp.zoho_journal_id || oldExp.is_exported || oldExp.sync_status === 'synced') {
+                if (!serverIds.has(oldExp.id) && (!oldExp.zoho_journal_id || !serverZohoIds.has(String(oldExp.zoho_journal_id)))) {
+                  this.addDeletedId(oldExp.id);
+                  if (oldExp.zoho_journal_id) this.addDeletedId(oldExp.zoho_journal_id);
+                  this.removeExportedId(oldExp.id);
+                  if (oldExp.zoho_journal_id) this.removeExportedId(oldExp.zoho_journal_id);
+                }
+              }
+            }
+          }
           const merged = [...localOnly, ...data.expenses];
           localStorage.setItem(cacheKey, JSON.stringify(merged));
           data.expenses = merged;

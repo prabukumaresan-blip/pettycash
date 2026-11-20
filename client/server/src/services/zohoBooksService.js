@@ -529,6 +529,7 @@ class ZohoBooksService {
 
       const zohoExpenses = [];
       const accountsList = Object.entries(pcAccountMap);
+      const allActiveZohoExpenseIds = new Set();
 
       for (const [accountId, emp] of accountsList) {
         try {
@@ -540,6 +541,63 @@ class ZohoBooksService {
           });
           const list = res.expenses || [];
           let accountNewExpenses = 0;
+
+          // Index all active Zoho expense IDs and references for this account
+          const accountActiveZohoIds = new Set();
+          const accountActiveRefs = new Set();
+          for (const ze of list) {
+            accountActiveZohoIds.add(String(ze.expense_id));
+            allActiveZohoExpenseIds.add(String(ze.expense_id));
+            if (ze.reference_number) accountActiveRefs.add(String(ze.reference_number));
+          }
+
+          // DETECT EXPENSES DELETED IN ZOHO BOOKS:
+          // Check all local expenses for this employee/account that were synced to Zoho Books.
+          // If they no longer exist in Zoho Books (even if marked as exported), delete them locally!
+          const syncedLocalForAccount = allLocalExpenses.filter(e => {
+            const matchesEmp = e.employee_id === emp.id;
+            const matchesAcc = e.paid_through_account_id === accountId;
+            const wasSynced = Boolean(e.zoho_journal_id) || e.sync_status === 'synced';
+            return (matchesEmp || matchesAcc) && wasSynced;
+          });
+
+          for (const locExp of syncedLocalForAccount) {
+            const inActiveList = (locExp.zoho_journal_id && accountActiveZohoIds.has(String(locExp.zoho_journal_id))) ||
+                                 (locExp.invoice_number && accountActiveRefs.has(String(locExp.invoice_number))) ||
+                                 (locExp.id && (accountActiveRefs.has(String(locExp.id)) || accountActiveRefs.has(`PCA-${locExp.id}`)));
+
+            if (!inActiveList) {
+              // Not in active Zoho expenses list for this account.
+              // Double check single expense endpoint in Zoho to confirm deletion
+              let isConfirmedDeleted = false;
+              if (locExp.zoho_journal_id) {
+                try {
+                  const checkRes = await this.makeApiRequest(`/expenses/${locExp.zoho_journal_id}`, 'GET');
+                  if (!checkRes || !checkRes.expense) {
+                    isConfirmedDeleted = true;
+                  } else if (checkRes.expense.paid_through_account_id !== accountId) {
+                    isConfirmedDeleted = true;
+                  }
+                } catch (checkErr) {
+                  const errMsg = (checkErr.message || '').toLowerCase();
+                  if (errMsg.includes('does not exist') || errMsg.includes('not found') || errMsg.includes('1002') || errMsg.includes('404')) {
+                    isConfirmedDeleted = true;
+                  }
+                }
+              } else {
+                isConfirmedDeleted = true;
+              }
+
+              if (isConfirmedDeleted) {
+                console.log(`🗑️ [Zoho Sync] Expense ${locExp.id} (Zoho ID: ${locExp.zoho_journal_id || 'N/A'}, Exported: ${Boolean(locExp.is_exported)}) was deleted in Zoho Books. Deleting local record...`);
+                await db.deleteExpense(locExp.id);
+                if (locExp.zoho_journal_id && String(locExp.zoho_journal_id) !== String(locExp.id)) {
+                  await db.deleteExpense(locExp.zoho_journal_id);
+                }
+                accountNewExpenses++;
+              }
+            }
+          }
 
           for (const ze of list) {
             // Skip any expense that was deleted by the user
@@ -675,6 +733,30 @@ class ZohoBooksService {
         }
         // Small delay between employee accounts to respect Zoho API rate limits
         await new Promise(r => setTimeout(r, 100));
+      }
+
+      // Global sweep: Check any other local expenses marked as synced with Zoho
+      // that weren't found in ANY active account list (handles account changes/re-assignments)
+      try {
+        const currentLocal = await db.getExpenses();
+        const orphanedSynced = currentLocal.filter(e => e.zoho_journal_id && !allActiveZohoExpenseIds.has(String(e.zoho_journal_id)));
+        for (const orphan of orphanedSynced) {
+          try {
+            const singleRes = await this.makeApiRequest(`/expenses/${orphan.zoho_journal_id}`, 'GET');
+            if (!singleRes || !singleRes.expense) {
+              console.log(`🗑️ [Zoho Sync] Orphaned expense ${orphan.id} (Zoho ID: ${orphan.zoho_journal_id}, Exported: ${Boolean(orphan.is_exported)}) deleted from Zoho Books. Removing locally...`);
+              await db.deleteExpense(orphan.id);
+            }
+          } catch (checkErr) {
+            const errMsg = (checkErr.message || '').toLowerCase();
+            if (errMsg.includes('does not exist') || errMsg.includes('not found') || errMsg.includes('1002') || errMsg.includes('404')) {
+              console.log(`🗑️ [Zoho Sync] Confirmed deleted from Zoho Books: ${orphan.id} (Zoho ID: ${orphan.zoho_journal_id}, Exported: ${Boolean(orphan.is_exported)}). Removing locally...`);
+              await db.deleteExpense(orphan.id);
+            }
+          }
+        }
+      } catch (sweepErr) {
+        console.warn('Global deletion sweep notice:', sweepErr.message);
       }
 
       // Merge into local cache using fast batch save

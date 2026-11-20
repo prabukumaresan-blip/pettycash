@@ -24,7 +24,8 @@ import {
   ChevronRight,
   Layers,
   FolderOpen,
-  FileText
+  FileText,
+  Trash2
 } from 'lucide-react';
 import { api } from '../utils/api';
 import { formatOMR, getSettlementStatus } from '../utils/currency';
@@ -36,6 +37,7 @@ export default function ReportsView({
   currentUser,
   onUpdateReportStatus,
   onMarkSelectedExported,
+  onDeleteExpense,
   onRequestRecall,
   onApproveRecall,
   onRejectRecall,
@@ -612,9 +614,19 @@ export default function ReportsView({
     }
   };
 
-  const handleManualResync = () => {
+  const handleManualResync = async () => {
     setIsResyncing(true);
-    fetchReport(true);
+    try {
+      if (api.triggerZohoSync) {
+        await api.triggerZohoSync();
+      }
+      await fetchReport(true);
+      if (onRefreshData) await onRefreshData();
+    } catch (err) {
+      console.warn('Sync notice:', err.message);
+    } finally {
+      setIsResyncing(false);
+    }
   };
 
   const handleBulkUpdateReportStatus = async (addedToReport) => {
@@ -1368,16 +1380,32 @@ export default function ReportsView({
                                           )}
                                         </td>
                                         <td className="py-2 px-3 text-center whitespace-nowrap">
-                                          <button
-                                            type="button"
-                                            onClick={() => handlePrintSingleExpense(exp)}
-                                            disabled={isExportingPdf}
-                                            className="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[10px] font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 transition cursor-pointer"
-                                            title={exp.is_exported ? 'Re-print voucher PDF' : 'Print voucher PDF'}
-                                          >
-                                            <Printer className="w-3 h-3 text-slate-500" />
-                                            <span>{exp.is_exported ? 'Re-print' : 'Print'}</span>
-                                          </button>
+                                          <div className="flex items-center justify-center space-x-1">
+                                            <button
+                                              type="button"
+                                              onClick={() => handlePrintSingleExpense(exp)}
+                                              disabled={isExportingPdf}
+                                              className="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[10px] font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 transition cursor-pointer"
+                                              title={exp.is_exported ? 'Re-print voucher PDF' : 'Print voucher PDF'}
+                                            >
+                                              <Printer className="w-3 h-3 text-slate-500" />
+                                              <span>{exp.is_exported ? 'Re-print' : 'Print'}</span>
+                                            </button>
+                                            {onDeleteExpense && (
+                                              <button
+                                                type="button"
+                                                onClick={async () => {
+                                                  await onDeleteExpense(exp.id);
+                                                  await fetchReport();
+                                                  if (onRefreshData) onRefreshData();
+                                                }}
+                                                className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition cursor-pointer"
+                                                title="Delete voucher from records and Zoho Books"
+                                              >
+                                                <Trash2 className="w-3.5 h-3.5" />
+                                              </button>
+                                            )}
+                                          </div>
                                         </td>
                                       </tr>
                                     );

@@ -380,18 +380,7 @@ router.delete('/:id', async (req, res) => {
       });
     }
 
-    // Permission Check: Once exported as report, ONLY admin user can delete the expense.
-    // If not exported, employee can delete even if added to report!
-    const isExported = Boolean(expense.is_exported);
-    const isAdmin = req.user && req.user.role === 'admin';
-
-    if (isExported && !isAdmin) {
-      return res.status(403).json({
-        success: false,
-        error: 'Access denied: This expense has been exported in an official report. Only an Administrator can delete it.'
-      });
-    }
-
+    // Employees can delete their own expenses (even if exported), and Admin can delete any expense.
     if (req.user && req.user.role === 'employee' && expense.employee_id !== req.user.id) {
       return res.status(403).json({ success: false, error: 'Access denied: You can only delete your own expenses' });
     }

@@ -243,7 +243,7 @@ export default function ExpenseCard({
               </button>
             )}
 
-            {(!isExported || isAdmin) && onDelete && (
+            {onDelete && (
               <button
                 onClick={() => onDelete(expense.id)}
                 className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition"

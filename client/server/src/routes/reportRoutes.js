@@ -94,7 +94,7 @@ async function getFilteredExpenses(query, user) {
 router.get('/', async (req, res) => {
   try {
     if (req.query.resync === 'true') {
-      await syncService.syncPendingExpenses();
+      await syncService.runFullSync();
     }
 
     const expenses = await getFilteredExpenses(req.query, req.user);
@@ -144,7 +144,7 @@ router.get('/', async (req, res) => {
 const handleCsvExport = async (req, res) => {
   try {
     if (req.query?.resync === 'true' || req.body?.resync === 'true') {
-      await syncService.syncPendingExpenses();
+      await syncService.runFullSync();
     }
 
     const payload = req.method === 'POST' ? { ...req.query, ...req.body } : req.query;
@@ -209,7 +209,7 @@ router.post('/export/csv', handleCsvExport);
 const handlePdfExport = async (req, res) => {
   try {
     if (req.query?.resync === 'true' || req.body?.resync === 'true') {
-      await syncService.syncPendingExpenses();
+      await syncService.runFullSync();
     }
 
     const payload = req.method === 'POST' ? { ...req.query, ...req.body } : req.query;
