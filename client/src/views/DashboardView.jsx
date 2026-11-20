@@ -216,6 +216,20 @@ export default function DashboardView({
         await api.downloadCsvReport(filters);
       }
 
+      const targetIds = selectedExpenseIds.size > 0
+        ? Array.from(selectedExpenseIds)
+        : (filterTab === 'marked'
+            ? markedExpenses.map(e => e.id)
+            : (filterTab === 'not_exported'
+                ? notExportedExpenses.map(e => e.id)
+                : employeeExpenses.map(e => e.id)));
+
+      if (onMarkSelectedExported && targetIds.length > 0) {
+        await onMarkSelectedExported(targetIds);
+      } else if (api.addExportedIds && targetIds.length > 0) {
+        api.addExportedIds(targetIds);
+      }
+
       setSelectedExpenseIds(new Set());
       if (onRefreshData) onRefreshData();
     } catch (err) {

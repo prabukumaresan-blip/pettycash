@@ -30,6 +30,7 @@ export default function ReportsView({
   projects = [],
   currentUser,
   onUpdateReportStatus,
+  onMarkSelectedExported,
   onRequestRecall,
   onApproveRecall,
   onRejectRecall,
@@ -144,21 +145,29 @@ export default function ReportsView({
         mark_exported: 'true'
       };
 
-      if (selectedRowIds.size > 0) {
-        filters.expense_ids = Array.from(selectedRowIds).join(',');
-      } else if (expenses.length > 0) {
-        filters.expense_ids = expenses.map((e) => e.id).join(',');
+      const exportedIds = selectedRowIds.size > 0
+        ? Array.from(selectedRowIds)
+        : expenses.map((e) => e.id);
+
+      if (exportedIds.length > 0) {
+        filters.expense_ids = exportedIds.join(',');
       }
 
       await api.downloadCsvReport(filters);
       
-      const exportedCount = selectedRowIds.size > 0 ? selectedRowIds.size : (expenses?.length || 0);
+      // Update exported status across client app immediately
+      if (onMarkSelectedExported && exportedIds.length > 0) {
+        await onMarkSelectedExported(exportedIds);
+      } else if (api.addExportedIds && exportedIds.length > 0) {
+        api.addExportedIds(exportedIds);
+      }
+
       setSelectedRowIds(new Set());
       setActionFeedback({
         type: 'success',
         msg: activeReportTab === 'exported'
           ? 'Exported statement CSV downloaded successfully.'
-          : `Expense report exported! ${exportedCount} expense log(s) marked as Exported.`
+          : `Expense report exported! ${exportedIds.length} expense log(s) marked as Exported.`
       });
       setTimeout(() => setActionFeedback(null), 4000);
 
@@ -199,21 +208,29 @@ export default function ReportsView({
         mark_exported: 'true'
       };
 
-      if (selectedRowIds.size > 0) {
-        filters.expense_ids = Array.from(selectedRowIds).join(',');
-      } else if (expenses.length > 0) {
-        filters.expense_ids = expenses.map((e) => e.id).join(',');
+      const exportedIds = selectedRowIds.size > 0
+        ? Array.from(selectedRowIds)
+        : expenses.map((e) => e.id);
+
+      if (exportedIds.length > 0) {
+        filters.expense_ids = exportedIds.join(',');
       }
 
       await api.downloadPdfReport(filters);
 
-      const count = selectedRowIds.size > 0 ? selectedRowIds.size : (expenses?.length || 0);
+      // Update exported status across client app immediately
+      if (onMarkSelectedExported && exportedIds.length > 0) {
+        await onMarkSelectedExported(exportedIds);
+      } else if (api.addExportedIds && exportedIds.length > 0) {
+        api.addExportedIds(exportedIds);
+      }
+
       setSelectedRowIds(new Set());
       setActionFeedback({
         type: 'success',
         msg: activeReportTab === 'exported'
           ? 'Audit PDF downloaded successfully.'
-          : `Official Statement exported! ${count} expense log(s) marked as Exported.`
+          : `Official Statement exported! ${exportedIds.length} expense log(s) marked as Exported.`
       });
       setTimeout(() => setActionFeedback(null), 4500);
 
@@ -234,8 +251,14 @@ export default function ReportsView({
     if (selectedRowIds.size === 0) return;
     setIsUpdatingReport(true);
     const count = selectedRowIds.size;
+    const ids = Array.from(selectedRowIds);
     try {
-      await api.markExpensesAsExported(Array.from(selectedRowIds));
+      if (onMarkSelectedExported) {
+        await onMarkSelectedExported(ids);
+      } else {
+        if (api.addExportedIds) api.addExportedIds(ids);
+        await api.markExpensesAsExported(ids);
+      }
       setSelectedRowIds(new Set());
       await fetchReport();
       if (onRefreshData) onRefreshData();

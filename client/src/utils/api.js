@@ -206,6 +206,34 @@ export const api = {
     } catch {}
   },
 
+  getExportedIds() {
+    if (typeof window === 'undefined') return new Set();
+    try {
+      const raw = localStorage.getItem('exported_expense_ids');
+      return new Set(raw ? JSON.parse(raw) : []);
+    } catch {
+      return new Set();
+    }
+  },
+
+  addExportedIds(ids = []) {
+    if (typeof window === 'undefined' || !ids || ids.length === 0) return;
+    try {
+      const current = this.getExportedIds();
+      ids.forEach(id => current.add(String(id)));
+      localStorage.setItem('exported_expense_ids', JSON.stringify(Array.from(current)));
+    } catch {}
+  },
+
+  removeExportedId(id) {
+    if (typeof window === 'undefined' || !id) return;
+    try {
+      const current = this.getExportedIds();
+      current.delete(String(id));
+      localStorage.setItem('exported_expense_ids', JSON.stringify(Array.from(current)));
+    } catch {}
+  },
+
   // Expenses
   async getExpenses(filters = {}) {
     const params = new URLSearchParams();
@@ -232,9 +260,22 @@ export const api = {
       if (data && data.success && Array.isArray(data.expenses)) {
         try {
           const deletedSet = this.getDeletedIds();
-          data.expenses = data.expenses.filter(
-            (e) => !deletedSet.has(String(e.id)) && (!e.zoho_journal_id || !deletedSet.has(String(e.zoho_journal_id)))
-          );
+          const exportedSet = this.getExportedIds();
+          data.expenses = data.expenses
+            .filter(
+              (e) => !deletedSet.has(String(e.id)) && (!e.zoho_journal_id || !deletedSet.has(String(e.zoho_journal_id)))
+            )
+            .map((e) => {
+              if (exportedSet.has(String(e.id)) || (e.zoho_journal_id && exportedSet.has(String(e.zoho_journal_id)))) {
+                return {
+                  ...e,
+                  is_exported: true,
+                  exported_at: e.exported_at || new Date().toISOString(),
+                  added_to_report: true
+                };
+              }
+              return e;
+            });
 
           const cached = JSON.parse(localStorage.getItem(cacheKey) || '[]');
           const serverIds = new Set(data.expenses.map((e) => e.id));
@@ -259,10 +300,16 @@ export const api = {
     } catch {
       const cached = localStorage.getItem(cacheKey);
       const deletedSet = this.getDeletedIds();
+      const exportedSet = this.getExportedIds();
       const list = cached ? JSON.parse(cached) : [];
       return {
         success: true,
-        expenses: list.filter((e) => !deletedSet.has(String(e.id)) && (!e.zoho_journal_id || !deletedSet.has(String(e.zoho_journal_id)))),
+        expenses: list
+          .filter((e) => !deletedSet.has(String(e.id)) && (!e.zoho_journal_id || !deletedSet.has(String(e.zoho_journal_id))))
+          .map((e) => exportedSet.has(String(e.id)) || (e.zoho_journal_id && exportedSet.has(String(e.zoho_journal_id)))
+            ? { ...e, is_exported: true, added_to_report: true }
+            : e
+          ),
         offline: true
       };
     }

@@ -170,9 +170,22 @@ export default function App() {
       if (expRes.status === 'fulfilled' && expRes.value?.success && Array.isArray(expRes.value.expenses)) {
         setExpenses((prevExpenses) => {
           const deletedSet = api.getDeletedIds ? api.getDeletedIds() : new Set();
-          const serverExpenses = expRes.value.expenses.filter(
-            (e) => !deletedSet.has(String(e.id)) && (!e.zoho_journal_id || !deletedSet.has(String(e.zoho_journal_id)))
-          );
+          const exportedSet = api.getExportedIds ? api.getExportedIds() : new Set();
+          const serverExpenses = expRes.value.expenses
+            .filter(
+              (e) => !deletedSet.has(String(e.id)) && (!e.zoho_journal_id || !deletedSet.has(String(e.zoho_journal_id)))
+            )
+            .map((e) => {
+              if (exportedSet.has(String(e.id)) || (e.zoho_journal_id && exportedSet.has(String(e.zoho_journal_id)))) {
+                return {
+                  ...e,
+                  is_exported: true,
+                  exported_at: e.exported_at || new Date().toISOString(),
+                  added_to_report: true
+                };
+              }
+              return e;
+            });
           const serverIds = new Set(serverExpenses.map((e) => e.id));
           const serverZohoIds = new Set(
             serverExpenses.filter((e) => e.zoho_journal_id).map((e) => String(e.zoho_journal_id))
@@ -452,6 +465,14 @@ export default function App() {
     try {
       const res = await api.approveExpenseRecall(id);
       if (res.success) {
+        if (api.removeExportedId) api.removeExportedId(id);
+        setExpenses((prev) =>
+          prev.map((e) =>
+            String(e.id) === String(id) || (e.zoho_journal_id && String(e.zoho_journal_id) === String(id))
+              ? { ...e, is_exported: false, added_to_report: false, recall_status: null }
+              : e
+          )
+        );
         showToast('Call back approved! Expense is now unlocked from the report.', 'success');
         await loadAllData();
       } else {
@@ -550,16 +571,55 @@ export default function App() {
 
   // Handle Explicitly Marking Expenses as Exported (Condition 2)
   const handleMarkExpensesExported = async (expenseIds) => {
+    if (!Array.isArray(expenseIds) || expenseIds.length === 0) return true;
     try {
-      const res = await api.markExpensesAsExported(expenseIds);
-      if (res.success) {
-        showToast(`Successfully marked ${expenseIds.length} expense log(s) as Exported.`);
-        await loadAllData();
-        return true;
-      } else {
-        showToast(res.error || 'Failed to mark expenses as exported', 'error');
-        return false;
+      const idSet = new Set(expenseIds.map(String));
+      const now = new Date().toISOString();
+
+      if (api.addExportedIds) {
+        api.addExportedIds(expenseIds);
       }
+
+      setExpenses((prev) =>
+        prev.map((e) =>
+          idSet.has(String(e.id)) || (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id)))
+            ? {
+                ...e,
+                is_exported: true,
+                exported_at: now,
+                added_to_report: true,
+                added_to_report_at: e.added_to_report_at || now
+              }
+            : e
+        )
+      );
+
+      // Clean/update localStorage caches immediately
+      try {
+        const keys = Object.keys(localStorage).filter((k) => k.startsWith('cached_expenses'));
+        keys.forEach((k) => {
+          const list = JSON.parse(localStorage.getItem(k) || '[]');
+          const updated = list.map((e) =>
+            idSet.has(String(e.id)) || (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id)))
+              ? {
+                  ...e,
+                  is_exported: true,
+                  exported_at: now,
+                  added_to_report: true,
+                  added_to_report_at: e.added_to_report_at || now
+                }
+              : e
+          );
+          localStorage.setItem(k, JSON.stringify(updated));
+        });
+      } catch { }
+
+      const res = await api.markExpensesAsExported(expenseIds);
+      if (res && res.success) {
+        showToast(`Successfully marked ${expenseIds.length} expense log(s) as Exported.`);
+      }
+      await loadAllData();
+      return true;
     } catch (err) {
       showToast('Export error: ' + err.message, 'error');
       return false;
@@ -694,6 +754,7 @@ export default function App() {
             projects={projects}
             currentUser={currentUser}
             onUpdateReportStatus={handleUpdateExpenseReportStatus}
+            onMarkSelectedExported={handleMarkExpensesExported}
             onRequestRecall={handleRequestExpenseRecall}
             onApproveRecall={handleApproveExpenseRecall}
             onRejectRecall={handleRejectExpenseRecall}
