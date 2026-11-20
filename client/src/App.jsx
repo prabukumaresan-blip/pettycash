@@ -689,6 +689,7 @@ export default function App() {
 
         {activeTab === 'reports' && (
           <ReportsView
+            expenses={expenses}
             employees={employees}
             projects={projects}
             currentUser={currentUser}

@@ -1134,7 +1134,14 @@ const db = {
     }
     const store = loadLocalData();
       list = [...store.expenses];
-      if (filters.employee_id) list = list.filter(e => e.employee_id === filters.employee_id);
+      if (filters.employee_id) {
+        const targetEmp = (store.employees || []).find(emp => emp.id === filters.employee_id);
+        const empName = targetEmp?.name?.toLowerCase().trim();
+        list = list.filter(e =>
+          e.employee_id === filters.employee_id ||
+          (empName && e.employee_name && e.employee_name.toLowerCase().trim() === empName)
+        );
+      }
       if (filters.project_id) list = list.filter(e => e.project_id === filters.project_id);
       if (filters.start_date) list = list.filter(e => e.expense_date >= filters.start_date);
       if (filters.end_date) list = list.filter(e => e.expense_date <= filters.end_date);

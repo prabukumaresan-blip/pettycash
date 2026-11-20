@@ -58,7 +58,13 @@ async function getFilteredExpenses(query, user) {
     const idList = Array.isArray(query.expense_ids)
       ? query.expense_ids.map(String)
       : String(query.expense_ids).split(',').map(s => s.trim());
-    expenses = expenses.filter(e => idList.includes(String(e.id)));
+    const idSet = new Set(idList);
+    const allExpenses = await db.getExpenses({});
+    return allExpenses.filter(e =>
+      idSet.has(String(e.id)) ||
+      (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id))) ||
+      (e.invoice_number && idSet.has(String(e.invoice_number)))
+    );
   }
 
   return expenses;

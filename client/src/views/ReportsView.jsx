@@ -25,6 +25,7 @@ import { api } from '../utils/api';
 import { formatOMR, getSettlementStatus } from '../utils/currency';
 
 export default function ReportsView({
+  expenses: allExpenses = [],
   employees = [],
   projects = [],
   currentUser,
@@ -145,11 +146,13 @@ export default function ReportsView({
 
       if (selectedRowIds.size > 0) {
         filters.expense_ids = Array.from(selectedRowIds).join(',');
+      } else if (expenses.length > 0) {
+        filters.expense_ids = expenses.map((e) => e.id).join(',');
       }
 
       await api.downloadCsvReport(filters);
       
-      const exportedCount = selectedRowIds.size > 0 ? selectedRowIds.size : (reportData?.expenses?.length || 0);
+      const exportedCount = selectedRowIds.size > 0 ? selectedRowIds.size : (expenses?.length || 0);
       setSelectedRowIds(new Set());
       setActionFeedback({
         type: 'success',
@@ -172,7 +175,7 @@ export default function ReportsView({
 
   // Export to PDF & automatically mark exported (Condition 2)
   const handleExportPdf = async () => {
-    if ((activeReportTab === 'report' || activeReportTab === 'exported') && (!reportData?.expenses || reportData.expenses.length === 0)) {
+    if ((activeReportTab === 'report' || activeReportTab === 'exported') && (!expenses || expenses.length === 0)) {
       setActionFeedback({
         type: 'error',
         msg: activeReportTab === 'exported'
@@ -198,11 +201,13 @@ export default function ReportsView({
 
       if (selectedRowIds.size > 0) {
         filters.expense_ids = Array.from(selectedRowIds).join(',');
+      } else if (expenses.length > 0) {
+        filters.expense_ids = expenses.map((e) => e.id).join(',');
       }
 
       await api.downloadPdfReport(filters);
 
-      const count = selectedRowIds.size > 0 ? selectedRowIds.size : (reportData?.expenses?.length || 0);
+      const count = selectedRowIds.size > 0 ? selectedRowIds.size : (expenses?.length || 0);
       setSelectedRowIds(new Set());
       setActionFeedback({
         type: 'success',
@@ -288,8 +293,90 @@ export default function ReportsView({
     });
   };
 
-  const expenses = reportData?.expenses || [];
-  const meta = reportData?.meta || {};
+  // Live client-derived expenses from allExpenses (guarantees marked items show up instantly!)
+  const clientFilteredExpenses = React.useMemo(() => {
+    if (!allExpenses || allExpenses.length === 0) return [];
+    return allExpenses.filter((e) => {
+      // 1. Tab filter
+      if (activeReportTab === 'report') {
+        if (!e.added_to_report || e.is_exported) return false;
+      } else if (activeReportTab === 'exported') {
+        if (!e.is_exported) return false;
+      } else if (activeReportTab === 'unreported') {
+        if (e.added_to_report || e.is_exported) return false;
+      }
+
+      // 2. Employee filter
+      const effectiveEmpId = selectedEmployeeId || (!isAdmin && currentUser?.id ? currentUser.id : '');
+      if (effectiveEmpId) {
+        const emp = employees.find((x) => x.id === effectiveEmpId);
+        const empName = emp?.name?.toLowerCase().trim();
+        const matchesId = e.employee_id === effectiveEmpId;
+        const matchesName = empName && e.employee_name && e.employee_name.toLowerCase().trim() === empName;
+        if (!matchesId && !matchesName) return false;
+      }
+
+      // 3. Project filter
+      if (selectedProjectId && String(e.project_id) !== String(selectedProjectId)) {
+        return false;
+      }
+
+      // 4. Sync status filter
+      if (syncStatusFilter && e.sync_status !== syncStatusFilter) {
+        return false;
+      }
+
+      // 5. Date filters
+      if (startDate && e.expense_date && e.expense_date < startDate) return false;
+      if (endDate && e.expense_date && e.expense_date > endDate) return false;
+
+      // 6. Search query
+      if (search.trim()) {
+        const q = search.toLowerCase();
+        const mDesc = e.description && e.description.toLowerCase().includes(q);
+        const mCat = e.category_name && e.category_name.toLowerCase().includes(q);
+        const mProj = e.project_name && e.project_name.toLowerCase().includes(q);
+        const mInv = e.invoice_number && e.invoice_number.toLowerCase().includes(q);
+        const mEmp = e.employee_name && e.employee_name.toLowerCase().includes(q);
+        const mZoho = (e.zoho_journal_number && e.zoho_journal_number.toLowerCase().includes(q)) || (e.zoho_journal_id && String(e.zoho_journal_id).includes(q));
+        if (!mDesc && !mCat && !mProj && !mInv && !mEmp && !mZoho) return false;
+      }
+
+      return true;
+    });
+  }, [allExpenses, activeReportTab, selectedEmployeeId, isAdmin, currentUser, employees, selectedProjectId, syncStatusFilter, startDate, endDate, search]);
+
+  const expenses = React.useMemo(() => {
+    const serverList = reportData?.expenses || [];
+    if (clientFilteredExpenses.length === 0) return serverList;
+    if (serverList.length === 0) return clientFilteredExpenses;
+
+    const map = new Map();
+    // Start with server list
+    serverList.forEach((e) => map.set(e.id, e));
+    // Overlay client expenses (which reflect real-time user actions)
+    clientFilteredExpenses.forEach((e) => map.set(e.id, e));
+
+    return Array.from(map.values()).sort((a, b) => {
+      const dateA = a.expense_date || '';
+      const dateB = b.expense_date || '';
+      if (dateA !== dateB) return dateB.localeCompare(dateA);
+      return (b.id || '').localeCompare(a.id || '');
+    });
+  }, [clientFilteredExpenses, reportData]);
+
+  const meta = React.useMemo(() => {
+    const totalAmount = expenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
+    const syncedCount = expenses.filter((e) => e.sync_status === 'synced').length;
+    const pendingCount = expenses.filter((e) => e.sync_status === 'pending' || e.sync_status === 'failed').length;
+    return {
+      total_records: expenses.length,
+      total_amount: totalAmount,
+      synced_count: syncedCount,
+      pending_count: pendingCount,
+      ...(reportData?.meta || {})
+    };
+  }, [expenses, reportData]);
 
   const handleSelectAllRows = () => {
     if (selectedRowIds.size === expenses.length && expenses.length > 0) {
