@@ -145,15 +145,17 @@ export default function ReportsView({
         mark_exported: 'true'
       };
 
-      const exportedIds = selectedRowIds.size > 0
-        ? Array.from(selectedRowIds)
-        : expenses.map((e) => e.id);
+      const targetExpenses = selectedRowIds.size > 0
+        ? expenses.filter((e) => selectedRowIds.has(e.id))
+        : expenses;
+
+      const exportedIds = targetExpenses.map((e) => e.id);
 
       if (exportedIds.length > 0) {
         filters.expense_ids = exportedIds.join(',');
       }
 
-      await api.downloadCsvReport(filters);
+      await api.downloadCsvReport(filters, targetExpenses);
       
       // Update exported status across client app immediately
       if (onMarkSelectedExported && exportedIds.length > 0) {
@@ -208,15 +210,17 @@ export default function ReportsView({
         mark_exported: 'true'
       };
 
-      const exportedIds = selectedRowIds.size > 0
-        ? Array.from(selectedRowIds)
-        : expenses.map((e) => e.id);
+      const targetExpenses = selectedRowIds.size > 0
+        ? expenses.filter((e) => selectedRowIds.has(e.id))
+        : expenses;
+
+      const exportedIds = targetExpenses.map((e) => e.id);
 
       if (exportedIds.length > 0) {
         filters.expense_ids = exportedIds.join(',');
       }
 
-      await api.downloadPdfReport(filters);
+      await api.downloadPdfReport(filters, targetExpenses);
 
       // Update exported status across client app immediately
       if (onMarkSelectedExported && exportedIds.length > 0) {

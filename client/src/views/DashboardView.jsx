@@ -199,8 +199,19 @@ export default function DashboardView({
       } else if (currentEmployee?.id && currentEmployee.role !== 'admin') {
         filters.employee_id = currentEmployee.id;
       }
-      if (selectedExpenseIds.size > 0) {
-        filters.expense_ids = Array.from(selectedExpenseIds).join(',');
+      const targetExpenses = selectedExpenseIds.size > 0
+        ? employeeExpenses.filter(e => selectedExpenseIds.has(e.id))
+        : (filterTab === 'marked'
+            ? markedExpenses
+            : (filterTab === 'not_exported'
+                ? notExportedExpenses
+                : (filterTab === 'exported'
+                    ? exportedExpenses
+                    : filteredExpenses)));
+
+      const targetIds = targetExpenses.map(e => e.id);
+      if (targetIds.length > 0) {
+        filters.expense_ids = targetIds.join(',');
       } else if (filterTab === 'marked') {
         filters.added_to_report = 'true';
         filters.is_exported = 'false';
@@ -211,18 +222,10 @@ export default function DashboardView({
       }
 
       if (format === 'pdf') {
-        await api.downloadPdfReport(filters);
+        await api.downloadPdfReport(filters, targetExpenses);
       } else {
-        await api.downloadCsvReport(filters);
+        await api.downloadCsvReport(filters, targetExpenses);
       }
-
-      const targetIds = selectedExpenseIds.size > 0
-        ? Array.from(selectedExpenseIds)
-        : (filterTab === 'marked'
-            ? markedExpenses.map(e => e.id)
-            : (filterTab === 'not_exported'
-                ? notExportedExpenses.map(e => e.id)
-                : employeeExpenses.map(e => e.id)));
 
       if (onMarkSelectedExported && targetIds.length > 0) {
         await onMarkSelectedExported(targetIds);

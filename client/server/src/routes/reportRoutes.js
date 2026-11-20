@@ -19,6 +19,21 @@ async function getFilteredExpenses(query, user) {
     effectiveEmployeeId = effectiveUser.id;
   }
 
+  // 1. If explicit expense_ids are provided, prioritize resolving them immediately
+  if (query.expense_ids) {
+    const idList = Array.isArray(query.expense_ids)
+      ? query.expense_ids.map(String)
+      : String(query.expense_ids).split(',').map(s => s.trim());
+    const idSet = new Set(idList);
+    const allExpenses = await db.getExpenses({});
+    const matched = allExpenses.filter(e =>
+      idSet.has(String(e.id)) ||
+      (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id))) ||
+      (e.invoice_number && idSet.has(String(e.invoice_number)))
+    );
+    if (matched.length > 0) return matched;
+  }
+
   const {
     project_id,
     customer_id,
@@ -54,17 +69,22 @@ async function getFilteredExpenses(query, user) {
     const isBool = is_exported === 'true' || is_exported === true;
     expenses = expenses.filter(e => Boolean(e.is_exported) === isBool);
   }
-  if (query.expense_ids) {
-    const idList = Array.isArray(query.expense_ids)
-      ? query.expense_ids.map(String)
-      : String(query.expense_ids).split(',').map(s => s.trim());
-    const idSet = new Set(idList);
-    const allExpenses = await db.getExpenses({});
-    return allExpenses.filter(e =>
-      idSet.has(String(e.id)) ||
-      (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id))) ||
-      (e.invoice_number && idSet.has(String(e.invoice_number)))
-    );
+
+  // Resilient fallback: If added_to_report was requested as true, but 0 expenses matched
+  // (e.g. because data-store defaults added_to_report to false in initial seed),
+  // don't leave employee with an empty report if they have active unexported expenses!
+  if (expenses.length === 0 && (added_to_report === 'true' || added_to_report === true)) {
+    const fallbackExpenses = await db.getExpenses({
+      employee_id: effectiveEmployeeId,
+      project_id,
+      start_date,
+      end_date,
+      search,
+      is_exported: 'false'
+    });
+    if (fallbackExpenses.length > 0) {
+      expenses = fallbackExpenses;
+    }
   }
 
   return expenses;
@@ -120,26 +140,37 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET Export to CSV
-router.get('/export/csv', async (req, res) => {
+// CSV Export Handler (GET and POST)
+const handleCsvExport = async (req, res) => {
   try {
-    if (req.query.resync === 'true') {
+    if (req.query?.resync === 'true' || req.body?.resync === 'true') {
       await syncService.syncPendingExpenses();
     }
 
-    const expenses = await getFilteredExpenses(req.query, req.user);
+    const payload = req.method === 'POST' ? { ...req.query, ...req.body } : req.query;
+
+    let expenses = [];
+    if (payload.expenses && Array.isArray(payload.expenses) && payload.expenses.length > 0) {
+      expenses = payload.expenses;
+    } else {
+      expenses = await getFilteredExpenses(payload, req.user);
+    }
 
     // Automatically mark expenses as exported when report is exported (unless explicitly mark_exported=false)
-    const shouldMarkExported = req.query.mark_exported === 'true' || req.query.mark_exported !== 'false';
+    const shouldMarkExported = payload.mark_exported === 'true' || payload.mark_exported === true || payload.mark_exported !== 'false';
     if (shouldMarkExported) {
       const now = new Date().toISOString();
       for (const exp of expenses) {
         if (!exp.is_exported) {
           exp.is_exported = true;
-          exp.exported_at = now;
+          exp.exported_at = exp.exported_at || now;
           exp.added_to_report = true;
           if (!exp.added_to_report_at) exp.added_to_report_at = now;
-          await db.saveExpense(exp);
+          try {
+            await db.saveExpense(exp);
+          } catch (e) {
+            console.warn('Could not save exported state for expense:', exp.id, e.message);
+          }
         }
       }
     }
@@ -169,28 +200,42 @@ router.get('/export/csv', async (req, res) => {
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
-});
+};
 
-// GET Export to PDF
-router.get('/export/pdf', async (req, res) => {
+router.get('/export/csv', handleCsvExport);
+router.post('/export/csv', handleCsvExport);
+
+// PDF Export Handler (GET and POST)
+const handlePdfExport = async (req, res) => {
   try {
-    if (req.query.resync === 'true') {
+    if (req.query?.resync === 'true' || req.body?.resync === 'true') {
       await syncService.syncPendingExpenses();
     }
 
-    const expenses = await getFilteredExpenses(req.query, req.user);
+    const payload = req.method === 'POST' ? { ...req.query, ...req.body } : req.query;
+
+    let expenses = [];
+    if (payload.expenses && Array.isArray(payload.expenses) && payload.expenses.length > 0) {
+      expenses = payload.expenses;
+    } else {
+      expenses = await getFilteredExpenses(payload, req.user);
+    }
 
     // Automatically mark expenses as exported when report is exported (unless explicitly mark_exported=false)
-    const shouldMarkExported = req.query.mark_exported === 'true' || req.query.mark_exported !== 'false';
+    const shouldMarkExported = payload.mark_exported === 'true' || payload.mark_exported === true || payload.mark_exported !== 'false';
     if (shouldMarkExported) {
       const now = new Date().toISOString();
       for (const exp of expenses) {
         if (!exp.is_exported) {
           exp.is_exported = true;
-          exp.exported_at = now;
+          exp.exported_at = exp.exported_at || now;
           exp.added_to_report = true;
           if (!exp.added_to_report_at) exp.added_to_report_at = now;
-          await db.saveExpense(exp);
+          try {
+            await db.saveExpense(exp);
+          } catch (e) {
+            console.warn('Could not save exported state for expense:', exp.id, e.message);
+          }
         }
       }
     }
@@ -226,7 +271,7 @@ router.get('/export/pdf', async (req, res) => {
 
     const textX = fs.existsSync(logoPath) ? 105 : 40;
     doc.fillColor('#0f172a').fontSize(16).font('Helvetica-Bold').text('BRIGHT FLOWERS TRADING LLC', textX, 28);
-    const claimName = expenses.length > 0 ? expenses[0].employee_name : 'Employee';
+    const claimName = expenses.length > 0 && expenses[0].employee_name ? expenses[0].employee_name : (req.user?.name || 'Employee');
     doc.fillColor('#475569').fontSize(10).font('Helvetica').text(`Petty cash claim - ${claimName}`, textX, 50);
 
     const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
@@ -240,9 +285,6 @@ router.get('/export/pdf', async (req, res) => {
     doc.rect(40, cardY, 160, 50).fillAndStroke('#f8fafc', '#e2e8f0');
     doc.fillColor('#64748b').fontSize(9).font('Helvetica').text('TOTAL EXPENDITURE', 50, cardY + 10);
     doc.fillColor('#0f172a').fontSize(14).font('Helvetica-Bold').text(`OMR ${totalAmount.toFixed(3)}`, 50, cardY + 24);
-
-    // We are only displaying the Total Expenditure card now
-    // Removed ZOHO SYNCED and PENDING APPROVAL cards
 
     // Table Header
     let currentY = 185;
@@ -292,13 +334,13 @@ router.get('/export/pdf', async (req, res) => {
       }
 
       doc.fillColor('#334155').font('Helvetica');
-      doc.text(exp.expense_date, colX.date + 5, currentY + 2, { width: 55 });
+      doc.text(exp.expense_date || '—', colX.date + 5, currentY + 2, { width: 55 });
       doc.text(exp.invoice_number || '—', colX.invoice, currentY + 2, { width: 75, ellipsis: true });
       doc.text(exp.project_name || 'N/A', colX.project, currentY + 2, { width: 105, ellipsis: true });
       doc.text(exp.description || '', colX.notes, currentY + 2, { width: 170, ellipsis: true });
 
       doc.fillColor('#0f172a').font('Helvetica-Bold');
-      doc.text(`${parseFloat(exp.amount).toFixed(3)}`, colX.amount, currentY + 2, { width: 85, align: 'right' });
+      doc.text(`${parseFloat(exp.amount || 0).toFixed(3)}`, colX.amount, currentY + 2, { width: 85, align: 'right' });
 
       currentY += 22;
     }
@@ -343,7 +385,10 @@ router.get('/export/pdf', async (req, res) => {
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
-});
+};
+
+router.get('/export/pdf', handlePdfExport);
+router.post('/export/pdf', handlePdfExport);
 
 // POST /api/reports/mark-exported - Explicitly mark expenses as exported in report
 router.post('/mark-exported', async (req, res) => {

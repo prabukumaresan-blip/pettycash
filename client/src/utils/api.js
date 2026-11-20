@@ -623,7 +623,42 @@ export const api = {
     return `${BASE_URL}/reports/export/pdf?${params.toString()}`;
   },
 
-  async downloadPdfReport(filters = {}) {
+  async downloadPdfReport(filters = {}, targetExpenses = null) {
+    if (targetExpenses && Array.isArray(targetExpenses) && targetExpenses.length > 0) {
+      try {
+        const user = getStoredUser();
+        const payload = {
+          ...filters,
+          auth_user_id: user?.id,
+          mark_exported: 'true',
+          expenses: targetExpenses,
+          expense_ids: targetExpenses.map(e => e.id)
+        };
+        const res = await fetchWithAuth(`${BASE_URL}/reports/export/pdf`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          const blob = await res.blob();
+          const blobUrl = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = blobUrl;
+          a.download = `petty_cash_report_${Date.now()}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(() => {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(blobUrl);
+          }, 2000);
+          return true;
+        }
+      } catch (err) {
+        console.warn('POST /reports/export/pdf error, falling back to GET:', err.message);
+      }
+    }
+
     const url = this.getPdfExportUrl(filters);
     const res = await fetchWithAuth(url);
     if (!res.ok) {
@@ -645,7 +680,42 @@ export const api = {
     return true;
   },
 
-  async downloadCsvReport(filters = {}) {
+  async downloadCsvReport(filters = {}, targetExpenses = null) {
+    if (targetExpenses && Array.isArray(targetExpenses) && targetExpenses.length > 0) {
+      try {
+        const user = getStoredUser();
+        const payload = {
+          ...filters,
+          auth_user_id: user?.id,
+          mark_exported: 'true',
+          expenses: targetExpenses,
+          expense_ids: targetExpenses.map(e => e.id)
+        };
+        const res = await fetchWithAuth(`${BASE_URL}/reports/export/csv`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          const blob = await res.blob();
+          const blobUrl = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = blobUrl;
+          a.download = `petty_cash_report_${Date.now()}.csv`;
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(() => {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(blobUrl);
+          }, 2000);
+          return true;
+        }
+      } catch (err) {
+        console.warn('POST /reports/export/csv error, falling back to GET:', err.message);
+      }
+    }
+
     const url = this.getCsvExportUrl(filters);
     const res = await fetchWithAuth(url);
     if (!res.ok) {
