@@ -272,11 +272,17 @@ const handlePdfExport = async (req, res) => {
     const textX = fs.existsSync(logoPath) ? 105 : 40;
     doc.fillColor('#0f172a').fontSize(16).font('Helvetica-Bold').text('BRIGHT FLOWERS TRADING LLC', textX, 28);
     const claimName = expenses.length > 0 && expenses[0].employee_name ? expenses[0].employee_name : (req.user?.name || 'Employee');
-    doc.fillColor('#475569').fontSize(10).font('Helvetica').text(`Petty cash claim - ${claimName}`, textX, 50);
+    const isReprint = payload.is_reprint === 'true' || payload.is_reprint === true || payload.is_exported === 'true' || (expenses.length > 0 && expenses.every(e => e.is_exported));
+    const subtitle = isReprint
+      ? `Petty cash claim statement - ${claimName} (Official Archive Copy)`
+      : `Petty cash claim - ${claimName}`;
+    doc.fillColor('#475569').fontSize(10).font('Helvetica').text(subtitle, textX, 50);
 
     const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-    doc.fillColor('#475569').fontSize(10).text(`Generated: ${dateStr}`, doc.page.width - 200, 32, { align: 'right', width: 160 });
-    doc.text(`Total Records: ${expenses.length}`, doc.page.width - 200, 48, { align: 'right', width: 160 });
+    const exportedDate = expenses.length > 0 && expenses[0].exported_at ? new Date(expenses[0].exported_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : null;
+    const headerDateText = isReprint && exportedDate ? `Exported: ${exportedDate} (Re-print)` : `Generated: ${dateStr}`;
+    doc.fillColor('#475569').fontSize(9).text(headerDateText, doc.page.width - 220, 32, { align: 'right', width: 180 });
+    doc.text(`Total Records: ${expenses.length}`, doc.page.width - 220, 48, { align: 'right', width: 180 });
 
     doc.moveDown(4);
 

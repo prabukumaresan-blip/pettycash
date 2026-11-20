@@ -244,6 +244,25 @@ export default function DashboardView({
     }
   };
 
+  const handlePrintSingleExpense = async (exp) => {
+    try {
+      setIsExportingPdf(true);
+      const isExp = Boolean(exp.is_exported);
+      const filters = {
+        employee_id: exp.employee_id,
+        expense_ids: exp.id,
+        is_reprint: isExp ? 'true' : 'false',
+        mark_exported: isExp ? 'false' : 'true'
+      };
+      await api.downloadPdfReport(filters, [exp]);
+    } catch (err) {
+      console.error('Failed to print expense voucher:', err);
+      alert('Failed to print: ' + err.message);
+    } finally {
+      setIsExportingPdf(false);
+    }
+  };
+
   const selectedTotal = employeeExpenses
     .filter((e) => selectedExpenseIds.has(e.id))
     .reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
@@ -640,25 +659,25 @@ export default function DashboardView({
               <span>Unmark</span>
             </button>
 
-            {/* Direct Export Selected Options (Condition 1) */}
+            {/* Direct Export / Re-print Selected Options */}
             <button
               onClick={() => handleExportTransactions('pdf')}
               disabled={isExportingPdf || isExportingCsv}
               className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-900 font-semibold text-xs flex items-center space-x-1.5 transition disabled:opacity-50 cursor-pointer"
-              title="Download PDF statement of selected items and mark as exported"
+              title={filterTab === 'exported' ? "Re-print PDF statement of selected items" : "Download PDF statement of selected items and mark as exported"}
             >
               <Printer className="w-3.5 h-3.5 text-slate-700" />
-              <span>Export PDF</span>
+              <span>{filterTab === 'exported' ? 'Re-print (PDF)' : 'Export PDF'}</span>
             </button>
 
             <button
               onClick={() => handleExportTransactions('csv')}
               disabled={isExportingPdf || isExportingCsv}
               className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-900 font-semibold text-xs flex items-center space-x-1.5 transition disabled:opacity-50 cursor-pointer"
-              title="Download CSV spreadsheet of selected items"
+              title={filterTab === 'exported' ? "Re-export CSV spreadsheet of selected items" : "Download CSV spreadsheet of selected items"}
             >
               <Download className="w-3.5 h-3.5 text-slate-700" />
-              <span>Export CSV</span>
+              <span>{filterTab === 'exported' ? 'Re-export CSV' : 'Export CSV'}</span>
             </button>
 
             {/* Mark Selected as Exported */}
@@ -920,13 +939,24 @@ export default function DashboardView({
                       <td className="py-3 px-3 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end space-x-1">
                           {isExported ? (
-                            <button
-                              onClick={() => onRequestRecall && onRequestRecall(exp)}
-                              className="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
-                              title={currentUser?.role === 'admin' ? 'Admin Direct Unlock' : 'Request Unlock'}
-                            >
-                              <RotateCcw className="w-3.5 h-3.5" />
-                            </button>
+                            <>
+                              <button
+                                type="button"
+                                onClick={() => handlePrintSingleExpense(exp)}
+                                disabled={isExportingPdf}
+                                className="p-1 rounded text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition cursor-pointer"
+                                title="Re-print PDF statement for this voucher"
+                              >
+                                <Printer className="w-3.5 h-3.5" />
+                              </button>
+                              <button
+                                onClick={() => onRequestRecall && onRequestRecall(exp)}
+                                className="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer"
+                                title={currentUser?.role === 'admin' ? 'Admin Direct Unlock' : 'Request Unlock'}
+                              >
+                                <RotateCcw className="w-3.5 h-3.5" />
+                              </button>
+                            </>
                           ) : (
                             <>
                               <button
@@ -983,6 +1013,7 @@ export default function DashboardView({
                 onEdit={onEditExpense}
                 onDelete={onDeleteExpense}
                 onRetrySync={onRetrySync}
+                onPrint={handlePrintSingleExpense}
                 isSelected={selectedExpenseIds.has(exp.id)}
                 onToggleSelect={handleToggleSelect}
                 onToggleReportStatus={handleToggleSingleReport}

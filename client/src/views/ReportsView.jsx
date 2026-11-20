@@ -233,7 +233,7 @@ export default function ReportsView({
       setActionFeedback({
         type: 'success',
         msg: activeReportTab === 'exported'
-          ? 'Audit PDF downloaded successfully.'
+          ? 'Re-print PDF statement downloaded successfully.'
           : `Official Statement exported! ${exportedIds.length} expense log(s) marked as Exported.`
       });
       setTimeout(() => setActionFeedback(null), 4500);
@@ -245,6 +245,34 @@ export default function ReportsView({
       console.error('Failed to export PDF:', err);
       setActionFeedback({ type: 'error', msg: `Download failed: ${err.message}` });
       setTimeout(() => setActionFeedback(null), 5000);
+    } finally {
+      setIsExportingPdf(false);
+    }
+  };
+
+  // Re-print or print a single expense statement
+  const handlePrintSingleExpense = async (exp) => {
+    try {
+      setIsExportingPdf(true);
+      const isExp = Boolean(exp.is_exported);
+      const filters = {
+        employee_id: exp.employee_id,
+        expense_ids: exp.id,
+        is_reprint: isExp ? 'true' : 'false',
+        mark_exported: isExp ? 'false' : 'true'
+      };
+      await api.downloadPdfReport(filters, [exp]);
+      setActionFeedback({
+        type: 'success',
+        msg: isExp
+          ? `Re-printed official PDF statement for voucher #${exp.invoice_number || exp.id}.`
+          : `Printed statement for voucher #${exp.invoice_number || exp.id}.`
+      });
+      setTimeout(() => setActionFeedback(null), 4000);
+    } catch (err) {
+      console.error('Print single expense error:', err);
+      setActionFeedback({ type: 'error', msg: `Print failed: ${err.message}` });
+      setTimeout(() => setActionFeedback(null), 4000);
     } finally {
       setIsExportingPdf(false);
     }
@@ -455,20 +483,20 @@ export default function ReportsView({
             onClick={handleExportCsv}
             disabled={isExportingCsv}
             className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition flex items-center space-x-1.5 disabled:opacity-50 shadow-2xs cursor-pointer"
-            title="Download CSV spreadsheet and mark active expenses as exported"
+            title={activeReportTab === 'exported' ? "Re-export CSV spreadsheet of archived statements" : "Download CSV spreadsheet and mark active expenses as exported"}
           >
             <Download className={`w-3.5 h-3.5 text-slate-500 ${isExportingCsv ? 'animate-bounce' : ''}`} />
-            <span>{isExportingCsv ? 'Exporting...' : 'Export to CSV'}</span>
+            <span>{isExportingCsv ? 'Exporting...' : activeReportTab === 'exported' ? 'Re-export CSV' : 'Export to CSV'}</span>
           </button>
 
           <button
             onClick={handleExportPdf}
             disabled={isExportingPdf}
             className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 hover:bg-slate-800 active:bg-slate-900 text-white shadow-xs border border-slate-800 transition flex items-center space-x-1.5 disabled:opacity-50 cursor-pointer"
-            title="Download audit PDF statement and mark active expenses as exported"
+            title={activeReportTab === 'exported' ? "Re-print official PDF statement for exported transactions" : "Download audit PDF statement and mark active expenses as exported"}
           >
             <Printer className={`w-3.5 h-3.5 text-slate-300 ${isExportingPdf ? 'animate-spin' : ''}`} />
-            <span>{isExportingPdf ? 'Generating...' : 'Download PDF Statement'}</span>
+            <span>{isExportingPdf ? 'Generating...' : activeReportTab === 'exported' ? 'Re-print PDF Statement' : 'Download PDF Statement'}</span>
           </button>
         </div>
       </div>
@@ -680,10 +708,28 @@ export default function ReportsView({
               </span>
             )}
             {activeReportTab === 'exported' && (
-              <span className="bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded border border-slate-200 font-medium flex items-center space-x-1">
-                <Lock className="w-3 h-3 text-slate-600" />
-                <span>Exported & locked official statements archive</span>
-              </span>
+              <div className="mt-2 bg-emerald-50/80 border border-emerald-200/80 rounded-lg p-2.5 sm:p-3 text-xs text-emerald-950 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 animate-fade-in shadow-2xs">
+                <div className="flex items-center space-x-2">
+                  <div className="w-6 h-6 rounded bg-emerald-600 text-white flex items-center justify-center shrink-0">
+                    <Printer className="w-3.5 h-3.5" />
+                  </div>
+                  <div>
+                    <span className="font-bold">Exported Statements Archive</span>
+                    <span className="text-emerald-700 text-[11px] block sm:inline sm:ml-2">
+                      ({expenses.length} archived record{expenses.length === 1 ? '' : 's'}) — Select items to re-print or re-print all.
+                    </span>
+                  </div>
+                </div>
+                <button
+                  onClick={handleExportPdf}
+                  disabled={isExportingPdf || expenses.length === 0}
+                  className="px-3 py-1.5 rounded-md bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-xs shrink-0 flex items-center space-x-1.5 shadow-2xs transition disabled:opacity-50 cursor-pointer self-start sm:self-auto"
+                  title="Re-print all currently visible exported transactions"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                  <span>Re-print All ({expenses.length})</span>
+                </button>
+              </div>
             )}
           </div>
         </div>
@@ -704,25 +750,25 @@ export default function ReportsView({
             </div>
 
             <div className="flex items-center space-x-2 flex-wrap gap-y-1">
-              {/* Direct Export Selected */}
+              {/* Direct Export / Re-print Selected */}
               <button
                 onClick={handleExportPdf}
                 disabled={isExportingPdf}
                 className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-900 font-semibold transition disabled:opacity-50 cursor-pointer"
-                title="Download PDF statement of selected items and mark exported"
+                title={activeReportTab === 'exported' ? "Re-print PDF statement of selected items" : "Download PDF statement of selected items and mark exported"}
               >
                 <Printer className="w-3.5 h-3.5 text-slate-700 inline mr-1" />
-                <span>Export Selected (PDF)</span>
+                <span>{activeReportTab === 'exported' ? 'Re-print Selected (PDF)' : 'Export Selected (PDF)'}</span>
               </button>
 
               <button
                 onClick={handleExportCsv}
                 disabled={isExportingCsv}
                 className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-900 font-semibold transition disabled:opacity-50 cursor-pointer"
-                title="Download CSV spreadsheet of selected items"
+                title={activeReportTab === 'exported' ? "Re-export CSV spreadsheet of selected items" : "Download CSV spreadsheet of selected items"}
               >
                 <Download className="w-3.5 h-3.5 text-slate-700 inline mr-1" />
-                <span>Export Selected (CSV)</span>
+                <span>{activeReportTab === 'exported' ? 'Re-export Selected (CSV)' : 'Export Selected (CSV)'}</span>
               </button>
 
               {activeReportTab === 'report' && (
@@ -782,12 +828,13 @@ export default function ReportsView({
                 <th className="py-3 px-3 w-28 text-center">Zoho Sync</th>
                 <th className="py-3 px-3 w-28 text-center">Status</th>
                 <th className="py-3 px-3 w-20 text-center">Receipt</th>
+                <th className="py-3 px-3 w-28 text-center">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 font-normal">
               {expenses.length === 0 ? (
                 <tr>
-                  <td colSpan={10} className="py-12 text-center text-slate-500">
+                  <td colSpan={11} className="py-12 text-center text-slate-500">
                     <div className="max-w-md mx-auto text-center py-4">
                       <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center mx-auto mb-3">
                         <FileCheck className="w-5 h-5 text-slate-400" />
@@ -917,6 +964,33 @@ export default function ReportsView({
                           </button>
                         ) : (
                           <span className="text-slate-300">—</span>
+                        )}
+                      </td>
+
+                      {/* Re-print / Print Voucher Action */}
+                      <td className="py-3 px-3 text-center whitespace-nowrap">
+                        {isExported ? (
+                          <button
+                            type="button"
+                            onClick={() => handlePrintSingleExpense(exp)}
+                            disabled={isExportingPdf}
+                            className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-white hover:bg-slate-100 text-slate-800 border border-slate-200 transition shadow-2xs cursor-pointer group"
+                            title="Re-print official PDF statement for this expense"
+                          >
+                            <Printer className="w-3 h-3 text-slate-500 group-hover:text-slate-900" />
+                            <span>Re-print</span>
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => handlePrintSingleExpense(exp)}
+                            disabled={isExportingPdf}
+                            className="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[11px] font-medium text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition cursor-pointer"
+                            title="Print draft PDF statement"
+                          >
+                            <Printer className="w-3 h-3" />
+                            <span>Print</span>
+                          </button>
                         )}
                       </td>
                     </tr>

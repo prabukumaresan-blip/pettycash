@@ -7,6 +7,7 @@ import {
   Lock,
   RotateCcw,
   Paperclip,
+  Printer,
   Edit2,
   Trash2,
   ExternalLink
@@ -18,6 +19,7 @@ export default function ExpenseCard({
   onEdit,
   onDelete,
   onRetrySync,
+  onPrint,
   isSelected,
   onToggleSelect,
   onToggleReportStatus,
@@ -209,14 +211,26 @@ export default function ExpenseCard({
             )}
 
             {isExported && (
-              <button
-                onClick={() => onRequestRecall && onRequestRecall(expense)}
-                className="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition flex items-center space-x-1"
-                title={isAdmin ? 'Admin Direct Unlock' : 'Request Unlock / Recall'}
-              >
-                <RotateCcw className="w-3 h-3 text-slate-500" />
-                <span>{isAdmin ? 'Unlock' : 'Recall'}</span>
-              </button>
+              <>
+                {onPrint && (
+                  <button
+                    onClick={() => onPrint(expense)}
+                    className="px-2 py-0.5 rounded text-[11px] font-semibold bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 transition flex items-center space-x-1 shadow-2xs cursor-pointer"
+                    title="Re-print PDF statement for this voucher"
+                  >
+                    <Printer className="w-3 h-3 text-slate-600" />
+                    <span>Re-print</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => onRequestRecall && onRequestRecall(expense)}
+                  className="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition flex items-center space-x-1"
+                  title={isAdmin ? 'Admin Direct Unlock' : 'Request Unlock / Recall'}
+                >
+                  <RotateCcw className="w-3 h-3 text-slate-500" />
+                  <span>{isAdmin ? 'Unlock' : 'Recall'}</span>
+                </button>
+              </>
             )}
 
             {!isExported && onEdit && (
