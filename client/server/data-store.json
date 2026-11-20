@@ -7239,7 +7239,12 @@
       "recall_status": null,
       "created_by": "Azan",
       "created_at": "2026-11-19T17:23:49.330Z",
-      "updated_at": "2026-11-19T17:23:49.330Z"
+      "updated_at": "2026-11-20T13:51:14.882Z",
+      "recall_reason": null,
+      "recall_requested_at": null,
+      "recall_requested_by": null,
+      "recall_reviewed_by": null,
+      "recall_reviewed_at": null
     },
     {
       "id": "exp-9496011",

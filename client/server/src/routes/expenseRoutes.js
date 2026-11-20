@@ -486,7 +486,11 @@ router.post('/report-status', async (req, res) => {
       const exp = await db.getExpenseById(id);
       if (exp) {
         if (req.user && req.user.role === 'employee' && exp.employee_id !== req.user.id) {
-          continue;
+          const nameMatches = req.user.name && exp.employee_name && 
+            req.user.name.toLowerCase().trim() === exp.employee_name.toLowerCase().trim();
+          if (!nameMatches) {
+            continue;
+          }
         }
         exp.added_to_report = isAdded;
         exp.added_to_report_at = isAdded ? new Date().toISOString() : null;
@@ -516,7 +520,11 @@ router.patch('/:id/report-status', async (req, res) => {
       return res.status(404).json({ success: false, error: 'Expense not found' });
     }
     if (req.user && req.user.role === 'employee' && exp.employee_id !== req.user.id) {
-      return res.status(403).json({ success: false, error: 'Access denied' });
+      const nameMatches = req.user.name && exp.employee_name && 
+        req.user.name.toLowerCase().trim() === exp.employee_name.toLowerCase().trim();
+      if (!nameMatches) {
+        return res.status(403).json({ success: false, error: 'Access denied' });
+      }
     }
 
     const isAdded = req.body.added_to_report !== undefined ? Boolean(req.body.added_to_report) : !exp.added_to_report;

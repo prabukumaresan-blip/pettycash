@@ -568,32 +568,6 @@ export default function DashboardView({
             <span>Exported ({exportedExpenses.length})</span>
           </button>
 
-          <button
-            onClick={() => setFilterTab('synced')}
-            className={`px-3.5 py-1.5 rounded-md font-semibold transition shrink-0 flex items-center space-x-1.5 ${
-              filterTab === 'synced'
-                ? 'bg-white text-slate-900 shadow-2xs font-bold'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
-            }`}
-          >
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Zoho Synced ({syncedExpenses.length})</span>
-          </button>
-
-          {pendingSyncExpenses.length > 0 && (
-            <button
-              onClick={() => setFilterTab('pending_sync')}
-              className={`px-3.5 py-1.5 rounded-md font-semibold transition shrink-0 flex items-center space-x-1.5 ${
-                filterTab === 'pending_sync'
-                  ? 'bg-white text-slate-900 shadow-2xs font-bold'
-                  : 'text-amber-700 hover:bg-white/60'
-              }`}
-            >
-              <Clock className="w-3.5 h-3.5 text-amber-600" />
-              <span>Pending Sync ({pendingSyncExpenses.length})</span>
-            </button>
-          )}
-
           {pendingRecallCount > 0 && (
             <button
               onClick={() => setFilterTab('recalls')}
@@ -900,18 +874,28 @@ export default function DashboardView({
                             <span>Exported</span>
                           </span>
                         ) : exp.added_to_report ? (
-                          <span
-                            className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-800 border border-blue-200"
-                            title="Marked for Export - displayed in Export section"
+                          <button
+                            type="button"
+                            onClick={() => handleToggleSingleReport(exp)}
+                            className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-800 border border-blue-200 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 transition cursor-pointer group shadow-2xs"
+                            title="Marked for Export • Click to unmark"
                           >
-                            <CheckCircle2 className="w-3 h-3 text-blue-600" />
-                            <span>Marked for Export</span>
-                          </span>
+                            <CheckCircle2 className="w-3 h-3 text-blue-600 group-hover:hidden" />
+                            <X className="w-3 h-3 text-rose-600 hidden group-hover:inline" />
+                            <span className="group-hover:hidden">Marked for Export</span>
+                            <span className="hidden group-hover:inline">Click to Unmark</span>
+                          </button>
                         ) : (
-                          <span className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                            <span>Not Exported</span>
-                          </span>
+                          <button
+                            type="button"
+                            onClick={() => handleToggleSingleReport(exp)}
+                            className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-blue-50 hover:text-blue-800 hover:border-blue-300 transition cursor-pointer group shadow-2xs"
+                            title="Click to mark for Export section"
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 group-hover:bg-blue-600"></span>
+                            <span className="group-hover:hidden">Not Exported</span>
+                            <span className="hidden group-hover:inline">Mark for Export</span>
+                          </button>
                         )}
                       </td>
 
@@ -931,9 +915,9 @@ export default function DashboardView({
                               <button
                                 type="button"
                                 onClick={() => handleToggleSingleReport(exp)}
-                                className={`p-1 rounded transition ${
+                                className={`p-1.5 rounded transition ${
                                   exp.added_to_report
-                                    ? 'text-blue-600 hover:text-rose-600 hover:bg-rose-50'
+                                    ? 'text-blue-600 bg-blue-50 hover:text-rose-600 hover:bg-rose-50'
                                     : 'text-slate-400 hover:text-blue-600 hover:bg-blue-50'
                                 }`}
                                 title={

@@ -1110,8 +1110,27 @@ const db = {
       if (filters.project_id) query = query.eq('project_id', filters.project_id);
       if (filters.start_date) query = query.gte('expense_date', filters.start_date);
       if (filters.end_date) query = query.lte('expense_date', filters.end_date);
+      if (filters.added_to_report !== undefined && filters.added_to_report !== '') {
+        const boolVal = filters.added_to_report === true || filters.added_to_report === 'true';
+        query = query.eq('added_to_report', boolVal);
+      }
+      if (filters.is_exported !== undefined && filters.is_exported !== '') {
+        const boolVal = filters.is_exported === true || filters.is_exported === 'true';
+        query = query.eq('is_exported', boolVal);
+      }
       const { data, error } = await query;
-      if (!error && data) return data;
+      if (!error && data) {
+        if (filters.search) {
+          const s = filters.search.toLowerCase();
+          return data.filter(e =>
+            (e.description && e.description.toLowerCase().includes(s)) ||
+            (e.category_name && e.category_name.toLowerCase().includes(s)) ||
+            (e.employee_name && e.employee_name.toLowerCase().includes(s)) ||
+            (e.invoice_number && e.invoice_number.toLowerCase().includes(s))
+          );
+        }
+        return data;
+      }
     }
     const store = loadLocalData();
       list = [...store.expenses];
@@ -1338,22 +1357,19 @@ const db = {
 
       if (existing) {
         if (!expense.id) expense.id = existing.id;
-        if (expense.added_to_report === undefined && existing.added_to_report !== undefined) {
-          expense.added_to_report = existing.added_to_report;
-          expense.added_to_report_at = existing.added_to_report_at;
-        }
-        if (expense.is_exported === undefined && existing.is_exported !== undefined) {
-          expense.is_exported = existing.is_exported;
-          expense.exported_at = existing.exported_at;
-        }
-        if (expense.recall_status === undefined && existing.recall_status !== undefined) {
-          expense.recall_status = existing.recall_status;
-          expense.recall_reason = existing.recall_reason;
-          expense.recall_requested_at = existing.recall_requested_at;
-          expense.recall_requested_by = existing.recall_requested_by;
-          expense.recall_reviewed_by = existing.recall_reviewed_by;
-          expense.recall_reviewed_at = existing.recall_reviewed_at;
-        }
+        // CRITICAL: Preserve local reporting and export workflow flags from existing expense!
+        // Zoho Books sync NEVER manages added_to_report or is_exported - do not let sync clobber them!
+        expense.added_to_report = existing.added_to_report !== undefined ? existing.added_to_report : (expense.added_to_report || false);
+        expense.added_to_report_at = existing.added_to_report ? (existing.added_to_report_at || expense.added_to_report_at || null) : null;
+        expense.is_exported = existing.is_exported !== undefined ? existing.is_exported : (expense.is_exported || false);
+        expense.exported_at = existing.is_exported ? (existing.exported_at || expense.exported_at || null) : null;
+        expense.recall_status = existing.recall_status !== undefined ? existing.recall_status : (expense.recall_status || null);
+        expense.recall_reason = existing.recall_reason !== undefined ? existing.recall_reason : (expense.recall_reason || null);
+        expense.recall_requested_at = existing.recall_requested_at !== undefined ? existing.recall_requested_at : (expense.recall_requested_at || null);
+        expense.recall_requested_by = existing.recall_requested_by !== undefined ? existing.recall_requested_by : (expense.recall_requested_by || null);
+        expense.recall_reviewed_by = existing.recall_reviewed_by !== undefined ? existing.recall_reviewed_by : (expense.recall_reviewed_by || null);
+        expense.recall_reviewed_at = existing.recall_reviewed_at !== undefined ? existing.recall_reviewed_at : (expense.recall_reviewed_at || null);
+
         if (!expense.project_id && existing.project_id) expense.project_id = existing.project_id;
         if (!expense.project_name && existing.project_name) expense.project_name = existing.project_name;
         if (!expense.invoice_number && existing.invoice_number) expense.invoice_number = existing.invoice_number;
@@ -1364,6 +1380,11 @@ const db = {
           ...existing,
           ...expense,
           id: existing.id || expense.id,
+          added_to_report: expense.added_to_report,
+          added_to_report_at: expense.added_to_report_at,
+          is_exported: expense.is_exported,
+          exported_at: expense.exported_at,
+          recall_status: expense.recall_status,
           updated_at: new Date().toISOString()
         };
         processedList.push(store.expenses[existingIdx]);

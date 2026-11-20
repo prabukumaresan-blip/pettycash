@@ -180,9 +180,9 @@ export default function App() {
           // Retain newly recorded local expenses that may not yet be reflected in server response
           const localOnly = prevExpenses.filter(
             (e) => !deletedSet.has(String(e.id)) &&
-                   (!e.zoho_journal_id || !deletedSet.has(String(e.zoho_journal_id))) &&
-                   !serverIds.has(e.id) &&
-                   (!e.zoho_journal_id || !serverZohoIds.has(String(e.zoho_journal_id)))
+              (!e.zoho_journal_id || !deletedSet.has(String(e.zoho_journal_id))) &&
+              !serverIds.has(e.id) &&
+              (!e.zoho_journal_id || !serverZohoIds.has(String(e.zoho_journal_id)))
           );
           return [...localOnly, ...serverExpenses];
         });
@@ -510,10 +510,29 @@ export default function App() {
               : e
           )
         );
+
+        // Update local storage caches immediately so background or cached reads preserve added_to_report
+        try {
+          const keys = Object.keys(localStorage).filter((k) => k.startsWith('cached_expenses'));
+          keys.forEach((k) => {
+            const list = JSON.parse(localStorage.getItem(k) || '[]');
+            const updated = list.map((e) =>
+              idSet.has(String(e.id)) || (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id)))
+                ? {
+                    ...e,
+                    added_to_report: addedToReport,
+                    added_to_report_at: addedToReport ? new Date().toISOString() : null
+                  }
+                : e
+            );
+            localStorage.setItem(k, JSON.stringify(updated));
+          });
+        } catch { }
+
         showToast(
           addedToReport
-            ? `Added ${expenseIds.length} expense(s) to the Expense Report!`
-            : `Removed ${expenseIds.length} expense(s) from the Expense Report.`,
+            ? `Marked ${expenseIds.length} expense(s) for export`
+            : `Removed ${expenseIds.length} expense(s) from export list`,
           'success'
         );
         // Refresh app state in background
@@ -766,10 +785,10 @@ export default function App() {
         <div className="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-50 animate-slide-up">
           <div
             className={`px-4 py-2.5 rounded-lg shadow-lg border text-xs font-semibold flex items-center space-x-2 ${toastMessage.type === 'error'
-                ? 'bg-rose-900 text-white border-rose-800'
-                : toastMessage.type === 'warning'
-                  ? 'bg-amber-900 text-white border-amber-800'
-                  : 'bg-slate-900 text-white border-slate-800'
+              ? 'bg-rose-900 text-white border-rose-800'
+              : toastMessage.type === 'warning'
+                ? 'bg-amber-900 text-white border-amber-800'
+                : 'bg-slate-900 text-white border-slate-800'
               }`}
           >
             <span>{toastMessage.msg}</span>
