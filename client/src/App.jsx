@@ -539,10 +539,10 @@ export default function App() {
             const updated = list.map((e) =>
               idSet.has(String(e.id)) || (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id)))
                 ? {
-                    ...e,
-                    added_to_report: addedToReport,
-                    added_to_report_at: addedToReport ? new Date().toISOString() : null
-                  }
+                  ...e,
+                  added_to_report: addedToReport,
+                  added_to_report_at: addedToReport ? new Date().toISOString() : null
+                }
                 : e
             );
             localStorage.setItem(k, JSON.stringify(updated));
@@ -583,12 +583,12 @@ export default function App() {
         prev.map((e) =>
           idSet.has(String(e.id)) || (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id)))
             ? {
-                ...e,
-                is_exported: true,
-                exported_at: now,
-                added_to_report: true,
-                added_to_report_at: e.added_to_report_at || now
-              }
+              ...e,
+              is_exported: true,
+              exported_at: now,
+              added_to_report: true,
+              added_to_report_at: e.added_to_report_at || now
+            }
             : e
         )
       );
@@ -601,12 +601,12 @@ export default function App() {
           const updated = list.map((e) =>
             idSet.has(String(e.id)) || (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id)))
               ? {
-                  ...e,
-                  is_exported: true,
-                  exported_at: now,
-                  added_to_report: true,
-                  added_to_report_at: e.added_to_report_at || now
-                }
+                ...e,
+                is_exported: true,
+                exported_at: now,
+                added_to_report: true,
+                added_to_report_at: e.added_to_report_at || now
+              }
               : e
           );
           localStorage.setItem(k, JSON.stringify(updated));

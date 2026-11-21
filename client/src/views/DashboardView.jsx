@@ -50,7 +50,7 @@ export default function DashboardView({
   const effectiveUser = currentUser || currentEmployee;
   const isAdmin = effectiveUser?.role === 'admin';
   const [selectedEmployeeFilter, setSelectedEmployeeFilter] = useState('');
-  const [filterTab, setFilterTab] = useState('all'); // 'all', 'marked', 'not_exported', 'exported', 'recalls'
+  const [filterTab, setFilterTab] = useState('all'); // 'all', 'marked', 'unmarked', 'synced', 'recalls'
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedExpenseIds, setSelectedExpenseIds] = useState(new Set());
@@ -80,22 +80,25 @@ export default function DashboardView({
   const currentBal = parseFloat(activeAccountOwner?.current_balance || 0);
   const settlement = getSettlementStatus(currentBal, activeAccountOwner?.name || 'Petty Cash');
 
-  const totalSpent = employeeExpenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
-  const markedExpenses = employeeExpenses.filter((e) => e.added_to_report && !e.is_exported);
-  const markedAmount = markedExpenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
   const notExportedExpenses = employeeExpenses.filter((e) => !e.is_exported);
   const notExportedAmount = notExportedExpenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
+  const unmarkedExpenses = notExportedExpenses.filter((e) => !e.added_to_report);
+  const unmarkedAmount = unmarkedExpenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
+  const markedExpenses = notExportedExpenses.filter((e) => e.added_to_report);
+  const markedAmount = markedExpenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
   const exportedExpenses = employeeExpenses.filter((e) => e.is_exported);
   const exportedAmount = exportedExpenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
-  const syncedExpenses = employeeExpenses.filter((e) => e.sync_status === 'synced');
-  const pendingSyncExpenses = employeeExpenses.filter((e) => e.sync_status === 'pending' || e.sync_status === 'failed');
+  const syncedExpenses = notExportedExpenses.filter((e) => e.sync_status === 'synced');
+  const pendingSyncExpenses = notExportedExpenses.filter((e) => e.sync_status === 'pending' || e.sync_status === 'failed');
   const pendingRecallCount = employeeExpenses.filter((e) => e.recall_status === 'pending').length;
 
-  // Filter list
+  // Filter list: Never show exported expense logs in Petty Cash Transactions!
   const filteredList = employeeExpenses.filter((e) => {
-    if (filterTab === 'marked' && (!e.added_to_report || e.is_exported)) return false;
-    if (filterTab === 'not_exported' && e.is_exported) return false;
-    if (filterTab === 'exported' && !e.is_exported) return false;
+    // Condition: Exclude exported expense logs from Petty Cash Transactions
+    if (e.is_exported) return false;
+
+    if (filterTab === 'marked' && !e.added_to_report) return false;
+    if (filterTab === 'unmarked' && e.added_to_report) return false;
     if (filterTab === 'synced' && e.sync_status !== 'synced') return false;
     if (filterTab === 'pending_sync' && e.sync_status === 'synced') return false;
     if (filterTab === 'recalls' && e.recall_status !== 'pending') return false;
@@ -203,11 +206,7 @@ export default function DashboardView({
         ? employeeExpenses.filter(e => selectedExpenseIds.has(e.id))
         : (filterTab === 'marked'
             ? markedExpenses
-            : (filterTab === 'not_exported'
-                ? notExportedExpenses
-                : (filterTab === 'exported'
-                    ? exportedExpenses
-                    : filteredExpenses)));
+            : notExportedExpenses);
 
       const targetIds = targetExpenses.map(e => e.id);
       if (targetIds.length > 0) {
@@ -215,10 +214,8 @@ export default function DashboardView({
       } else if (filterTab === 'marked') {
         filters.added_to_report = 'true';
         filters.is_exported = 'false';
-      } else if (filterTab === 'not_exported') {
+      } else {
         filters.is_exported = 'false';
-      } else if (filterTab === 'exported') {
-        filters.is_exported = 'true';
       }
 
       if (format === 'pdf') {
@@ -351,33 +348,33 @@ export default function DashboardView({
         {/* Total Spent */}
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
           <div className="flex items-center justify-between text-xs text-slate-500 font-semibold uppercase tracking-wider">
-            <span>Total Spent</span>
+            <span>Active Expenses</span>
             <Wallet className="w-4 h-4 text-slate-400" />
-          </div>
-          <div className="text-xl font-bold text-slate-900 mt-2 font-mono">
-            {formatOMR(totalSpent)}
-          </div>
-          <div className="text-[11px] text-slate-500 mt-0.5">
-            {employeeExpenses.length} total transaction{employeeExpenses.length === 1 ? '' : 's'}
-          </div>
-        </div>
-
-        {/* Not Exported */}
-        <div
-          onClick={() => setFilterTab('not_exported')}
-          className={`bg-white p-4 rounded-xl border transition cursor-pointer shadow-2xs ${
-            filterTab === 'not_exported' ? 'border-amber-400 ring-1 ring-amber-400/30' : 'border-slate-200 hover:border-slate-300'
-          }`}
-        >
-          <div className="flex items-center justify-between text-xs text-slate-500 font-semibold uppercase tracking-wider">
-            <span>Not Exported</span>
-            <span className="w-2 h-2 rounded-full bg-amber-500"></span>
           </div>
           <div className="text-xl font-bold text-slate-900 mt-2 font-mono">
             {formatOMR(notExportedAmount)}
           </div>
+          <div className="text-[11px] text-slate-500 mt-0.5">
+            {notExportedExpenses.length} active transaction{notExportedExpenses.length === 1 ? '' : 's'}
+          </div>
+        </div>
+
+        {/* Unmarked / Open Float */}
+        <div
+          onClick={() => setFilterTab('unmarked')}
+          className={`bg-white p-4 rounded-xl border transition cursor-pointer shadow-2xs ${
+            filterTab === 'unmarked' ? 'border-amber-400 ring-1 ring-amber-400/30' : 'border-slate-200 hover:border-slate-300'
+          }`}
+        >
+          <div className="flex items-center justify-between text-xs text-slate-500 font-semibold uppercase tracking-wider">
+            <span>Unmarked</span>
+            <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+          </div>
+          <div className="text-xl font-bold text-slate-900 mt-2 font-mono">
+            {formatOMR(unmarkedAmount)}
+          </div>
           <div className="text-[11px] text-amber-700 mt-0.5 font-medium">
-            {notExportedExpenses.length} awaiting export
+            {unmarkedExpenses.length} awaiting staging
           </div>
         </div>
 
@@ -413,13 +410,13 @@ export default function DashboardView({
           </div>
           <div className="text-xl font-bold text-slate-900 mt-2 font-mono">
             {syncedExpenses.length}{' '}
-            <span className="text-xs font-normal text-slate-400">/ {employeeExpenses.length}</span>
+            <span className="text-xs font-normal text-slate-400">/ {notExportedExpenses.length}</span>
           </div>
           <div className="text-[11px] text-emerald-700 mt-0.5 font-medium flex items-center space-x-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
             <span>
               {pendingSyncExpenses.length === 0
-                ? 'All posted to Zoho Books'
+                ? 'All active posted to Zoho Books'
                 : `${pendingSyncExpenses.length} pending sync`}
             </span>
           </div>
@@ -476,7 +473,7 @@ export default function DashboardView({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
           <div>
             <h2 className="text-base font-bold text-slate-900 tracking-tight">Petty Cash Transactions</h2>
-            <p className="text-xs text-slate-500">Official expense ledger synchronized with Zoho Books vouchers</p>
+            <p className="text-xs text-slate-500">Active petty cash transactions • Exported statements are archived in Reports</p>
           </div>
 
           {/* Right Header Controls: Employee Filter (Admin), Search & Direct Export Options */}
@@ -565,19 +562,7 @@ export default function DashboardView({
                 : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
             }`}
           >
-            All Activity ({employeeExpenses.length})
-          </button>
-
-          <button
-            onClick={() => setFilterTab('not_exported')}
-            className={`px-3.5 py-1.5 rounded-md font-semibold transition shrink-0 flex items-center space-x-1.5 ${
-              filterTab === 'not_exported'
-                ? 'bg-white text-slate-900 shadow-2xs font-bold'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
-            }`}
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-            <span>Not Exported ({notExportedExpenses.length})</span>
+            All Active ({notExportedExpenses.length})
           </button>
 
           <button
@@ -593,15 +578,27 @@ export default function DashboardView({
           </button>
 
           <button
-            onClick={() => setFilterTab('exported')}
+            onClick={() => setFilterTab('unmarked')}
             className={`px-3.5 py-1.5 rounded-md font-semibold transition shrink-0 flex items-center space-x-1.5 ${
-              filterTab === 'exported'
+              filterTab === 'unmarked'
                 ? 'bg-white text-slate-900 shadow-2xs font-bold'
                 : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
             }`}
           >
-            <Lock className="w-3.5 h-3.5 text-slate-700" />
-            <span>Exported ({exportedExpenses.length})</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+            <span>Unmarked ({unmarkedExpenses.length})</span>
+          </button>
+
+          <button
+            onClick={() => setFilterTab('synced')}
+            className={`px-3.5 py-1.5 rounded-md font-semibold transition shrink-0 flex items-center space-x-1.5 ${
+              filterTab === 'synced'
+                ? 'bg-white text-slate-900 shadow-2xs font-bold'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+            }`}
+          >
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Zoho Synced ({syncedExpenses.length})</span>
           </button>
 
           {pendingRecallCount > 0 && (
@@ -615,6 +612,18 @@ export default function DashboardView({
             >
               <RotateCcw className="w-3.5 h-3.5 text-amber-700" />
               <span>Review Requests ({pendingRecallCount})</span>
+            </button>
+          )}
+
+          {exportedExpenses.length > 0 && onNavigateToReports && (
+            <button
+              type="button"
+              onClick={onNavigateToReports}
+              className="px-3 py-1.5 rounded-md font-semibold text-xs text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition shrink-0 flex items-center space-x-1.5 cursor-pointer ml-auto"
+              title="View archived statement packages in Reports"
+            >
+              <Lock className="w-3.5 h-3.5 text-blue-600" />
+              <span>Exported Statements ({exportedExpenses.length}) &rarr;</span>
             </button>
           )}
         </div>
@@ -659,25 +668,25 @@ export default function DashboardView({
               <span>Unmark</span>
             </button>
 
-            {/* Direct Export / Re-print Selected Options */}
+            {/* Direct Export Selected Options */}
             <button
               onClick={() => handleExportTransactions('pdf')}
               disabled={isExportingPdf || isExportingCsv}
               className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-900 font-semibold text-xs flex items-center space-x-1.5 transition disabled:opacity-50 cursor-pointer"
-              title={filterTab === 'exported' ? "Re-print PDF statement of selected items" : "Download PDF statement of selected items and mark as exported"}
+              title="Download PDF statement of selected items and mark as exported"
             >
               <Printer className="w-3.5 h-3.5 text-slate-700" />
-              <span>{filterTab === 'exported' ? 'Re-print (PDF)' : 'Export PDF'}</span>
+              <span>Export PDF</span>
             </button>
 
             <button
               onClick={() => handleExportTransactions('csv')}
               disabled={isExportingPdf || isExportingCsv}
               className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-900 font-semibold text-xs flex items-center space-x-1.5 transition disabled:opacity-50 cursor-pointer"
-              title={filterTab === 'exported' ? "Re-export CSV spreadsheet of selected items" : "Download CSV spreadsheet of selected items"}
+              title="Download CSV spreadsheet of selected items"
             >
               <Download className="w-3.5 h-3.5 text-slate-700" />
-              <span>{filterTab === 'exported' ? 'Re-export CSV' : 'Export CSV'}</span>
+              <span>Export CSV</span>
             </button>
 
             {/* Mark Selected as Exported */}
@@ -746,20 +755,33 @@ export default function DashboardView({
           <div className="w-10 h-10 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center mx-auto mb-3">
             <Wallet className="w-5 h-5" />
           </div>
-          <h3 className="text-sm font-bold text-slate-900">No transactions found</h3>
+          <h3 className="text-sm font-bold text-slate-900">No active transactions found</h3>
           <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-            {filterTab === 'not_exported'
-              ? 'All current expenses have been exported into official statements.'
-              : filterTab === 'exported'
-              ? 'No exported expenses found under current filter.'
-              : 'Log an expense to record transactions against your petty cash float.'}
+            {filterTab === 'marked'
+              ? 'No active expenses are currently marked for export.'
+              : filterTab === 'unmarked'
+              ? 'No unmarked active expenses found.'
+              : searchQuery.trim()
+              ? 'No active transactions match your search query.'
+              : 'All recorded expenses have been exported to official statements or none logged yet.'}
           </p>
-          <button
-            onClick={onOpenLogModal}
-            className="mt-4 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition"
-          >
-            + Log First Expense
-          </button>
+          <div className="flex items-center justify-center space-x-2 mt-4">
+            <button
+              onClick={onOpenLogModal}
+              className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition"
+            >
+              + Log First Expense
+            </button>
+            {exportedExpenses.length > 0 && onNavigateToReports && (
+              <button
+                onClick={onNavigateToReports}
+                className="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition flex items-center space-x-1.5"
+              >
+                <Lock className="w-3.5 h-3.5 text-slate-500" />
+                <span>View {exportedExpenses.length} Exported Statements</span>
+              </button>
+            )}
+          </div>
         </div>
       ) : (
         <div className="space-y-4">
@@ -789,7 +811,6 @@ export default function DashboardView({
               <tbody className="divide-y divide-slate-100 font-normal">
                 {paginatedList.map((exp) => {
                   const isExpSelected = selectedExpenseIds.has(exp.id);
-                  const isExported = Boolean(exp.is_exported);
                   const hasReceipt = Boolean(exp.receipt_url || exp.receipt_file_name);
                   const receiptUrl =
                     exp.receipt_url ||
@@ -899,17 +920,9 @@ export default function DashboardView({
                         )}
                       </td>
 
-                      {/* Status: Exported / Marked for Export / Not Exported */}
+                      {/* Status: Marked for Export / Not Exported */}
                       <td className="py-3 px-3 text-center whitespace-nowrap">
-                        {isExported ? (
-                          <span
-                            className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200"
-                            title={exp.exported_at ? `Exported: ${new Date(exp.exported_at).toLocaleDateString()}` : 'Exported'}
-                          >
-                            <Lock className="w-3 h-3 text-emerald-600" />
-                            <span>Exported</span>
-                          </span>
-                        ) : exp.added_to_report ? (
+                        {exp.added_to_report ? (
                           <button
                             type="button"
                             onClick={() => handleToggleSingleReport(exp)}
@@ -938,72 +951,39 @@ export default function DashboardView({
                       {/* Row Actions */}
                       <td className="py-3 px-3 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end space-x-1">
-                          {isExported ? (
-                            <>
-                              <button
-                                type="button"
-                                onClick={() => handlePrintSingleExpense(exp)}
-                                disabled={isExportingPdf}
-                                className="p-1 rounded text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition cursor-pointer"
-                                title="Re-print PDF statement for this voucher"
-                              >
-                                <Printer className="w-3.5 h-3.5" />
-                              </button>
-                              <button
-                                onClick={() => onRequestRecall && onRequestRecall(exp)}
-                                className="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer"
-                                title={currentUser?.role === 'admin' ? 'Admin Direct Unlock' : 'Request Unlock'}
-                              >
-                                <RotateCcw className="w-3.5 h-3.5" />
-                              </button>
-                              {onDeleteExpense && (
-                                <button
-                                  type="button"
-                                  onClick={() => onDeleteExpense(exp.id)}
-                                  className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition cursor-pointer"
-                                  title="Delete Expense (reverses in Zoho Books)"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                              )}
-                            </>
-                          ) : (
-                            <>
-                              <button
-                                type="button"
-                                onClick={() => handleToggleSingleReport(exp)}
-                                className={`p-1.5 rounded transition ${
-                                  exp.added_to_report
-                                    ? 'text-blue-600 bg-blue-50 hover:text-rose-600 hover:bg-rose-50'
-                                    : 'text-slate-400 hover:text-blue-600 hover:bg-blue-50'
-                                }`}
-                                title={
-                                  exp.added_to_report
-                                    ? 'Marked for Export (click to unmark)'
-                                    : 'Click to mark for Export section'
-                                }
-                              >
-                                <FileCheck className="w-3.5 h-3.5" />
-                              </button>
-                              {onEditExpense && (
-                                <button
-                                  onClick={() => onEditExpense(exp)}
-                                  className="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
-                                  title="Edit Expense"
-                                >
-                                  <Edit2 className="w-3.5 h-3.5" />
-                                </button>
-                              )}
-                              {onDeleteExpense && (
-                                <button
-                                  onClick={() => onDeleteExpense(exp.id)}
-                                  className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition"
-                                  title="Delete Expense"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                              )}
-                            </>
+                          <button
+                            type="button"
+                            onClick={() => handleToggleSingleReport(exp)}
+                            className={`p-1.5 rounded transition ${
+                              exp.added_to_report
+                                ? 'text-blue-600 bg-blue-50 hover:text-rose-600 hover:bg-rose-50'
+                                : 'text-slate-400 hover:text-blue-600 hover:bg-blue-50'
+                            }`}
+                            title={
+                              exp.added_to_report
+                                ? 'Marked for Export (click to unmark)'
+                                : 'Click to mark for Export section'
+                            }
+                          >
+                            <FileCheck className="w-3.5 h-3.5" />
+                          </button>
+                          {onEditExpense && (
+                            <button
+                              onClick={() => onEditExpense(exp)}
+                              className="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
+                              title="Edit Expense"
+                            >
+                              <Edit2 className="w-3.5 h-3.5" />
+                            </button>
+                          )}
+                          {onDeleteExpense && (
+                            <button
+                              onClick={() => onDeleteExpense(exp.id)}
+                              className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition"
+                              title="Delete Expense"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
                           )}
                         </div>
                       </td>
