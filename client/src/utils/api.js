@@ -572,8 +572,9 @@ export const api = {
     return await safeJson(res);
   },
 
-  async getZohoProjects() {
-    const res = await fetchWithAuth(`${BASE_URL}/zoho/projects`);
+  async getZohoProjects(forceRefresh = false) {
+    const url = forceRefresh ? `${BASE_URL}/zoho/projects?refresh=true` : `${BASE_URL}/zoho/projects`;
+    const res = await fetchWithAuth(url);
     return await safeJson(res);
   },
 

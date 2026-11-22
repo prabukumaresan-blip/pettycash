@@ -431,7 +431,7 @@ class ZohoBooksService {
   // Sync Projects from Zoho Books
   async syncProjects() {
     try {
-      const response = await this.makeApiRequest('/projects', 'GET');
+      const response = await this.makeApiRequest('/projects', 'GET', null, { per_page: 200 });
       const rawProjects = response.projects || [];
       const mapped = rawProjects.map(proj => ({
         project_id: proj.project_id,
@@ -442,6 +442,9 @@ class ZohoBooksService {
         status: proj.status || 'active',
         last_synced: new Date().toISOString()
       }));
+
+      // Sort alphabetically by project name for better usability
+      mapped.sort((a, b) => (a.project_name || '').localeCompare(b.project_name || ''));
 
       await db.setZohoProjects(mapped);
       await db.addSyncLog('projects_sync', 'success', { count: mapped.length });

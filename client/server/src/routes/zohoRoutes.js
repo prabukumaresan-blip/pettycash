@@ -158,11 +158,16 @@ router.get('/chart-of-accounts', async (req, res) => {
   }
 });
 
-// GET Synced Projects (auto-syncs from Zoho Books if empty or stale)
+// GET Synced Projects (auto-syncs from Zoho Books if empty, stale, or forced refresh)
 router.get('/projects', async (req, res) => {
   try {
     let projects = await db.getZohoProjects();
-    if (!projects || projects.length === 0 || (projects.length <= 4 && projects[0]?.project_id?.startsWith('proj-'))) {
+    const shouldRefresh = req.query.refresh === 'true' ||
+                          !projects ||
+                          projects.length === 0 ||
+                          (projects.length <= 4 && projects[0]?.project_id?.startsWith('proj-')) ||
+                          !projects.some(p => p.project_name === 'GENERIC PROJECT');
+    if (shouldRefresh) {
       try {
         projects = await zohoBooksService.syncProjects();
       } catch (syncErr) {

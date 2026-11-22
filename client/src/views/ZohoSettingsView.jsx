@@ -427,10 +427,22 @@ export default function ZohoSettingsView({
       {activeTab === 'projects' && (
         <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs overflow-hidden">
           <div className="p-4 border-b border-slate-100 flex items-center justify-between">
-            <h3 className="text-sm font-extrabold text-slate-900">
-              Synced Zoho Projects ({projects.length})
-            </h3>
-            <span className="text-xs text-slate-400">Available for project-wise expense tagging</span>
+            <div>
+              <h3 className="text-sm font-extrabold text-slate-900">
+                Synced Zoho Projects ({projects.length})
+              </h3>
+              <span className="text-xs text-slate-400">Available for project-wise expense tagging</span>
+            </div>
+            <button
+              type="button"
+              onClick={async () => {
+                const res = await api.getZohoProjects(true);
+                if (res.projects) setProjects(res.projects);
+              }}
+              className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer"
+            >
+              Refresh from Zoho
+            </button>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
