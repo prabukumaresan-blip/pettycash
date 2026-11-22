@@ -898,6 +898,38 @@ function loadLocalData() {
       }
     }
 
+    // Deduplicate expenses sharing the same zoho_journal_id so duplicate records never exist
+    if (Array.isArray(parsed.expenses)) {
+      const seenZoho = new Map();
+      const deduped = [];
+      let hadDuplicates = false;
+      for (const exp of parsed.expenses) {
+        if (exp.zoho_journal_id) {
+          const zid = String(exp.zoho_journal_id);
+          if (seenZoho.has(zid)) {
+            hadDuplicates = true;
+            const existing = seenZoho.get(zid);
+            // Merge flags if duplicate was marked or exported
+            if (exp.added_to_report) {
+              existing.added_to_report = true;
+              existing.added_to_report_at = exp.added_to_report_at || existing.added_to_report_at || new Date().toISOString();
+            }
+            if (exp.is_exported) {
+              existing.is_exported = true;
+              existing.exported_at = exp.exported_at || existing.exported_at || new Date().toISOString();
+            }
+            continue;
+          }
+          seenZoho.set(zid, exp);
+        }
+        deduped.push(exp);
+      }
+      if (hadDuplicates) {
+        parsed.expenses = deduped;
+        saveLocalData(parsed);
+      }
+    }
+
     // Merge bundled real tokens and projects if parsed lacks them
     const bundled = defaultBundledJson || (fs.existsSync(/*turbopackIgnore: true*/ BUNDLED_DB_FILE)
       ? (() => { try { return JSON.parse(fs.readFileSync(/*turbopackIgnore: true*/ BUNDLED_DB_FILE, 'utf-8')); } catch { return null; } })()
@@ -1162,8 +1194,17 @@ const db = {
           (e.invoice_number && e.invoice_number.toLowerCase().includes(s))
         );
       }
+      // Ensure returned list is cleanly deduplicated by zoho_journal_id
+      const seenZoho = new Set();
+      list = list.filter((e) => {
+        if (!e.zoho_journal_id) return true;
+        const zid = String(e.zoho_journal_id);
+        if (seenZoho.has(zid)) return false;
+        seenZoho.add(zid);
+        return true;
+      });
       list.sort((a, b) => new Date(b.expense_date) - new Date(a.expense_date));
-    return list;
+      return list;
   },
 
   async getExpenseById(id) {
@@ -1186,10 +1227,10 @@ const db = {
       expense.employee_name = emp.name;
     }
 
-    // Match existing by zoho_journal_id, id, or (employee_id + invoice_number)
+    // Match existing by exact id first, then zoho_journal_id, then (employee_id + invoice_number)
     const existing = store.expenses.find(e => 
-      (expense.zoho_journal_id && e.zoho_journal_id && String(e.zoho_journal_id) === String(expense.zoho_journal_id)) ||
       (expense.id && e.id === expense.id) || 
+      (expense.zoho_journal_id && e.zoho_journal_id && String(e.zoho_journal_id) === String(expense.zoho_journal_id)) ||
       (expense.employee_id && expense.invoice_number && e.employee_id === expense.employee_id && e.invoice_number && String(e.invoice_number) === String(expense.invoice_number))
     );
 
@@ -1295,6 +1336,21 @@ const db = {
         id: existing.id || expense.id,
         updated_at: new Date().toISOString()
       });
+      // Synchronize any sister records sharing the same zoho_journal_id
+      if (existing.zoho_journal_id) {
+        store.expenses.forEach(e => {
+          if (e !== existing && e.zoho_journal_id && String(e.zoho_journal_id) === String(existing.zoho_journal_id)) {
+            if (expense.added_to_report !== undefined) {
+              e.added_to_report = expense.added_to_report;
+              e.added_to_report_at = expense.added_to_report_at;
+            }
+            if (expense.is_exported !== undefined) {
+              e.is_exported = expense.is_exported;
+              e.exported_at = expense.exported_at;
+            }
+          }
+        });
+      }
     } else {
       store.expenses.unshift({
         ...expense,

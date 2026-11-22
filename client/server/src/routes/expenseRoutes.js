@@ -472,7 +472,11 @@ router.post('/report-status', async (req, res) => {
     const updated = [];
 
     for (const id of expense_ids) {
-      const exp = await db.getExpenseById(id);
+      let exp = await db.getExpenseById(id);
+      if (!exp) {
+        const all = await db.getExpenses({});
+        exp = all.find(e => String(e.id) === String(id) || (e.zoho_journal_id && String(e.zoho_journal_id) === String(id)));
+      }
       if (exp) {
         if (req.user && req.user.role === 'employee' && exp.employee_id !== req.user.id) {
           const nameMatches = req.user.name && exp.employee_name && 

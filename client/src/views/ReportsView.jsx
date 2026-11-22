@@ -193,21 +193,34 @@ export default function ReportsView({
   }, [allExpenses, activeReportTab, selectedEmployeeId, isAdmin, currentUser, employees, selectedProjectId, syncStatusFilter, startDate, endDate, search]);
 
   const expenses = React.useMemo(() => {
-    const serverList = reportData?.expenses || [];
-    if (clientFilteredExpenses.length === 0) return serverList;
-    if (serverList.length === 0) return clientFilteredExpenses;
+    const serverList = (reportData?.expenses || []).filter((e) => {
+      if (activeReportTab === 'report') return e.added_to_report && !e.is_exported;
+      if (activeReportTab === 'exported') return e.is_exported;
+      if (activeReportTab === 'unreported') return !e.added_to_report && !e.is_exported;
+      return true;
+    });
 
     const map = new Map();
     serverList.forEach((e) => map.set(e.id, e));
+    // Client-derived expenses take precedence for instant reactivity on mark/unmark
     clientFilteredExpenses.forEach((e) => map.set(e.id, e));
 
-    return Array.from(map.values()).sort((a, b) => {
+    let list = Array.from(map.values());
+    if (activeReportTab === 'report') {
+      list = list.filter((e) => e.added_to_report && !e.is_exported);
+    } else if (activeReportTab === 'exported') {
+      list = list.filter((e) => e.is_exported);
+    } else if (activeReportTab === 'unreported') {
+      list = list.filter((e) => !e.added_to_report && !e.is_exported);
+    }
+
+    return list.sort((a, b) => {
       const dateA = a.expense_date || '';
       const dateB = b.expense_date || '';
       if (dateA !== dateB) return dateB.localeCompare(dateA);
       return (b.id || '').localeCompare(a.id || '');
     });
-  }, [clientFilteredExpenses, reportData]);
+  }, [clientFilteredExpenses, reportData, activeReportTab]);
 
   // 2. Group filtered expenses into formal Report objects (Claim Statements & Exported Archives)
   const reports = React.useMemo(() => {

@@ -171,6 +171,14 @@ export default function App() {
         setExpenses((prevExpenses) => {
           const deletedSet = api.getDeletedIds ? api.getDeletedIds() : new Set();
           const exportedSet = api.getExportedIds ? api.getExportedIds() : new Set();
+
+          // Index prevExpenses to preserve optimistic report status
+          const prevMap = new Map();
+          (prevExpenses || []).forEach((e) => {
+            if (e.id) prevMap.set(String(e.id), e);
+            if (e.zoho_journal_id) prevMap.set(String(e.zoho_journal_id), e);
+          });
+
           const serverExpenses = expRes.value.expenses
             .filter(
               (e) => !deletedSet.has(String(e.id)) && (!e.zoho_journal_id || !deletedSet.has(String(e.zoho_journal_id)))
@@ -182,6 +190,14 @@ export default function App() {
                   is_exported: true,
                   exported_at: e.exported_at || new Date().toISOString(),
                   added_to_report: true
+                };
+              }
+              const prev = prevMap.get(String(e.id)) || (e.zoho_journal_id ? prevMap.get(String(e.zoho_journal_id)) : null);
+              if (prev && prev.added_to_report !== undefined && e.added_to_report === undefined) {
+                return {
+                  ...e,
+                  added_to_report: prev.added_to_report,
+                  added_to_report_at: prev.added_to_report_at
                 };
               }
               return e;
@@ -515,55 +531,60 @@ export default function App() {
 
   // Handle Adding or Removing Expenses from Expense Report
   const handleUpdateExpenseReportStatus = async (expenseIds, addedToReport) => {
+    if (!Array.isArray(expenseIds) || expenseIds.length === 0) return true;
+    const idSet = new Set(expenseIds.map(String));
+    const nowIso = new Date().toISOString();
+
+    // 1. Instant Optimistic React state update (0ms latency)
+    setExpenses((prev) =>
+      prev.map((e) =>
+        idSet.has(String(e.id)) || (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id)))
+          ? {
+            ...e,
+            added_to_report: addedToReport,
+            added_to_report_at: addedToReport ? nowIso : null
+          }
+          : e
+      )
+    );
+
+    // 2. Update local storage caches immediately so background or cached reads preserve added_to_report
+    try {
+      const keys = Object.keys(localStorage).filter((k) => k.startsWith('cached_expenses'));
+      keys.forEach((k) => {
+        const list = JSON.parse(localStorage.getItem(k) || '[]');
+        const updated = list.map((e) =>
+          idSet.has(String(e.id)) || (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id)))
+            ? {
+              ...e,
+              added_to_report: addedToReport,
+              added_to_report_at: addedToReport ? nowIso : null
+            }
+            : e
+        );
+        localStorage.setItem(k, JSON.stringify(updated));
+      });
+    } catch { }
+
+    showToast(
+      addedToReport
+        ? `Marked ${expenseIds.length} expense(s) for export`
+        : `Removed ${expenseIds.length} expense(s) from export list`,
+      'success'
+    );
+
+    // 3. Persist to server in background
     try {
       const res = await api.updateExpensesReportStatus(expenseIds, addedToReport);
-      if (res.success) {
-        const idSet = new Set(expenseIds.map(String));
-        setExpenses((prev) =>
-          prev.map((e) =>
-            idSet.has(String(e.id)) || (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id)))
-              ? {
-                ...e,
-                added_to_report: addedToReport,
-                added_to_report_at: addedToReport ? new Date().toISOString() : null
-              }
-              : e
-          )
-        );
-
-        // Update local storage caches immediately so background or cached reads preserve added_to_report
-        try {
-          const keys = Object.keys(localStorage).filter((k) => k.startsWith('cached_expenses'));
-          keys.forEach((k) => {
-            const list = JSON.parse(localStorage.getItem(k) || '[]');
-            const updated = list.map((e) =>
-              idSet.has(String(e.id)) || (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id)))
-                ? {
-                  ...e,
-                  added_to_report: addedToReport,
-                  added_to_report_at: addedToReport ? new Date().toISOString() : null
-                }
-                : e
-            );
-            localStorage.setItem(k, JSON.stringify(updated));
-          });
-        } catch { }
-
-        showToast(
-          addedToReport
-            ? `Marked ${expenseIds.length} expense(s) for export`
-            : `Removed ${expenseIds.length} expense(s) from export list`,
-          'success'
-        );
-        // Refresh app state in background
+      if (!res.success) {
+        showToast(res.error || 'Failed to update report status on server', 'error');
         loadAllData();
-        return true;
-      } else {
-        showToast(res.error || 'Failed to update report status', 'error');
         return false;
       }
+      return true;
     } catch (err) {
       showToast('Report status error: ' + err.message, 'error');
+      loadAllData();
       return false;
     }
   };

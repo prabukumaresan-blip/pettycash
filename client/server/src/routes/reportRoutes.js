@@ -70,23 +70,6 @@ async function getFilteredExpenses(query, user) {
     expenses = expenses.filter(e => Boolean(e.is_exported) === isBool);
   }
 
-  // Resilient fallback: If added_to_report was requested as true, but 0 expenses matched
-  // (e.g. because data-store defaults added_to_report to false in initial seed),
-  // don't leave employee with an empty report if they have active unexported expenses!
-  if (expenses.length === 0 && (added_to_report === 'true' || added_to_report === true)) {
-    const fallbackExpenses = await db.getExpenses({
-      employee_id: effectiveEmployeeId,
-      project_id,
-      start_date,
-      end_date,
-      search,
-      is_exported: 'false'
-    });
-    if (fallbackExpenses.length > 0) {
-      expenses = fallbackExpenses;
-    }
-  }
-
   return expenses;
 }
 

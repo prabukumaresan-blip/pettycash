@@ -179,10 +179,11 @@ export default function DashboardView({
 
   const handleBulkReportStatus = async (addedToReport) => {
     if (!onUpdateReportStatus || selectedExpenseIds.size === 0) return;
+    const ids = Array.from(selectedExpenseIds);
+    setSelectedExpenseIds(new Set());
     setIsUpdatingReport(true);
     try {
-      await onUpdateReportStatus(Array.from(selectedExpenseIds), addedToReport);
-      setSelectedExpenseIds(new Set());
+      await onUpdateReportStatus(ids, addedToReport);
     } finally {
       setIsUpdatingReport(false);
     }
