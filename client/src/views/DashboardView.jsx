@@ -9,7 +9,6 @@ import {
   Search,
   Filter,
   RefreshCw,
-  FileCheck,
   FileSpreadsheet,
   CheckSquare,
   Square,
@@ -187,12 +186,6 @@ export default function DashboardView({
     } finally {
       setIsUpdatingReport(false);
     }
-  };
-
-  const handleToggleSingleReport = async (exp) => {
-    if (!onUpdateReportStatus) return;
-    const newStatus = !exp.added_to_report;
-    await onUpdateReportStatus([exp.id], newStatus);
   };
 
   const handleExportTransactions = async (format) => {
@@ -643,9 +636,20 @@ export default function DashboardView({
               <CheckSquare className="w-4 h-4" />
             </div>
             <div>
-              <span className="text-xs font-bold text-white block">
-                {selectedExpenseIds.size} expense{selectedExpenseIds.size > 1 ? 's' : ''} selected
-              </span>
+              <div className="flex items-center space-x-2">
+                <span className="text-xs font-bold text-white block">
+                  {selectedExpenseIds.size} expense{selectedExpenseIds.size > 1 ? 's' : ''} selected
+                </span>
+                {filteredList.length > paginatedList.length && selectedExpenseIds.size === paginatedList.length && (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedExpenseIds(new Set(filteredList.map((e) => e.id)))}
+                    className="text-[11px] text-blue-400 hover:text-blue-300 underline font-semibold cursor-pointer"
+                  >
+                    (Select all {filteredList.length})
+                  </button>
+                )}
+              </div>
               <span className="text-[11px] text-slate-300 font-mono">
                 Total: {formatOMR(selectedTotal)}
               </span>
@@ -926,57 +930,34 @@ export default function DashboardView({
                         )}
                       </td>
 
-                      {/* Status: Marked for Export / Not Exported */}
+                      {/* Status: Marked for Export / Not Exported (Display Only - selection done via checkboxes) */}
                       <td className="py-3 px-3 text-center whitespace-nowrap">
                         {exp.added_to_report ? (
-                          <button
-                            type="button"
-                            onClick={() => handleToggleSingleReport(exp)}
-                            className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-800 border border-blue-200 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 transition cursor-pointer group shadow-2xs"
-                            title="Marked for Export • Click to unmark"
+                          <span
+                            className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-800 border border-blue-200 shadow-2xs"
+                            title="Marked for Export"
                           >
-                            <CheckCircle2 className="w-3 h-3 text-blue-600 group-hover:hidden" />
-                            <X className="w-3 h-3 text-rose-600 hidden group-hover:inline" />
-                            <span className="group-hover:hidden">Marked for Export</span>
-                            <span className="hidden group-hover:inline">Click to Unmark</span>
-                          </button>
+                            <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                            <span>Marked for Export</span>
+                          </span>
                         ) : (
-                          <button
-                            type="button"
-                            onClick={() => handleToggleSingleReport(exp)}
-                            className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-blue-50 hover:text-blue-800 hover:border-blue-300 transition cursor-pointer group shadow-2xs"
-                            title="Click to mark for Export section"
+                          <span
+                            className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200 shadow-2xs"
+                            title="Not Exported"
                           >
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 group-hover:bg-blue-600"></span>
-                            <span className="group-hover:hidden">Not Exported</span>
-                            <span className="hidden group-hover:inline">Mark for Export</span>
-                          </button>
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0"></span>
+                            <span>Not Exported</span>
+                          </span>
                         )}
                       </td>
 
                       {/* Row Actions */}
                       <td className="py-3 px-3 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end space-x-1">
-                          <button
-                            type="button"
-                            onClick={() => handleToggleSingleReport(exp)}
-                            className={`p-1.5 rounded transition ${
-                              exp.added_to_report
-                                ? 'text-blue-600 bg-blue-50 hover:text-rose-600 hover:bg-rose-50'
-                                : 'text-slate-400 hover:text-blue-600 hover:bg-blue-50'
-                            }`}
-                            title={
-                              exp.added_to_report
-                                ? 'Marked for Export (click to unmark)'
-                                : 'Click to mark for Export section'
-                            }
-                          >
-                            <FileCheck className="w-3.5 h-3.5" />
-                          </button>
                           {onEditExpense && (
                             <button
                               onClick={() => onEditExpense(exp)}
-                              className="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
+                              className="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer"
                               title="Edit Expense"
                             >
                               <Edit2 className="w-3.5 h-3.5" />
@@ -985,7 +966,7 @@ export default function DashboardView({
                           {onDeleteExpense && (
                             <button
                               onClick={() => onDeleteExpense(exp.id)}
-                              className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition"
+                              className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition cursor-pointer"
                               title="Delete Expense"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -1012,7 +993,6 @@ export default function DashboardView({
                 onPrint={handlePrintSingleExpense}
                 isSelected={selectedExpenseIds.has(exp.id)}
                 onToggleSelect={handleToggleSelect}
-                onToggleReportStatus={handleToggleSingleReport}
                 onRequestRecall={onRequestRecall}
                 onApproveRecall={onApproveRecall}
                 onRejectRecall={onRejectRecall}
