@@ -73,7 +73,13 @@ export default function DashboardView({
       e.employee_id === emp.id ||
       (e.employee_name &&
         emp.name &&
-        e.employee_name.toLowerCase().trim() === emp.name.toLowerCase().trim())
+        e.employee_name.toLowerCase().trim() === emp.name.toLowerCase().trim()) ||
+      (e.employee_email &&
+        emp.email &&
+        e.employee_email.toLowerCase().trim() === emp.email.toLowerCase().trim()) ||
+      (e.paid_through_account_name &&
+        emp.petty_cash_account_name &&
+        e.paid_through_account_name.toLowerCase().trim() === emp.petty_cash_account_name.toLowerCase().trim())
     );
   });
 

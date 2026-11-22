@@ -1186,11 +1186,11 @@ const db = {
       expense.employee_name = emp.name;
     }
 
-    // Match existing by id, zoho_journal_id, or invoice_number
+    // Match existing by zoho_journal_id, id, or (employee_id + invoice_number)
     const existing = store.expenses.find(e => 
-      e.id === expense.id || 
       (expense.zoho_journal_id && e.zoho_journal_id && String(e.zoho_journal_id) === String(expense.zoho_journal_id)) ||
-      (expense.invoice_number && e.invoice_number && String(e.invoice_number) === String(expense.invoice_number))
+      (expense.id && e.id === expense.id) || 
+      (expense.employee_id && expense.invoice_number && e.employee_id === expense.employee_id && e.invoice_number && String(e.invoice_number) === String(expense.invoice_number))
     );
 
     if (existing) {
@@ -1277,43 +1277,24 @@ const db = {
       const { data, error } = await supabase.from('expenses').upsert(dbExpense).select().single();
       if (!error && data) {
         // Keep local store in sync with Supabase
-        let idx = store.expenses.findIndex(e => e.id === expense.id);
-        if (idx < 0 && existing) {
-          idx = store.expenses.findIndex(e => e.id === existing.id);
-        }
-        if (idx < 0 && expense.zoho_journal_id) {
-          idx = store.expenses.findIndex(e => e.zoho_journal_id && String(e.zoho_journal_id) === String(expense.zoho_journal_id));
-        }
-        if (idx >= 0) {
-          store.expenses[idx] = { ...store.expenses[idx], ...expense, ...data, updated_at: new Date().toISOString() };
+        if (existing) {
+          Object.assign(existing, expense, data, { updated_at: new Date().toISOString() });
         } else {
           store.expenses.unshift({ ...expense, ...data, created_at: new Date().toISOString(), updated_at: new Date().toISOString() });
         }
         saveLocalData(store);
-
         await this.recalculateBalance(expense.employee_id);
-        return { ...expense, ...data };
+        return existing || store.expenses[0];
       } else if (error) {
         console.warn('⚠️ Supabase expense upsert notice:', error.message);
       }
     }
 
-    // Find index of existing item by id, zoho_journal_id, or invoice_number to update in place
-    let idx = store.expenses.findIndex(e => e.id === expense.id);
-    if (idx < 0 && existing) {
-      idx = store.expenses.findIndex(e => e.id === existing.id);
-    }
-    if (idx < 0 && expense.zoho_journal_id) {
-      idx = store.expenses.findIndex(e => e.zoho_journal_id && String(e.zoho_journal_id) === String(expense.zoho_journal_id));
-    }
-
-    if (idx >= 0) {
-      store.expenses[idx] = { 
-        ...store.expenses[idx], 
-        ...expense, 
-        id: store.expenses[idx].id || expense.id,
-        updated_at: new Date().toISOString() 
-      };
+    if (existing) {
+      Object.assign(existing, expense, {
+        id: existing.id || expense.id,
+        updated_at: new Date().toISOString()
+      });
     } else {
       store.expenses.unshift({
         ...expense,
@@ -1323,7 +1304,7 @@ const db = {
     }
     saveLocalData(store);
     await this.recalculateBalance(expense.employee_id);
-    return idx >= 0 ? store.expenses[idx] : store.expenses[0];
+    return existing || store.expenses[0];
   },
 
   async saveExpensesBatch(expensesList = []) {
@@ -1333,16 +1314,18 @@ const db = {
     const affectedEmployeeIds = new Set();
     const processedList = [];
 
-    // Map existing expenses for fast O(1) lookup
-    const existingById = new Map();
+    // Map existing expenses by authoritative identifiers (objects, not fragile array indices)
     const existingByZohoId = new Map();
-    const existingByInvoice = new Map();
+    const existingById = new Map();
+    const existingByEmpAndInvoice = new Map();
 
-    store.expenses.forEach((e, idx) => {
-      if (e.id) existingById.set(e.id, idx);
-      if (e.zoho_journal_id) existingByZohoId.set(String(e.zoho_journal_id), idx);
-      if (e.invoice_number) existingByInvoice.set(String(e.invoice_number), idx);
+    store.expenses.forEach((e) => {
+      if (e.zoho_journal_id) existingByZohoId.set(String(e.zoho_journal_id), e);
+      if (e.id) existingById.set(String(e.id), e);
+      if (e.employee_id && e.invoice_number) existingByEmpAndInvoice.set(`${e.employee_id}_${e.invoice_number}`, e);
     });
+
+    const toInsert = [];
 
     for (const exp of expensesList) {
       const expense = { ...exp };
@@ -1351,16 +1334,14 @@ const db = {
       }
 
       // Find existing
-      let existingIdx = -1;
-      if (expense.id && existingById.has(expense.id)) {
-        existingIdx = existingById.get(expense.id);
-      } else if (expense.zoho_journal_id && existingByZohoId.has(String(expense.zoho_journal_id))) {
-        existingIdx = existingByZohoId.get(String(expense.zoho_journal_id));
-      } else if (expense.invoice_number && existingByInvoice.has(String(expense.invoice_number))) {
-        existingIdx = existingByInvoice.get(String(expense.invoice_number));
+      let existing = null;
+      if (expense.zoho_journal_id && existingByZohoId.has(String(expense.zoho_journal_id))) {
+        existing = existingByZohoId.get(String(expense.zoho_journal_id));
+      } else if (expense.id && existingById.has(String(expense.id))) {
+        existing = existingById.get(String(expense.id));
+      } else if (expense.employee_id && expense.invoice_number && existingByEmpAndInvoice.has(`${expense.employee_id}_${expense.invoice_number}`)) {
+        existing = existingByEmpAndInvoice.get(`${expense.employee_id}_${expense.invoice_number}`);
       }
-
-      const existing = existingIdx >= 0 ? store.expenses[existingIdx] : null;
 
       if (existing) {
         if (!expense.id) expense.id = existing.id;
@@ -1383,9 +1364,7 @@ const db = {
         if (!expense.receipt_url && existing.receipt_url) expense.receipt_url = existing.receipt_url;
         if (!expense.receipt_file_name && existing.receipt_file_name) expense.receipt_file_name = existing.receipt_file_name;
 
-        store.expenses[existingIdx] = {
-          ...existing,
-          ...expense,
+        Object.assign(existing, expense, {
           id: existing.id || expense.id,
           added_to_report: expense.added_to_report,
           added_to_report_at: expense.added_to_report_at,
@@ -1393,8 +1372,8 @@ const db = {
           exported_at: expense.exported_at,
           recall_status: expense.recall_status,
           updated_at: new Date().toISOString()
-        };
-        processedList.push(store.expenses[existingIdx]);
+        });
+        processedList.push(existing);
       } else {
         if (expense.added_to_report === undefined) {
           expense.added_to_report = false;
@@ -1427,13 +1406,22 @@ const db = {
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         };
-        store.expenses.unshift(newExp);
+        toInsert.push(newExp);
         processedList.push(newExp);
+
+        // Keep lookup maps fresh
+        if (newExp.zoho_journal_id) existingByZohoId.set(String(newExp.zoho_journal_id), newExp);
+        if (newExp.id) existingById.set(String(newExp.id), newExp);
+        if (newExp.employee_id && newExp.invoice_number) existingByEmpAndInvoice.set(`${newExp.employee_id}_${newExp.invoice_number}`, newExp);
       }
 
       if (expense.employee_id) {
         affectedEmployeeIds.add(expense.employee_id);
       }
+    }
+
+    if (toInsert.length > 0) {
+      store.expenses.unshift(...toInsert);
     }
 
     saveLocalData(store);

@@ -487,11 +487,15 @@ class ZohoBooksService {
       const existingByJournalId = new Map();
       const existingByRef = new Map();
       const existingByInvoice = new Map();
+      const existingById = new Map();
 
       for (const e of allLocalExpenses) {
         if (e.zoho_journal_id) existingByJournalId.set(String(e.zoho_journal_id), e);
-        if (e.id) existingByRef.set(String(e.id), e);
-        if (e.invoice_number) existingByInvoice.set(String(e.invoice_number), e);
+        if (e.id) {
+          existingByRef.set(String(e.id), e);
+          existingById.set(String(e.id), e);
+        }
+        if (e.employee_id && e.invoice_number) existingByInvoice.set(`${e.employee_id}_${e.invoice_number}`, e);
       }
 
       // Pre-index cached projects for fast O(1) lookup
@@ -611,7 +615,7 @@ class ZohoBooksService {
             // Fast in-memory lookup
             const existingExp = existingByJournalId.get(String(ze.expense_id)) ||
               (ze.reference_number && ze.reference_number.startsWith('PCA-') ? existingByRef.get(ze.reference_number.replace('PCA-', '')) : null) ||
-              (ze.reference_number ? existingByInvoice.get(String(ze.reference_number)) : null);
+              (ze.reference_number ? existingByInvoice.get(`${emp.id}_${ze.reference_number}`) : null);
 
             const isTracked = Boolean(existingExp);
             const isFromApp = isAppRef ||
@@ -638,7 +642,10 @@ class ZohoBooksService {
                   : `exp-${ze.expense_id.slice(-7)}`);
 
             let counter = 1;
-            while (zohoExpenses.some(zeItem => zeItem.id === localId && zeItem.zoho_journal_id !== ze.expense_id)) {
+            while (
+              (existingById.has(localId) && existingById.get(localId).zoho_journal_id && String(existingById.get(localId).zoho_journal_id) !== String(ze.expense_id)) ||
+              zohoExpenses.some(zeItem => zeItem.id === localId && zeItem.zoho_journal_id !== ze.expense_id)
+            ) {
               localId = `exp-${ze.expense_id.slice(-7)}-${counter++}`;
             }
 
