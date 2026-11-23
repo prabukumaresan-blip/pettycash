@@ -252,11 +252,11 @@ router.post('/', upload.single('receipt'), async (req, res) => {
       console.warn('Balance deduction notice:', balErr.message);
     }
 
-    // 3. Attempt immediate Zoho Books Expense creation with a 3.5-second safety race
+    // 3. Attempt immediate Zoho Books Expense creation with a 12-second safety race
     try {
       const syncPromise = zohoBooksService.createExpenseJournal(newExpense, employee);
       const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Zoho API response deferred to background')), 3500)
+        setTimeout(() => reject(new Error('Zoho API response deferred to background')), 12000)
       );
 
       const journalRes = await Promise.race([syncPromise, timeoutPromise]);

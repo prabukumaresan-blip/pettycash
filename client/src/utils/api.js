@@ -191,7 +191,29 @@ export const api = {
     if (typeof window === 'undefined') return new Set();
     try {
       const raw = localStorage.getItem('recently_deleted_expenses');
-      return new Set(raw ? JSON.parse(raw) : []);
+      if (!raw) return new Set();
+      const parsed = JSON.parse(raw);
+      // Legacy array format has no timestamps and was easily corrupted by the old auto-purge bug;
+      // purge legacy array so it doesn't hide legitimate active expenses!
+      if (Array.isArray(parsed)) {
+        localStorage.removeItem('recently_deleted_expenses');
+        return new Set();
+      }
+      if (typeof parsed === 'object' && parsed !== null) {
+        const now = Date.now();
+        const validIds = new Set();
+        const validEntries = {};
+        for (const [id, timestamp] of Object.entries(parsed)) {
+          // Keep deleted ID for only 2 minutes (120,000ms) for optimistic UI hiding
+          if (now - Number(timestamp) < 120000) {
+            validIds.add(String(id));
+            validEntries[id] = timestamp;
+          }
+        }
+        localStorage.setItem('recently_deleted_expenses', JSON.stringify(validEntries));
+        return validIds;
+      }
+      return new Set();
     } catch {
       return new Set();
     }
@@ -200,9 +222,31 @@ export const api = {
   addDeletedId(id) {
     if (typeof window === 'undefined' || !id) return;
     try {
-      const current = this.getDeletedIds();
-      current.add(String(id));
-      localStorage.setItem('recently_deleted_expenses', JSON.stringify(Array.from(current)));
+      const raw = localStorage.getItem('recently_deleted_expenses');
+      let entries = {};
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          if (typeof parsed === 'object' && !Array.isArray(parsed) && parsed !== null) {
+            entries = parsed;
+          }
+        } catch {}
+      }
+      entries[String(id)] = Date.now();
+      localStorage.setItem('recently_deleted_expenses', JSON.stringify(entries));
+    } catch {}
+  },
+
+  removeDeletedId(id) {
+    if (typeof window === 'undefined' || !id) return;
+    try {
+      const raw = localStorage.getItem('recently_deleted_expenses');
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (typeof parsed === 'object' && !Array.isArray(parsed) && parsed !== null) {
+        delete parsed[String(id)];
+        localStorage.setItem('recently_deleted_expenses', JSON.stringify(parsed));
+      }
     } catch {}
   },
 
@@ -279,28 +323,12 @@ export const api = {
 
           const cached = JSON.parse(localStorage.getItem(cacheKey) || '[]');
           const serverIds = new Set(data.expenses.map((e) => e.id));
-          const serverZohoIds = new Set(
-            data.expenses.filter((e) => e.zoho_journal_id).map((e) => String(e.zoho_journal_id))
-          );
           // Preserve ONLY genuinely pending un-synced offline expenses that have not reached server
           const localOnly = cached.filter(
             (e) => e.sync_status === 'pending' && !e.zoho_journal_id &&
                    !deletedSet.has(String(e.id)) &&
                    !serverIds.has(e.id)
           );
-          // Auto-purge any deleted server expenses from local exportedSet
-          if (!filters.search && !filters.start_date && !filters.end_date && !filters.project_id) {
-            for (const oldExp of cached) {
-              if (oldExp.zoho_journal_id || oldExp.is_exported || oldExp.sync_status === 'synced') {
-                if (!serverIds.has(oldExp.id) && (!oldExp.zoho_journal_id || !serverZohoIds.has(String(oldExp.zoho_journal_id)))) {
-                  this.addDeletedId(oldExp.id);
-                  if (oldExp.zoho_journal_id) this.addDeletedId(oldExp.zoho_journal_id);
-                  this.removeExportedId(oldExp.id);
-                  if (oldExp.zoho_journal_id) this.removeExportedId(oldExp.zoho_journal_id);
-                }
-              }
-            }
-          }
           const merged = [...localOnly, ...data.expenses];
           localStorage.setItem(cacheKey, JSON.stringify(merged));
           data.expenses = merged;
@@ -345,6 +373,8 @@ export const api = {
 
       const data = await safeJson(res);
       if (data && data.success && data.expense) {
+        if (data.expense.id) this.removeDeletedId(data.expense.id);
+        if (data.expense.zoho_journal_id) this.removeDeletedId(data.expense.zoho_journal_id);
         const user = getStoredUser();
         const cacheKey = user && user.id ? `cached_expenses_${user.id}` : 'cached_expenses';
         try {

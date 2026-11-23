@@ -106,19 +106,24 @@ class ZohoBooksService {
     }
 
     try {
-      const response = await axios.post(tokenUrl, null, {
-        params: {
-          code,
-          client_id: config.client_id,
-          client_secret: config.client_secret,
-          redirect_uri: redirectUri,
-          grant_type: 'authorization_code'
-        }
+      const body = new URLSearchParams({
+        code,
+        client_id: config.client_id,
+        client_secret: config.client_secret,
+        redirect_uri: redirectUri,
+        grant_type: 'authorization_code'
+      });
+      const response = await fetch(tokenUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body,
+        signal: AbortSignal.timeout(15000)
       });
 
-      const { access_token, refresh_token, expires_in } = response.data;
+      const data = await response.json();
+      const { access_token, refresh_token, expires_in } = data;
       if (!access_token) {
-        throw new Error(response.data.error || 'Failed to exchange token');
+        throw new Error(data.error_description || data.error || 'Failed to exchange token');
       }
 
       await db.updateZohoConfig({
@@ -131,7 +136,7 @@ class ZohoBooksService {
       await db.addSyncLog('oauth_connect', 'success', { expires_in });
       return { success: true, message: 'Successfully connected to Zoho Books' };
     } catch (err) {
-      const errMsg = err.response?.data?.error || err.message;
+      const errMsg = err.message;
       await db.addSyncLog('oauth_connect', 'failure', {}, errMsg);
       throw new Error(`Zoho OAuth Error: ${errMsg}`);
     }
@@ -185,19 +190,23 @@ class ZohoBooksService {
 
     this._refreshPromise = (async () => {
       try {
-        const response = await axios.post(tokenUrl, null, {
-          params: {
-            refresh_token: refreshToken,
-            client_id: clientId,
-            client_secret: clientSecret,
-            grant_type: 'refresh_token'
-          },
-          timeout: 6000
+        const body = new URLSearchParams({
+          refresh_token: refreshToken,
+          client_id: clientId,
+          client_secret: clientSecret,
+          grant_type: 'refresh_token'
+        });
+        const response = await fetch(tokenUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body,
+          signal: AbortSignal.timeout(15000)
         });
 
-        const { access_token, expires_in } = response.data;
+        const data = await response.json();
+        const { access_token, expires_in } = data;
         if (!access_token) {
-          throw new Error(response.data.error || 'Refresh token response missing access_token');
+          throw new Error(data.error_description || data.error || 'Refresh token response missing access_token');
         }
 
         this._lastRefreshSuccessTime = Date.now();
@@ -211,7 +220,7 @@ class ZohoBooksService {
         return access_token;
       } catch (err) {
         this._lastRefreshErrorTime = Date.now();
-        const errMsg = err.response?.data?.error_description || err.response?.data?.error || err.message;
+        const errMsg = err.message;
         await db.addSyncLog('token_refresh', 'failure', {}, errMsg);
         throw new Error(`Failed to refresh Zoho Books token: ${errMsg}`);
       } finally {
@@ -233,42 +242,60 @@ class ZohoBooksService {
     const token = await this.getValidAccessToken();
     const { apiUrl } = this.getEndpoints(config.dc_region);
 
+    const queryParams = new URLSearchParams({
+      organization_id: config.organization_id || process.env.ZOHO_ORG_ID || '771750431',
+      ...customParams
+    });
+    const url = `${apiUrl}${endpoint}?${queryParams.toString()}`;
+
     const headers = {
       Authorization: `Zoho-oauthtoken ${token}`,
       'Content-Type': 'application/json'
     };
 
-    const params = {
-      organization_id: config.organization_id || process.env.ZOHO_ORG_ID || '771750431',
-      ...customParams
+    const options = {
+      method,
+      headers,
+      signal: AbortSignal.timeout(15000)
     };
+    if (data && method !== 'GET' && method !== 'HEAD') {
+      options.body = typeof data === 'string' ? data : JSON.stringify(data);
+    }
 
     try {
-      const response = await axios({
-        url: `${apiUrl}${endpoint}`,
-        method,
-        headers,
-        params,
-        data,
-        timeout: 6000
-      });
-      return response.data;
-    } catch (err) {
-      const status = err.response?.status;
-      const errCode = err.response?.data?.code;
-      const errMsg = err.response?.data?.message || err.message;
+      const response = await fetch(url, options);
+      const resData = await response.json().catch(() => ({}));
 
-      // Auto-retry once on 401 or Zoho authorization code 57 / 14 by force-refreshing the access token
-      if (retryCount === 0 && (status === 401 || errCode === 57 || errCode === 14 || errMsg?.toLowerCase().includes('not authorized') || errMsg?.toLowerCase().includes('token'))) {
-        console.warn(`🔄 Zoho API unauthorized/expired on [${endpoint}]. Force-refreshing token and retrying...`);
+      if (!response.ok || (resData.code !== undefined && resData.code !== 0)) {
+        const status = response.status;
+        const errCode = resData.code;
+        const errMsg = resData.message || `HTTP ${status}`;
+
+        // Auto-retry once on 401 or Zoho authorization code 57 / 14 by force-refreshing the access token
+        if (retryCount === 0 && (status === 401 || errCode === 57 || errCode === 14 || errMsg?.toLowerCase().includes('not authorized') || errMsg?.toLowerCase().includes('token'))) {
+          console.warn(`🔄 Zoho API unauthorized/expired on [${endpoint}]. Force-refreshing token and retrying...`);
+          try {
+            await this.getValidAccessToken(true);
+            return await this.makeApiRequest(endpoint, method, data, customParams, 1);
+          } catch (refreshErr) {
+            console.error('Failed to auto-refresh token after 401:', refreshErr.message);
+          }
+        }
+
+        throw new Error(`Zoho API Request Error [${endpoint}]: ${errMsg}`);
+      }
+      return resData;
+    } catch (err) {
+      const errMsg = err.message;
+      if (retryCount === 0 && (errMsg?.toLowerCase().includes('not authorized') || errMsg?.toLowerCase().includes('token') || errMsg?.toLowerCase().includes('57'))) {
+        console.warn(`🔄 Zoho API unauthorized notice on [${endpoint}]. Retrying with fresh token...`);
         try {
           await this.getValidAccessToken(true);
           return await this.makeApiRequest(endpoint, method, data, customParams, 1);
         } catch (refreshErr) {
-          console.error('Failed to auto-refresh token after 401:', refreshErr.message);
+          console.error('Failed to auto-refresh token after error:', refreshErr.message);
         }
       }
-
       throw new Error(`Zoho API Request Error [${endpoint}]: ${errMsg}`);
     }
   }
@@ -559,13 +586,14 @@ class ZohoBooksService {
           }
 
           // DETECT EXPENSES DELETED IN ZOHO BOOKS:
-          // Check all local expenses for this employee/account that were synced to Zoho Books.
-          // If they no longer exist in Zoho Books (even if marked as exported), delete them locally!
+          // Check all local expenses for this employee/account that were previously confirmed synced to Zoho Books.
+          // CRITICAL: NEVER delete expenses that have no zoho_journal_id, are pending sync, or were created within the last 15 minutes!
           const syncedLocalForAccount = allLocalExpenses.filter(e => {
             const matchesEmp = e.employee_id === emp.id;
             const matchesAcc = e.paid_through_account_id === accountId;
-            const wasSynced = Boolean(e.zoho_journal_id) || e.sync_status === 'synced';
-            return (matchesEmp || matchesAcc) && wasSynced;
+            const hasZohoId = Boolean(e.zoho_journal_id);
+            const isNotBrandNew = !e.created_at || (Date.now() - new Date(e.created_at).getTime() > 15 * 60 * 1000);
+            return (matchesEmp || matchesAcc) && hasZohoId && isNotBrandNew && e.sync_status === 'synced';
           });
 
           for (const locExp of syncedLocalForAccount) {
@@ -573,30 +601,26 @@ class ZohoBooksService {
                                  (locExp.invoice_number && accountActiveRefs.has(String(locExp.invoice_number))) ||
                                  (locExp.id && (accountActiveRefs.has(String(locExp.id)) || accountActiveRefs.has(`PCA-${locExp.id}`)));
 
-            if (!inActiveList) {
+            if (!inActiveList && locExp.zoho_journal_id) {
               // Not in active Zoho expenses list for this account.
               // Double check single expense endpoint in Zoho to confirm deletion
               let isConfirmedDeleted = false;
-              if (locExp.zoho_journal_id) {
-                try {
-                  const checkRes = await this.makeApiRequest(`/expenses/${locExp.zoho_journal_id}`, 'GET');
-                  if (!checkRes || !checkRes.expense) {
-                    isConfirmedDeleted = true;
-                  } else if (checkRes.expense.paid_through_account_id !== accountId) {
-                    isConfirmedDeleted = true;
-                  }
-                } catch (checkErr) {
-                  const errMsg = (checkErr.message || '').toLowerCase();
-                  if (errMsg.includes('does not exist') || errMsg.includes('not found') || errMsg.includes('1002') || errMsg.includes('404')) {
-                    isConfirmedDeleted = true;
-                  }
+              try {
+                const checkRes = await this.makeApiRequest(`/expenses/${locExp.zoho_journal_id}`, 'GET');
+                if (!checkRes || !checkRes.expense) {
+                  isConfirmedDeleted = true;
+                } else if (checkRes.expense.paid_through_account_id !== accountId) {
+                  isConfirmedDeleted = true;
                 }
-              } else {
-                isConfirmedDeleted = true;
+              } catch (checkErr) {
+                const errMsg = (checkErr.message || '').toLowerCase();
+                if (errMsg.includes('does not exist') || errMsg.includes('not found') || errMsg.includes('1002') || errMsg.includes('404')) {
+                  isConfirmedDeleted = true;
+                }
               }
 
               if (isConfirmedDeleted) {
-                console.log(`🗑️ [Zoho Sync] Expense ${locExp.id} (Zoho ID: ${locExp.zoho_journal_id || 'N/A'}, Exported: ${Boolean(locExp.is_exported)}) was deleted in Zoho Books. Deleting local record...`);
+                console.log(`🗑️ [Zoho Sync] Expense ${locExp.id} (Zoho ID: ${locExp.zoho_journal_id}, Exported: ${Boolean(locExp.is_exported)}) was deleted in Zoho Books. Deleting local record...`);
                 await db.deleteExpense(locExp.id);
                 if (locExp.zoho_journal_id && String(locExp.zoho_journal_id) !== String(locExp.id)) {
                   await db.deleteExpense(locExp.zoho_journal_id);
@@ -747,13 +771,18 @@ class ZohoBooksService {
 
       // Global sweep: Check any other local expenses marked as synced with Zoho
       // that weren't found in ANY active account list (handles account changes/re-assignments)
+      // CRITICAL: NEVER delete expenses that have no zoho_journal_id, are pending sync, or were created within the last 15 minutes!
       try {
         const currentLocal = await db.getExpenses();
-        const orphanedSynced = currentLocal.filter(e => e.zoho_journal_id && !allActiveZohoExpenseIds.has(String(e.zoho_journal_id)));
+        const orphanedSynced = currentLocal.filter(e => {
+          const hasZohoId = Boolean(e.zoho_journal_id);
+          const isNotBrandNew = !e.created_at || (Date.now() - new Date(e.created_at).getTime() > 15 * 60 * 1000);
+          return hasZohoId && isNotBrandNew && e.sync_status === 'synced' && !allActiveZohoExpenseIds.has(String(e.zoho_journal_id));
+        });
         for (const orphan of orphanedSynced) {
           try {
             const singleRes = await this.makeApiRequest(`/expenses/${orphan.zoho_journal_id}`, 'GET');
-            if (!singleRes || !singleRes.expense) {
+            if (singleRes && singleRes.code === 1002) {
               console.log(`🗑️ [Zoho Sync] Orphaned expense ${orphan.id} (Zoho ID: ${orphan.zoho_journal_id}, Exported: ${Boolean(orphan.is_exported)}) deleted from Zoho Books. Removing locally...`);
               await db.deleteExpense(orphan.id);
             }

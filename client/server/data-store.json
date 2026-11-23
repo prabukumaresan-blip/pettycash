@@ -4,9 +4,9 @@
     "client_id": "1000.BYLDNDDJMF36HIGK6ZJXGMMYILQ12O",
     "client_secret": "834dd49f629f1e095f2858a71217add0571131bd70",
     "redirect_uri": "https://pettycash-pearl.vercel.app/api/zoho/callback",
-    "access_token": "1000.71c885dd3628eea56358403b43870344.a1e8080c10522131427381b4bf46db7d",
+    "access_token": "1000.c71e6a23a88b9c4183da1d4e8bc64b7c.2a951518a937aec815ccb0483b065855",
     "refresh_token": "1000.70b3d3f7739447a1b5a16b1d535b0f94.860e4471704192a3fa442619dbd08417",
-    "token_expires_at": "2026-11-22T17:16:07.337Z",
+    "token_expires_at": "2026-11-23T18:59:52.859Z",
     "organization_id": "771750431",
     "organization_name": "Bright Flowers Trading LLC",
     "dc_region": "com",
@@ -16,7 +16,7 @@
     "default_expense_account_id": "acc-exp-petty",
     "default_expense_account_name": "Petty Cash Purchases",
     "last_sync_at": "2026-10-05T19:45:02.798Z",
-    "updated_at": "2026-11-22T16:16:07.339Z"
+    "updated_at": "2026-11-23T17:59:52.862Z"
   },
   "employees": [
     {
@@ -27,7 +27,7 @@
       "password": "emp123",
       "role": "employee",
       "initial_float": 40.76,
-      "current_balance": -15.25,
+      "current_balance": 184.75,
       "department": "Field Operations",
       "default_project_id": null,
       "default_project_name": null,
@@ -35,7 +35,7 @@
       "petty_cash_account_name": "Nihal Petty Cash",
       "is_active": true,
       "created_at": "2026-09-30T16:40:43.579Z",
-      "updated_at": "2026-11-22T16:16:09.712Z",
+      "updated_at": "2026-11-23T17:59:55.837Z",
       "auto_create_zoho_account": false
     },
     {
@@ -54,7 +54,7 @@
       "petty_cash_account_name": "Kumaresan Petty Cash",
       "is_active": true,
       "created_at": "2026-09-30T20:00:54.188Z",
-      "updated_at": "2026-11-19T17:23:45.349Z"
+      "updated_at": "2026-11-23T17:59:56.495Z"
     },
     {
       "id": "emp-1d2878bd",
@@ -72,7 +72,7 @@
       "petty_cash_account_name": "Ibrahim Petty Cash",
       "is_active": true,
       "created_at": "2026-10-22T14:37:08.458Z",
-      "updated_at": "2026-11-22T16:16:21.704Z"
+      "updated_at": "2026-11-23T17:59:57.217Z"
     },
     {
       "id": "emp-40f042c0",
@@ -82,7 +82,7 @@
       "password": "emp123",
       "role": "employee",
       "initial_float": 1000,
-      "current_balance": -95.64,
+      "current_balance": -106.64,
       "department": "Field Operations",
       "default_project_id": null,
       "default_project_name": null,
@@ -90,7 +90,7 @@
       "petty_cash_account_name": "Azzan Petty Cash",
       "is_active": true,
       "created_at": "2026-10-22T17:32:51.787Z",
-      "updated_at": "2026-11-22T16:16:23.539Z"
+      "updated_at": "2026-11-23T17:59:57.933Z"
     },
     {
       "id": "emp-shaibani",
@@ -100,7 +100,7 @@
       "password": "emp123",
       "role": "employee",
       "initial_float": 104.709,
-      "current_balance": 16.318,
+      "current_balance": -85.182,
       "department": "Field Operations",
       "default_project_id": null,
       "default_project_name": null,
@@ -108,7 +108,7 @@
       "petty_cash_account_name": "Ibrahim AL Shaibani",
       "is_active": true,
       "created_at": "2026-10-25T16:06:30.168Z",
-      "updated_at": "2026-11-22T16:16:25.341Z"
+      "updated_at": "2026-11-23T17:59:58.577Z"
     }
   ],
   "zoho_accounts": [
@@ -119,7 +119,7 @@
       "account_type": "other_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000003605347",
@@ -128,7 +128,7 @@
       "account_type": "other_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000370",
@@ -137,7 +137,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000035001",
@@ -146,7 +146,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075352",
@@ -155,7 +155,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075358",
@@ -164,7 +164,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075364",
@@ -173,7 +173,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075370",
@@ -182,7 +182,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075376",
@@ -191,7 +191,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075382",
@@ -200,7 +200,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075388",
@@ -209,7 +209,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075394",
@@ -218,7 +218,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075400",
@@ -227,7 +227,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075412",
@@ -236,7 +236,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075418",
@@ -245,7 +245,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075424",
@@ -254,7 +254,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075430",
@@ -263,7 +263,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075448",
@@ -272,7 +272,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075454",
@@ -281,7 +281,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075460",
@@ -290,7 +290,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075466",
@@ -299,7 +299,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075472",
@@ -308,7 +308,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075508",
@@ -317,7 +317,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000258729",
@@ -326,7 +326,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000292001",
@@ -335,7 +335,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000399263",
@@ -344,7 +344,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000589089",
@@ -353,7 +353,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000710223",
@@ -362,7 +362,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001103288",
@@ -371,7 +371,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001367590",
@@ -380,7 +380,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002049033",
@@ -389,7 +389,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002075174",
@@ -398,7 +398,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002083087",
@@ -407,7 +407,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002093708",
@@ -416,7 +416,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002139689",
@@ -425,7 +425,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002203003",
@@ -434,7 +434,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002403105",
@@ -443,7 +443,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002583403",
@@ -452,7 +452,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000003068153",
@@ -461,7 +461,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000003548772",
@@ -470,7 +470,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000003974081",
@@ -479,7 +479,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000004199952",
@@ -488,7 +488,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000004235001",
@@ -497,7 +497,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000004334377",
@@ -506,7 +506,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000004413002",
@@ -515,7 +515,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000004448115",
@@ -524,7 +524,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000004981183",
@@ -533,7 +533,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000005707196",
@@ -542,7 +542,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000005933630",
@@ -551,7 +551,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000006564139",
@@ -560,7 +560,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000006564147",
@@ -569,7 +569,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000006954736",
@@ -578,7 +578,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000007094003",
@@ -587,7 +587,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000007094047",
@@ -596,7 +596,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000007419550",
@@ -605,7 +605,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000007795002",
@@ -614,7 +614,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000008117458",
@@ -623,7 +623,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000008171002",
@@ -632,7 +632,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000008522002",
@@ -641,7 +641,16 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
+    },
+    {
+      "account_id": "3095712000009311202",
+      "account_name": "MD SOLOMAN PETTY CASH",
+      "account_code": "",
+      "account_type": "other_current_asset",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000074012",
@@ -650,7 +659,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000074041",
@@ -659,7 +668,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075340",
@@ -668,7 +677,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075478",
@@ -677,7 +686,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075484",
@@ -686,7 +695,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075490",
@@ -695,7 +704,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075496",
@@ -704,7 +713,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075502",
@@ -713,7 +722,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075514",
@@ -722,7 +731,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075520",
@@ -731,7 +740,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075526",
@@ -740,7 +749,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075532",
@@ -749,7 +758,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000179633",
@@ -758,7 +767,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000549001",
@@ -767,7 +776,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001734243",
@@ -776,7 +785,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001734267",
@@ -785,7 +794,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001994472",
@@ -794,7 +803,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002003023",
@@ -803,7 +812,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002686236",
@@ -812,7 +821,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000003424243",
@@ -821,7 +830,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000003987209",
@@ -830,7 +839,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000006082227",
@@ -839,7 +848,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002049025",
@@ -848,7 +857,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075538",
@@ -857,7 +866,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075544",
@@ -866,7 +875,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075550",
@@ -875,7 +884,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075568",
@@ -884,7 +893,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075574",
@@ -893,7 +902,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000578467",
@@ -902,7 +911,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001208049",
@@ -911,7 +920,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000004694407",
@@ -920,7 +929,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000004867061",
@@ -929,7 +938,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000005550626",
@@ -938,7 +947,7 @@
       "account_type": "other_current_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000358",
@@ -947,7 +956,7 @@
       "account_type": "cash",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000361",
@@ -956,7 +965,7 @@
       "account_type": "cash",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075328",
@@ -965,7 +974,7 @@
       "account_type": "bank",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000003093687",
@@ -974,7 +983,7 @@
       "account_type": "bank",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000005550305",
@@ -983,7 +992,7 @@
       "account_type": "bank",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000008584381",
@@ -992,7 +1001,16 @@
       "account_type": "bank",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
+    },
+    {
+      "account_id": "3095712000009395174",
+      "account_name": "TAX PAYMENTS",
+      "account_code": "",
+      "account_type": "bank",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000364",
@@ -1001,7 +1019,7 @@
       "account_type": "accounts_receivable",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000367",
@@ -1010,7 +1028,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075580",
@@ -1019,7 +1037,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075586",
@@ -1028,7 +1046,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075592",
@@ -1037,7 +1055,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075598",
@@ -1046,7 +1064,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075604",
@@ -1055,7 +1073,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075610",
@@ -1064,7 +1082,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001283127",
@@ -1073,7 +1091,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000003553229",
@@ -1082,7 +1100,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000005642854",
@@ -1091,7 +1109,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000007629002",
@@ -1100,7 +1118,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000007930424",
@@ -1109,7 +1127,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000096168",
@@ -1118,7 +1136,7 @@
       "account_type": "fixed_asset",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000376",
@@ -1127,7 +1145,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000003001",
@@ -1136,7 +1154,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000005001",
@@ -1145,7 +1163,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000035003",
@@ -1154,7 +1172,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000074043",
@@ -1163,7 +1181,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000074169",
@@ -1172,7 +1190,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075622",
@@ -1181,7 +1199,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075628",
@@ -1190,7 +1208,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075634",
@@ -1199,7 +1217,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075640",
@@ -1208,7 +1226,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075646",
@@ -1217,7 +1235,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075652",
@@ -1226,7 +1244,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075658",
@@ -1235,7 +1253,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001367072",
@@ -1244,7 +1262,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001622427",
@@ -1253,7 +1271,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001622433",
@@ -1262,7 +1280,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001622439",
@@ -1271,7 +1289,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001622445",
@@ -1280,7 +1298,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001622451",
@@ -1289,7 +1307,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001734335",
@@ -1298,7 +1316,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002417187",
@@ -1307,7 +1325,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002592009",
@@ -1316,7 +1334,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000003568249",
@@ -1325,7 +1343,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000003719299",
@@ -1334,7 +1352,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000003763228",
@@ -1343,7 +1361,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000005550249",
@@ -1352,7 +1370,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000005550252",
@@ -1361,7 +1379,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000005550255",
@@ -1370,7 +1388,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000005550258",
@@ -1379,7 +1397,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000005550261",
@@ -1388,7 +1406,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000005792824",
@@ -1397,7 +1415,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000006082367",
@@ -1406,7 +1424,7 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000007629006",
@@ -1415,7 +1433,16 @@
       "account_type": "other_current_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
+    },
+    {
+      "account_id": "3095712000009395023",
+      "account_name": "Loan from Nursery",
+      "account_code": "",
+      "account_type": "other_current_liability",
+      "is_active": true,
+      "current_balance": 0,
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000009134445",
@@ -1424,7 +1451,7 @@
       "account_type": "credit_card",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000373",
@@ -1433,7 +1460,7 @@
       "account_type": "accounts_payable",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000007112001",
@@ -1442,7 +1469,7 @@
       "account_type": "long_term_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000007418001",
@@ -1451,7 +1478,7 @@
       "account_type": "long_term_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000045001",
@@ -1460,7 +1487,7 @@
       "account_type": "other_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001283133",
@@ -1469,7 +1496,7 @@
       "account_type": "other_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000006092357",
@@ -1478,7 +1505,7 @@
       "account_type": "other_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000007250003",
@@ -1487,7 +1514,7 @@
       "account_type": "other_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000007930396",
@@ -1496,7 +1523,7 @@
       "account_type": "other_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000008432496",
@@ -1505,7 +1532,7 @@
       "account_type": "other_liability",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000379",
@@ -1514,7 +1541,7 @@
       "account_type": "equity",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000382",
@@ -1523,7 +1550,7 @@
       "account_type": "equity",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000385",
@@ -1532,7 +1559,7 @@
       "account_type": "equity",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000012001",
@@ -1541,7 +1568,7 @@
       "account_type": "equity",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075664",
@@ -1550,7 +1577,7 @@
       "account_type": "equity",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.456Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075668",
@@ -1559,7 +1586,7 @@
       "account_type": "equity",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075672",
@@ -1568,7 +1595,7 @@
       "account_type": "equity",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075676",
@@ -1577,7 +1604,7 @@
       "account_type": "equity",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075680",
@@ -1586,7 +1613,7 @@
       "account_type": "equity",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000388",
@@ -1595,7 +1622,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000391",
@@ -1604,7 +1631,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000394",
@@ -1613,7 +1640,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000397",
@@ -1622,7 +1649,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000406",
@@ -1631,7 +1658,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000010001",
@@ -1640,7 +1667,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000014001",
@@ -1649,7 +1676,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075688",
@@ -1658,7 +1685,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075692",
@@ -1667,7 +1694,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075700",
@@ -1676,7 +1703,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075704",
@@ -1685,7 +1712,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075708",
@@ -1694,7 +1721,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075712",
@@ -1703,7 +1730,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075716",
@@ -1712,7 +1739,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075720",
@@ -1721,7 +1748,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075724",
@@ -1730,7 +1757,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001615185",
@@ -1739,7 +1766,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001615305",
@@ -1748,7 +1775,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002544082",
@@ -1757,7 +1784,7 @@
       "account_type": "income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000007347557",
@@ -1766,7 +1793,7 @@
       "account_type": "other_income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000007519007",
@@ -1775,7 +1802,7 @@
       "account_type": "other_income",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000400",
@@ -1784,7 +1811,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000403",
@@ -1793,7 +1820,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000409",
@@ -1802,7 +1829,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000421",
@@ -1811,7 +1838,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000439",
@@ -1820,7 +1847,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000445",
@@ -1829,7 +1856,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000451",
@@ -1838,7 +1865,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000454",
@@ -1847,7 +1874,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000457",
@@ -1856,7 +1883,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000460",
@@ -1865,7 +1892,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000032023",
@@ -1874,7 +1901,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000035005",
@@ -1883,7 +1910,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000072001",
@@ -1892,7 +1919,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075854",
@@ -1901,7 +1928,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075860",
@@ -1910,7 +1937,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075872",
@@ -1919,7 +1946,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075878",
@@ -1928,7 +1955,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075884",
@@ -1937,7 +1964,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075890",
@@ -1946,7 +1973,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075896",
@@ -1955,7 +1982,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075902",
@@ -1964,7 +1991,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075908",
@@ -1973,7 +2000,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075914",
@@ -1982,7 +2009,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075920",
@@ -1991,7 +2018,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075926",
@@ -2000,7 +2027,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075932",
@@ -2009,7 +2036,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075938",
@@ -2018,7 +2045,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076112",
@@ -2027,7 +2054,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000202455",
@@ -2036,7 +2063,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075944",
@@ -2045,7 +2072,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075950",
@@ -2054,7 +2081,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075956",
@@ -2063,7 +2090,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075962",
@@ -2072,7 +2099,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075968",
@@ -2081,7 +2108,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075974",
@@ -2090,7 +2117,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075980",
@@ -2099,7 +2126,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075986",
@@ -2108,7 +2135,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075992",
@@ -2117,7 +2144,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075998",
@@ -2126,7 +2153,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076004",
@@ -2135,7 +2162,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076010",
@@ -2144,7 +2171,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076016",
@@ -2153,7 +2180,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076022",
@@ -2162,7 +2189,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076028",
@@ -2171,7 +2198,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076034",
@@ -2180,7 +2207,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076040",
@@ -2189,7 +2216,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076046",
@@ -2198,7 +2225,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076052",
@@ -2207,7 +2234,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076058",
@@ -2216,7 +2243,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076064",
@@ -2225,7 +2252,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076070",
@@ -2234,7 +2261,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076076",
@@ -2243,7 +2270,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076082",
@@ -2252,7 +2279,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076088",
@@ -2261,7 +2288,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076094",
@@ -2270,7 +2297,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076100",
@@ -2279,7 +2306,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076106",
@@ -2288,7 +2315,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000170163",
@@ -2297,7 +2324,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000175082",
@@ -2306,7 +2333,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000461003",
@@ -2315,7 +2342,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000663024",
@@ -2324,7 +2351,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000690011",
@@ -2333,7 +2360,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000709113",
@@ -2342,7 +2369,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000709157",
@@ -2351,7 +2378,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000974001",
@@ -2360,7 +2387,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000974007",
@@ -2369,7 +2396,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000974013",
@@ -2378,7 +2405,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076118",
@@ -2387,7 +2414,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076124",
@@ -2396,7 +2423,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076130",
@@ -2405,7 +2432,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076142",
@@ -2414,7 +2441,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076148",
@@ -2423,7 +2450,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076154",
@@ -2432,7 +2459,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076160",
@@ -2441,7 +2468,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076166",
@@ -2450,7 +2477,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076172",
@@ -2459,7 +2486,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076178",
@@ -2468,7 +2495,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076184",
@@ -2477,7 +2504,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076190",
@@ -2486,7 +2513,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076196",
@@ -2495,7 +2522,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076202",
@@ -2504,7 +2531,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076208",
@@ -2513,7 +2540,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076214",
@@ -2522,7 +2549,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076220",
@@ -2531,7 +2558,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000663030",
@@ -2540,7 +2567,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000774001",
@@ -2549,7 +2576,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000938001",
@@ -2558,7 +2585,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000982055",
@@ -2567,7 +2594,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076226",
@@ -2576,7 +2603,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076232",
@@ -2585,7 +2612,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076238",
@@ -2594,7 +2621,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076244",
@@ -2603,7 +2630,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076256",
@@ -2612,7 +2639,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076262",
@@ -2621,7 +2648,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076268",
@@ -2630,7 +2657,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076274",
@@ -2639,7 +2666,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076280",
@@ -2648,7 +2675,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076286",
@@ -2657,7 +2684,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076292",
@@ -2666,7 +2693,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076298",
@@ -2675,7 +2702,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076304",
@@ -2684,7 +2711,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076310",
@@ -2693,7 +2720,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076316",
@@ -2702,7 +2729,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000189001",
@@ -2711,7 +2738,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000210301",
@@ -2720,7 +2747,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000652001",
@@ -2729,7 +2756,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000663036",
@@ -2738,7 +2765,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000728057",
@@ -2747,7 +2774,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076322",
@@ -2756,7 +2783,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076328",
@@ -2765,7 +2792,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076334",
@@ -2774,7 +2801,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076340",
@@ -2783,7 +2810,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076346",
@@ -2792,7 +2819,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000076352",
@@ -2801,7 +2828,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000170169",
@@ -2810,7 +2837,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000170201",
@@ -2819,7 +2846,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000112067",
@@ -2828,7 +2855,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000174001",
@@ -2837,7 +2864,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000185001",
@@ -2846,7 +2873,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001050020",
@@ -2855,7 +2882,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001050166",
@@ -2864,7 +2891,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001251185",
@@ -2873,7 +2900,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002425033",
@@ -2882,7 +2909,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002466001",
@@ -2891,7 +2918,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002749549",
@@ -2900,7 +2927,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002835085",
@@ -2909,7 +2936,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000003424525",
@@ -2918,7 +2945,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000003512467",
@@ -2927,7 +2954,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000003974519",
@@ -2936,7 +2963,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000004940521",
@@ -2945,7 +2972,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000005221243",
@@ -2954,7 +2981,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000007112003",
@@ -2963,7 +2990,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000007418003",
@@ -2972,7 +2999,7 @@
       "account_type": "expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000034003",
@@ -2981,7 +3008,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075728",
@@ -2990,7 +3017,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075734",
@@ -2999,7 +3026,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075740",
@@ -3008,7 +3035,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075746",
@@ -3017,7 +3044,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075776",
@@ -3026,7 +3053,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075788",
@@ -3035,7 +3062,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075782",
@@ -3044,7 +3071,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075794",
@@ -3053,7 +3080,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075806",
@@ -3062,7 +3089,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000643685",
@@ -3071,7 +3098,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001498571",
@@ -3080,7 +3107,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000001503955",
@@ -3089,7 +3116,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002375645",
@@ -3098,7 +3125,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075812",
@@ -3107,7 +3134,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075818",
@@ -3116,7 +3143,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075824",
@@ -3125,7 +3152,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075830",
@@ -3134,7 +3161,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075836",
@@ -3143,7 +3170,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075842",
@@ -3152,7 +3179,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000003786001",
@@ -3161,7 +3188,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000075848",
@@ -3170,7 +3197,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000002159007",
@@ -3179,7 +3206,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000005604020",
@@ -3188,7 +3215,7 @@
       "account_type": "cost_of_goods_sold",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000000415",
@@ -3197,7 +3224,7 @@
       "account_type": "other_expense",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000034001",
@@ -3206,7 +3233,7 @@
       "account_type": "stock",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     },
     {
       "account_id": "3095712000000101470",
@@ -3215,7 +3242,7 @@
       "account_type": "payment_clearing",
       "is_active": true,
       "current_balance": 0,
-      "last_synced": "2026-10-25T15:21:33.457Z"
+      "last_synced": "2026-11-23T17:59:54.985Z"
     }
   ],
   "zoho_projects": [
@@ -11735,6 +11762,34 @@
   ],
   "sync_logs": [
     {
+      "id": "log-1795456798580",
+      "sync_type": "coa_sync",
+      "status": "success",
+      "details": {
+        "count": 348
+      },
+      "error_message": null,
+      "created_at": "2026-11-23T17:59:58.580Z"
+    },
+    {
+      "id": "log-1795450926671",
+      "sync_type": "expense_create",
+      "status": "failure",
+      "details": {
+        "expense_id": "test-azan-1795450920621"
+      },
+      "error_message": "Failed to refresh Zoho Books token: timeout of 6000ms exceeded",
+      "created_at": "2026-11-23T16:22:06.671Z"
+    },
+    {
+      "id": "log-1795450926664",
+      "sync_type": "token_refresh",
+      "status": "failure",
+      "details": {},
+      "error_message": "timeout of 6000ms exceeded",
+      "created_at": "2026-11-23T16:22:06.664Z"
+    },
+    {
       "id": "log-1795365719464",
       "sync_type": "projects_sync",
       "status": "success",
@@ -12183,36 +12238,6 @@
       },
       "error_message": null,
       "created_at": "2026-10-05T19:48:16.911Z"
-    },
-    {
-      "id": "log-1791229639668",
-      "sync_type": "expenses_sync",
-      "status": "success",
-      "details": {
-        "count": 0
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:47:19.668Z"
-    },
-    {
-      "id": "log-1791229591648",
-      "sync_type": "expenses_sync",
-      "status": "success",
-      "details": {
-        "count": 0
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:46:31.648Z"
-    },
-    {
-      "id": "log-1791229556519",
-      "sync_type": "expenses_sync",
-      "status": "success",
-      "details": {
-        "count": 0
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:45:56.519Z"
     }
   ],
   "deleted_expense_ids": [
