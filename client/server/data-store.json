@@ -4,9 +4,9 @@
     "client_id": "1000.BYLDNDDJMF36HIGK6ZJXGMMYILQ12O",
     "client_secret": "834dd49f629f1e095f2858a71217add0571131bd70",
     "redirect_uri": "https://pettycash-pearl.vercel.app/api/zoho/callback",
-    "access_token": "1000.c71e6a23a88b9c4183da1d4e8bc64b7c.2a951518a937aec815ccb0483b065855",
+    "access_token": "1000.a0dc0392d1b66fbe4b242c6a8d2747ee.577ff6484eff20987cf937f315fd9f60",
     "refresh_token": "1000.70b3d3f7739447a1b5a16b1d535b0f94.860e4471704192a3fa442619dbd08417",
-    "token_expires_at": "2026-11-23T18:59:52.859Z",
+    "token_expires_at": "2026-11-23T21:36:22.191Z",
     "organization_id": "771750431",
     "organization_name": "Bright Flowers Trading LLC",
     "dc_region": "com",
@@ -16,7 +16,7 @@
     "default_expense_account_id": "acc-exp-petty",
     "default_expense_account_name": "Petty Cash Purchases",
     "last_sync_at": "2026-10-05T19:45:02.798Z",
-    "updated_at": "2026-11-23T17:59:52.862Z"
+    "updated_at": "2026-11-23T20:36:22.194Z"
   },
   "employees": [
     {
@@ -11762,6 +11762,30 @@
   ],
   "sync_logs": [
     {
+      "id": "log-1795466212782",
+      "sync_type": "expense_create",
+      "status": "success",
+      "details": {
+        "expense_id": "test-sync-1795466210824",
+        "zoho_expense_id": "3095712000009713031",
+        "zoho_expense_number": "9967"
+      },
+      "error_message": null,
+      "created_at": "2026-11-23T20:36:52.782Z"
+    },
+    {
+      "id": "log-1795464115617",
+      "sync_type": "expense_create",
+      "status": "success",
+      "details": {
+        "expense_id": "test-azan-1795464110002",
+        "zoho_expense_id": "3095712000009720017",
+        "zoho_expense_number": "9966"
+      },
+      "error_message": null,
+      "created_at": "2026-11-23T20:01:55.617Z"
+    },
+    {
       "id": "log-1795456798580",
       "sync_type": "coa_sync",
       "status": "success",
@@ -12218,26 +12242,6 @@
       },
       "error_message": null,
       "created_at": "2026-10-05T19:49:30.843Z"
-    },
-    {
-      "id": "log-1791229726098",
-      "sync_type": "expenses_sync",
-      "status": "success",
-      "details": {
-        "count": 0
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:48:46.098Z"
-    },
-    {
-      "id": "log-1791229696911",
-      "sync_type": "expenses_sync",
-      "status": "success",
-      "details": {
-        "count": 0
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:48:16.911Z"
     }
   ],
   "deleted_expense_ids": [

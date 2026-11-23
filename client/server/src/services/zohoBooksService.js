@@ -1,4 +1,8 @@
-const axios = require('axios');
+const dns = require('dns');
+if (dns.setDefaultResultOrder) {
+  dns.setDefaultResultOrder('ipv4first');
+}
+
 const { db } = require('../config/supabase');
 
 class ZohoBooksService {
@@ -115,9 +119,13 @@ class ZohoBooksService {
       });
       const response = await fetch(tokenUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Connection': 'close',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        },
         body,
-        signal: AbortSignal.timeout(15000)
+        signal: AbortSignal.timeout(10000)
       });
 
       const data = await response.json();
@@ -163,14 +171,14 @@ class ZohoBooksService {
 
     const now = Date.now();
     // Protect against rapid multiple refreshes (Zoho allows max 1 refresh per minute; reuse valid token within 45s)
-    if (this._lastRefreshSuccessTime && (now - this._lastRefreshSuccessTime < 45000)) {
+    if (!forceRefresh && this._lastRefreshSuccessTime && (now - this._lastRefreshSuccessTime < 45000)) {
       if (config.access_token) {
         return config.access_token;
       }
     }
 
     // Cooldown if rate-limited recently (avoid repeated rapid re-firing)
-    if (this._lastRefreshErrorTime && (now - this._lastRefreshErrorTime < 30000)) {
+    if (!forceRefresh && this._lastRefreshErrorTime && (now - this._lastRefreshErrorTime < 15000)) {
       if (config.access_token) {
         return config.access_token; // Use current token if available instead of hammering rate limit
       }
@@ -198,9 +206,13 @@ class ZohoBooksService {
         });
         const response = await fetch(tokenUrl, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Connection': 'close',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+          },
           body,
-          signal: AbortSignal.timeout(15000)
+          signal: AbortSignal.timeout(10000)
         });
 
         const data = await response.json();
@@ -250,7 +262,9 @@ class ZohoBooksService {
 
     const headers = {
       Authorization: `Zoho-oauthtoken ${token}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Connection': 'close',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
     };
 
     const options = {
@@ -286,8 +300,8 @@ class ZohoBooksService {
       }
       return resData;
     } catch (err) {
-      const errMsg = err.message;
-      if (retryCount === 0 && (errMsg?.toLowerCase().includes('not authorized') || errMsg?.toLowerCase().includes('token') || errMsg?.toLowerCase().includes('57'))) {
+      const errMsg = err.message || '';
+      if (retryCount === 0 && (errMsg.toLowerCase().includes('not authorized') || errMsg.toLowerCase().includes('token') || errMsg.toLowerCase().includes('57'))) {
         console.warn(`🔄 Zoho API unauthorized notice on [${endpoint}]. Retrying with fresh token...`);
         try {
           await this.getValidAccessToken(true);
@@ -296,7 +310,7 @@ class ZohoBooksService {
           console.error('Failed to auto-refresh token after error:', refreshErr.message);
         }
       }
-      throw new Error(`Zoho API Request Error [${endpoint}]: ${errMsg}`);
+      throw err;
     }
   }
 

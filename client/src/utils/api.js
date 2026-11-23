@@ -323,12 +323,20 @@ export const api = {
 
           const cached = JSON.parse(localStorage.getItem(cacheKey) || '[]');
           const serverIds = new Set(data.expenses.map((e) => e.id));
-          // Preserve ONLY genuinely pending un-synced offline expenses that have not reached server
-          const localOnly = cached.filter(
-            (e) => e.sync_status === 'pending' && !e.zoho_journal_id &&
-                   !deletedSet.has(String(e.id)) &&
-                   !serverIds.has(e.id)
+          const serverZohoIds = new Set(
+            data.expenses.filter((e) => e.zoho_journal_id).map((e) => String(e.zoho_journal_id))
           );
+          // Preserve any local expense that has not yet reached the server
+          // (either pending sync OR created within the last 24 hours)
+          const now = Date.now();
+          const localOnly = cached.filter((e) => {
+            if (serverIds.has(e.id)) return false;
+            if (e.zoho_journal_id && serverZohoIds.has(String(e.zoho_journal_id))) return false;
+            if (deletedSet.has(String(e.id))) return false;
+            if (e.zoho_journal_id && deletedSet.has(String(e.zoho_journal_id))) return false;
+            const isRecent = e.created_at && (now - new Date(e.created_at).getTime() < 24 * 60 * 60 * 1000);
+            return e.sync_status === 'pending' || isRecent;
+          });
           const merged = [...localOnly, ...data.expenses];
           localStorage.setItem(cacheKey, JSON.stringify(merged));
           data.expenses = merged;
