@@ -997,6 +997,11 @@ export default function ReportsView({
               Each row below is an official Petty Cash Report containing all marked vouchers for that claim period. Click any report to view its contained vouchers.
             </span>
           )}
+          {activeReportTab === 'all' && (
+            <span className="bg-slate-100 text-slate-800 px-2.5 py-0.5 rounded border border-slate-200 font-medium inline-block">
+              Master Audit View: Displays all petty cash statements and claim packages across all statuses (Draft, Ready to Export, and Exported Archive). Click any statement to view its contained vouchers.
+            </span>
+          )}
           {activeReportTab === 'exported' && (
             <div className="bg-emerald-50/80 border border-emerald-200/80 rounded-lg p-2.5 sm:p-3 text-xs text-emerald-950 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 shadow-2xs">
               <div className="flex items-center space-x-2">
