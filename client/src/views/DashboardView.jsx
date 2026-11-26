@@ -168,8 +168,10 @@ export default function DashboardView({
     if (selectedExpenseIds.size === 0) return;
     setIsUpdatingReport(true);
     try {
+      const cleanCode = (activeAccountOwner?.employee_code || activeAccountOwner?.name || 'EMP').replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 6) || 'EMP';
+      const batchReportId = `REP-${cleanCode}-${new Date().toISOString().replace(/[-:T]/g, '').slice(2, 12)}`;
       if (onMarkSelectedExported) {
-        await onMarkSelectedExported(Array.from(selectedExpenseIds));
+        await onMarkSelectedExported(Array.from(selectedExpenseIds), batchReportId);
       }
       setSelectedExpenseIds(new Set());
     } finally {
@@ -218,6 +220,10 @@ export default function DashboardView({
         filters.is_exported = 'false';
       }
 
+      const cleanCode = (activeAccountOwner?.employee_code || activeAccountOwner?.name || 'EMP').replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 6) || 'EMP';
+      const batchReportId = `REP-${cleanCode}-${new Date().toISOString().replace(/[-:T]/g, '').slice(2, 12)}`;
+      filters.report_id = batchReportId;
+
       if (format === 'pdf') {
         await api.downloadPdfReport(filters, targetExpenses);
       } else {
@@ -225,7 +231,7 @@ export default function DashboardView({
       }
 
       if (onMarkSelectedExported && targetIds.length > 0) {
-        await onMarkSelectedExported(targetIds);
+        await onMarkSelectedExported(targetIds, batchReportId);
       } else if (api.addExportedIds && targetIds.length > 0) {
         api.addExportedIds(targetIds);
       }
@@ -966,7 +972,7 @@ export default function DashboardView({
                           )}
                           {onDeleteExpense && (
                             <button
-                              onClick={() => onDeleteExpense(exp.id)}
+                              onClick={() => onDeleteExpense(exp)}
                               className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition cursor-pointer"
                               title="Delete Expense"
                             >

@@ -143,12 +143,14 @@ const handleCsvExport = async (req, res) => {
     const shouldMarkExported = payload.mark_exported === 'true' || payload.mark_exported === true || payload.mark_exported !== 'false';
     if (shouldMarkExported) {
       const now = new Date().toISOString();
+      const batchReportId = payload.report_id || `REP-${Date.now().toString().slice(-6)}`;
       for (const exp of expenses) {
         if (!exp.is_exported) {
           exp.is_exported = true;
           exp.exported_at = exp.exported_at || now;
           exp.added_to_report = true;
           if (!exp.added_to_report_at) exp.added_to_report_at = now;
+          if (!exp.report_id) exp.report_id = batchReportId;
           try {
             await db.saveExpense(exp);
           } catch (e) {
@@ -208,12 +210,14 @@ const handlePdfExport = async (req, res) => {
     const shouldMarkExported = payload.mark_exported === 'true' || payload.mark_exported === true || payload.mark_exported !== 'false';
     if (shouldMarkExported) {
       const now = new Date().toISOString();
+      const batchReportId = payload.report_id || `REP-${Date.now().toString().slice(-6)}`;
       for (const exp of expenses) {
         if (!exp.is_exported) {
           exp.is_exported = true;
           exp.exported_at = exp.exported_at || now;
           exp.added_to_report = true;
           if (!exp.added_to_report_at) exp.added_to_report_at = now;
+          if (!exp.report_id) exp.report_id = batchReportId;
           try {
             await db.saveExpense(exp);
           } catch (e) {
@@ -382,12 +386,13 @@ router.post('/export/pdf', handlePdfExport);
 // POST /api/reports/mark-exported - Explicitly mark expenses as exported in report
 router.post('/mark-exported', async (req, res) => {
   try {
-    const { expense_ids } = req.body;
+    const { expense_ids, report_id } = req.body;
     if (!Array.isArray(expense_ids) || expense_ids.length === 0) {
       return res.status(400).json({ success: false, error: 'expense_ids array is required' });
     }
 
     const now = new Date().toISOString();
+    const batchReportId = report_id || `REP-${Date.now().toString().slice(-6)}`;
     const updated = [];
 
     for (const id of expense_ids) {
@@ -397,6 +402,7 @@ router.post('/mark-exported', async (req, res) => {
         exp.exported_at = now;
         exp.added_to_report = true;
         if (!exp.added_to_report_at) exp.added_to_report_at = now;
+        exp.report_id = batchReportId;
         const saved = await db.saveExpense(exp);
         updated.push(saved);
       }
@@ -404,9 +410,10 @@ router.post('/mark-exported', async (req, res) => {
 
     res.json({
       success: true,
+      report_id: batchReportId,
       updated_count: updated.length,
       expenses: updated,
-      message: `Successfully locked ${updated.length} expense(s) as exported report`
+      message: `Successfully locked ${updated.length} expense(s) into report ${batchReportId}`
     });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });

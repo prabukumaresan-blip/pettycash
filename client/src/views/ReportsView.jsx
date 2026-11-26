@@ -245,23 +245,39 @@ export default function ReportsView({
       const cleanMonth = monthKey.replace('-', '');
 
       if (activeReportTab === 'exported' || isExp) {
-        // Exported archive grouped by employee and export date/batch
-        const batchDate = exp.exported_at ? exp.exported_at.substring(0, 10).replace(/-/g, '') : cleanMonth;
-        groupKey = `EXP_${empId}_${batchDate}`;
-        reportNumber = `REP-${cleanCode}-${batchDate}`;
-        title = `Petty Cash Statement - ${empName}`;
+        // Exported archive grouped by explicit report_id or distinct export batch
+        let batchKey;
+        if (exp.report_id) {
+          batchKey = exp.report_id;
+          reportNumber = exp.report_id;
+        } else if (exp.exported_at) {
+          // Group by minute of export timestamp
+          const batchMinute = exp.exported_at.substring(0, 16);
+          const cleanBatch = batchMinute.replace(/[-:T]/g, '').slice(2);
+          batchKey = `EXP_${empId}_${cleanBatch}`;
+          reportNumber = `REP-${cleanCode}-${cleanBatch}`;
+        } else {
+          const dateKey = (exp.expense_date || cleanMonth).replace(/-/g, '');
+          const projTag = exp.project_name ? exp.project_name.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 5) : '';
+          batchKey = projTag ? `EXP_${empId}_${dateKey}_${projTag}` : `EXP_${empId}_${dateKey}`;
+          reportNumber = projTag ? `REP-${cleanCode}-${dateKey}-${projTag}` : `REP-${cleanCode}-${dateKey}`;
+        }
+        groupKey = batchKey;
+        title = exp.project_name ? `Petty Cash Statement - ${empName} (${exp.project_name})` : `Petty Cash Statement - ${empName}`;
         status = 'exported';
       } else if (activeReportTab === 'report' || exp.added_to_report) {
-        // Ready to export claim package
-        groupKey = `CLAIM_${empId}_${cleanMonth}`;
-        reportNumber = `CLM-${cleanCode}-${cleanMonth}`;
-        title = `Petty Cash Claim - ${empName}`;
+        // Ready to export claim package grouped by employee and project
+        const projTag = exp.project_name ? exp.project_name.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 5) : '';
+        groupKey = projTag ? `CLAIM_${empId}_${cleanMonth}_${projTag}` : `CLAIM_${empId}_${cleanMonth}`;
+        reportNumber = projTag ? `CLM-${cleanCode}-${cleanMonth}-${projTag}` : `CLM-${cleanCode}-${cleanMonth}`;
+        title = exp.project_name ? `Petty Cash Claim - ${empName} (${exp.project_name})` : `Petty Cash Claim - ${empName}`;
         status = 'ready';
       } else {
         // Unreported / general statement
-        groupKey = `STMT_${empId}_${cleanMonth}`;
-        reportNumber = `STMT-${cleanCode}-${cleanMonth}`;
-        title = `Petty Cash Statement - ${empName}`;
+        const projTag = exp.project_name ? exp.project_name.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 5) : '';
+        groupKey = projTag ? `STMT_${empId}_${cleanMonth}_${projTag}` : `STMT_${empId}_${cleanMonth}`;
+        reportNumber = projTag ? `STMT-${cleanCode}-${cleanMonth}-${projTag}` : `STMT-${cleanCode}-${cleanMonth}`;
+        title = exp.project_name ? `Petty Cash Statement - ${empName} (${exp.project_name})` : `Petty Cash Statement - ${empName}`;
         status = 'draft';
       }
 
@@ -400,10 +416,16 @@ export default function ReportsView({
       
       // Update exported status across client app immediately if newly exported
       if (!isExp) {
-        if (onMarkSelectedExported && exportedIds.length > 0) {
-          await onMarkSelectedExported(exportedIds);
-        } else if (api.addExportedIds && exportedIds.length > 0) {
-          api.addExportedIds(exportedIds);
+        const targetReps = selectedReportIds.size > 0 ? selectedReports : reports;
+        for (const rep of targetReps) {
+          const ids = rep.expenses.map(e => e.id).filter(id => exportedIds.includes(id));
+          if (ids.length > 0) {
+            if (onMarkSelectedExported) {
+              await onMarkSelectedExported(ids, rep.reportNumber);
+            } else if (api.addExportedIds) {
+              api.addExportedIds(ids);
+            }
+          }
         }
       }
 
@@ -464,10 +486,16 @@ export default function ReportsView({
 
       // Update exported status across client app immediately if newly exported
       if (!isExp) {
-        if (onMarkSelectedExported && exportedIds.length > 0) {
-          await onMarkSelectedExported(exportedIds);
-        } else if (api.addExportedIds && exportedIds.length > 0) {
-          api.addExportedIds(exportedIds);
+        const targetReps = selectedReportIds.size > 0 ? selectedReports : reports;
+        for (const rep of targetReps) {
+          const ids = rep.expenses.map(e => e.id).filter(id => exportedIds.includes(id));
+          if (ids.length > 0) {
+            if (onMarkSelectedExported) {
+              await onMarkSelectedExported(ids, rep.reportNumber);
+            } else if (api.addExportedIds) {
+              api.addExportedIds(ids);
+            }
+          }
         }
       }
 
@@ -508,7 +536,7 @@ export default function ReportsView({
       if (!isExp) {
         const ids = report.expenses.map((e) => e.id);
         if (onMarkSelectedExported && ids.length > 0) {
-          await onMarkSelectedExported(ids);
+          await onMarkSelectedExported(ids, report.reportNumber);
         } else if (api.addExportedIds && ids.length > 0) {
           api.addExportedIds(ids);
         }
@@ -548,7 +576,7 @@ export default function ReportsView({
       if (!isExp) {
         const ids = report.expenses.map((e) => e.id);
         if (onMarkSelectedExported && ids.length > 0) {
-          await onMarkSelectedExported(ids);
+          await onMarkSelectedExported(ids, report.reportNumber);
         } else if (api.addExportedIds && ids.length > 0) {
           api.addExportedIds(ids);
         }
@@ -602,21 +630,24 @@ export default function ReportsView({
   const handleMarkSelectedAsExported = async () => {
     if (selectedReportIds.size === 0) return;
     setIsUpdatingReport(true);
-    const targetExpenses = selectedReports.flatMap((r) => r.expenses);
-    const ids = targetExpenses.map((e) => e.id);
     try {
-      if (onMarkSelectedExported) {
-        await onMarkSelectedExported(ids);
-      } else {
-        if (api.addExportedIds) api.addExportedIds(ids);
-        await api.markExpensesAsExported(ids);
+      for (const rep of selectedReports) {
+        const ids = rep.expenses.map((e) => e.id);
+        if (ids.length > 0) {
+          if (onMarkSelectedExported) {
+            await onMarkSelectedExported(ids, rep.reportNumber);
+          } else {
+            if (api.addExportedIds) api.addExportedIds(ids);
+            await api.markExpensesAsExported(ids, rep.reportNumber);
+          }
+        }
       }
       setSelectedReportIds(new Set());
       await fetchReport();
       if (onRefreshData) onRefreshData();
       setActionFeedback({
         type: 'success',
-        msg: `Successfully marked and locked ${ids.length} expense log(s) across ${selectedReportIds.size} report(s) as Exported!`
+        msg: `Successfully marked and locked ${selectedExpensesCount} expense log(s) across ${selectedReportIds.size} report(s) as Exported!`
       });
       setTimeout(() => setActionFeedback(null), 4000);
     } catch (err) {
@@ -1168,7 +1199,7 @@ export default function ReportsView({
                             </span>
                             {report.exported_at && (
                               <span className="text-emerald-700 ml-2 font-sans font-medium text-[10px]">
-                                (Exported: {new Date(report.exported_at).toLocaleDateString()})
+                                (Exported: {new Date(report.exported_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}, {new Date(report.exported_at).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })})
                               </span>
                             )}
                           </div>

@@ -367,59 +367,97 @@ router.put('/:id', upload.single('receipt'), async (req, res) => {
   }
 });
 
-// DELETE Expense (and remove Zoho journal entry)
+// DELETE Expense (and remove Zoho expense entry)
 router.delete('/:id', async (req, res) => {
   try {
-    const expense = await db.getExpenseById(req.params.id);
-    if (!expense) {
-      await db.deleteExpense(req.params.id);
-      return res.json({
-        success: true,
-        message: 'Expense removed from local records',
-        deleted_id: req.params.id
-      });
+    const passedId = req.params.id;
+    let zohoId = req.query.zoho_journal_id || req.body?.zoho_journal_id || null;
+
+    let expense = await db.getExpenseById(passedId);
+    if (!expense && zohoId) {
+      expense = await db.getExpenseById(zohoId);
     }
 
     // Employees can delete their own expenses (even if exported), and Admin can delete any expense.
-    if (req.user && req.user.role === 'employee' && expense.employee_id !== req.user.id) {
+    if (req.user && req.user.role === 'employee' && expense && expense.employee_id !== req.user.id) {
       return res.status(403).json({ success: false, error: 'Access denied: You can only delete your own expenses' });
     }
 
-    const employee = await db.getEmployeeById(expense.employee_id);
+    // Identify Zoho Expense ID
+    if (!zohoId && expense?.zoho_journal_id) {
+      zohoId = expense.zoho_journal_id;
+    }
+    if (!zohoId && (passedId.startsWith('30957') || /^\d{15,20}$/.test(passedId))) {
+      zohoId = passedId;
+    }
 
-    // If synced with Zoho Books, delete the Expense in Zoho
-    if (expense.zoho_journal_id) {
+    // If still no Zoho ID, search Zoho Books by reference number or invoice number
+    if (!zohoId && passedId) {
       try {
-        await zohoBooksService.deleteExpenseJournal(expense.zoho_journal_id);
-      } catch (zErr) {
-        console.warn('⚠️ Could not delete expense in Zoho:', zErr.message);
+        const refSearch = passedId.startsWith('PCA-') ? passedId : `PCA-${passedId}`;
+        const searchRes = await zohoBooksService.makeApiRequest('/expenses', 'GET', null, {
+          reference_number: refSearch
+        });
+        if (searchRes && Array.isArray(searchRes.expenses) && searchRes.expenses.length > 0) {
+          zohoId = searchRes.expenses[0].expense_id;
+        }
+      } catch (sErr) {
+        console.warn('⚠️ Could not lookup expense in Zoho Books by ref:', sErr.message);
       }
     }
 
-    await db.deleteExpense(expense.id);
-    if (expense.zoho_journal_id && String(expense.zoho_journal_id) !== String(expense.id)) {
-      await db.deleteExpense(expense.zoho_journal_id);
-    }
-
-    if (employee && employee.petty_cash_account_id) {
+    // Delete in Zoho Books first if synced
+    if (zohoId) {
       try {
-        const liveBal = await zohoBooksService.getPettyCashBalance(employee.petty_cash_account_id, true);
-        if (typeof liveBal === 'number') {
-          await db.updateEmployeeBalance(employee.id, liveBal);
+        console.log(`🗑️ Deleting expense ${zohoId} from Zoho Books...`);
+        await zohoBooksService.deleteExpenseJournal(zohoId);
+      } catch (zErr) {
+        const errMsg = (zErr.message || '').toLowerCase();
+        // If not found in Zoho, it's already deleted in Zoho so proceed
+        if (!errMsg.includes('does not exist') && !errMsg.includes('not found') && !errMsg.includes('404') && !errMsg.includes('1002')) {
+          console.error('❌ Failed to delete expense in Zoho Books:', zErr.message);
+          return res.status(400).json({
+            success: false,
+            error: `Failed to delete expense in Zoho Books: ${zErr.message}`
+          });
         }
-      } catch {}
+      }
     }
 
-    const updatedEmployee = await db.getEmployeeById(expense.employee_id);
+    // Delete locally and record in deleted_expense_ids
+    await db.deleteExpense(passedId);
+    if (zohoId && String(zohoId) !== String(passedId)) {
+      await db.deleteExpense(zohoId);
+    }
+    if (expense?.id && String(expense.id) !== String(passedId)) {
+      await db.deleteExpense(expense.id);
+    }
+
+    // Restore employee petty cash balance
+    const empId = expense?.employee_id || (req.user?.role === 'employee' ? req.user.id : null);
+    let updatedEmployee = null;
+    if (empId) {
+      const employee = await db.getEmployeeById(empId);
+      if (employee && employee.petty_cash_account_id) {
+        try {
+          const liveBal = await zohoBooksService.getPettyCashBalance(employee.petty_cash_account_id, true);
+          if (typeof liveBal === 'number') {
+            await db.updateEmployeeBalance(employee.id, liveBal);
+          }
+        } catch {}
+      }
+      updatedEmployee = await db.getEmployeeById(empId);
+    }
 
     res.json({
       success: true,
-      message: 'Expense deleted and employee balance restored',
-      deleted_id: expense.id,
-      zoho_journal_id: expense.zoho_journal_id,
+      message: 'Expense deleted in Zoho Books and cash balance restored',
+      deleted_id: passedId,
+      zoho_journal_id: zohoId,
       employee_balance: updatedEmployee ? updatedEmployee.current_balance : null
     });
   } catch (err) {
+    console.error('DELETE /api/expenses/:id error:', err);
     res.status(500).json({ success: false, error: err.message });
   }
 });

@@ -419,8 +419,9 @@ export const api = {
     }
   },
 
-  async deleteExpense(id) {
+  async deleteExpense(id, zoho_journal_id = null) {
     this.addDeletedId(id);
+    if (zoho_journal_id) this.addDeletedId(zoho_journal_id);
 
     // Clean up all localStorage expense caches immediately
     try {
@@ -429,12 +430,19 @@ export const api = {
       if (user && user.id) keys.push(`cached_expenses_${user.id}`);
       for (const k of keys) {
         const cur = JSON.parse(localStorage.getItem(k) || '[]');
-        localStorage.setItem(k, JSON.stringify(cur.filter(e => String(e.id) !== String(id) && (!e.zoho_journal_id || String(e.zoho_journal_id) !== String(id)))));
+        localStorage.setItem(k, JSON.stringify(cur.filter(e =>
+          String(e.id) !== String(id) &&
+          (!zoho_journal_id || String(e.zoho_journal_id) !== String(zoho_journal_id)) &&
+          (!e.zoho_journal_id || String(e.zoho_journal_id) !== String(id))
+        )));
       }
     } catch {}
 
-    const res = await fetchWithAuth(`${BASE_URL}/expenses/${id}`, {
-      method: 'DELETE'
+    const query = zoho_journal_id ? `?zoho_journal_id=${encodeURIComponent(zoho_journal_id)}` : '';
+    const res = await fetchWithAuth(`${BASE_URL}/expenses/${id}${query}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ zoho_journal_id })
     });
     const data = await safeJson(res);
     if (data.deleted_id) this.addDeletedId(data.deleted_id);
@@ -468,11 +476,11 @@ export const api = {
     return await safeJson(res);
   },
 
-  async markExpensesAsExported(expenseIds) {
+  async markExpensesAsExported(expenseIds, reportId = null) {
     const res = await fetchWithAuth(`${BASE_URL}/reports/mark-exported`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ expense_ids: expenseIds })
+      body: JSON.stringify({ expense_ids: expenseIds, report_id: reportId })
     });
     return await safeJson(res);
   },

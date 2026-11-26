@@ -301,7 +301,7 @@ class ZohoBooksService {
       return resData;
     } catch (err) {
       const errMsg = err.message || '';
-      if (retryCount === 0 && (errMsg.toLowerCase().includes('not authorized') || errMsg.toLowerCase().includes('token') || errMsg.toLowerCase().includes('57'))) {
+      if (retryCount === 0 && (errMsg.toLowerCase().includes('not authorized') || errMsg.toLowerCase().includes('invalid_token') || errMsg.toLowerCase().includes('token expired') || errMsg.includes('code 57') || errMsg.includes('code: 57'))) {
         console.warn(`🔄 Zoho API unauthorized notice on [${endpoint}]. Retrying with fresh token...`);
         try {
           await this.getValidAccessToken(true);
@@ -646,7 +646,11 @@ class ZohoBooksService {
 
           for (const ze of list) {
             // Skip any expense that was deleted by the user
-            if (db.isDeletedExpense && db.isDeletedExpense(null, ze.expense_id)) {
+            if (db.isDeletedExpense && (
+              db.isDeletedExpense(ze.expense_id, ze.expense_id) ||
+              db.isDeletedExpense(ze.reference_number, ze.expense_id) ||
+              (ze.reference_number && db.isDeletedExpense(ze.reference_number.replace('PCA-', ''), ze.expense_id))
+            )) {
               continue;
             }
             const isRecentCreated = ze.created_time && new Date(ze.created_time) >= new Date('2026-10-20T00:00:00Z');
@@ -951,7 +955,7 @@ class ZohoBooksService {
     } catch (err) {
       const errMsg = (err.message || '').toLowerCase();
       // If the expense already does not exist in Zoho Books, treat as success
-      if (errMsg.includes('does not exist') || errMsg.includes('not found') || errMsg.includes('404')) {
+      if (errMsg.includes('does not exist') || errMsg.includes('not found') || errMsg.includes('404') || errMsg.includes('1002')) {
         console.log(`ℹ️ Expense ${journalId} already does not exist in Zoho Books`);
         await db.addSyncLog('expense_delete', 'success', { zoho_expense_id: journalId, note: 'already deleted' });
         return true;

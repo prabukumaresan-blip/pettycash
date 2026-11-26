@@ -240,7 +240,7 @@ export default function ExpenseCard({
 
             {onDelete && (
               <button
-                onClick={() => onDelete(expense.id)}
+                onClick={() => onDelete(expense)}
                 className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition"
                 title="Delete Expense"
               >

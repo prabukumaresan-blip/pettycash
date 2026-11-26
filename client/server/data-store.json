@@ -4,9 +4,9 @@
     "client_id": "1000.BYLDNDDJMF36HIGK6ZJXGMMYILQ12O",
     "client_secret": "834dd49f629f1e095f2858a71217add0571131bd70",
     "redirect_uri": "https://pettycash-pearl.vercel.app/api/zoho/callback",
-    "access_token": "1000.a0dc0392d1b66fbe4b242c6a8d2747ee.577ff6484eff20987cf937f315fd9f60",
+    "access_token": "1000.9fd7633fe8899aa3ee79fd9968676e5c.4cdfc0f2e1eeefc0aa650cc1c6f1c7b5",
     "refresh_token": "1000.70b3d3f7739447a1b5a16b1d535b0f94.860e4471704192a3fa442619dbd08417",
-    "token_expires_at": "2026-11-23T21:36:22.191Z",
+    "token_expires_at": "2026-11-26T08:12:33.898Z",
     "organization_id": "771750431",
     "organization_name": "Bright Flowers Trading LLC",
     "dc_region": "com",
@@ -16,7 +16,7 @@
     "default_expense_account_id": "acc-exp-petty",
     "default_expense_account_name": "Petty Cash Purchases",
     "last_sync_at": "2026-10-05T19:45:02.798Z",
-    "updated_at": "2026-11-23T20:36:22.194Z"
+    "updated_at": "2026-11-26T07:12:33.901Z"
   },
   "employees": [
     {
@@ -11762,6 +11762,61 @@
   ],
   "sync_logs": [
     {
+      "id": "log-1795677151421",
+      "sync_type": "expense_delete",
+      "status": "success",
+      "details": {
+        "zoho_expense_id": "3095712000009757001"
+      },
+      "error_message": null,
+      "created_at": "2026-11-26T07:12:31.421Z"
+    },
+    {
+      "id": "log-1795677148061",
+      "sync_type": "expense_create",
+      "status": "success",
+      "details": {
+        "expense_id": "test-del-verify-1795677146426",
+        "zoho_expense_id": "3095712000009757001",
+        "zoho_expense_number": "9980"
+      },
+      "error_message": null,
+      "created_at": "2026-11-26T07:12:28.061Z"
+    },
+    {
+      "id": "log-1795677126526",
+      "sync_type": "expense_delete",
+      "status": "success",
+      "details": {
+        "zoho_expense_id": "999999999999999999",
+        "note": "already deleted"
+      },
+      "error_message": null,
+      "created_at": "2026-11-26T07:12:06.526Z"
+    },
+    {
+      "id": "log-1795675688634",
+      "sync_type": "expense_delete",
+      "status": "success",
+      "details": {
+        "zoho_expense_id": "3095712000009754001"
+      },
+      "error_message": null,
+      "created_at": "2026-11-26T06:48:08.634Z"
+    },
+    {
+      "id": "log-1795675687424",
+      "sync_type": "expense_create",
+      "status": "success",
+      "details": {
+        "expense_id": "test-del-1795675684639",
+        "zoho_expense_id": "3095712000009754001",
+        "zoho_expense_number": "9979"
+      },
+      "error_message": null,
+      "created_at": "2026-11-26T06:48:07.424Z"
+    },
+    {
       "id": "log-1795466212782",
       "sync_type": "expense_create",
       "status": "success",
@@ -12192,56 +12247,6 @@
       },
       "error_message": null,
       "created_at": "2026-10-05T19:53:20.220Z"
-    },
-    {
-      "id": "log-1791229952084",
-      "sync_type": "expenses_sync",
-      "status": "success",
-      "details": {
-        "count": 0
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:52:32.084Z"
-    },
-    {
-      "id": "log-1791229906119",
-      "sync_type": "expenses_sync",
-      "status": "success",
-      "details": {
-        "count": 0
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:51:46.119Z"
-    },
-    {
-      "id": "log-1791229861196",
-      "sync_type": "expenses_sync",
-      "status": "success",
-      "details": {
-        "count": 0
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:51:01.196Z"
-    },
-    {
-      "id": "log-1791229820412",
-      "sync_type": "expenses_sync",
-      "status": "success",
-      "details": {
-        "count": 0
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:50:20.412Z"
-    },
-    {
-      "id": "log-1791229770843",
-      "sync_type": "expenses_sync",
-      "status": "success",
-      "details": {
-        "count": 0
-      },
-      "error_message": null,
-      "created_at": "2026-10-05T19:49:30.843Z"
     }
   ],
   "deleted_expense_ids": [

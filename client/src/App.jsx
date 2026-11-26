@@ -414,26 +414,36 @@ export default function App() {
   };
 
   // Handle Deleting Expense
-  const handleDeleteExpense = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this expense? This will reverse the expense entry in Zoho Books.')) {
+  const handleDeleteExpense = async (expenseOrId, maybeZohoId) => {
+    if (!window.confirm('Are you sure you want to delete this expense? This will delete the expense record in Zoho Books.')) {
       return;
     }
+    const id = typeof expenseOrId === 'object' ? expenseOrId.id : expenseOrId;
+    const zohoJournalId = typeof expenseOrId === 'object' ? expenseOrId.zoho_journal_id : maybeZohoId;
+
     // Optimistically remove from state immediately
-    setExpenses((prev) => prev.filter((e) => String(e.id) !== String(id) && (!e.zoho_journal_id || String(e.zoho_journal_id) !== String(id))));
+    setExpenses((prev) => prev.filter((e) =>
+      String(e.id) !== String(id) &&
+      (!zohoJournalId || String(e.zoho_journal_id) !== String(zohoJournalId)) &&
+      (!e.zoho_journal_id || String(e.zoho_journal_id) !== String(id))
+    ));
     try {
-      const res = await api.deleteExpense(id);
+      const res = await api.deleteExpense(id, zohoJournalId);
       if (res.success) {
-        showToast('Expense deleted and cash balance restored', 'success');
+        showToast('Expense deleted in Zoho Books and cash balance restored', 'success');
         const targetId = res.deleted_id || id;
-        const targetZohoId = res.zoho_journal_id;
-        setExpenses((prev) => prev.filter((e) => String(e.id) !== String(targetId) && (!targetZohoId || String(e.zoho_journal_id) !== String(targetZohoId))));
+        const targetZohoId = res.zoho_journal_id || zohoJournalId;
+        setExpenses((prev) => prev.filter((e) =>
+          String(e.id) !== String(targetId) &&
+          (!targetZohoId || String(e.zoho_journal_id) !== String(targetZohoId))
+        ));
         if (res.employee_balance !== undefined && res.employee_balance !== null) {
           setCurrentEmployee((prev) => prev ? { ...prev, current_balance: res.employee_balance } : prev);
           setEmployees((prev) => prev.map((emp) => emp.id === currentEmployee?.id ? { ...emp, current_balance: res.employee_balance } : emp));
         }
         await loadAllData();
       } else {
-        showToast(res.error || 'Failed to delete expense', 'error');
+        showToast(res.error || 'Failed to delete expense in Zoho Books', 'error');
         await loadAllData();
       }
     } catch (err) {
@@ -595,11 +605,12 @@ export default function App() {
   };
 
   // Handle Explicitly Marking Expenses as Exported (Condition 2)
-  const handleMarkExpensesExported = async (expenseIds) => {
+  const handleMarkExpensesExported = async (expenseIds, reportId = null) => {
     if (!Array.isArray(expenseIds) || expenseIds.length === 0) return true;
     try {
       const idSet = new Set(expenseIds.map(String));
       const now = new Date().toISOString();
+      const batchReportId = reportId || ('REP-' + Date.now().toString().slice(-6));
 
       if (api.addExportedIds) {
         api.addExportedIds(expenseIds);
@@ -613,7 +624,8 @@ export default function App() {
               is_exported: true,
               exported_at: now,
               added_to_report: true,
-              added_to_report_at: e.added_to_report_at || now
+              added_to_report_at: e.added_to_report_at || now,
+              report_id: batchReportId
             }
             : e
         )
@@ -631,7 +643,8 @@ export default function App() {
                 is_exported: true,
                 exported_at: now,
                 added_to_report: true,
-                added_to_report_at: e.added_to_report_at || now
+                added_to_report_at: e.added_to_report_at || now,
+                report_id: batchReportId
               }
               : e
           );
@@ -639,9 +652,9 @@ export default function App() {
         });
       } catch { }
 
-      const res = await api.markExpensesAsExported(expenseIds);
+      const res = await api.markExpensesAsExported(expenseIds, batchReportId);
       if (res && res.success) {
-        showToast(`Successfully marked ${expenseIds.length} expense log(s) as Exported.`);
+        showToast(`Successfully locked ${expenseIds.length} expense log(s) into report ${batchReportId}.`);
       }
       await loadAllData();
       return true;
