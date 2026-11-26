@@ -415,11 +415,22 @@ export default function App() {
 
   // Handle Deleting Expense
   const handleDeleteExpense = async (expenseOrId, maybeZohoId) => {
+    const id = typeof expenseOrId === 'object' ? expenseOrId.id : expenseOrId;
+    const zohoJournalId = typeof expenseOrId === 'object' ? expenseOrId.zoho_journal_id : maybeZohoId;
+    const expenseObj = typeof expenseOrId === 'object'
+      ? expenseOrId
+      : expenses.find((e) => String(e.id) === String(id) || (e.zoho_journal_id && String(e.zoho_journal_id) === String(id)));
+
+    // AUDIT COMPLIANCE: Once exported, an expense log CANNOT be deleted from this app.
+    // It can ONLY be deleted directly in Zoho Books!
+    if (expenseObj && expenseObj.is_exported) {
+      showToast('Exported expense logs are locked in official reports and cannot be deleted from the app. Please delete directly in Zoho Books if required.', 'error');
+      return;
+    }
+
     if (!window.confirm('Are you sure you want to delete this expense? This will delete the expense record in Zoho Books.')) {
       return;
     }
-    const id = typeof expenseOrId === 'object' ? expenseOrId.id : expenseOrId;
-    const zohoJournalId = typeof expenseOrId === 'object' ? expenseOrId.zoho_journal_id : maybeZohoId;
 
     // Optimistically remove from state immediately
     setExpenses((prev) => prev.filter((e) =>

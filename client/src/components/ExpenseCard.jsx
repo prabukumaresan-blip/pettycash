@@ -239,13 +239,22 @@ export default function ExpenseCard({
             )}
 
             {onDelete && (
-              <button
-                onClick={() => onDelete(expense)}
-                className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition"
-                title="Delete Expense"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-              </button>
+              expense.is_exported ? (
+                <span
+                  className="p-1 text-slate-300 cursor-not-allowed inline-flex items-center"
+                  title="Exported: Locked in official report. Can only be deleted directly in Zoho Books."
+                >
+                  <Lock className="w-3.5 h-3.5 text-slate-400" />
+                </span>
+              ) : (
+                <button
+                  onClick={() => onDelete(expense)}
+                  className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition"
+                  title="Delete Expense"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              )
             )}
           </div>
         </div>

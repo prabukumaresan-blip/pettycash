@@ -1441,18 +1441,27 @@ export default function ReportsView({
                                               <span>{exp.is_exported ? 'Re-print' : 'Print'}</span>
                                             </button>
                                             {onDeleteExpense && (
-                                              <button
-                                                type="button"
-                                                onClick={async () => {
-                                                  await onDeleteExpense(exp.id);
-                                                  await fetchReport();
-                                                  if (onRefreshData) onRefreshData();
-                                                }}
-                                                className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition cursor-pointer"
-                                                title="Delete voucher from records and Zoho Books"
-                                              >
-                                                <Trash2 className="w-3.5 h-3.5" />
-                                              </button>
+                                              exp.is_exported ? (
+                                                <span
+                                                  className="p-1 text-slate-300 cursor-not-allowed inline-flex items-center"
+                                                  title="Exported: Locked in official report. Can only be deleted directly in Zoho Books."
+                                                >
+                                                  <Lock className="w-3.5 h-3.5 text-slate-400" />
+                                                </span>
+                                              ) : (
+                                                <button
+                                                  type="button"
+                                                  onClick={async () => {
+                                                    await onDeleteExpense(exp);
+                                                    await fetchReport();
+                                                    if (onRefreshData) onRefreshData();
+                                                  }}
+                                                  className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition cursor-pointer"
+                                                  title="Delete voucher from records and Zoho Books"
+                                                >
+                                                  <Trash2 className="w-3.5 h-3.5" />
+                                                </button>
+                                              )
                                             )}
                                           </div>
                                         </td>

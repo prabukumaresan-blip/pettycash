@@ -378,7 +378,17 @@ router.delete('/:id', async (req, res) => {
       expense = await db.getExpenseById(zohoId);
     }
 
-    // Employees can delete their own expenses (even if exported), and Admin can delete any expense.
+    // AUDIT COMPLIANCE RULE:
+    // After export, the expense log CANNOT be deleted from the petty cash app.
+    // It can ONLY be deleted directly in Zoho Books!
+    if ((expense && expense.is_exported) || req.query.is_exported === 'true' || req.body?.is_exported === true) {
+      return res.status(403).json({
+        success: false,
+        error: 'Exported expense logs are locked in official reports and cannot be deleted from the petty cash app. To delete this expense, please delete it directly in Zoho Books.'
+      });
+    }
+
+    // Employees can delete their own expenses (if unexported), and Admin can delete unexported expenses.
     if (req.user && req.user.role === 'employee' && expense && expense.employee_id !== req.user.id) {
       return res.status(403).json({ success: false, error: 'Access denied: You can only delete your own expenses' });
     }

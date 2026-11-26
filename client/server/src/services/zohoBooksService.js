@@ -606,7 +606,8 @@ class ZohoBooksService {
             const matchesEmp = e.employee_id === emp.id;
             const matchesAcc = e.paid_through_account_id === accountId;
             const hasZohoId = Boolean(e.zoho_journal_id);
-            const isNotBrandNew = !e.created_at || (Date.now() - new Date(e.created_at).getTime() > 15 * 60 * 1000);
+            // Exported expenses are always checked for Zoho deletion; unexported brand-new ones get a 15m creation buffer
+            const isNotBrandNew = e.is_exported || !e.created_at || (Date.now() - new Date(e.created_at).getTime() > 15 * 60 * 1000);
             return (matchesEmp || matchesAcc) && hasZohoId && isNotBrandNew && e.sync_status === 'synced';
           });
 
@@ -794,7 +795,7 @@ class ZohoBooksService {
         const currentLocal = await db.getExpenses();
         const orphanedSynced = currentLocal.filter(e => {
           const hasZohoId = Boolean(e.zoho_journal_id);
-          const isNotBrandNew = !e.created_at || (Date.now() - new Date(e.created_at).getTime() > 15 * 60 * 1000);
+          const isNotBrandNew = e.is_exported || !e.created_at || (Date.now() - new Date(e.created_at).getTime() > 15 * 60 * 1000);
           return hasZohoId && isNotBrandNew && e.sync_status === 'synced' && !allActiveZohoExpenseIds.has(String(e.zoho_journal_id));
         });
         for (const orphan of orphanedSynced) {
