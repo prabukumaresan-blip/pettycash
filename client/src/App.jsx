@@ -632,7 +632,9 @@ export default function App() {
         prev.map((e) => {
           if (idSet.has(String(e.id)) || (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id)))) {
             const empCode = (e.employee_code || e.employee_name || 'EMP').replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 6) || 'EMP';
-            const distinctReportId = reportId || `REP-${empCode}-${exportDateStr}-${exportTimeStr}`;
+            const voucherDateClean = (e.expense_date || exportDateStr).replace(/-/g, '');
+            const projTag = e.project_name ? e.project_name.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 5) : '';
+            const distinctReportId = reportId || (projTag ? `REP-${empCode}-${voucherDateClean}-${projTag}` : `REP-${empCode}-${voucherDateClean}`);
             return {
               ...e,
               is_exported: true,
@@ -654,7 +656,9 @@ export default function App() {
           const updated = list.map((e) => {
             if (idSet.has(String(e.id)) || (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id)))) {
               const empCode = (e.employee_code || e.employee_name || 'EMP').replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 6) || 'EMP';
-              const distinctReportId = reportId || `REP-${empCode}-${exportDateStr}-${exportTimeStr}`;
+              const voucherDateClean = (e.expense_date || exportDateStr).replace(/-/g, '');
+              const projTag = e.project_name ? e.project_name.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 5) : '';
+              const distinctReportId = reportId || (projTag ? `REP-${empCode}-${voucherDateClean}-${projTag}` : `REP-${empCode}-${voucherDateClean}`);
               return {
                 ...e,
                 is_exported: true,

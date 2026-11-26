@@ -144,11 +144,12 @@ const handleCsvExport = async (req, res) => {
     if (shouldMarkExported) {
       const now = new Date().toISOString();
       const exportDateStr = now.substring(0, 10).replace(/-/g, '');
-      const exportTimeStr = now.substring(11, 16).replace(':', '');
       for (const exp of expenses) {
         if (!exp.is_exported) {
           const empCode = (exp.employee_code || exp.employee_name || 'EMP').replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 6) || 'EMP';
-          const distinctReportId = payload.report_id || `REP-${empCode}-${exportDateStr}-${exportTimeStr}`;
+          const voucherDateClean = (exp.expense_date || exportDateStr).replace(/-/g, '');
+          const projTag = exp.project_name ? exp.project_name.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 5) : '';
+          const distinctReportId = payload.report_id || (projTag ? `REP-${empCode}-${voucherDateClean}-${projTag}` : `REP-${empCode}-${voucherDateClean}`);
           exp.is_exported = true;
           exp.exported_at = exp.exported_at || now;
           exp.added_to_report = true;
@@ -214,11 +215,12 @@ const handlePdfExport = async (req, res) => {
     if (shouldMarkExported) {
       const now = new Date().toISOString();
       const exportDateStr = now.substring(0, 10).replace(/-/g, '');
-      const exportTimeStr = now.substring(11, 16).replace(':', '');
       for (const exp of expenses) {
         if (!exp.is_exported) {
           const empCode = (exp.employee_code || exp.employee_name || 'EMP').replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 6) || 'EMP';
-          const distinctReportId = payload.report_id || `REP-${empCode}-${exportDateStr}-${exportTimeStr}`;
+          const voucherDateClean = (exp.expense_date || exportDateStr).replace(/-/g, '');
+          const projTag = exp.project_name ? exp.project_name.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 5) : '';
+          const distinctReportId = payload.report_id || (projTag ? `REP-${empCode}-${voucherDateClean}-${projTag}` : `REP-${empCode}-${voucherDateClean}`);
           exp.is_exported = true;
           exp.exported_at = exp.exported_at || now;
           exp.added_to_report = true;
@@ -399,14 +401,15 @@ router.post('/mark-exported', async (req, res) => {
 
     const now = new Date().toISOString();
     const exportDateStr = now.substring(0, 10).replace(/-/g, '');
-    const exportTimeStr = now.substring(11, 16).replace(':', '');
     const updated = [];
 
     for (const id of expense_ids) {
       const exp = await db.getExpenseById(id);
       if (exp) {
         const empCode = (exp.employee_code || exp.employee_name || 'EMP').replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 6) || 'EMP';
-        const distinctReportId = report_id || `REP-${empCode}-${exportDateStr}-${exportTimeStr}`;
+        const voucherDateClean = (exp.expense_date || exportDateStr).replace(/-/g, '');
+        const projTag = exp.project_name ? exp.project_name.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 5) : '';
+        const distinctReportId = report_id || (projTag ? `REP-${empCode}-${voucherDateClean}-${projTag}` : `REP-${empCode}-${voucherDateClean}`);
         exp.is_exported = true;
         exp.exported_at = now;
         exp.added_to_report = true;

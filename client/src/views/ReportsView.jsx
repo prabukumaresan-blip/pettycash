@@ -245,26 +245,18 @@ export default function ReportsView({
       const cleanMonth = monthKey.replace('-', '');
 
       if (activeReportTab === 'exported' || isExp) {
-        // ALWAYS separate exported reports based on employee and the exact date of export (never combine into one)
-        const exportDateStr = exp.exported_at
-          ? exp.exported_at.substring(0, 10)
-          : (exp.expense_date || '2026-11-26');
-        const exportDateClean = exportDateStr.replace(/-/g, '');
+        // ALWAYS separate exported reports based on Employee, Project, and Voucher Date (expense_date)
+        const voucherDateStr = exp.expense_date || (exp.exported_at ? exp.exported_at.substring(0, 10) : '2026-11-26');
+        const voucherDateClean = voucherDateStr.replace(/-/g, '');
+        const projTag = exp.project_name ? exp.project_name.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 5) : '';
 
-        let batchTag = '';
-        if (exp.report_id) {
-          batchTag = exp.report_id.replace(/^REP-[A-Z0-9]+-?/i, '');
-        } else if (exp.exported_at && exp.exported_at.length >= 16) {
-          batchTag = exp.exported_at.substring(11, 16).replace(':', '');
-        }
+        groupKey = projTag
+          ? `EXP_${empId}_${voucherDateClean}_${projTag}`
+          : `EXP_${empId}_${voucherDateClean}`;
 
-        groupKey = batchTag
-          ? `EXP_${empId}_${exportDateClean}_${batchTag}`
-          : `EXP_${empId}_${exportDateClean}`;
-
-        reportNumber = exp.report_id && exp.report_id.startsWith('REP-')
-          ? exp.report_id
-          : (batchTag ? `REP-${cleanCode}-${exportDateClean}-${batchTag}` : `REP-${cleanCode}-${exportDateClean}`);
+        reportNumber = projTag
+          ? `REP-${cleanCode}-${voucherDateClean}-${projTag}`
+          : `REP-${cleanCode}-${voucherDateClean}`;
 
         title = exp.project_name
           ? `Petty Cash Statement - ${empName} (${exp.project_name})`
@@ -292,6 +284,7 @@ export default function ReportsView({
 
       if (!reportMap.has(groupKey)) {
         const expDateOfExport = exp.exported_at ? exp.exported_at.substring(0, 10) : (isExp && exp.expense_date ? exp.expense_date : null);
+        const voucherDateStr = exp.expense_date || expDateOfExport;
         reportMap.set(groupKey, {
           id: groupKey,
           reportNumber,
@@ -300,6 +293,7 @@ export default function ReportsView({
           employee_name: empName,
           employee_code: empCode,
           status,
+          voucher_date: voucherDateStr,
           export_date: expDateOfExport,
           exported_at: exp.exported_at || (expDateOfExport ? `${expDateOfExport}T12:00:00Z` : null),
           minDate: expDate,
@@ -324,9 +318,9 @@ export default function ReportsView({
     });
 
     return Array.from(reportMap.values()).sort((a, b) => {
-      // Sort primarily by date of export (newest export date first), falling back to maxDate
-      const dateA = a.export_date || (a.exported_at ? a.exported_at.substring(0, 10) : '') || a.maxDate || '';
-      const dateB = b.export_date || (b.exported_at ? b.exported_at.substring(0, 10) : '') || b.maxDate || '';
+      // Sort primarily by voucher date (newest voucher date first), falling back to export_date
+      const dateA = a.voucher_date || a.minDate || a.maxDate || a.export_date || '';
+      const dateB = b.voucher_date || b.minDate || b.maxDate || b.export_date || '';
       if (dateA !== dateB) return dateB.localeCompare(dateA);
       return a.reportNumber.localeCompare(b.reportNumber);
     });
@@ -1210,24 +1204,27 @@ export default function ReportsView({
                             {report.title}
                           </div>
                           <div className="text-[11px] text-slate-500 flex items-center space-x-2 mt-0.5 flex-wrap gap-y-1">
-                            {report.export_date ? (
-                              <span className="inline-flex items-center space-x-1 text-emerald-800 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 text-[10px]">
-                                <Calendar className="w-3 h-3 text-emerald-600 shrink-0" />
+                            {report.voucher_date ? (
+                              <span className="inline-flex items-center space-x-1 text-blue-800 font-semibold bg-blue-50 px-2 py-0.5 rounded border border-blue-200 text-[10px]">
+                                <Calendar className="w-3 h-3 text-blue-600 shrink-0" />
                                 <span>
-                                  Export Date: {new Date(report.export_date + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
-                                </span>
-                              </span>
-                            ) : report.exported_at ? (
-                              <span className="inline-flex items-center space-x-1 text-emerald-800 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 text-[10px]">
-                                <Calendar className="w-3 h-3 text-emerald-600 shrink-0" />
-                                <span>
-                                  Export Date: {new Date(report.exported_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                  Voucher Date: {new Date(report.voucher_date + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                                 </span>
                               </span>
                             ) : null}
-                            <span className="text-slate-400 font-mono text-[10px]">
-                              Vouchers: {report.minDate} {report.minDate !== report.maxDate ? `— ${report.maxDate}` : ''}
-                            </span>
+                            {report.export_date ? (
+                              <span className="inline-flex items-center space-x-1 text-emerald-800 font-medium bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 text-[10px]">
+                                <span>
+                                  Exported: {new Date(report.export_date + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                </span>
+                              </span>
+                            ) : report.exported_at ? (
+                              <span className="inline-flex items-center space-x-1 text-emerald-800 font-medium bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 text-[10px]">
+                                <span>
+                                  Exported: {new Date(report.exported_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                </span>
+                              </span>
+                            ) : null}
                           </div>
                         </td>
 

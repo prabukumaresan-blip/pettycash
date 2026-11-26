@@ -193,6 +193,11 @@ export default function DashboardView({
 
   const handleExportTransactions = async (format) => {
     try {
+      if (selectedExpenseIds.size === 0) {
+        alert('Please select at least one transaction using the checkboxes to export.');
+        return;
+      }
+
       if (format === 'pdf') setIsExportingPdf(true);
       else setIsExportingCsv(true);
 
@@ -204,25 +209,10 @@ export default function DashboardView({
       } else if (currentEmployee?.id && currentEmployee.role !== 'admin') {
         filters.employee_id = currentEmployee.id;
       }
-      const targetExpenses = selectedExpenseIds.size > 0
-        ? employeeExpenses.filter(e => selectedExpenseIds.has(e.id))
-        : (filterTab === 'marked'
-            ? markedExpenses
-            : notExportedExpenses);
 
+      const targetExpenses = employeeExpenses.filter(e => selectedExpenseIds.has(e.id));
       const targetIds = targetExpenses.map(e => e.id);
-      if (targetIds.length > 0) {
-        filters.expense_ids = targetIds.join(',');
-      } else if (filterTab === 'marked') {
-        filters.added_to_report = 'true';
-        filters.is_exported = 'false';
-      } else {
-        filters.is_exported = 'false';
-      }
-
-      const cleanCode = (activeAccountOwner?.employee_code || activeAccountOwner?.name || 'EMP').replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 6) || 'EMP';
-      const batchReportId = `REP-${cleanCode}-${new Date().toISOString().replace(/[-:T]/g, '').slice(2, 12)}`;
-      filters.report_id = batchReportId;
+      filters.expense_ids = targetIds.join(',');
 
       if (format === 'pdf') {
         await api.downloadPdfReport(filters, targetExpenses);
@@ -231,7 +221,7 @@ export default function DashboardView({
       }
 
       if (onMarkSelectedExported && targetIds.length > 0) {
-        await onMarkSelectedExported(targetIds, batchReportId);
+        await onMarkSelectedExported(targetIds);
       } else if (api.addExportedIds && targetIds.length > 0) {
         api.addExportedIds(targetIds);
       }
@@ -523,14 +513,18 @@ export default function DashboardView({
               />
             </div>
 
-            {/* Direct Export Buttons for Petty Cash Transactions (Condition 1) */}
+            {/* Direct Export Buttons for Petty Cash Transactions (Condition 1: Checkbox selection required) */}
             <div className="flex items-center space-x-1.5 shrink-0">
               <button
                 type="button"
                 onClick={() => handleExportTransactions('pdf')}
-                disabled={isExportingPdf || isExportingCsv}
-                className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 text-xs font-semibold flex items-center space-x-1.5 shadow-2xs transition disabled:opacity-50 cursor-pointer"
-                title={selectedExpenseIds.size > 0 ? `Export ${selectedExpenseIds.size} selected transaction(s) to PDF` : 'Export transactions to PDF'}
+                disabled={selectedExpenseIds.size === 0 || isExportingPdf || isExportingCsv}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition ${
+                  selectedExpenseIds.size > 0
+                    ? 'bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 shadow-2xs cursor-pointer'
+                    : 'bg-slate-50 text-slate-400 border border-slate-200/60 cursor-not-allowed opacity-60'
+                }`}
+                title={selectedExpenseIds.size > 0 ? `Export ${selectedExpenseIds.size} selected transaction(s) to PDF` : 'Select transactions using checkboxes to export PDF'}
               >
                 {isExportingPdf ? (
                   <RefreshCw className="w-3.5 h-3.5 animate-spin text-slate-600" />
@@ -543,9 +537,13 @@ export default function DashboardView({
               <button
                 type="button"
                 onClick={() => handleExportTransactions('csv')}
-                disabled={isExportingPdf || isExportingCsv}
-                className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 text-xs font-semibold flex items-center space-x-1.5 shadow-2xs transition disabled:opacity-50 cursor-pointer"
-                title={selectedExpenseIds.size > 0 ? `Export ${selectedExpenseIds.size} selected transaction(s) to CSV` : 'Export transactions to CSV'}
+                disabled={selectedExpenseIds.size === 0 || isExportingPdf || isExportingCsv}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition ${
+                  selectedExpenseIds.size > 0
+                    ? 'bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 shadow-2xs cursor-pointer'
+                    : 'bg-slate-50 text-slate-400 border border-slate-200/60 cursor-not-allowed opacity-60'
+                }`}
+                title={selectedExpenseIds.size > 0 ? `Export ${selectedExpenseIds.size} selected transaction(s) to CSV` : 'Select transactions using checkboxes to export CSV'}
               >
                 {isExportingCsv ? (
                   <RefreshCw className="w-3.5 h-3.5 animate-spin text-slate-600" />
