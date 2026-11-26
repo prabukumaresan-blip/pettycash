@@ -621,25 +621,29 @@ export default function App() {
     try {
       const idSet = new Set(expenseIds.map(String));
       const now = new Date().toISOString();
-      const batchReportId = reportId || ('REP-' + Date.now().toString().slice(-6));
+      const exportDateStr = now.substring(0, 10).replace(/-/g, '');
+      const exportTimeStr = now.substring(11, 16).replace(':', '');
 
       if (api.addExportedIds) {
         api.addExportedIds(expenseIds);
       }
 
       setExpenses((prev) =>
-        prev.map((e) =>
-          idSet.has(String(e.id)) || (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id)))
-            ? {
+        prev.map((e) => {
+          if (idSet.has(String(e.id)) || (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id)))) {
+            const empCode = (e.employee_code || e.employee_name || 'EMP').replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 6) || 'EMP';
+            const distinctReportId = reportId || `REP-${empCode}-${exportDateStr}-${exportTimeStr}`;
+            return {
               ...e,
               is_exported: true,
               exported_at: now,
               added_to_report: true,
               added_to_report_at: e.added_to_report_at || now,
-              report_id: batchReportId
-            }
-            : e
-        )
+              report_id: distinctReportId
+            };
+          }
+          return e;
+        })
       );
 
       // Clean/update localStorage caches immediately
@@ -647,25 +651,28 @@ export default function App() {
         const keys = Object.keys(localStorage).filter((k) => k.startsWith('cached_expenses'));
         keys.forEach((k) => {
           const list = JSON.parse(localStorage.getItem(k) || '[]');
-          const updated = list.map((e) =>
-            idSet.has(String(e.id)) || (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id)))
-              ? {
+          const updated = list.map((e) => {
+            if (idSet.has(String(e.id)) || (e.zoho_journal_id && idSet.has(String(e.zoho_journal_id)))) {
+              const empCode = (e.employee_code || e.employee_name || 'EMP').replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 6) || 'EMP';
+              const distinctReportId = reportId || `REP-${empCode}-${exportDateStr}-${exportTimeStr}`;
+              return {
                 ...e,
                 is_exported: true,
                 exported_at: now,
                 added_to_report: true,
                 added_to_report_at: e.added_to_report_at || now,
-                report_id: batchReportId
-              }
-              : e
-          );
+                report_id: distinctReportId
+              };
+            }
+            return e;
+          });
           localStorage.setItem(k, JSON.stringify(updated));
         });
       } catch { }
 
-      const res = await api.markExpensesAsExported(expenseIds, batchReportId);
+      const res = await api.markExpensesAsExported(expenseIds, reportId);
       if (res && res.success) {
-        showToast(`Successfully locked ${expenseIds.length} expense log(s) into report ${batchReportId}.`);
+        showToast(`Successfully locked ${expenseIds.length} expense log(s) as exported.`);
       }
       await loadAllData();
       return true;

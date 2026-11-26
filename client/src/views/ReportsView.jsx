@@ -245,43 +245,53 @@ export default function ReportsView({
       const cleanMonth = monthKey.replace('-', '');
 
       if (activeReportTab === 'exported' || isExp) {
-        // Exported archive grouped by explicit report_id or distinct export batch
-        let batchKey;
+        // ALWAYS separate exported reports based on employee and the exact date of export (never combine into one)
+        const exportDateStr = exp.exported_at
+          ? exp.exported_at.substring(0, 10)
+          : (exp.expense_date || '2026-11-26');
+        const exportDateClean = exportDateStr.replace(/-/g, '');
+
+        let batchTag = '';
         if (exp.report_id) {
-          batchKey = exp.report_id;
-          reportNumber = exp.report_id;
-        } else if (exp.exported_at) {
-          // Group by minute of export timestamp
-          const batchMinute = exp.exported_at.substring(0, 16);
-          const cleanBatch = batchMinute.replace(/[-:T]/g, '').slice(2);
-          batchKey = `EXP_${empId}_${cleanBatch}`;
-          reportNumber = `REP-${cleanCode}-${cleanBatch}`;
-        } else {
-          const dateKey = (exp.expense_date || cleanMonth).replace(/-/g, '');
-          const projTag = exp.project_name ? exp.project_name.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 5) : '';
-          batchKey = projTag ? `EXP_${empId}_${dateKey}_${projTag}` : `EXP_${empId}_${dateKey}`;
-          reportNumber = projTag ? `REP-${cleanCode}-${dateKey}-${projTag}` : `REP-${cleanCode}-${dateKey}`;
+          batchTag = exp.report_id.replace(/^REP-[A-Z0-9]+-?/i, '');
+        } else if (exp.exported_at && exp.exported_at.length >= 16) {
+          batchTag = exp.exported_at.substring(11, 16).replace(':', '');
         }
-        groupKey = batchKey;
-        title = exp.project_name ? `Petty Cash Statement - ${empName} (${exp.project_name})` : `Petty Cash Statement - ${empName}`;
+
+        groupKey = batchTag
+          ? `EXP_${empId}_${exportDateClean}_${batchTag}`
+          : `EXP_${empId}_${exportDateClean}`;
+
+        reportNumber = exp.report_id && exp.report_id.startsWith('REP-')
+          ? exp.report_id
+          : (batchTag ? `REP-${cleanCode}-${exportDateClean}-${batchTag}` : `REP-${cleanCode}-${exportDateClean}`);
+
+        title = exp.project_name
+          ? `Petty Cash Statement - ${empName} (${exp.project_name})`
+          : `Petty Cash Statement - ${empName}`;
         status = 'exported';
       } else if (activeReportTab === 'report' || exp.added_to_report) {
-        // Ready to export claim package grouped by employee and project
+        // Ready to export claim package grouped by employee, project, and claim date
+        const claimDate = exp.added_to_report_at
+          ? exp.added_to_report_at.substring(0, 10).replace(/-/g, '')
+          : (exp.expense_date ? exp.expense_date.replace(/-/g, '') : cleanMonth);
         const projTag = exp.project_name ? exp.project_name.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 5) : '';
-        groupKey = projTag ? `CLAIM_${empId}_${cleanMonth}_${projTag}` : `CLAIM_${empId}_${cleanMonth}`;
-        reportNumber = projTag ? `CLM-${cleanCode}-${cleanMonth}-${projTag}` : `CLM-${cleanCode}-${cleanMonth}`;
+        groupKey = projTag ? `CLAIM_${empId}_${claimDate}_${projTag}` : `CLAIM_${empId}_${claimDate}`;
+        reportNumber = projTag ? `CLM-${cleanCode}-${claimDate}-${projTag}` : `CLM-${cleanCode}-${claimDate}`;
         title = exp.project_name ? `Petty Cash Claim - ${empName} (${exp.project_name})` : `Petty Cash Claim - ${empName}`;
         status = 'ready';
       } else {
         // Unreported / general statement
+        const stmtDate = exp.expense_date ? exp.expense_date.replace(/-/g, '') : cleanMonth;
         const projTag = exp.project_name ? exp.project_name.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 5) : '';
-        groupKey = projTag ? `STMT_${empId}_${cleanMonth}_${projTag}` : `STMT_${empId}_${cleanMonth}`;
-        reportNumber = projTag ? `STMT-${cleanCode}-${cleanMonth}-${projTag}` : `STMT-${cleanCode}-${cleanMonth}`;
+        groupKey = projTag ? `STMT_${empId}_${stmtDate}_${projTag}` : `STMT_${empId}_${stmtDate}`;
+        reportNumber = projTag ? `STMT-${cleanCode}-${stmtDate}-${projTag}` : `STMT-${cleanCode}-${stmtDate}`;
         title = exp.project_name ? `Petty Cash Statement - ${empName} (${exp.project_name})` : `Petty Cash Statement - ${empName}`;
         status = 'draft';
       }
 
       if (!reportMap.has(groupKey)) {
+        const expDateOfExport = exp.exported_at ? exp.exported_at.substring(0, 10) : (isExp && exp.expense_date ? exp.expense_date : null);
         reportMap.set(groupKey, {
           id: groupKey,
           reportNumber,
@@ -290,7 +300,8 @@ export default function ReportsView({
           employee_name: empName,
           employee_code: empCode,
           status,
-          exported_at: exp.exported_at || null,
+          export_date: expDateOfExport,
+          exported_at: exp.exported_at || (expDateOfExport ? `${expDateOfExport}T12:00:00Z` : null),
           minDate: expDate,
           maxDate: expDate,
           expenses: [],
@@ -313,8 +324,9 @@ export default function ReportsView({
     });
 
     return Array.from(reportMap.values()).sort((a, b) => {
-      const dateA = a.maxDate || '';
-      const dateB = b.maxDate || '';
+      // Sort primarily by date of export (newest export date first), falling back to maxDate
+      const dateA = a.export_date || (a.exported_at ? a.exported_at.substring(0, 10) : '') || a.maxDate || '';
+      const dateB = b.export_date || (b.exported_at ? b.exported_at.substring(0, 10) : '') || b.maxDate || '';
       if (dateA !== dateB) return dateB.localeCompare(dateA);
       return a.reportNumber.localeCompare(b.reportNumber);
     });
@@ -1197,16 +1209,25 @@ export default function ReportsView({
                           <div className="font-bold text-slate-900 text-xs">
                             {report.title}
                           </div>
-                          <div className="text-[11px] text-slate-500 flex items-center space-x-1.5 mt-0.5 font-mono">
-                            <Calendar className="w-3 h-3 text-slate-400 shrink-0" />
-                            <span>
-                              {report.minDate} {report.minDate !== report.maxDate ? `— ${report.maxDate}` : ''}
-                            </span>
-                            {report.exported_at && (
-                              <span className="text-emerald-700 ml-2 font-sans font-medium text-[10px]">
-                                (Exported: {new Date(report.exported_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}, {new Date(report.exported_at).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })})
+                          <div className="text-[11px] text-slate-500 flex items-center space-x-2 mt-0.5 flex-wrap gap-y-1">
+                            {report.export_date ? (
+                              <span className="inline-flex items-center space-x-1 text-emerald-800 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 text-[10px]">
+                                <Calendar className="w-3 h-3 text-emerald-600 shrink-0" />
+                                <span>
+                                  Export Date: {new Date(report.export_date + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                </span>
                               </span>
-                            )}
+                            ) : report.exported_at ? (
+                              <span className="inline-flex items-center space-x-1 text-emerald-800 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 text-[10px]">
+                                <Calendar className="w-3 h-3 text-emerald-600 shrink-0" />
+                                <span>
+                                  Export Date: {new Date(report.exported_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                </span>
+                              </span>
+                            ) : null}
+                            <span className="text-slate-400 font-mono text-[10px]">
+                              Vouchers: {report.minDate} {report.minDate !== report.maxDate ? `— ${report.maxDate}` : ''}
+                            </span>
                           </div>
                         </td>
 

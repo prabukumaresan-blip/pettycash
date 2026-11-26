@@ -143,14 +143,17 @@ const handleCsvExport = async (req, res) => {
     const shouldMarkExported = payload.mark_exported === 'true' || payload.mark_exported === true || payload.mark_exported !== 'false';
     if (shouldMarkExported) {
       const now = new Date().toISOString();
-      const batchReportId = payload.report_id || `REP-${Date.now().toString().slice(-6)}`;
+      const exportDateStr = now.substring(0, 10).replace(/-/g, '');
+      const exportTimeStr = now.substring(11, 16).replace(':', '');
       for (const exp of expenses) {
         if (!exp.is_exported) {
+          const empCode = (exp.employee_code || exp.employee_name || 'EMP').replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 6) || 'EMP';
+          const distinctReportId = payload.report_id || `REP-${empCode}-${exportDateStr}-${exportTimeStr}`;
           exp.is_exported = true;
           exp.exported_at = exp.exported_at || now;
           exp.added_to_report = true;
           if (!exp.added_to_report_at) exp.added_to_report_at = now;
-          if (!exp.report_id) exp.report_id = batchReportId;
+          if (!exp.report_id) exp.report_id = distinctReportId;
           try {
             await db.saveExpense(exp);
           } catch (e) {
@@ -210,14 +213,17 @@ const handlePdfExport = async (req, res) => {
     const shouldMarkExported = payload.mark_exported === 'true' || payload.mark_exported === true || payload.mark_exported !== 'false';
     if (shouldMarkExported) {
       const now = new Date().toISOString();
-      const batchReportId = payload.report_id || `REP-${Date.now().toString().slice(-6)}`;
+      const exportDateStr = now.substring(0, 10).replace(/-/g, '');
+      const exportTimeStr = now.substring(11, 16).replace(':', '');
       for (const exp of expenses) {
         if (!exp.is_exported) {
+          const empCode = (exp.employee_code || exp.employee_name || 'EMP').replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 6) || 'EMP';
+          const distinctReportId = payload.report_id || `REP-${empCode}-${exportDateStr}-${exportTimeStr}`;
           exp.is_exported = true;
           exp.exported_at = exp.exported_at || now;
           exp.added_to_report = true;
           if (!exp.added_to_report_at) exp.added_to_report_at = now;
-          if (!exp.report_id) exp.report_id = batchReportId;
+          if (!exp.report_id) exp.report_id = distinctReportId;
           try {
             await db.saveExpense(exp);
           } catch (e) {
@@ -392,17 +398,20 @@ router.post('/mark-exported', async (req, res) => {
     }
 
     const now = new Date().toISOString();
-    const batchReportId = report_id || `REP-${Date.now().toString().slice(-6)}`;
+    const exportDateStr = now.substring(0, 10).replace(/-/g, '');
+    const exportTimeStr = now.substring(11, 16).replace(':', '');
     const updated = [];
 
     for (const id of expense_ids) {
       const exp = await db.getExpenseById(id);
       if (exp) {
+        const empCode = (exp.employee_code || exp.employee_name || 'EMP').replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 6) || 'EMP';
+        const distinctReportId = report_id || `REP-${empCode}-${exportDateStr}-${exportTimeStr}`;
         exp.is_exported = true;
         exp.exported_at = now;
         exp.added_to_report = true;
         if (!exp.added_to_report_at) exp.added_to_report_at = now;
-        exp.report_id = batchReportId;
+        exp.report_id = distinctReportId;
         const saved = await db.saveExpense(exp);
         updated.push(saved);
       }
@@ -410,10 +419,9 @@ router.post('/mark-exported', async (req, res) => {
 
     res.json({
       success: true,
-      report_id: batchReportId,
       updated_count: updated.length,
       expenses: updated,
-      message: `Successfully locked ${updated.length} expense(s) into report ${batchReportId}`
+      message: `Successfully locked ${updated.length} expense(s) as exported reports`
     });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
